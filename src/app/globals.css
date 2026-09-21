@@ -505,3 +505,26 @@ dd { margin: 0; white-space: pre-wrap; font-size: .78rem; }
   color: #0a0a0a !important;
   -webkit-text-fill-color: #0a0a0a;
 }
+
+
+/* Keep public CTA labels and icons readable across mobile browser inheritance quirks. */
+.legacy-public .legacy-action-dark,
+.legacy-public .legacy-action-dark *,
+.legacy-public a.bg-neutral-950,
+.legacy-public a.bg-neutral-950 *,
+.legacy-public button.bg-neutral-950,
+.legacy-public button.bg-neutral-950 * {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  stroke: currentColor;
+}
+.legacy-public .legacy-action-light,
+.legacy-public .legacy-action-light *,
+.legacy-public a.bg-white,
+.legacy-public a.bg-white *,
+.legacy-public button.bg-white,
+.legacy-public button.bg-white * {
+  color: #0a0a0a !important;
+  -webkit-text-fill-color: #0a0a0a !important;
+  stroke: currentColor;
+}
