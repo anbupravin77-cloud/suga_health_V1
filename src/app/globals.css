@@ -488,3 +488,20 @@ dd { margin: 0; white-space: pre-wrap; font-size: .78rem; }
 @media (prefers-reduced-motion: reduce) {
   .legacy-public .animate-marquee { animation: none; }
 }
+
+
+/* Explicit CTA contrast: mobile browsers must not inherit an action's text color. */
+.legacy-public a.bg-neutral-950,
+.legacy-public a.bg-black,
+.legacy-public .legacy-action-dark,
+.legacy-public button.bg-neutral-950,
+.legacy-public button.bg-black {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff;
+}
+.legacy-public a.bg-white,
+.legacy-public .legacy-action-light,
+.legacy-public button.bg-white {
+  color: #0a0a0a !important;
+  -webkit-text-fill-color: #0a0a0a;
+}
