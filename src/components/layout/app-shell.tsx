@@ -8,7 +8,7 @@ import { signOut } from "@/app/actions";
 
 const iconMap = { Home, Consultations: ClipboardList, Queue: ClipboardList, "Active reviews": Stethoscope, Messages: MessageSquare, Notifications: Bell, Profile: UserRound };
 
-export function AppShell({ role, name, children }: { role: "patient" | "doctor"; name: string; children: ReactNode }) {
+export function AppShell({ role, name, children }: { role: "patient" | "doctor"; active?: string; name: string; children: ReactNode }) {
   const pathname = usePathname();
   const items = role === "patient" ? ["Home", "Consultations", "Messages", "Notifications", "Profile"] : ["Queue", "Active reviews", "Messages", "Notifications", "Profile"];
   const base = role === "patient" ? "/patient" : "/doctor";
