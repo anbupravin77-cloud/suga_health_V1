@@ -177,7 +177,7 @@ export default function HomePage() {
         </Link>
       </section>
 
-      <section className="faq" aria-labelledby="faq-title">
+      <section className="faq" id="trust" aria-labelledby="faq-title">
         <h2 id="faq-title">Questions before you begin.</h2>
         <div className="faq-list">
           {faqs.map(({ question, answer }) => (
