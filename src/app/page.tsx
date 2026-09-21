@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Activity,
   ArrowRight,
@@ -20,12 +20,13 @@ import {
   Truck,
   X,
 } from "lucide-react";
+import { rememberReturnPosition, useRestoreReturnPosition } from "@/components/public/return-position";
 
 const navLinks = [
+  { name: "About", path: "/about", desc: "Our clinical mission & standards" },
   { name: "Weight Loss", path: "/weight-loss", desc: "GLP-1 medical protocols" },
   { name: "Hair Growth", path: "/hair-growth", desc: "Follicular regeneration" },
   { name: "Sexual Health", path: "/sexual-health", desc: "Performance & longevity" },
-  { name: "About", path: "/about", desc: "Clinical team & safety" },
 ];
 
 const pillars = [
@@ -283,6 +284,20 @@ export default function HomePage() {
   const [productCategory, setProductCategory] = useState("all");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  useRestoreReturnPosition();
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const bodyOverflow = document.body.style.overflow;
+    const htmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = bodyOverflow;
+      document.documentElement.style.overflow = htmlOverflow;
+    };
+  }, [mobileMenuOpen]);
 
   const visibleProducts = productCategory === "all" ? products : products.filter((product) => product.category === productCategory);
 
@@ -305,19 +320,38 @@ export default function HomePage() {
 
           <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
             <Link href="/sign-in" className="hidden sm:inline-flex text-xs font-bold uppercase tracking-wider text-neutral-700 hover:text-neutral-950 mr-2">Sign In</Link>
-            <Link href="/sign-up" className="hidden sm:inline-flex items-center justify-center bg-neutral-950 px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase text-white hover:bg-neutral-800 transition-all group">
+            <Link href="/sign-up" onClick={rememberReturnPosition} className="hidden sm:inline-flex items-center justify-center bg-neutral-950 px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase text-white hover:bg-neutral-800 transition-all group">
               Start consultation <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <details className="relative lg:hidden">
-              <summary className="list-none p-2 rounded-xl cursor-pointer"><Menu size={22} /></summary>
-              <div className="absolute right-0 top-12 w-[min(88vw,360px)] rounded-2xl border border-neutral-200 bg-white p-3 shadow-xl">
-                <div className="grid gap-2">
-                  {navLinks.map((link) => <Link key={link.name} href={link.path} className="rounded-xl bg-neutral-50 p-4"><span className="block font-bold">{link.name}</span><span className="text-xs text-neutral-500">{link.desc}</span></Link>)}
-                  <Link href="/sign-in" className="rounded-xl border border-neutral-200 p-3 text-center text-sm font-bold">Sign In</Link>
-                  <Link href="/sign-up" className="rounded-full bg-neutral-950 p-3 text-center text-xs font-bold uppercase tracking-wider text-white">Start consultation</Link>
+            <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
+              {mobileMenuOpen ? <X size={23} /> : <Menu size={23} />}
+            </button>
+            {mobileMenuOpen && (
+              <div className="fixed inset-x-0 top-[70px] bottom-0 z-50 bg-white overflow-y-auto overscroll-contain border-t border-neutral-200 lg:hidden">
+                <div className="max-w-xl mx-auto px-5 py-6">
+                  <span className="text-[10px] font-bold tracking-[0.18em] uppercase text-neutral-400 block mb-3">About Suga.Health</span>
+                  <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="block rounded-2xl border border-neutral-200 bg-white p-5 mb-6 hover:border-neutral-950 transition-colors">
+                    <span className="block text-xl font-bold tracking-tight text-neutral-950">About</span>
+                    <span className="block text-sm text-neutral-500 mt-1">Our clinical mission, standards and approach to care.</span>
+                  </Link>
+
+                  <span className="text-[10px] font-bold tracking-[0.18em] uppercase text-neutral-400 block mb-3">Treatments</span>
+                  <div className="grid gap-2.5">
+                    {navLinks.filter((link) => link.name !== "About").map((link) => (
+                      <Link key={link.name} href={link.path} onClick={() => setMobileMenuOpen(false)} className="rounded-2xl bg-neutral-50 border border-neutral-100 p-5 hover:border-neutral-300 transition-colors">
+                        <span className="block text-lg font-bold tracking-tight text-neutral-950">{link.name}</span>
+                        <span className="block text-sm text-neutral-500 mt-1">{link.desc}</span>
+                      </Link>
+                    ))}
+                  </div>
+
+                  <div className="mt-7 pt-5 border-t border-neutral-200 grid gap-3">
+                    <Link href="/sign-in" onClick={() => setMobileMenuOpen(false)} className="legacy-action-light rounded-2xl border border-neutral-300 bg-white p-4 text-center text-sm font-bold">Sign In</Link>
+                    <Link href="/sign-up" onClick={() => { rememberReturnPosition(); setMobileMenuOpen(false); }} className="legacy-action-dark rounded-full bg-neutral-950 p-4 text-center text-xs font-bold uppercase tracking-wider">Start consultation</Link>
+                  </div>
                 </div>
               </div>
-            </details>
+            )}
           </div>
         </div>
       </header>
@@ -346,7 +380,7 @@ export default function HomePage() {
                 <Link href="/weight-loss" className="legacy-pill-link">Medical weight loss</Link>
                 <Link href="/hair-growth" className="legacy-pill-link">Hair growth</Link>
                 <Link href="/sexual-health" className="legacy-pill-link">Sexual health</Link>
-                <Link href="/sign-up" className="w-full inline-flex items-center justify-center bg-neutral-950 hover:bg-neutral-800 text-white px-6 py-4 rounded-[2rem] text-[15px] font-medium transition-colors mt-3 shadow-sm">Start consultation</Link>
+                <Link href="/sign-up" onClick={rememberReturnPosition} className="w-full inline-flex items-center justify-center bg-neutral-950 hover:bg-neutral-800 text-white px-6 py-4 rounded-[2rem] text-[15px] font-medium transition-colors mt-3 shadow-sm">Start consultation</Link>
               </div>
             </div>
           </div>
@@ -378,7 +412,7 @@ export default function HomePage() {
                   </div>
                   <div className="pt-4 border-t border-neutral-100 flex items-center justify-between">
                     <Link href={pillar.path} className="inline-flex items-center text-xs font-bold tracking-wider uppercase">View Protocol Details <ArrowRight size={14} className="ml-1.5" /></Link>
-                    <Link href="/sign-up" className="p-2.5 rounded-full bg-neutral-100 group-hover:bg-neutral-950 group-hover:text-white transition-colors" aria-label="Start consultation"><ArrowUpRight size={15} /></Link>
+                    <Link href="/sign-up" onClick={rememberReturnPosition} className="p-2.5 rounded-full bg-neutral-100 group-hover:bg-neutral-950 group-hover:text-white transition-colors" aria-label="Start consultation"><ArrowUpRight size={15} /></Link>
                   </div>
                 </div>
               </article>
@@ -404,7 +438,7 @@ export default function HomePage() {
                 </article>
               ))}
             </div>
-            <div className="mt-8 sm:mt-10 text-center"><Link href="/sign-up" className="legacy-dark-cta">See if you qualify today <ArrowRight size={14} className="ml-2" /></Link></div>
+            <div className="mt-8 sm:mt-10 text-center"><Link href="/sign-up" onClick={rememberReturnPosition} className="legacy-dark-cta">See if you qualify today <ArrowRight size={14} className="ml-2" /></Link></div>
           </div>
         </section>
 
@@ -460,7 +494,7 @@ export default function HomePage() {
           <div className="mt-10 sm:mt-12 lg:mt-14 rounded-2xl sm:rounded-3xl bg-neutral-950 text-white p-6 sm:p-8 lg:p-10">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-10">
               <div className="text-center lg:text-left max-w-2xl"><div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-neutral-300 text-xs font-semibold mb-4"><HeartHandshake size={14} /><span>Direct Doctor Access Included</span></div><h3 className="font-sans text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">Care that feels personal.<br /><span className="text-neutral-300 font-medium">Guidance from real doctors, with someone you can reach whenever you need.</span></h3><p className="mt-3 text-xs sm:text-sm text-neutral-400">Your care doesn’t stop with a prescription. Message your clinician directly, request dosage adjustments, and receive periodic medical check-ins at zero added charge.</p></div>
-              <Link href="/sign-up" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white text-neutral-950 text-xs font-bold uppercase tracking-wider">Meet Your Doctor <ArrowRight size={14} /></Link>
+              <Link href="/sign-up" onClick={rememberReturnPosition} className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white text-neutral-950 text-xs font-bold uppercase tracking-wider">Meet Your Doctor <ArrowRight size={14} /></Link>
             </div>
           </div>
         </section>
@@ -485,7 +519,7 @@ export default function HomePage() {
                 </div>
                 <div className="p-5 sm:p-6 lg:p-7 flex flex-col flex-grow justify-between">
                   <div><h3 className="font-sans text-lg sm:text-xl font-bold text-neutral-950 tracking-tight">{product.name}</h3><p className="mt-1 text-xs font-semibold text-neutral-500 font-mono line-clamp-1">{product.activeIngredients}</p><div className="my-4 p-3 rounded-xl bg-neutral-50 border border-neutral-200/80"><div className="flex items-start gap-2"><span className="w-4 h-4 rounded-full bg-neutral-900 text-white flex items-center justify-center shrink-0 mt-0.5"><Check size={10} /></span><span className="text-xs font-semibold text-neutral-800">{product.clinicalProof}</span></div></div></div>
-                  <div className="pt-4 border-t border-neutral-100"><div className="flex items-baseline gap-1.5"><span className="text-xs text-neutral-500">From</span><span className="font-sans text-2xl sm:text-3xl font-black">{product.startingPrice}</span><span className="text-xs text-neutral-500">/mo</span></div><div className="mt-2.5 mb-4 inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-semibold bg-neutral-100 px-2.5 py-1 rounded-full"><Truck size={12} />Free 2-Day Ship</div><div className="grid grid-cols-2 gap-2"><button type="button" onClick={() => setSelectedProduct(product)} className="inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-neutral-300 hover:border-neutral-950 text-xs font-bold uppercase tracking-wider"><Info size={13} />Details</button><Link href="/sign-up" className="inline-flex items-center justify-center gap-1 py-2.5 rounded-xl bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider">Get Started <ArrowRight size={13} /></Link></div></div>
+                  <div className="pt-4 border-t border-neutral-100"><div className="flex items-baseline gap-1.5"><span className="text-xs text-neutral-500">From</span><span className="font-sans text-2xl sm:text-3xl font-black">{product.startingPrice}</span><span className="text-xs text-neutral-500">/mo</span></div><div className="mt-2.5 mb-4 inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-semibold bg-neutral-100 px-2.5 py-1 rounded-full"><Truck size={12} />Free 2-Day Ship</div><div className="grid grid-cols-2 gap-2"><button type="button" onClick={() => setSelectedProduct(product)} className="inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-neutral-300 hover:border-neutral-950 text-xs font-bold uppercase tracking-wider"><Info size={13} />Details</button><Link href="/sign-up" onClick={rememberReturnPosition} className="inline-flex items-center justify-center gap-1 py-2.5 rounded-xl bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider">Get Started <ArrowRight size={13} /></Link></div></div>
                 </div>
               </article>
             ))}
@@ -502,7 +536,7 @@ export default function HomePage() {
         <section className="py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="rounded-2xl sm:rounded-3xl bg-neutral-950 text-white p-6 sm:p-10 md:p-14 flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
             <div className="max-w-2xl"><span className="text-xs font-bold tracking-widest text-neutral-400 uppercase block mb-2 sm:mb-3">Take the first step</span><h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-3 sm:mb-4">Your personalized medical plan is 5 minutes away.</h2><p className="text-neutral-400 text-base sm:text-lg">Answer quick medical questions. A licensed clinician will review your file and tailor your prescription.</p></div>
-            <Link href="/sign-up" className="w-full sm:w-auto inline-flex items-center justify-center bg-white text-neutral-950 px-8 py-4 rounded-full text-sm font-bold tracking-wider uppercase">Start Free Assessment <ArrowRight size={16} className="ml-2.5" /></Link>
+            <Link href="/sign-up" onClick={rememberReturnPosition} className="w-full sm:w-auto inline-flex items-center justify-center bg-white text-neutral-950 px-8 py-4 rounded-full text-sm font-bold tracking-wider uppercase">Start Free Assessment <ArrowRight size={16} className="ml-2.5" /></Link>
           </div>
         </section>
       </div>
@@ -511,8 +545,8 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 mb-10 sm:mb-12">
             <div className="md:col-span-6"><Link href="/" className="flex flex-col items-start mb-6"><span className="font-sans text-2xl tracking-tighter uppercase font-black text-white">SUGA<span className="text-neutral-500">.</span>HEALTH</span><span className="brand-tagline text-neutral-400 mt-0.5">live naturally</span></Link><p className="text-neutral-400 max-w-md text-sm leading-relaxed">Confidential, doctor-guided treatments for medical weight loss, hair restoration, and sexual vitality. Real treatments delivered with care and complete privacy.</p></div>
-            <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Clinical Treatments</h4><ul className="space-y-3 text-sm text-neutral-400"><li><Link href="/weight-loss">Medical Weight Loss (GLP-1)</Link></li><li><Link href="/hair-growth">Hair Regrowth & Density</Link></li><li><Link href="/sexual-health">Sexual Health & Performance</Link></li><li><Link href="/sign-up">Start Online Consultation</Link></li></ul></div>
-            <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Medical Practice</h4><ul className="space-y-3 text-sm text-neutral-400"><li><a href="#doctors">Our Doctors & Medical Board</a></li><li><a href="#products">Our Products & Formulary</a></li><li><Link href="/about">About Our Clinical Mission</Link></li><li><Link href="/sign-up">Patient Medical Intake</Link></li></ul></div>
+            <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Clinical Treatments</h4><ul className="space-y-3 text-sm text-neutral-400"><li><Link href="/weight-loss">Medical Weight Loss (GLP-1)</Link></li><li><Link href="/hair-growth">Hair Regrowth & Density</Link></li><li><Link href="/sexual-health">Sexual Health & Performance</Link></li><li><Link href="/sign-up" onClick={rememberReturnPosition}>Start Online Consultation</Link></li></ul></div>
+            <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Medical Practice</h4><ul className="space-y-3 text-sm text-neutral-400"><li><a href="#doctors">Our Doctors & Medical Board</a></li><li><a href="#products">Our Products & Formulary</a></li><li><Link href="/about">About Our Clinical Mission</Link></li><li><Link href="/sign-up" onClick={rememberReturnPosition}>Patient Medical Intake</Link></li></ul></div>
           </div>
           <div className="pt-6 border-t border-neutral-800 text-xs text-neutral-500 space-y-2"><p>Suga.Health facilitates telehealth consultations through licensed medical professionals. Prescription products require an online evaluation with a licensed healthcare provider.</p><p>For emergencies, contact local emergency services.</p><p>© {new Date().getFullYear()} Suga.Health. All rights reserved.</p></div>
         </div>
@@ -526,7 +560,7 @@ export default function HomePage() {
       {selectedProduct && <Modal onClose={() => setSelectedProduct(null)}>
         <div className="p-5 sm:p-7 bg-neutral-950 text-white"><span className="text-[10px] uppercase tracking-widest text-neutral-400 font-bold">Prescription Specification</span><h3 className="font-sans text-2xl sm:text-3xl font-extrabold text-white">{selectedProduct.name}</h3><p className="text-xs text-neutral-300 font-mono mt-1">Active Ingredients: {selectedProduct.activeIngredients}</p></div>
         <div className="p-5 sm:p-7 space-y-5"><div><span className="legacy-label">Formulation Overview</span><p className="text-sm text-neutral-700">{selectedProduct.description}</p></div><div className="grid sm:grid-cols-2 gap-3"><div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200"><span className="legacy-label">Administration Method</span><p className="text-xs font-bold text-neutral-900">{selectedProduct.deliveryMethod}</p></div><div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200"><span className="legacy-label">Typical Dosage Range</span><p className="text-xs font-bold text-neutral-900">{selectedProduct.dosage}</p></div></div><div><span className="legacy-label">Mechanism of Action</span><p className="text-sm text-neutral-700">{selectedProduct.mechanismOfAction}</p></div><div><span className="legacy-label">Clinical Benefits & Outcomes</span><div className="grid sm:grid-cols-2 gap-2 mt-2">{selectedProduct.benefits.map((benefit) => <div key={benefit} className="flex gap-2 text-xs text-neutral-700"><Check size={13} className="shrink-0 mt-0.5" />{benefit}</div>)}</div></div></div>
-        <div className="p-5 sm:p-6 bg-neutral-50 border-t border-neutral-200 flex items-center justify-between"><div><span className="text-[11px] text-neutral-500">All-inclusive pricing</span><div className="font-sans text-2xl font-extrabold">{selectedProduct.startingPrice} <span className="text-xs font-medium text-neutral-500">{selectedProduct.billingCadence}</span></div></div><Link href="/sign-up" className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider">Check Eligibility <ArrowRight size={14} /></Link></div>
+        <div className="p-5 sm:p-6 bg-neutral-50 border-t border-neutral-200 flex items-center justify-between"><div><span className="text-[11px] text-neutral-500">All-inclusive pricing</span><div className="font-sans text-2xl font-extrabold">{selectedProduct.startingPrice} <span className="text-xs font-medium text-neutral-500">{selectedProduct.billingCadence}</span></div></div><Link href="/sign-up" onClick={rememberReturnPosition} className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider">Check Eligibility <ArrowRight size={14} /></Link></div>
       </Modal>}
     </main>
   );
