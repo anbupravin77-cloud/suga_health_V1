@@ -82,13 +82,6 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
   return (
     <div>
-      {mode !== "forgot-password" && (
-        <div className="mb-6 grid grid-cols-2 rounded-xl bg-stone-50 p-1 border border-stone-200">
-          <Link href="/sign-in" className={"rounded-lg px-3 py-2 text-center text-xs font-semibold transition-colors " + (isSignIn ? "bg-white text-stone-950 shadow-sm" : "text-stone-500 hover:text-stone-900")}>Sign In</Link>
-          <Link href="/sign-up" className={"rounded-lg px-3 py-2 text-center text-xs font-semibold transition-colors " + (isSignUp ? "bg-white text-stone-950 shadow-sm" : "text-stone-500 hover:text-stone-900")}>New Patient</Link>
-        </div>
-      )}
-
       {error && <div className="mb-5 rounded-lg bg-red-50 p-3 text-xs text-red-700 border border-red-200" role="alert">{error}</div>}
       {message && <div className="mb-5 rounded-lg bg-emerald-50 p-3 text-xs text-emerald-800 border border-emerald-200" role="status">{message}</div>}
 
@@ -146,7 +139,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
       )}
 
       <p className="mt-5 text-center text-xs text-stone-500">
-        {isSignIn ? <>New to Suga.Health? <Link href="/sign-up" className="font-semibold text-stone-950 underline underline-offset-4">Create account</Link></> : isSignUp ? <>Already have an account? <Link href="/sign-in" className="font-semibold text-stone-950 underline underline-offset-4">Sign in</Link></> : <>Remembered your password? <Link href="/sign-in" className="font-semibold text-stone-950 underline underline-offset-4">Sign in</Link></>}
+        {isSignIn ? <>New patient? <Link href="/sign-up" className="font-semibold text-stone-950 underline underline-offset-4">Create account</Link></> : isSignUp ? <>Already registered? <Link href="/sign-in" className="font-semibold text-stone-950 underline underline-offset-4">Sign in</Link></> : <>Remembered your password? <Link href="/sign-in" className="font-semibold text-stone-950 underline underline-offset-4">Sign in</Link></>}
       </p>
     </div>
   );
