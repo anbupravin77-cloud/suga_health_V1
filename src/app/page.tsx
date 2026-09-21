@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Activity,
   ArrowRight,
@@ -21,6 +21,7 @@ import {
   X,
 } from "lucide-react";
 import { rememberReturnPosition, useRestoreReturnPosition } from "@/components/public/return-position";
+import { MobilePublicMenu } from "@/components/public/mobile-public-menu";
 
 const navLinks = [
   { name: "About", path: "/about", desc: "Our clinical mission & standards" },
@@ -287,18 +288,6 @@ export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   useRestoreReturnPosition();
 
-  useEffect(() => {
-    if (!mobileMenuOpen) return;
-    const bodyOverflow = document.body.style.overflow;
-    const htmlOverflow = document.documentElement.style.overflow;
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = bodyOverflow;
-      document.documentElement.style.overflow = htmlOverflow;
-    };
-  }, [mobileMenuOpen]);
-
   const visibleProducts = productCategory === "all" ? products : products.filter((product) => product.category === productCategory);
 
   return (
@@ -326,35 +315,11 @@ export default function HomePage() {
             <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
               {mobileMenuOpen ? <X size={23} /> : <Menu size={23} />}
             </button>
-            {mobileMenuOpen && (
-              <div className="fixed inset-x-0 top-[70px] bottom-0 z-50 bg-white overflow-y-auto overscroll-contain border-t border-neutral-200 lg:hidden">
-                <div className="max-w-xl mx-auto px-5 py-6">
-                  <span className="text-[10px] font-bold tracking-[0.18em] uppercase text-neutral-400 block mb-3">About Suga.Health</span>
-                  <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="block rounded-2xl border border-neutral-200 bg-white p-5 mb-6 hover:border-neutral-950 transition-colors">
-                    <span className="block text-xl font-bold tracking-tight text-neutral-950">About</span>
-                    <span className="block text-sm text-neutral-500 mt-1">Our clinical mission, standards and approach to care.</span>
-                  </Link>
 
-                  <span className="text-[10px] font-bold tracking-[0.18em] uppercase text-neutral-400 block mb-3">Treatments</span>
-                  <div className="grid gap-2.5">
-                    {navLinks.filter((link) => link.name !== "About").map((link) => (
-                      <Link key={link.name} href={link.path} onClick={() => setMobileMenuOpen(false)} className="rounded-2xl bg-neutral-50 border border-neutral-100 p-5 hover:border-neutral-300 transition-colors">
-                        <span className="block text-lg font-bold tracking-tight text-neutral-950">{link.name}</span>
-                        <span className="block text-sm text-neutral-500 mt-1">{link.desc}</span>
-                      </Link>
-                    ))}
-                  </div>
-
-                  <div className="mt-7 pt-5 border-t border-neutral-200 grid gap-3">
-                    <Link href="/sign-in" onClick={() => setMobileMenuOpen(false)} className="legacy-action-light rounded-2xl border border-neutral-300 bg-white p-4 text-center text-sm font-bold">Sign In</Link>
-                    <Link href="/sign-up" onClick={() => { rememberReturnPosition(); setMobileMenuOpen(false); }} className="legacy-action-dark rounded-full bg-neutral-950 p-4 text-center text-xs font-bold uppercase tracking-wider">Start consultation</Link>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </header>
+      <MobilePublicMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
 
       <div className="pt-[70px]">
         <section className="relative pb-10 sm:pb-14 md:pb-16 overflow-hidden bg-[#FAFAFA] border-b border-neutral-200/80">
