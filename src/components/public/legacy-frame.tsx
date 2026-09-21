@@ -65,7 +65,7 @@ export function LegacyPublicFrame({ children }: { children: ReactNode }) {
 
                 <div className="mt-7 pt-5 border-t border-neutral-200 grid gap-3">
                   <Link href="/sign-in" onClick={() => setMobileMenuOpen(false)} className="legacy-action-light rounded-2xl border border-neutral-300 bg-white p-4 text-center text-sm font-bold">Sign In</Link>
-                  <Link href="/sign-up" onClick={rememberReturnPosition} onClick={() => { rememberReturnPosition(); setMobileMenuOpen(false); }} className="legacy-action-dark rounded-full bg-neutral-950 p-4 text-center text-xs font-bold uppercase tracking-wider">Start consultation</Link>
+                  <Link href="/sign-up" onClick={() => { rememberReturnPosition(); setMobileMenuOpen(false); }} className="legacy-action-dark rounded-full bg-neutral-950 p-4 text-center text-xs font-bold uppercase tracking-wider">Start consultation</Link>
                 </div>
               </div>
             </div>
