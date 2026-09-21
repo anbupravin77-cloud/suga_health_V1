@@ -36,6 +36,8 @@ export default async function PatientConsultationPage({
   if (!consultation) notFound();
 
   const responses = (consultation.responses ?? {}) as Responses;
+  const isTestPatient = (user.email ?? "").trim().toLowerCase() === "patient123@gmail.com";
+  const doctorRpc = isTestPatient ? "v1_test_get_consultation_doctor" : "v1_get_consultation_doctor";
 
   const [{ data: thread }, { data: prescription }, { data: doctorRows }] = await Promise.all([
     supabase.from("message_threads").select("id").eq("consultation_id", id).maybeSingle(),
@@ -47,7 +49,7 @@ export default async function PatientConsultationPage({
           .maybeSingle()
       : Promise.resolve({ data: null }),
     consultation.assigned_to
-      ? supabase.rpc("v1_test_get_consultation_doctor", { p_consultation_id: id })
+      ? supabase.rpc(doctorRpc, { p_consultation_id: id })
       : Promise.resolve({ data: [] }),
   ]);
 
@@ -159,12 +161,16 @@ export default async function PatientConsultationPage({
               ? "Your plan is ready"
               : consultation.status === "under_review"
                 ? "Your doctor is reviewing this case"
-                : "Assigned to your test doctor"}
+                : consultation.assigned_to
+                  ? "Assigned to your doctor"
+                  : "Waiting for a doctor"}
           </h3>
           <p>
             {doctor
               ? `${doctor.professional_title || "Doctor"} ${doctor.full_name || ""}`
-              : "The paired test doctor will review this consultation."}
+              : consultation.assigned_to
+                ? "Your assigned doctor will review this consultation."
+                : "We’ll notify you when a doctor is assigned."}
           </p>
         </div>
       </aside>
