@@ -124,22 +124,34 @@ export async function updateProfile(formData: FormData) {
   const role: AppRole = value(formData, "role") === "doctor" ? "doctor" : "patient";
   const { user } = await requireRole(role);
   const supabase = await createClient();
-  const { error } = await supabase.from("profiles").update({
-    full_name: value(formData, "full_name"),
-    phone: value(formData, "phone") || null,
-    birth_date: value(formData, "birth_date") || null,
-  }).eq("id", user.id);
-  if (error) redirect(`/${role}/profile?error=save`);
-  if (role === "doctor") {
-    const { error: doctorError } = await supabase.from("doctor_profiles").update({
-      professional_title: value(formData, "professional_title") || null,
-      specialization: value(formData, "specialization") || null,
-      bio: value(formData, "bio") || null,
-    }).eq("doctor_id", user.id);
-    if (doctorError) redirect("/doctor/profile?error=save");
+
+  if (role === "patient") {
+    const firstName = value(formData, "first_name");
+    const lastName = value(formData, "last_name");
+    const displayName = [firstName, lastName].filter(Boolean).join(" ").trim();
+
+    const { error } = await supabase.from("profiles").update({
+      first_name: firstName || null,
+      last_name: lastName || null,
+      display_name: displayName || null,
+      phone_number: value(formData, "phone_number") || null,
+      date_of_birth: value(formData, "date_of_birth") || null,
+    }).eq("id", user.id);
+
+    if (error) redirect("/patient/profile?error=save");
+    revalidatePath("/patient/profile");
+    redirect("/patient/profile?notice=saved");
   }
-  revalidatePath(`/${role}/profile`);
-  redirect(`/${role}/profile?notice=saved`);
+
+  const fullName = value(formData, "full_name");
+  const { error } = await supabase.from("profiles").update({
+    display_name: fullName || null,
+    phone_number: value(formData, "phone") || null,
+  }).eq("id", user.id);
+  if (error) redirect("/doctor/profile?error=save");
+
+  revalidatePath("/doctor/profile");
+  redirect("/doctor/profile?notice=saved");
 }
 
 export async function signOut() {
