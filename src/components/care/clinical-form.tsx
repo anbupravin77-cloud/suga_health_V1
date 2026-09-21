@@ -230,7 +230,7 @@ export function ClinicalForm({
         duration: medicine.duration.trim(),
         instructions: medicine.instructions.trim(),
       })),
-    })));
+    }))));
     return data;
   }
 
