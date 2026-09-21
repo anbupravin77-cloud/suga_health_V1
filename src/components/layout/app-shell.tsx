@@ -37,7 +37,7 @@ export function AppShell({ role, name, children }: { role: "patient" | "doctor";
         <div className="sidebar-foot"><p className="sidebar-note">Real care.<br />Clear next steps.</p><form action={signOut}><button className="sidebar-logout" type="submit"><LogOut size={16} /> Sign out</button></form></div>
       </aside>
       <div className="app-main">
-        <header className="app-topbar"><Link className="mobile-app-brand" href="/">Suga.Health</Link><span>{role === "doctor" ? "Clinical workspace" : "Private patient space"}</span><strong>{name}</strong></header>
+        <header className="app-topbar"><Link className="mobile-app-brand" href="/">SUGA<span>.</span>HEALTH</Link><span>{role === "doctor" ? "Clinical workspace" : "Private patient space"}</span><strong>{name}</strong></header>
         <main className="app-content">{children}</main>
       </div>
     </div>
