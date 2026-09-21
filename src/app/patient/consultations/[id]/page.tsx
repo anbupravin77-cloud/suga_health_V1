@@ -1,0 +1,46 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Check, Clock3, FilePenLine, Pill } from "lucide-react";
+import { deleteDraft } from "@/app/actions";
+import { AppShell } from "@/components/layout/app-shell";
+import { MessageThread } from "@/components/care/message-thread";
+import { StatusBadge } from "@/components/care/status-badge";
+import { requireRole } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+
+export const dynamic = "force-dynamic";
+
+export default async function PatientConsultationPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ notice?: string; error?: string }> }) {
+  const { id } = await params;
+  const query = await searchParams;
+  const { user, profile } = await requireRole("patient");
+  const supabase = await createClient();
+  const { data: consultation } = await supabase.from("consultations").select("*").eq("id", id).single();
+  if (!consultation) notFound();
+
+  const [{ data: thread }, { data: prescription }, { data: doctorRows }] = await Promise.all([
+    supabase.from("message_threads").select("id").eq("consultation_id", id).maybeSingle(),
+    consultation.status === "completed" ? supabase.from("prescriptions").select("id, prescription_items(medication_name, dosage, frequency, duration, instructions, position)").eq("consultation_id", id).maybeSingle() : Promise.resolve({ data: null }),
+    consultation.assigned_doctor_id ? supabase.rpc("get_consultation_doctor", { p_consultation_id: id }) : Promise.resolve({ data: [] }),
+  ]);
+  const { data: messages } = thread ? await supabase.from("messages").select("id, sender_id, body, created_at").eq("thread_id", thread.id).order("created_at") : { data: [] };
+  const doctor = doctorRows?.[0];
+  const items = (prescription?.prescription_items ?? []).sort((a, b) => a.position - b.position);
+
+  return <AppShell role="patient" active="Consultations" name={profile.full_name || "Patient"}>
+    <section className="case-header"><div><Link className="back-link" href="/patient/consultations">← All consultations</Link><span className="eyebrow">Consultation</span><h1>{consultation.primary_concern}</h1><p>Started {new Date(consultation.created_at).toLocaleDateString("en", { dateStyle: "long" })}</p></div><StatusBadge status={consultation.status} /></section>
+    {query.notice && <p className="page-notice" role="status">{query.notice === "submitted" ? "Consultation submitted successfully." : query.notice === "saved" ? "Draft saved." : "Message sent securely."}</p>}
+    {query.error && <p className="page-error" role="alert">We couldn’t complete that action. Please try again.</p>}
+
+    {consultation.status === "draft" ? <section className="case-action-panel"><FilePenLine /><div><h2>Your draft is private</h2><p>Continue editing when you’re ready. A doctor cannot see it until you submit.</p></div><div className="case-actions"><Link className="button button-primary" href={`/patient/consultations/${id}/edit`}>Continue draft</Link><form action={deleteDraft}><input type="hidden" name="id" value={id} /><button className="button button-secondary" type="submit">Delete</button></form></div></section> : <section className="care-progress"><div className="progress-step done"><Check /><span>Submitted</span></div><div className={`progress-step ${["under_review", "completed"].includes(consultation.status) ? "done" : ""}`}><Clock3 /><span>Doctor review</span></div><div className={`progress-step ${consultation.status === "completed" ? "done" : ""}`}><Pill /><span>Treatment ready</span></div></section>}
+
+    <div className="case-layout">
+      <div>
+        <section className="detail-card"><span className="eyebrow">What you shared</span><h2>{consultation.primary_concern}</h2><dl><div><dt>Symptoms</dt><dd>{consultation.symptoms}</dd></div><div><dt>Duration</dt><dd>{consultation.symptom_duration || "Not provided"}</dd></div><div><dt>Relevant context</dt><dd>{consultation.relevant_context || "Not provided"}</dd></div></dl></section>
+        {consultation.status === "completed" && <section className="treatment-summary"><span className="eyebrow">Your treatment plan</span><h2>Guidance from {doctor?.full_name || "your doctor"}</h2><blockquote>{consultation.clinician_message}</blockquote><h3>Prescription</h3>{items.length ? <div className="medication-list">{items.map((item, index) => <article key={`${item.medication_name}-${index}`}><span>{String(index + 1).padStart(2, "0")}</span><div><h4>{item.medication_name}</h4><p>{item.dosage} · {item.frequency} · {item.duration}</p>{item.instructions && <small>{item.instructions}</small>}</div></article>)}</div> : <p>No medication was added.</p>}<p className="treatment-meta">Completed {consultation.completed_at ? new Date(consultation.completed_at).toLocaleDateString("en", { dateStyle: "long" }) : "recently"}{doctor?.specialization ? ` · ${doctor.specialization}` : ""}</p></section>}
+      </div>
+      <aside className="case-aside"><div className="aside-card"><span className="eyebrow">Care status</span><h3>{consultation.status === "completed" ? "Your plan is ready" : consultation.status === "under_review" ? "A doctor is reviewing your case" : "Waiting for a doctor"}</h3><p>{doctor ? `${doctor.professional_title || "Doctor"} ${doctor.full_name || ""}` : "We’ll notify you when a doctor begins the review."}</p></div></aside>
+    </div>
+    {thread && <MessageThread threadId={thread.id} currentUserId={user.id} messages={messages ?? []} returnTo={`/patient/consultations/${id}`} enabled={Boolean(consultation.assigned_doctor_id)} />}
+  </AppShell>;
+}
