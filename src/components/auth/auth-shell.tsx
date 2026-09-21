@@ -3,21 +3,20 @@ import type { ReactNode } from "react";
 
 export function AuthShell({ title, description, children }: { title: string; description: string; children: ReactNode }) {
   return (
-    <main className="auth-page">
-      <section className="auth-story" aria-label="Suga.Health">
-        <Link className="wordmark" href="/">Suga.Health</Link>
-        <div>
-          <h2>Thoughtful care for a healthier you.</h2>
-          <p>Real clinicians. Private conversations. Clear next steps.</p>
+    <main className="legacy-public min-h-screen flex items-center justify-center bg-stone-50 p-4">
+      <section className="w-full max-w-lg rounded-2xl bg-white p-6 sm:p-8 shadow-sm border border-stone-200">
+        <div className="mb-6 text-center">
+          <Link href="/" className="inline-flex flex-col items-center mb-3">
+            <span className="font-sans text-xl font-black tracking-tighter text-stone-950">SUGA<span className="text-neutral-400">.</span>HEALTH</span>
+            <span className="brand-tagline text-stone-500 mt-0.5">live naturally</span>
+          </Link>
+          <h1 className="font-sans text-2xl font-bold tracking-tight text-stone-900">{title}</h1>
+          <p className="mt-1 text-xs text-stone-500">{description}</p>
         </div>
-        <p className="auth-story-foot">PEOPLE / CARE / PROGRESS</p>
-      </section>
-      <section className="auth-panel">
-        <div className="auth-card">
-          <Link className="auth-mobile-brand" href="/">Suga.Health</Link>
-          <h1>{title}</h1>
-          <p className="auth-description">{description}</p>
-          {children}
+        {children}
+        <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
+          <Link href="/" className="hover:text-stone-900">← Back to Home</Link>
+          <Link href="/doctor" className="hover:text-stone-900 font-medium">Clinical Doctor Portal →</Link>
         </div>
       </section>
     </main>
