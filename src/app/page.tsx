@@ -338,7 +338,7 @@ export default function HomePage() {
 
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 md:pt-24 pb-8">
             <div className="flex flex-col items-center text-center">
-              <h1 className="font-sans text-[20px] sm:text-4xl md:text-[2.5rem] lg:text-[2.75rem] font-normal tracking-tight text-neutral-900 leading-[1.4] text-balance max-w-2xl">
+              <h1 className="legacy-hero-title font-sans text-[20px] sm:text-4xl md:text-[2.5rem] lg:text-[2.75rem] tracking-tight text-neutral-900 leading-[1.4] text-balance max-w-2xl">
                 Clinically proven, FDA (USA) approved,<br className="hidden sm:block" /> treatment prescribed by experts.
               </h1>
               <div className="flex flex-col items-center gap-3.5 w-full max-w-[280px] sm:max-w-[320px] mt-10 sm:mt-14">
