@@ -2,7 +2,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Check, Clock3, FilePenLine, Pill } from "lucide-react";
 import { deleteDraft } from "@/app/actions";
-import { AppShell } from "@/components/layout/app-shell";
 import { MessageThread } from "@/components/care/message-thread";
 import { StatusBadge } from "@/components/care/status-badge";
 import { requireRole } from "@/lib/auth";
@@ -13,7 +12,7 @@ export const dynamic = "force-dynamic";
 export default async function PatientConsultationPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ notice?: string; error?: string }> }) {
   const { id } = await params;
   const query = await searchParams;
-  const { user, profile } = await requireRole("patient");
+  const { user } = await requireRole("patient");
   const supabase = await createClient();
   const { data: consultation } = await supabase.from("consultations").select("*").eq("id", id).single();
   if (!consultation) notFound();
@@ -27,7 +26,7 @@ export default async function PatientConsultationPage({ params, searchParams }: 
   const doctor = doctorRows?.[0];
   const items = (prescription?.prescription_items ?? []).sort((a, b) => a.position - b.position);
 
-  return <AppShell role="patient" active="Consultations" name={profile.full_name || "Patient"}>
+  return <>
     <section className="case-header"><div><Link className="back-link" href="/patient/consultations">← All consultations</Link><span className="eyebrow">Consultation</span><h1>{consultation.primary_concern}</h1><p>Started {new Date(consultation.created_at).toLocaleDateString("en", { dateStyle: "long" })}</p></div><StatusBadge status={consultation.status} /></section>
     {query.notice && <p className="page-notice" role="status">{query.notice === "submitted" ? "Consultation submitted successfully." : query.notice === "saved" ? "Draft saved." : "Message sent securely."}</p>}
     {query.error && <p className="page-error" role="alert">We couldn’t complete that action. Please try again.</p>}
@@ -42,5 +41,5 @@ export default async function PatientConsultationPage({ params, searchParams }: 
       <aside className="case-aside"><div className="aside-card"><span className="eyebrow">Care status</span><h3>{consultation.status === "completed" ? "Your plan is ready" : consultation.status === "under_review" ? "A doctor is reviewing your case" : "Waiting for a doctor"}</h3><p>{doctor ? `${doctor.professional_title || "Doctor"} ${doctor.full_name || ""}` : "We’ll notify you when a doctor begins the review."}</p></div></aside>
     </div>
     {thread && <MessageThread threadId={thread.id} currentUserId={user.id} messages={messages ?? []} returnTo={`/patient/consultations/${id}`} enabled={Boolean(consultation.assigned_doctor_id)} />}
-  </AppShell>;
+  </>;
 }
