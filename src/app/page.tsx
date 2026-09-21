@@ -357,7 +357,7 @@ export default function HomePage() {
             {pillars.map((pillar) => (
               <article key={pillar.id} className="group relative bg-white rounded-2xl sm:rounded-3xl border border-neutral-200/90 hover:border-neutral-950 transition-colors duration-300 flex flex-col overflow-hidden">
                 <div className="relative h-56 sm:h-64 w-full overflow-hidden bg-neutral-100">
-                  <img src={pillar.img} alt={pillar.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <img loading="lazy" decoding="async" src={pillar.img} alt={pillar.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10" />
                   <div className="absolute bottom-4 left-4 right-4 text-white">
                     <span className="text-xs uppercase tracking-widest text-neutral-300 font-semibold block mb-0.5">{pillar.subtitle}</span>
@@ -444,7 +444,7 @@ export default function HomePage() {
             {doctors.map((doctor) => (
               <article key={doctor.id} className="group bg-white rounded-2xl sm:rounded-3xl border border-neutral-200/90 hover:border-neutral-950 transition-all flex flex-col overflow-hidden shadow-sm">
                 <div className="relative h-64 sm:h-72 bg-neutral-100 overflow-hidden">
-                  <img src={doctor.image} alt={doctor.name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700" />
+                  <img loading="lazy" decoding="async" src={doctor.image} alt={doctor.name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
                   <span className="absolute top-3.5 left-3.5 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-bold uppercase tracking-wider"><ShieldCheck size={12} />Verified MD/DO</span>
                   <div className="absolute bottom-3.5 left-3.5 right-3.5 text-white"><h3 className="font-sans text-xl font-bold text-white">{doctor.name}</h3><span className="text-xs font-semibold text-neutral-300">{doctor.credentials} • {doctor.role}</span></div>
@@ -477,7 +477,7 @@ export default function HomePage() {
             {visibleProducts.map((product) => (
               <article key={product.id} className="group bg-white rounded-2xl sm:rounded-3xl border border-neutral-200/90 hover:border-neutral-950 transition-all flex flex-col overflow-hidden shadow-sm">
                 <div className="relative h-60 sm:h-64 bg-neutral-100 overflow-hidden">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <img loading="lazy" decoding="async" src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                   <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between"><span className="px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-bold uppercase tracking-wider">{product.category === "weight" ? "Metabolic GLP-1" : product.category === "hair" ? "Trichology Formula" : "Endocrine / Vascular"}</span>{product.isPopular && <span className="px-2.5 py-1 rounded-full bg-neutral-950 text-white text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><Sparkles size={10} />Most Prescribed</span>}</div>
                   <div className="absolute bottom-3 left-3.5 right-3.5 text-white flex items-center gap-1.5 text-[11px] font-semibold"><Layers size={12} /><span className="truncate">{product.deliveryMethod}</span></div>
@@ -518,7 +518,7 @@ export default function HomePage() {
       </footer>
 
       {selectedDoctor && <Modal onClose={() => setSelectedDoctor(null)}>
-        <div className="p-5 sm:p-7 bg-neutral-950 text-white flex items-center gap-4"><img src={selectedDoctor.image} alt={selectedDoctor.name} className="w-20 h-20 rounded-2xl object-cover object-top" /><div><span className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Board-Certified Clinician</span><h3 className="font-sans text-2xl font-extrabold text-white">{selectedDoctor.name}, {selectedDoctor.credentials}</h3><p className="text-xs text-neutral-300">{selectedDoctor.role}</p></div></div>
+        <div className="p-5 sm:p-7 bg-neutral-950 text-white flex items-center gap-4"><img loading="lazy" decoding="async" src={selectedDoctor.image} alt={selectedDoctor.name} className="w-20 h-20 rounded-2xl object-cover object-top" /><div><span className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Board-Certified Clinician</span><h3 className="font-sans text-2xl font-extrabold text-white">{selectedDoctor.name}, {selectedDoctor.credentials}</h3><p className="text-xs text-neutral-300">{selectedDoctor.role}</p></div></div>
         <div className="p-5 sm:p-7 space-y-5"><div><span className="legacy-label">Clinical Specialty</span><p className="text-sm text-neutral-700">{selectedDoctor.specialty}</p></div><div><span className="legacy-label">Board Certification</span><p className="text-sm text-neutral-700">{selectedDoctor.boardCertification}</p></div><div><span className="legacy-label">Education</span><p className="text-sm text-neutral-700">{selectedDoctor.education}</p></div><div><span className="legacy-label">About</span><p className="text-sm text-neutral-700">{selectedDoctor.bio}</p></div><div className="text-xs font-bold uppercase tracking-wider text-neutral-500">{selectedDoctor.yearsOfExperience} years clinical practice</div></div>
       </Modal>}
 

@@ -1,4 +1,4 @@
-export default function PatientLoading() {
+export default function DoctorLoading() {
   return (
     <div className="portal-loading" role="status" aria-live="polite">
       <div className="portal-loading-heading" />
@@ -6,7 +6,7 @@ export default function PatientLoading() {
       <div className="portal-loading-grid">
         <div /><div /><div />
       </div>
-      <span>Opening your care space…</span>
+      <span>Opening clinical workspace…</span>
     </div>
   );
 }

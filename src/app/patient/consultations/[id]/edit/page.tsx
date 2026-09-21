@@ -2,12 +2,6 @@ import { notFound, redirect } from "next/navigation";
 import { ConsultationForm } from "@/components/care/consultation-form";
 import { createClient } from "@/lib/supabase/server";
 
-type Responses = {
-  symptoms?: string;
-  symptom_duration?: string | null;
-  relevant_context?: string | null;
-};
-
 export default async function EditConsultationPage({
   params,
   searchParams,
@@ -28,24 +22,23 @@ export default async function EditConsultationPage({
   if (!data) notFound();
   if (data.status !== "draft") redirect(`/patient/consultations/${id}`);
 
-  const responses = (data.responses ?? {}) as Responses;
-  const draft = {
-    id: data.id,
-    primary_concern: data.primary_concern,
-    symptoms: responses.symptoms ?? "",
-    symptom_duration: responses.symptom_duration ?? null,
-    relevant_context: responses.relevant_context ?? null,
-  };
-
-  return <>
-    <section className="dashboard-heading compact-heading">
-      <div>
-        <span className="eyebrow">Saved draft</span>
-        <h1>Continue your consultation.</h1>
-        <p>Your changes remain private until submission.</p>
-      </div>
-    </section>
-    {query.error && <p className="page-error" role="alert">We couldn’t save or submit this consultation. Review the details and try again.</p>}
-    <ConsultationForm draft={draft} />
-  </>;
+  return (
+    <>
+      <section className="dashboard-heading compact-heading">
+        <div>
+          <span className="eyebrow">Saved draft</span>
+          <h1>Continue your clinical intake.</h1>
+          <p>Your changes remain private until you submit the final consent step.</p>
+        </div>
+      </section>
+      {query.error && <p className="page-error" role="alert">We couldn’t save or submit this consultation. Review the details and try again.</p>}
+      <ConsultationForm
+        draft={{
+          id: data.id,
+          primary_concern: data.primary_concern,
+          responses: (data.responses ?? {}) as Record<string, unknown>,
+        }}
+      />
+    </>
+  );
 }

@@ -2,82 +2,182 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireRole, type AppRole } from "@/lib/auth";
+import { requireActionRole, type AppRole } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-
-const TEST_PATIENT_EMAIL = "patient123@gmail.com";
-const TEST_DOCTOR_EMAIL = "doctor123@gmail.com";
 
 function value(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
 }
 
-function isEmail(userEmail: string | undefined, expected: string) {
-  return (userEmail ?? "").trim().toLowerCase() === expected;
+function numberValue(formData: FormData, key: string) {
+  const parsed = Number(value(formData, key));
+  return Number.isFinite(parsed) ? parsed : null;
 }
 
-export async function saveConsultation(formData: FormData) {
-  const { user } = await requireRole("patient");
-  const supabase = await createClient();
-  const id = value(formData, "id");
-  const shouldSubmit = value(formData, "intent") === "submit";
+function checked(formData: FormData, key: string) {
+  const raw = value(formData, key);
+  return raw === "true" || raw === "on" || raw === "1";
+}
 
-  const record = {
-    patient_id: user.id,
-    primary_concern: value(formData, "primary_concern"),
+function buildConsultationRecord(formData: FormData, patientId: string) {
+  const primaryConcern = value(formData, "primary_concern");
+  if (!["weight", "hair", "sex"].includes(primaryConcern)) {
+    throw new Error("Choose a valid care area.");
+  }
+
+  const heightUnit = value(formData, "height_unit") === "ftin" ? "ftin" : "cm";
+  const weightUnit = value(formData, "weight_unit") === "lb" ? "lb" : "kg";
+  const heightCmInput = numberValue(formData, "height_cm");
+  const heightFeet = numberValue(formData, "height_feet");
+  const heightInches = numberValue(formData, "height_inches");
+  const weightInput = numberValue(formData, "weight_value");
+  const age = numberValue(formData, "age");
+  const sex = value(formData, "sex");
+
+  const heightCm =
+    heightUnit === "cm"
+      ? heightCmInput
+      : heightFeet !== null
+        ? Math.round(((heightFeet * 12 + (heightInches ?? 0)) * 2.54) * 10) / 10
+        : null;
+
+  const weightKg =
+    weightInput === null
+      ? null
+      : weightUnit === "kg"
+        ? Math.round(weightInput * 10) / 10
+        : Math.round(weightInput * 0.45359237 * 10) / 10;
+
+  return {
+    patient_id: patientId,
+    primary_concern: primaryConcern,
+    schema_version: 2,
     responses: {
-      symptoms: value(formData, "symptoms"),
-      symptom_duration: value(formData, "symptom_duration") || null,
-      relevant_context: value(formData, "relevant_context") || null,
+      primary_concern: primaryConcern,
+      height_unit: heightUnit,
+      height_cm_input: heightCmInput,
+      height_feet: heightFeet,
+      height_inches: heightInches,
+      height_cm: heightCm,
+      weight_unit: weightUnit,
+      weight_value: weightInput,
+      weight_kg: weightKg,
+      age,
+      sex,
+      conditions: formData.getAll("conditions").map(String).filter(Boolean),
+      current_medications: value(formData, "current_medications"),
+      allergies: value(formData, "allergies"),
+      medical_history: value(formData, "medical_history"),
+      care_goal: value(formData, "care_goal"),
+      consent_truth: checked(formData, "consent_truth"),
+      consent_telehealth: checked(formData, "consent_telehealth"),
+      consent_privacy: checked(formData, "consent_privacy"),
     },
   };
+}
+
+async function persistConsultation(formData: FormData, patientId: string) {
+  const supabase = await createClient();
+  const id = value(formData, "id");
+  const record = buildConsultationRecord(formData, patientId);
 
   const result = id
     ? await supabase
         .from("consultations")
         .update(record)
         .eq("id", id)
+        .eq("patient_id", patientId)
         .eq("status", "draft")
         .select("id")
         .single()
     : await supabase.from("consultations").insert(record).select("id").single();
 
   if (result.error || !result.data) {
-    redirect(`/patient/consultations/${id ? `${id}/edit` : "new"}?error=save`);
+    return { ok: false as const, error: result.error?.message || "Unable to save the consultation." };
   }
 
-  if (shouldSubmit) {
-    const testPatient = isEmail(user.email, TEST_PATIENT_EMAIL);
-    const submission = testPatient
-      ? await supabase.rpc("v1_test_submit_consultation", {
-          p_consultation_id: result.data.id,
-        })
-      : await supabase.rpc("fn_submit_consultation", {
-          p_consultation_id: result.data.id,
-          p_patient_id: user.id,
-          p_test_doctor_email: null,
-        });
+  return { ok: true as const, id: result.data.id, record };
+}
 
-    if (submission.error) {
-      redirect(`/patient/consultations/${result.data.id}/edit?error=submit`);
+export async function saveConsultationDraft(formData: FormData) {
+  const { user } = await requireActionRole("patient");
+
+  try {
+    const result = await persistConsultation(formData, user.id);
+    if (!result.ok) return result;
+
+    revalidatePath("/patient");
+    revalidatePath("/patient/consultations");
+    return { ok: true, id: result.id };
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : "Unable to save the consultation." };
+  }
+}
+
+export async function submitConsultation(formData: FormData) {
+  const { user } = await requireActionRole("patient");
+
+  try {
+    const consentOk =
+      checked(formData, "consent_truth") &&
+      checked(formData, "consent_telehealth") &&
+      checked(formData, "consent_privacy");
+
+    if (!consentOk) return { ok: false, error: "All three consent statements are required." };
+
+    const record = buildConsultationRecord(formData, user.id);
+    const responses = record.responses as Record<string, unknown>;
+
+    if (!responses.height_cm || !responses.weight_kg || !responses.age || !responses.sex) {
+      return { ok: false, error: "Height, weight, age, and sex are required before submission." };
     }
-  }
+    if (!Array.isArray(responses.conditions) || responses.conditions.length === 0) {
+      return { ok: false, error: "Select the applicable medical conditions or choose None of the above." };
+    }
 
-  revalidatePath("/patient");
-  revalidatePath("/patient/consultations");
-  redirect(`/patient/consultations/${result.data.id}?notice=${shouldSubmit ? "submitted" : "saved"}`);
+    const saved = await persistConsultation(formData, user.id);
+    if (!saved.ok) return saved;
+
+    const supabase = await createClient();
+    const { error } = await supabase.rpc("v1_submit_consultation", {
+      p_consultation_id: saved.id,
+    });
+
+    if (error) return { ok: false, error: error.message || "Unable to submit the consultation." };
+
+    if (typeof responses.height_cm === "number" && typeof responses.weight_kg === "number") {
+      await supabase
+        .from("profiles")
+        .update({
+          height_cm: responses.height_cm,
+          weight_kg: responses.weight_kg,
+          sex: typeof responses.sex === "string" ? responses.sex : null,
+        })
+        .eq("id", user.id);
+    }
+
+    revalidatePath("/patient");
+    revalidatePath("/patient/consultations");
+    revalidatePath("/patient/notifications");
+    revalidatePath("/doctor");
+    revalidatePath("/doctor/notifications");
+
+    return { ok: true, id: saved.id };
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : "Unable to submit the consultation." };
+  }
 }
 
 export async function deleteDraft(formData: FormData) {
-  const { user } = await requireRole("patient");
+  await requireActionRole("patient");
   const supabase = await createClient();
   const id = value(formData, "id");
 
-  const result = isEmail(user.email, TEST_PATIENT_EMAIL)
-    ? await supabase.rpc("v1_test_delete_draft", { p_consultation_id: id })
-    : await supabase.rpc("v1_delete_draft", { p_consultation_id: id });
+  const { error } = await supabase.rpc("v1_delete_draft", {
+    p_consultation_id: id,
+  });
 
-  if (result.error) redirect("/patient/consultations?error=delete");
+  if (error) redirect("/patient/consultations?error=delete");
 
   revalidatePath("/patient");
   revalidatePath("/patient/consultations");
@@ -85,131 +185,134 @@ export async function deleteDraft(formData: FormData) {
 }
 
 export async function claimConsultation(formData: FormData) {
-  const { user } = await requireRole("doctor");
+  await requireActionRole("doctor");
   const supabase = await createClient();
   const id = value(formData, "id");
 
-  const result = isEmail(user.email, TEST_DOCTOR_EMAIL)
-    ? await supabase.rpc("v1_test_claim_consultation", {
-        p_consultation_id: id,
-      })
-    : await supabase.rpc("fn_claim_consultation", {
-        p_consultation_id: id,
-        p_doctor_id: user.id,
-      });
+  const { error } = await supabase.rpc("v1_claim_consultation", {
+    p_consultation_id: id,
+  });
 
-  if (result.error) redirect("/doctor?error=claim");
+  if (error) redirect("/doctor?error=claim");
 
   revalidatePath("/doctor");
   revalidatePath("/doctor/active-reviews");
+  revalidatePath("/patient/notifications");
   redirect(`/doctor/consultations/${id}?notice=claimed`);
 }
 
-export async function saveClinicalWork(formData: FormData) {
-  const { user } = await requireRole("doctor");
+export async function saveTreatmentOptions(formData: FormData) {
+  await requireActionRole("doctor");
   const supabase = await createClient();
   const id = value(formData, "id");
 
-  const medications = formData.getAll("medication_name").map(String);
-  const dosages = formData.getAll("dosage").map(String);
-  const frequencies = formData.getAll("frequency").map(String);
-  const durations = formData.getAll("duration").map(String);
-  const instructions = formData.getAll("instructions").map(String);
+  let options: unknown;
+  try {
+    options = JSON.parse(value(formData, "options_json"));
+  } catch {
+    return { ok: false, error: "The prescription options could not be read." };
+  }
 
-  const items = medications.map((medication_name, index) => ({
-    medication_name: medication_name.trim(),
-    dosage: (dosages[index] ?? "").trim(),
-    frequency: (frequencies[index] ?? "").trim(),
-    duration: (durations[index] ?? "").trim(),
-    instructions: (instructions[index] ?? "").trim(),
-  }));
-
-  const rpc = isEmail(user.email, TEST_DOCTOR_EMAIL)
-    ? "v1_test_save_clinical_work"
-    : "v1_save_clinical_work";
-
-  const { error } = await supabase.rpc(rpc, {
+  const { error } = await supabase.rpc("v1_save_treatment_options", {
     p_consultation_id: id,
-    p_note: value(formData, "clinical_note"),
-    p_clinician_message: value(formData, "clinician_message"),
-    p_items: items,
+    p_clinical_note: value(formData, "clinical_note"),
+    p_options: options,
   });
 
-  if (error) redirect(`/doctor/consultations/${id}?error=save`);
+  if (error) return { ok: false, error: error.message || "Unable to save clinical work." };
 
   revalidatePath(`/doctor/consultations/${id}`);
-  redirect(`/doctor/consultations/${id}?notice=saved`);
+  return { ok: true };
 }
 
-export async function completeConsultation(formData: FormData) {
-  const { user } = await requireRole("doctor");
+export async function completeConsultationNow(consultationId: string) {
+  await requireActionRole("doctor");
   const supabase = await createClient();
-  const id = value(formData, "id");
 
-  const rpc = isEmail(user.email, TEST_DOCTOR_EMAIL)
-    ? "v1_test_complete_consultation"
-    : "v1_complete_consultation";
-
-  const { error } = await supabase.rpc(rpc, {
-    p_consultation_id: id,
+  const { error } = await supabase.rpc("v1_complete_consultation_options", {
+    p_consultation_id: consultationId,
   });
 
-  if (error) redirect(`/doctor/consultations/${id}?error=complete`);
+  if (error) return { ok: false, error: error.message || "Unable to complete the consultation." };
 
   revalidatePath("/doctor");
   revalidatePath("/doctor/active-reviews");
-  revalidatePath(`/doctor/consultations/${id}`);
+  revalidatePath(`/doctor/consultations/${consultationId}`);
   revalidatePath("/patient");
   revalidatePath("/patient/consultations");
-  redirect(`/doctor/consultations/${id}?notice=completed`);
+  revalidatePath("/patient/notifications");
+  return { ok: true };
 }
 
-export async function sendMessage(formData: FormData) {
+export async function selectTreatmentOption(optionId: string) {
+  await requireActionRole("patient");
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
-  if (!user) redirect("/sign-in");
-
-  const threadId = value(formData, "thread_id");
-  const returnTo = value(formData, "return_to");
-  const isTestAccount =
-    isEmail(user.email, TEST_PATIENT_EMAIL) || isEmail(user.email, TEST_DOCTOR_EMAIL);
-
-  const rpc = isTestAccount ? "v1_test_send_message" : "v1_send_message";
-  const { error } = await supabase.rpc(rpc, {
-    p_thread_id: threadId,
-    p_message_text: value(formData, "body"),
+  const { data, error } = await supabase.rpc("v1_select_prescription_option", {
+    p_option_id: optionId,
   });
 
-  if (error) redirect(`${returnTo}?error=message`);
+  if (error) return { ok: false, error: error.message || "Unable to select this treatment option." };
 
-  revalidatePath(returnTo);
+  const consultationId =
+    data && typeof data === "object" && "consultationId" in data
+      ? String((data as { consultationId: unknown }).consultationId)
+      : null;
+
+  if (consultationId) revalidatePath(`/patient/consultations/${consultationId}`);
+  revalidatePath("/patient");
+  revalidatePath("/patient/notifications");
+  return { ok: true, consultationId };
+}
+
+export async function sendMessageNow(threadId: string, body: string) {
+  const supabase = await createClient();
+  const { data: claimsData } = await supabase.auth.getClaims();
+  const claims = claimsData?.claims as Record<string, unknown> | undefined;
+  if (!claims?.sub) return { ok: false, error: "Your session expired. Sign in again." };
+
+  const cleanBody = body.trim();
+  if (!cleanBody) return { ok: false, error: "Write a message first." };
+  if (cleanBody.length > 3000) return { ok: false, error: "Keep the message under 3000 characters." };
+
+  const { error } = await supabase.rpc("v1_send_message", {
+    p_thread_id: threadId,
+    p_message_text: cleanBody,
+  });
+
+  if (error) return { ok: false, error: error.message || "Unable to send the message." };
+
   revalidatePath("/patient/messages");
   revalidatePath("/doctor/messages");
   revalidatePath("/patient/notifications");
   revalidatePath("/doctor/notifications");
-  redirect(`${returnTo}?notice=message-sent`);
+  return { ok: true };
+}
+
+export async function markAllNotificationsRead() {
+  const supabase = await createClient();
+  const { data: claimsData } = await supabase.auth.getClaims();
+  if (!claimsData?.claims) return { ok: false, error: "Your session expired." };
+
+  const { error } = await supabase.rpc("v1_mark_all_notifications_read");
+  if (error) return { ok: false, error: error.message || "Unable to mark notifications as read." };
+
+  revalidatePath("/patient");
+  revalidatePath("/patient/notifications");
+  revalidatePath("/doctor/notifications");
+  return { ok: true };
 }
 
 export async function markNotificationsRead(formData: FormData) {
   const role: AppRole = value(formData, "role") === "doctor" ? "doctor" : "patient";
-  const { user } = await requireRole(role);
-  const supabase = await createClient();
-
-  await supabase
-    .from("notifications")
-    .update({ read_at: new Date().toISOString(), status: "read" })
-    .eq("patient_id", user.id)
-    .is("read_at", null);
-
+  await requireActionRole(role);
+  await markAllNotificationsRead();
   revalidatePath(`/${role}/notifications`);
 }
 
 export async function updateProfile(formData: FormData) {
   const role: AppRole = value(formData, "role") === "doctor" ? "doctor" : "patient";
-  const { user } = await requireRole(role);
+  const { user } = await requireActionRole(role);
   const supabase = await createClient();
 
   if (role === "patient") {
