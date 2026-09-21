@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowRight, Loader2, Mail } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Loader2, Mail } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -14,6 +14,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -105,7 +106,27 @@ export function AuthForm({ mode }: { mode: Mode }) {
         {mode !== "forgot-password" && (
           <div>
             <label htmlFor="password" className="mb-1 block text-xs font-semibold text-stone-700">Password</label>
-            <input id="password" name="password" type="password" placeholder="••••••••" autoComplete={isSignIn ? "current-password" : "new-password"} minLength={8} className="w-full rounded-lg border border-stone-200 px-3.5 py-2.5 text-xs focus:border-stone-900 focus:outline-none" required />
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                autoComplete={isSignIn ? "current-password" : "new-password"}
+                minLength={8}
+                className="w-full rounded-lg border border-stone-200 px-3.5 py-2.5 pr-11 text-xs focus:border-stone-900 focus:outline-none"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((visible) => !visible)}
+                className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-stone-500 hover:text-stone-900"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-pressed={showPassword}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
         )}
 
