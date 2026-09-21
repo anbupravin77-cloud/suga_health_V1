@@ -8,12 +8,13 @@ import { createClient } from "@/lib/supabase/server";
 export const dynamic = "force-dynamic";
 
 export default async function DoctorNotificationsPage() {
-  const { profile } = await requireRole("doctor");
+  const { user, profile } = await requireRole("doctor");
   const supabase = await createClient();
 
   const { data } = await supabase
     .from("notifications")
     .select("id, related_entity_id, related_entity_type, title, short_message, status, read_at, created_at")
+    .eq("patient_id", user.id)
     .order("created_at", { ascending: false });
 
   return <AppShell role="doctor" active="Notifications" name={profile.full_name || "Doctor"}>
@@ -21,7 +22,7 @@ export default async function DoctorNotificationsPage() {
       <div>
         <span className="eyebrow">Clinical updates</span>
         <h1>Notifications</h1>
-        <p>Messages and workflow events that need your attention.</p>
+        <p>Messages and workflow events sent specifically to this doctor account.</p>
       </div>
       {data?.some((item) => !item.read_at && item.status !== "read") && (
         <form action={markNotificationsRead}>
@@ -59,7 +60,7 @@ export default async function DoctorNotificationsPage() {
       ) : (
         <div className="empty-state">
           <Bell />
-          <div><h3>You’re all caught up</h3><p>New test patient updates will appear here.</p></div>
+          <div><h3>You’re all caught up</h3><p>New consultation and message updates will appear here.</p></div>
         </div>
       )}
     </section>
