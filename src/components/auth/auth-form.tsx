@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { ArrowRight, Loader2, Mail } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -79,41 +80,53 @@ export function AuthForm({ mode }: { mode: Mode }) {
   const isSignUp = mode === "sign-up";
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit} noValidate>
-      {isSignUp && (
-        <label>
-          Full name
-          <input name="fullName" type="text" autoComplete="name" required />
-        </label>
-      )}
-      <label>
-        Email
-        <input name="email" type="email" autoComplete="email" required />
-      </label>
+    <div>
       {mode !== "forgot-password" && (
-        <label>
-          Password
-          <input name="password" type="password" autoComplete={isSignIn ? "current-password" : "new-password"} minLength={8} required />
-        </label>
+        <div className="mb-6 grid grid-cols-2 rounded-xl bg-stone-50 p-1 border border-stone-200">
+          <Link href="/sign-in" className={"rounded-lg px-3 py-2 text-center text-xs font-semibold transition-colors " + (isSignIn ? "bg-white text-stone-950 shadow-sm" : "text-stone-500 hover:text-stone-900")}>Sign In</Link>
+          <Link href="/sign-up" className={"rounded-lg px-3 py-2 text-center text-xs font-semibold transition-colors " + (isSignUp ? "bg-white text-stone-950 shadow-sm" : "text-stone-500 hover:text-stone-900")}>New Patient</Link>
+        </div>
       )}
-      {isSignIn && <Link className="form-link" href="/forgot-password">Forgot password?</Link>}
-      <button className="button button-primary auth-submit" type="submit" disabled={loading}>
-        {loading ? "Please wait…" : isSignIn ? "Sign in" : isSignUp ? "Create account" : "Send reset link"}
-      </button>
+
+      {error && <div className="mb-5 rounded-lg bg-red-50 p-3 text-xs text-red-700 border border-red-200" role="alert">{error}</div>}
+      {message && <div className="mb-5 rounded-lg bg-emerald-50 p-3 text-xs text-emerald-800 border border-emerald-200" role="status">{message}</div>}
+
+      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+        {isSignUp && (
+          <div>
+            <label htmlFor="fullName" className="mb-1 block text-xs font-semibold text-stone-700">Full Name</label>
+            <input id="fullName" name="fullName" type="text" autoComplete="name" className="w-full rounded-lg border border-stone-200 px-3.5 py-2.5 text-xs focus:border-stone-900 focus:outline-none" required />
+          </div>
+        )}
+        <div>
+          <label htmlFor="email" className="mb-1 block text-xs font-semibold text-stone-700">Email Address</label>
+          <input id="email" name="email" type="email" placeholder="name@example.com" autoComplete="email" className="w-full rounded-lg border border-stone-200 px-3.5 py-2.5 text-xs focus:border-stone-900 focus:outline-none" required />
+        </div>
+        {mode !== "forgot-password" && (
+          <div>
+            <label htmlFor="password" className="mb-1 block text-xs font-semibold text-stone-700">Password</label>
+            <input id="password" name="password" type="password" placeholder="••••••••" autoComplete={isSignIn ? "current-password" : "new-password"} minLength={8} className="w-full rounded-lg border border-stone-200 px-3.5 py-2.5 text-xs focus:border-stone-900 focus:outline-none" required />
+          </div>
+        )}
+
+        {isSignIn && <div className="flex justify-end"><Link className="text-xs text-stone-500 hover:text-stone-900 underline underline-offset-4" href="/forgot-password">Forgot password?</Link></div>}
+
+        <button type="submit" disabled={loading} className="flex w-full items-center justify-center gap-2 rounded-lg bg-stone-950 px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-stone-800 disabled:opacity-50 cursor-pointer shadow-sm">
+          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : mode === "sign-in" ? "Sign In" : mode === "sign-up" ? "Create Patient Account" : "Send Reset Link"}
+          {!loading && <ArrowRight className="h-3.5 w-3.5" />}
+        </button>
+      </form>
+
       {mode !== "forgot-password" && (
         <>
-          <div className="auth-divider"><span>or</span></div>
-          <button className="button button-secondary auth-submit" type="button" onClick={signInWithGoogle} disabled={loading}>
-            Continue with Google
-          </button>
+          <div className="mt-5 relative flex items-center justify-center"><div className="border-t border-stone-200 w-full" /><span className="bg-white px-3 text-[9px] font-semibold uppercase tracking-wider text-stone-400 absolute">Or continue with</span></div>
+          <div className="mt-5"><button type="button" onClick={signInWithGoogle} disabled={loading} className="flex w-full items-center justify-center gap-2.5 rounded-lg border border-stone-200 bg-white px-4 py-2.5 text-xs font-medium text-stone-700 transition-colors hover:bg-stone-50 disabled:opacity-50 cursor-pointer shadow-sm"><Mail className="h-4 w-4 text-stone-500" />Continue with Google</button></div>
         </>
       )}
-      {error && <p className="form-message form-error" role="alert">{error}</p>}
-      {message && <p className="form-message form-success" role="status">{message}</p>}
-      <p className="auth-switch">
-        {isSignIn ? "New to Suga.Health? " : isSignUp ? "Already have an account? " : "Remembered your password? "}
-        <Link href={isSignIn ? "/sign-up" : "/sign-in"}>{isSignIn ? "Create account" : "Sign in"}</Link>
+
+      <p className="mt-5 text-center text-xs text-stone-500">
+        {isSignIn ? <>New to Suga.Health? <Link href="/sign-up" className="font-semibold text-stone-950 underline underline-offset-4">Create account</Link></> : isSignUp ? <>Already have an account? <Link href="/sign-in" className="font-semibold text-stone-950 underline underline-offset-4">Sign in</Link></> : <>Remembered your password? <Link href="/sign-in" className="font-semibold text-stone-950 underline underline-offset-4">Sign in</Link></>}
       </p>
-    </form>
+    </div>
   );
 }
