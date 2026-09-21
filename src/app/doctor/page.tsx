@@ -26,31 +26,69 @@ export default async function DoctorQueue({
   const { user, profile } = await requireRole("doctor");
   const supabase = await createClient();
 
-  const isTestDoctor = (user.email ?? "").toLowerCase() === "doctor123@gmail.com";
-  const result = isTestDoctor
-    ? await supabase.rpc("v1_test_doctor_queue")
-    : { data: [] as QueueItem[], error: null };
+  const isTestDoctor = (user.email ?? "").trim().toLowerCase() === "doctor123@gmail.com";
+  let data: QueueItem[] = [];
+  let queueError: { message?: string } | null = null;
 
-  const data = (result.data ?? []) as QueueItem[];
-  const error = result.error;
+  if (isTestDoctor) {
+    const result = await supabase.rpc("v1_test_doctor_queue");
+    data = (result.data ?? []) as QueueItem[];
+    queueError = result.error;
+  } else {
+    const result = await supabase
+      .from("consultations")
+      .select("id, patient_id, primary_concern, submitted_at, status")
+      .eq("assigned_to", user.id)
+      .eq("status", "assigned")
+      .order("submitted_at", { ascending: true });
+
+    queueError = result.error;
+
+    const patientIds = [...new Set((result.data ?? []).map((item) => item.patient_id))];
+    const patientResult = patientIds.length
+      ? await supabase
+          .from("profiles")
+          .select("id, display_name, first_name, last_name")
+          .in("id", patientIds)
+      : { data: [], error: null };
+
+    if (!queueError) queueError = patientResult.error;
+
+    const patientNames = new Map(
+      (patientResult.data ?? []).map((patient) => [
+        patient.id,
+        patient.display_name ||
+          [patient.first_name, patient.last_name].filter(Boolean).join(" ") ||
+          "Patient",
+      ]),
+    );
+
+    data = (result.data ?? []).map((item) => ({
+      id: item.id,
+      patient_name: patientNames.get(item.patient_id) || "Patient",
+      primary_concern: item.primary_concern,
+      submitted_at: item.submitted_at,
+      status: item.status,
+    }));
+  }
 
   return <AppShell role="doctor" active="Queue" name={profile.full_name || "Doctor"}>
     <section className="dashboard-heading">
       <div>
         <span className="eyebrow">Available cases</span>
         <h1>Consultation queue</h1>
-        <p>Review consultations assigned to this clinical account.</p>
+        <p>{isTestDoctor ? "Only consultations from the paired test patient appear here." : "Review consultations assigned to your clinical account."}</p>
       </div>
       <Link className="button button-secondary" href="/doctor/active-reviews">
         Active reviews <ArrowRight size={17} />
       </Link>
     </section>
 
-    {(query.error || error) && (
+    {(query.error || queueError) && (
       <p className="page-error" role="alert">
         {query.error === "claim"
           ? "This consultation could not be opened. Please refresh the queue and try again."
-          : "The test consultation queue could not be loaded."}
+          : "The consultation queue could not be loaded."}
       </p>
     )}
 
@@ -74,7 +112,7 @@ export default async function DoctorQueue({
         <div className="queue-empty">
           <ClipboardList />
           <p>No consultations waiting.</p>
-          <span>New consultations from the paired test patient will appear here.</span>
+          <span>{isTestDoctor ? "New consultations from the paired test patient will appear here." : "New consultations assigned to you will appear here."}</span>
         </div>
       )}
     </section>
