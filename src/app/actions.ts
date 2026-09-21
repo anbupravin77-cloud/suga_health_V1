@@ -47,15 +47,18 @@ export async function saveConsultation(formData: FormData) {
   }
 
   if (shouldSubmit) {
-    if (!isEmail(user.email, TEST_PATIENT_EMAIL)) {
-      redirect(`/patient/consultations/${result.data.id}/edit?error=test-only`);
-    }
+    const testPatient = isEmail(user.email, TEST_PATIENT_EMAIL);
+    const submission = testPatient
+      ? await supabase.rpc("v1_test_submit_consultation", {
+          p_consultation_id: result.data.id,
+        })
+      : await supabase.rpc("fn_submit_consultation", {
+          p_consultation_id: result.data.id,
+          p_patient_id: user.id,
+          p_test_doctor_email: null,
+        });
 
-    const { error } = await supabase.rpc("v1_test_submit_consultation", {
-      p_consultation_id: result.data.id,
-    });
-
-    if (error) {
+    if (submission.error) {
       redirect(`/patient/consultations/${result.data.id}/edit?error=submit`);
     }
   }
@@ -70,15 +73,11 @@ export async function deleteDraft(formData: FormData) {
   const supabase = await createClient();
   const id = value(formData, "id");
 
-  if (!isEmail(user.email, TEST_PATIENT_EMAIL)) {
-    redirect("/patient/consultations?error=test-only");
-  }
+  const result = isEmail(user.email, TEST_PATIENT_EMAIL)
+    ? await supabase.rpc("v1_test_delete_draft", { p_consultation_id: id })
+    : await supabase.rpc("v1_delete_draft", { p_consultation_id: id });
 
-  const { error } = await supabase.rpc("v1_test_delete_draft", {
-    p_consultation_id: id,
-  });
-
-  if (error) redirect("/patient/consultations?error=delete");
+  if (result.error) redirect("/patient/consultations?error=delete");
 
   revalidatePath("/patient");
   revalidatePath("/patient/consultations");
@@ -90,15 +89,16 @@ export async function claimConsultation(formData: FormData) {
   const supabase = await createClient();
   const id = value(formData, "id");
 
-  if (!isEmail(user.email, TEST_DOCTOR_EMAIL)) {
-    redirect("/doctor?error=test-only");
-  }
+  const result = isEmail(user.email, TEST_DOCTOR_EMAIL)
+    ? await supabase.rpc("v1_test_claim_consultation", {
+        p_consultation_id: id,
+      })
+    : await supabase.rpc("fn_claim_consultation", {
+        p_consultation_id: id,
+        p_doctor_id: user.id,
+      });
 
-  const { error } = await supabase.rpc("v1_test_claim_consultation", {
-    p_consultation_id: id,
-  });
-
-  if (error) redirect("/doctor?error=claim");
+  if (result.error) redirect("/doctor?error=claim");
 
   revalidatePath("/doctor");
   revalidatePath("/doctor/active-reviews");
@@ -109,10 +109,6 @@ export async function saveClinicalWork(formData: FormData) {
   const { user } = await requireRole("doctor");
   const supabase = await createClient();
   const id = value(formData, "id");
-
-  if (!isEmail(user.email, TEST_DOCTOR_EMAIL)) {
-    redirect(`/doctor/consultations/${id}?error=test-only`);
-  }
 
   const medications = formData.getAll("medication_name").map(String);
   const dosages = formData.getAll("dosage").map(String);
@@ -128,7 +124,11 @@ export async function saveClinicalWork(formData: FormData) {
     instructions: (instructions[index] ?? "").trim(),
   }));
 
-  const { error } = await supabase.rpc("v1_test_save_clinical_work", {
+  const rpc = isEmail(user.email, TEST_DOCTOR_EMAIL)
+    ? "v1_test_save_clinical_work"
+    : "v1_save_clinical_work";
+
+  const { error } = await supabase.rpc(rpc, {
     p_consultation_id: id,
     p_note: value(formData, "clinical_note"),
     p_clinician_message: value(formData, "clinician_message"),
@@ -146,11 +146,11 @@ export async function completeConsultation(formData: FormData) {
   const supabase = await createClient();
   const id = value(formData, "id");
 
-  if (!isEmail(user.email, TEST_DOCTOR_EMAIL)) {
-    redirect(`/doctor/consultations/${id}?error=test-only`);
-  }
+  const rpc = isEmail(user.email, TEST_DOCTOR_EMAIL)
+    ? "v1_test_complete_consultation"
+    : "v1_complete_consultation";
 
-  const { error } = await supabase.rpc("v1_test_complete_consultation", {
+  const { error } = await supabase.rpc(rpc, {
     p_consultation_id: id,
   });
 
@@ -174,12 +174,11 @@ export async function sendMessage(formData: FormData) {
 
   const threadId = value(formData, "thread_id");
   const returnTo = value(formData, "return_to");
-  const testAccount =
+  const isTestAccount =
     isEmail(user.email, TEST_PATIENT_EMAIL) || isEmail(user.email, TEST_DOCTOR_EMAIL);
 
-  if (!testAccount) redirect(`${returnTo}?error=test-only`);
-
-  const { error } = await supabase.rpc("v1_test_send_message", {
+  const rpc = isTestAccount ? "v1_test_send_message" : "v1_send_message";
+  const { error } = await supabase.rpc(rpc, {
     p_thread_id: threadId,
     p_message_text: value(formData, "body"),
   });
@@ -187,6 +186,10 @@ export async function sendMessage(formData: FormData) {
   if (error) redirect(`${returnTo}?error=message`);
 
   revalidatePath(returnTo);
+  revalidatePath("/patient/messages");
+  revalidatePath("/doctor/messages");
+  revalidatePath("/patient/notifications");
+  revalidatePath("/doctor/notifications");
   redirect(`${returnTo}?notice=message-sent`);
 }
 
