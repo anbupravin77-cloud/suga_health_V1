@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Open_Sans } from "next/font/google";
+import { Cormorant_Garamond, Open_Sans, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 
 const brand = Cormorant_Garamond({
@@ -16,6 +16,13 @@ const sans = Open_Sans({
   display: "swap",
 });
 
+const headline = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-headline",
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://suga.health"),
   title: { default: "Suga.Health — Care that begins with listening", template: "%s | Suga.Health" },
@@ -24,5 +31,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body className={`${brand.variable} ${sans.variable}`}>{children}</body></html>;
+  return <html lang="en"><body className={`${brand.variable} ${sans.variable} ${headline.variable}`}>{children}</body></html>;
 }
