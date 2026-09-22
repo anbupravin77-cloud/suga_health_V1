@@ -2569,7 +2569,12 @@ main.legacy-public > div > section:nth-of-type(n+3) {
     grid-template-columns: 1fr;
   }
   .refined-home .home-action-pill {
-    min-height: 50px;
+    width: min(86vw, 300px);
+    min-height: 44px;
+    justify-self: center;
+    padding: .58rem 1rem;
+    font-size: .84rem;
+    line-height: 1.2;
   }
   .refined-home .hero-bento-primary { aspect-ratio: 4 / 3; }
   .refined-home .hero-bento-controls {
