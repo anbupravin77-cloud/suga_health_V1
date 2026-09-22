@@ -96,12 +96,12 @@ const timelines = {
 const howItWorks = [
   { step: "01", title: "Online Health Intake", time: "5 Minutes", desc: "Complete a private health evaluation from any smartphone or computer. Share your health goals, medical history, and symptoms." },
   { step: "02", title: "Physician Evaluation", time: "Under 24 Hours", desc: "A licensed US physician reviews your chart to verify clinical suitability and prescribes the optimal custom medication dose." },
-  { step: "03", title: "Discreet Delivery", time: "2-Day Doorstep", desc: "Medications ship free from a licensed US pharmacy in unbranded packaging, with continuous access to your care team for refills." },
+  { step: "03", title: "Discrete Delivery", time: "2-Day Doorstep", desc: "Medications ship free from a licensed US pharmacy in unbranded packaging, with continuous access to your care team for refills." },
 ];
 
 const metrics = [
-  { target: 5, suffix: " Min", title: "Intake Time", desc: "Thoughtful and comprehensive online questions" },
-  { target: 24, prefix: "< ", suffix: "h", title: "Doctor Review", desc: "Fast evaluation by board-certified physicians" },
+  { target: 5, suffix: " MINUTES", title: "Intake Time", desc: "Thoughtful and comprehensive online questions" },
+  { target: 24, prefix: "< ", suffix: " HOURS", title: "Doctor Review", desc: "Fast evaluation by board-certified physicians" },
   { target: 100, suffix: "%", title: "Human Doctors", desc: "Every single chart is reviewed by real clinicians" },
 ];
 
@@ -467,8 +467,10 @@ export default function HomePage() {
             <div className="progression-line">
               {timelines[timelineCategory].map((step, idx) => (
                 <article key={step.phase} className="progression-step">
-                  <span className="progression-index">0{idx + 1}</span>
-                  <span className="progression-phase">{step.phase}</span>
+                  <div className="progression-step-head">
+                    <span className="progression-phase">{step.phase}</span>
+                    <span className="progression-index">Step 0{idx + 1}</span>
+                  </div>
                   <h3>{step.label}</h3>
                   <p>{step.description}</p>
                 </article>
@@ -480,13 +482,16 @@ export default function HomePage() {
 
         <section className="home-process home-editorial-section">
           <div className="home-section-shell">
-            <SectionHeader eyebrow="Intake Protocol" title="Clear. Fast. Confidential." subtitle="A frictionless medical pathway designed for immediate evaluation and discreet doorstep delivery." />
+            <SectionHeader eyebrow="Intake Protocol" title="Clear. Fast. Confidential." subtitle="A frictionless medical pathway designed for immediate evaluation and discrete doorstep delivery." />
             <div className="process-track">
               {howItWorks.map((item, idx) => (
                 <article key={item.step} className="process-step">
-                  <div className="process-step-icon">{idx === 0 ? <Activity size={21} /> : idx === 1 ? <ShieldCheck size={21} /> : <Truck size={21} />}</div>
+                  <div className="process-card-head">
+                    <div className="process-step-icon">{idx === 0 ? <Activity size={21} /> : idx === 1 ? <ShieldCheck size={21} /> : <Truck size={21} />}</div>
+                    <span className="process-time">{item.time}</span>
+                  </div>
                   <div className="process-step-copy">
-                    <span>Step {item.step} · {item.time}</span>
+                    <span>Step {item.step}</span>
                     <h3>{item.title}</h3>
                     <p>{item.desc}</p>
                   </div>
@@ -609,7 +614,7 @@ export default function HomePage() {
 
             <div className="formulary-assurance">
               <span><ShieldCheck size={16} />All prescription treatments require online clinical evaluation and doctor approval.</span>
-              <div><b>100% US Licensed Pharmacies</b><b>Authentic Ingredients</b><b>Discreet Packaging</b></div>
+              <div><b>100% US Licensed Pharmacies</b><b>Authentic Ingredients</b><b>Discrete Packaging</b></div>
             </div>
           </div>
         </section>
@@ -708,7 +713,7 @@ function CountUp({ target, prefix = "", suffix = "" }: { target: number; prefix?
     };
   }, [target]);
 
-  return <span ref={ref} className="metric-count">{prefix}{value}{suffix}</span>;
+  return <span ref={ref} className="metric-count"><span className="metric-count-value">{prefix}{value}</span><span className="metric-count-unit">{suffix}</span></span>;
 }
 
 function SectionHeader({ eyebrow, title, subtitle, children, dark = false }: { eyebrow: string; title: string; subtitle?: string; children?: React.ReactNode; dark?: boolean }) {
