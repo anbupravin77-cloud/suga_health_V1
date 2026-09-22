@@ -21,16 +21,19 @@ References: TypeUI marketing/application layout categories and Impeccable's shap
 
 - TypeScript: passed.
 - Production Next.js build: passed, including all public and protected routes.
-- ESLint: zero errors; three pre-existing unused-import warnings on hair-growth and weight-loss pages.
+- ESLint: passed with zero errors and zero warnings after removing three unused imports from the existing treatment pages.
 - Automated comparison: all homepage data declarations unchanged.
 - Automated comparison: consultation intake, clinical prescription builder, and treatment-selection state/validation/persistence code unchanged before rendering.
 - Git diff review: no changes to Supabase schema, RLS, RPCs, server actions, auth implementation, or protected route data queries.
 - Messaging frontend prop reconciliation moved from an effect to a guarded render update to satisfy lint. Realtime subscription, optimistic send, rollback, and server action unchanged.
 - Live public checks: homepage and weight-loss page rendered; no desktop document overflow; formulary filter returned two hair treatments and six total treatments; selected-filter semantics updated; doctor and medicine dialogs opened; Escape and close button dismissed dialogs; FAQ expanded.
-- First refinement commit received a successful Vercel status through GitHub. Follow-up corrections address ticker minimum width, legacy section-blur specificity, and unavailable remote images.
+- Email/password authentication and role-aware redirects were verified on the live deployment with the isolated Patient and Doctor test accounts.
+- Live Patient checks: home, consultation list and details, completed treatment options, messages, notifications, and profile rendered correctly. The six-step intake was traversed in full; unit selection, required-field and consent errors, save state, and draft persistence after reload were verified. The synthetic draft was deliberately not submitted for clinical review.
+- Live Doctor checks: queue and empty state, active/completed case list, consultation review, patient-provided information, clinical notes, prescription options, medication-search empty state, local add/remove-option behavior, secure messages, notifications, and profile rendered correctly. No clinical record, profile, message, or notification state was saved during the review.
+- Published refinement commits received successful Vercel deployment statuses through GitHub. Follow-up corrections address ticker minimum width, legacy section-blur specificity, and unavailable remote images.
 
 ## Remaining verification
 
-This is not an end-to-end release sign-off. The browser has no authenticated test session. Actual Patient and Doctor screen inspection, six-step submission, review, treatment choice, messaging, and notifications must still be tested with the existing isolated test accounts. Authentication success itself has not been retested.
+This refinement is not a new clinical release sign-off. Creating a fake submitted consultation, completing treatment, sending a message, and repeating authorization-isolation tests were intentionally excluded from this presentation-only pass because those actions would change clinical workflow data. Existing workflow architecture and server code were left unchanged.
 
-The browser could not reach the local preview and exposes no viewport-emulation control. Mobile/tablet and reduced-motion rules were reviewed in code, but device-level visual and interaction checks remain outstanding. No test credentials, clinical records, or authorization bypasses were added for previewing screens.
+The available browser exposes no viewport-emulation or reduced-motion control. Mobile/tablet and reduced-motion rules were reviewed in code, including the five-item bottom dock, safe-area padding, single-column treatment and prescription layouts, 44px controls, intake rail compaction, dialog behavior, and motion overrides. Device-level visual and keyboard checks remain the only manual verification item. No test credentials, authorization bypasses, or backend changes were added for previewing screens.

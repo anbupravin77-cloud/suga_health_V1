@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, LoaderCircle, Save, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { saveConsultationDraft, submitConsultation } from "@/app/actions";
 
 type IntakeDefaults = {
@@ -117,12 +117,21 @@ export function ConsultationForm({
   const router = useRouter();
   const [draftId, setDraftId] = useState(draft?.id ?? "");
   const [step, setStep] = useState(1);
+  const stepContentRef = useRef<HTMLDivElement>(null);
+  const previousStepRef = useRef(step);
   const [form, setForm] = useState<FormState>(() => initialState(draft, defaults));
   const [error, setError] = useState("");
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const progress = useMemo(() => Math.round((step / 6) * 100), [step]);
+
+  useEffect(() => {
+    if (previousStepRef.current === step) return;
+    previousStepRef.current = step;
+    stepContentRef.current?.focus({ preventScroll: true });
+    stepContentRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
+  }, [step]);
 
   function patch<K extends keyof FormState>(key: K, next: FormState[K]) {
     setForm((current) => ({ ...current, [key]: next }));
@@ -278,7 +287,7 @@ export function ConsultationForm({
       </header>
       <ol className="intake-step-rail" aria-label="Consultation steps">{stepNames.map((name, index) => <li key={name} aria-current={step === index + 1 ? "step" : undefined} className={step > index + 1 ? "is-complete" : ""}><span>{step > index + 1 ? <Check size={14} /> : index + 1}</span>{name}</li>)}</ol>
 
-      <div className="intake-step" key={step}>
+      <div className="intake-step" key={step} ref={stepContentRef} tabIndex={-1} aria-label={`Step ${step}: ${stepNames[step - 1]}`}>
         {step === 1 && (
           <>
             <div className="intake-step-copy">
