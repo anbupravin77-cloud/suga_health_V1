@@ -272,10 +272,11 @@ export function ConsultationForm({
           {saveState === "saving" ? <LoaderCircle size={15} className="action-spinner" /> : <Save size={15} />}
           {saveState === "saving" ? "Saving…" : saveState === "saved" ? "Saved" : "Save progress"}
         </button>
-        <div className="intake-progress-track" aria-hidden="true">
+        <div className="intake-progress-track" role="progressbar" aria-label="Consultation progress" aria-valuemin={0} aria-valuemax={6} aria-valuenow={step} aria-valuetext={`Step ${step} of 6: ${stepNames[step - 1]}`}>
           <span style={{ width: `${progress}%` }} />
         </div>
       </header>
+      <ol className="intake-step-rail" aria-label="Consultation steps">{stepNames.map((name, index) => <li key={name} aria-current={step === index + 1 ? "step" : undefined} className={step > index + 1 ? "is-complete" : ""}><span>{step > index + 1 ? <Check size={14} /> : index + 1}</span>{name}</li>)}</ol>
 
       <div className="intake-step" key={step}>
         {step === 1 && (
@@ -293,6 +294,7 @@ export function ConsultationForm({
                   type="button"
                   key={area.id}
                   className={form.primaryConcern === area.id ? "intake-choice selected" : "intake-choice"}
+                  aria-pressed={form.primaryConcern === area.id}
                   onClick={() => patch("primaryConcern", area.id)}
                 >
                   <span className="choice-check">{form.primaryConcern === area.id ? <Check size={15} /> : null}</span>
@@ -316,17 +318,17 @@ export function ConsultationForm({
 
             <div className="intake-field-block">
               <div className="field-label-row">
-                <label>Height</label>
+                <label htmlFor={form.heightUnit === "cm" ? "intake-height" : "intake-height-feet"}>Height</label>
                 <div className="unit-switch">
-                  <button type="button" className={form.heightUnit === "cm" ? "active" : ""} onClick={() => patch("heightUnit", "cm")}>cm</button>
-                  <button type="button" className={form.heightUnit === "ftin" ? "active" : ""} onClick={() => patch("heightUnit", "ftin")}>ft / in</button>
+                  <button type="button" className={form.heightUnit === "cm" ? "active" : ""} aria-pressed={form.heightUnit === "cm"} onClick={() => patch("heightUnit", "cm")}>cm</button>
+                  <button type="button" className={form.heightUnit === "ftin" ? "active" : ""} aria-pressed={form.heightUnit === "ftin"} onClick={() => patch("heightUnit", "ftin")}>ft / in</button>
                 </div>
               </div>
               {form.heightUnit === "cm" ? (
-                <input type="number" inputMode="decimal" min="1" value={form.heightCm} onChange={(e) => patch("heightCm", e.target.value)} placeholder="e.g. 175" />
+                <input type="number" inputMode="decimal" min="1" id="intake-height" value={form.heightCm} onChange={(e) => patch("heightCm", e.target.value)} placeholder="e.g. 175" />
               ) : (
                 <div className="split-inputs">
-                  <label><span>Feet</span><input type="number" inputMode="numeric" min="1" value={form.heightFeet} onChange={(e) => patch("heightFeet", e.target.value)} placeholder="5" /></label>
+                  <label><span>Feet</span><input type="number" inputMode="numeric" min="1" id="intake-height-feet" value={form.heightFeet} onChange={(e) => patch("heightFeet", e.target.value)} placeholder="5" /></label>
                   <label><span>Inches</span><input type="number" inputMode="numeric" min="0" max="11" value={form.heightInches} onChange={(e) => patch("heightInches", e.target.value)} placeholder="9" /></label>
                 </div>
               )}
@@ -334,13 +336,13 @@ export function ConsultationForm({
 
             <div className="intake-field-block">
               <div className="field-label-row">
-                <label>Weight</label>
+                <label htmlFor="intake-weight">Weight</label>
                 <div className="unit-switch">
-                  <button type="button" className={form.weightUnit === "kg" ? "active" : ""} onClick={() => patch("weightUnit", "kg")}>kg</button>
-                  <button type="button" className={form.weightUnit === "lb" ? "active" : ""} onClick={() => patch("weightUnit", "lb")}>lb</button>
+                  <button type="button" className={form.weightUnit === "kg" ? "active" : ""} aria-pressed={form.weightUnit === "kg"} onClick={() => patch("weightUnit", "kg")}>kg</button>
+                  <button type="button" className={form.weightUnit === "lb" ? "active" : ""} aria-pressed={form.weightUnit === "lb"} onClick={() => patch("weightUnit", "lb")}>lb</button>
                 </div>
               </div>
-              <input type="number" inputMode="decimal" min="1" value={form.weightValue} onChange={(e) => patch("weightValue", e.target.value)} placeholder={form.weightUnit === "kg" ? "e.g. 78" : "e.g. 172"} />
+              <input type="number" inputMode="decimal" min="1" id="intake-weight" value={form.weightValue} onChange={(e) => patch("weightValue", e.target.value)} placeholder={form.weightUnit === "kg" ? "e.g. 78" : "e.g. 172"} />
             </div>
 
             <div className="intake-two-col">
@@ -376,6 +378,7 @@ export function ConsultationForm({
                     type="button"
                     key={condition}
                     className={selected ? "condition-option selected" : "condition-option"}
+                    aria-pressed={selected}
                     onClick={() => toggleCondition(condition)}
                   >
                     <span>{condition}</span>

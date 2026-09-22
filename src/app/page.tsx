@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Activity,
   ArrowRight,
@@ -291,7 +291,7 @@ export default function HomePage() {
   const visibleProducts = productCategory === "all" ? products : products.filter((product) => product.category === productCategory);
 
   return (
-    <main className="legacy-public min-h-screen bg-[#FAFAFA] text-neutral-950 overflow-x-hidden">
+    <main className="legacy-public refined-home min-h-screen bg-[#FAFAFA] text-neutral-950 overflow-x-hidden">
       <header className="legacy-header fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
           <Link href="/" className="flex flex-col items-start select-none shrink-0">
@@ -322,11 +322,11 @@ export default function HomePage() {
       <MobilePublicMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
 
       <div className="pt-[70px]">
-        <section className="relative pb-10 sm:pb-14 md:pb-16 overflow-hidden bg-[#FAFAFA] border-b border-neutral-200/80">
+        <section className="home-hero relative pb-10 sm:pb-14 md:pb-16 overflow-hidden bg-[#FAFAFA] border-b border-neutral-200/80">
           <div className="w-full bg-[#F5F5F5] py-3.5 overflow-hidden border-b border-neutral-200/80">
             <div className="animate-marquee items-center text-[11px] font-bold text-neutral-600 uppercase tracking-widest whitespace-nowrap">
               {Array.from({ length: 4 }).map((_, i) => (
-                <span key={i} className="flex items-center shrink-0">
+                <span key={i} aria-hidden={i > 0 ? true : undefined} className="flex items-center shrink-0">
                   <span className="px-6">Fully confidential</span><span className="text-neutral-300">✦</span>
                   <span className="px-6">Free and discrete shipping</span><span className="text-neutral-300">✦</span>
                   <span className="px-6">100% online process</span><span className="text-neutral-300">✦</span>
@@ -336,28 +336,29 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 md:pt-24 pb-8">
+          <div className="home-hero-composition max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 md:pt-24 pb-8">
             <div className="flex flex-col items-center text-center">
               <h1 className="legacy-hero-title font-sans text-[20px] sm:text-4xl md:text-[2.5rem] lg:text-[2.75rem] tracking-tight text-neutral-900 leading-[1.4] text-balance max-w-2xl">
                 Clinically proven, FDA (USA) approved,<br className="hidden sm:block" /> treatment prescribed by experts.
               </h1>
-              <div className="flex flex-col items-center gap-3.5 w-full max-w-[280px] sm:max-w-[320px] mt-10 sm:mt-14">
+              <div className="hero-pathway-links flex flex-col items-center gap-3.5 w-full max-w-[280px] sm:max-w-[320px] mt-10 sm:mt-14">
                 <Link href="/weight-loss" className="legacy-pill-link">Medical weight loss</Link>
                 <Link href="/hair-growth" className="legacy-pill-link">Hair growth</Link>
                 <Link href="/sexual-health" className="legacy-pill-link">Sexual health</Link>
                 <Link href="/sign-up" onClick={rememberReturnPosition} className="w-full inline-flex items-center justify-center bg-neutral-950 hover:bg-neutral-800 text-white px-6 py-4 rounded-[2rem] text-[15px] font-medium transition-colors mt-3 shadow-sm">Start consultation</Link>
               </div>
             </div>
+            <div className="home-hero-image"><img src={pillars[0].img} srcSet={imageSources(pillars[0].img)} sizes="(max-width: 640px) 100vw, 50vw" alt="" fetchPriority="high" width={720} height={860} /></div>
           </div>
         </section>
 
-        <section id="treatments" className="py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <section id="treatments" className="home-pathways py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
           <SectionHeader eyebrow="Targeted Therapeutics" title="Focused Clinical Pathways" subtitle="Precision treatment protocols designed for sustained biological optimization." />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {pillars.map((pillar) => (
               <article key={pillar.id} className="group relative bg-white rounded-2xl sm:rounded-3xl border border-neutral-200/90 hover:border-neutral-950 transition-colors duration-300 flex flex-col overflow-hidden">
                 <div className="relative h-56 sm:h-64 w-full overflow-hidden bg-neutral-100">
-                  <img loading="lazy" decoding="async" src={pillar.img} alt={pillar.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <img loading="lazy" decoding="async" src={pillar.img} srcSet={imageSources(pillar.img)} sizes="(max-width: 640px) 100vw, 50vw" width={720} height={600} alt={pillar.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10" />
                   <div className="absolute bottom-4 left-4 right-4 text-white">
                     <span className="text-xs uppercase tracking-widest text-neutral-300 font-semibold block mb-0.5">{pillar.subtitle}</span>
@@ -385,12 +386,12 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="py-10 sm:py-12 lg:py-16 bg-white border-y border-neutral-200/80">
+        <section className="home-progression py-10 sm:py-12 lg:py-16 bg-white border-y border-neutral-200/80">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <SectionHeader eyebrow="Clinical Progression" title="Clear Milestones from Day 1" subtitle="Expect real, measurable physiological changes with continuous medical guidance.">
               <div className="flex flex-wrap justify-center gap-1.5 p-1.5 bg-neutral-100 rounded-2xl sm:rounded-full mt-6 sm:mt-8 border border-neutral-200">
                 {([["weight","Weight Loss (GLP-1)"],["hair","Hair Regrowth"],["sexual","Sexual Vitality"]] as const).map(([key,label]) => (
-                  <button key={key} type="button" onClick={() => setTimelineCategory(key)} className={timelineCategory === key ? "legacy-toggle legacy-toggle-active" : "legacy-toggle"}>{label}</button>
+                  <button key={key} type="button" aria-pressed={timelineCategory === key} onClick={() => setTimelineCategory(key)} className={timelineCategory === key ? "legacy-toggle legacy-toggle-active" : "legacy-toggle"}>{label}</button>
                 ))}
               </div>
             </SectionHeader>
@@ -407,7 +408,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <section className="home-process py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <SectionHeader eyebrow="Intake Protocol" title="Clear. Fast. Confidential." subtitle="A frictionless medical pathway designed for immediate evaluation and discreet doorstep delivery." />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {howItWorks.map((item, idx) => (
@@ -421,14 +422,14 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <section className="home-metrics py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <SectionHeader eyebrow="Clinical Standards" title="Metrics that matter." />
           <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center">
             {metrics.map((metric) => <article key={metric.title} className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-neutral-200/90 hover:border-neutral-950"><span className="font-sans text-4xl sm:text-5xl font-extrabold text-neutral-950 block mb-2">{metric.value}</span><span className="text-xs font-bold uppercase tracking-widest block mb-2">{metric.title}</span><p className="text-xs text-neutral-500">{metric.desc}</p></article>)}
           </div>
         </section>
 
-        <section className="py-10 sm:py-12 lg:py-16 bg-neutral-950 text-white">
+        <section className="home-comparison py-10 sm:py-12 lg:py-16 bg-neutral-950 text-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <SectionHeader dark eyebrow="The Difference" title="The Suga Standard vs Traditional Healthcare" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
@@ -438,13 +439,13 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="doctors" className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <section id="doctors" className="home-doctors py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <SectionHeader eyebrow="Medical Leadership & Care Team" title="Board-certified doctors behind every prescription." subtitle="No bots, no algorithmic shortcuts. Licensed US physicians personally evaluate every intake, design individualized treatment plans, and support you throughout your care." />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {doctors.map((doctor) => (
               <article key={doctor.id} className="group bg-white rounded-2xl sm:rounded-3xl border border-neutral-200/90 hover:border-neutral-950 transition-all flex flex-col overflow-hidden shadow-sm">
                 <div className="relative h-64 sm:h-72 bg-neutral-100 overflow-hidden">
-                  <img loading="lazy" decoding="async" src={doctor.image} alt={doctor.name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700" />
+                  <img loading="lazy" decoding="async" src={doctor.image} srcSet={imageSources(doctor.image)} sizes="(max-width: 640px) 100vw, (max-width: 1150px) 50vw, 25vw" width={480} height={640} alt={doctor.name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
                   <span className="absolute top-3.5 left-3.5 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-bold uppercase tracking-wider"><ShieldCheck size={12} />Verified MD/DO</span>
                   <div className="absolute bottom-3.5 left-3.5 right-3.5 text-white"><h3 className="font-sans text-xl font-bold text-white">{doctor.name}</h3><span className="text-xs font-semibold text-neutral-300">{doctor.credentials} • {doctor.role}</span></div>
@@ -464,11 +465,11 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="products" className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <section id="products" className="home-formulary py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <SectionHeader eyebrow="Prescription Formulary" title="Targeted therapies compounded for maximum bioavailability." subtitle="Doctor-formulated treatments with pure active pharmaceutical ingredients, prepared exclusively in state-licensed 503A/503B pharmacies.">
             <div className="mt-7 sm:mt-8 flex justify-center">
               <div className="flex flex-wrap justify-center p-1.5 bg-neutral-100 rounded-2xl sm:rounded-full border border-neutral-200 gap-1">
-                {([["all","All Formulations"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Health"]] as const).map(([key,label]) => <button key={key} type="button" onClick={() => setProductCategory(key)} className={productCategory === key ? "legacy-toggle legacy-toggle-active" : "legacy-toggle"}>{label}</button>)}
+                {([["all","All Formulations"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Health"]] as const).map(([key,label]) => <button key={key} type="button" aria-pressed={productCategory === key} onClick={() => setProductCategory(key)} className={productCategory === key ? "legacy-toggle legacy-toggle-active" : "legacy-toggle"}>{label}</button>)}
               </div>
             </div>
           </SectionHeader>
@@ -477,7 +478,7 @@ export default function HomePage() {
             {visibleProducts.map((product) => (
               <article key={product.id} className="group bg-white rounded-2xl sm:rounded-3xl border border-neutral-200/90 hover:border-neutral-950 transition-all flex flex-col overflow-hidden shadow-sm">
                 <div className="relative h-60 sm:h-64 bg-neutral-100 overflow-hidden">
-                  <img loading="lazy" decoding="async" src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <img loading="lazy" decoding="async" src={product.image} srcSet={imageSources(product.image)} sizes="(max-width: 640px) 100vw, 210px" width={480} height={640} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                   <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between"><span className="px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-bold uppercase tracking-wider">{product.category === "weight" ? "Metabolic GLP-1" : product.category === "hair" ? "Trichology Formula" : "Endocrine / Vascular"}</span>{product.isPopular && <span className="px-2.5 py-1 rounded-full bg-neutral-950 text-white text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><Sparkles size={10} />Most Prescribed</span>}</div>
                   <div className="absolute bottom-3 left-3.5 right-3.5 text-white flex items-center gap-1.5 text-[11px] font-semibold"><Layers size={12} /><span className="truncate">{product.deliveryMethod}</span></div>
@@ -493,12 +494,12 @@ export default function HomePage() {
           <div className="mt-8 sm:mt-10 pt-6 border-t border-neutral-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-xs text-neutral-500"><div className="flex items-center gap-2"><ShieldCheck size={16} /><span>All prescription treatments require online clinical evaluation and doctor approval.</span></div><div className="flex flex-wrap justify-center gap-4 text-neutral-700 font-medium"><span>✓ 100% US Licensed Pharmacies</span><span>✓ Authentic Ingredients</span><span>✓ Discreet Packaging</span></div></div>
         </section>
 
-        <section className="py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+        <section className="home-faq py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
           <SectionHeader eyebrow="Patient Education" title="Common Questions" subtitle="Straightforward answers about our clinical protocols and prescription process." />
           <div className="space-y-3">{faqs.map((faq) => <details key={faq.q} className="group rounded-2xl bg-white border border-neutral-200/90 hover:border-neutral-950 overflow-hidden"><summary className="list-none cursor-pointer p-5 sm:p-6 flex items-center justify-between gap-4 font-sans font-bold text-base sm:text-lg"><span>{faq.q}</span><ChevronDown size={18} className="transition-transform group-open:rotate-180" /></summary><div className="px-5 pb-5 sm:px-6 sm:pb-6 text-sm sm:text-base text-neutral-600 leading-relaxed border-t border-neutral-100 pt-4">{faq.a}</div></details>)}</div>
         </section>
 
-        <section className="py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <section className="home-final-cta py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="rounded-2xl sm:rounded-3xl bg-neutral-950 text-white p-6 sm:p-10 md:p-14 flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
             <div className="max-w-2xl"><span className="text-xs font-bold tracking-widest text-neutral-400 uppercase block mb-2 sm:mb-3">Take the first step</span><h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-3 sm:mb-4">Your personalized medical plan is 5 minutes away.</h2><p className="text-neutral-400 text-base sm:text-lg">Answer quick medical questions. A licensed clinician will review your file and tailor your prescription.</p></div>
             <Link href="/sign-up" onClick={rememberReturnPosition} className="w-full sm:w-auto inline-flex items-center justify-center bg-white text-neutral-950 px-8 py-4 rounded-full text-sm font-bold tracking-wider uppercase">Start Free Assessment <ArrowRight size={16} className="ml-2.5" /></Link>
@@ -517,12 +518,12 @@ export default function HomePage() {
         </div>
       </footer>
 
-      {selectedDoctor && <Modal onClose={() => setSelectedDoctor(null)}>
+      {selectedDoctor && <Modal label={selectedDoctor.name} onClose={() => setSelectedDoctor(null)}>
         <div className="p-5 sm:p-7 bg-neutral-950 text-white flex items-center gap-4"><img loading="lazy" decoding="async" src={selectedDoctor.image} alt={selectedDoctor.name} className="w-20 h-20 rounded-2xl object-cover object-top" /><div><span className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Board-Certified Clinician</span><h3 className="font-sans text-2xl font-extrabold text-white">{selectedDoctor.name}, {selectedDoctor.credentials}</h3><p className="text-xs text-neutral-300">{selectedDoctor.role}</p></div></div>
         <div className="p-5 sm:p-7 space-y-5"><div><span className="legacy-label">Clinical Specialty</span><p className="text-sm text-neutral-700">{selectedDoctor.specialty}</p></div><div><span className="legacy-label">Board Certification</span><p className="text-sm text-neutral-700">{selectedDoctor.boardCertification}</p></div><div><span className="legacy-label">Education</span><p className="text-sm text-neutral-700">{selectedDoctor.education}</p></div><div><span className="legacy-label">About</span><p className="text-sm text-neutral-700">{selectedDoctor.bio}</p></div><div className="text-xs font-bold uppercase tracking-wider text-neutral-500">{selectedDoctor.yearsOfExperience} years clinical practice</div></div>
       </Modal>}
 
-      {selectedProduct && <Modal onClose={() => setSelectedProduct(null)}>
+      {selectedProduct && <Modal label={selectedProduct.name} onClose={() => setSelectedProduct(null)}>
         <div className="p-5 sm:p-7 bg-neutral-950 text-white"><span className="text-[10px] uppercase tracking-widest text-neutral-400 font-bold">Prescription Specification</span><h3 className="font-sans text-2xl sm:text-3xl font-extrabold text-white">{selectedProduct.name}</h3><p className="text-xs text-neutral-300 font-mono mt-1">Active Ingredients: {selectedProduct.activeIngredients}</p></div>
         <div className="p-5 sm:p-7 space-y-5"><div><span className="legacy-label">Formulation Overview</span><p className="text-sm text-neutral-700">{selectedProduct.description}</p></div><div className="grid sm:grid-cols-2 gap-3"><div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200"><span className="legacy-label">Administration Method</span><p className="text-xs font-bold text-neutral-900">{selectedProduct.deliveryMethod}</p></div><div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200"><span className="legacy-label">Typical Dosage Range</span><p className="text-xs font-bold text-neutral-900">{selectedProduct.dosage}</p></div></div><div><span className="legacy-label">Mechanism of Action</span><p className="text-sm text-neutral-700">{selectedProduct.mechanismOfAction}</p></div><div><span className="legacy-label">Clinical Benefits & Outcomes</span><div className="grid sm:grid-cols-2 gap-2 mt-2">{selectedProduct.benefits.map((benefit) => <div key={benefit} className="flex gap-2 text-xs text-neutral-700"><Check size={13} className="shrink-0 mt-0.5" />{benefit}</div>)}</div></div></div>
         <div className="p-5 sm:p-6 bg-neutral-50 border-t border-neutral-200 flex items-center justify-between"><div><span className="text-[11px] text-neutral-500">All-inclusive pricing</span><div className="font-sans text-2xl font-extrabold">{selectedProduct.startingPrice} <span className="text-xs font-medium text-neutral-500">{selectedProduct.billingCadence}</span></div></div><Link href="/sign-up" onClick={rememberReturnPosition} className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider">Check Eligibility <ArrowRight size={14} /></Link></div>
@@ -532,9 +533,21 @@ export default function HomePage() {
 }
 
 function SectionHeader({ eyebrow, title, subtitle, children, dark = false }: { eyebrow: string; title: string; subtitle?: string; children?: React.ReactNode; dark?: boolean }) {
-  return <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 flex flex-col items-center"><span className={"text-xs font-bold tracking-widest uppercase block mb-2.5 " + (dark ? "text-neutral-400" : "text-neutral-500")}>{eyebrow}</span><h2 className={"font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.15] text-balance " + (dark ? "text-white" : "text-neutral-950")}>{title}</h2>{subtitle && <p className={"mt-3.5 sm:mt-4 text-sm sm:text-base max-w-2xl leading-relaxed " + (dark ? "text-neutral-400" : "text-neutral-600")}>{subtitle}</p>}{children}</div>;
+  return <div className="editorial-section-heading text-center max-w-3xl mx-auto mb-10 sm:mb-12 flex flex-col items-center"><span className={"text-xs font-bold tracking-widest uppercase block mb-2.5 " + (dark ? "text-neutral-400" : "text-neutral-500")}>{eyebrow}</span><h2 className={"font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.15] text-balance " + (dark ? "text-white" : "text-neutral-950")}>{title}</h2>{subtitle && <p className={"mt-3.5 sm:mt-4 text-sm sm:text-base max-w-2xl leading-relaxed " + (dark ? "text-neutral-400" : "text-neutral-600")}>{subtitle}</p>}{children}</div>;
 }
 
-function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
-  return <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5"><button type="button" aria-label="Close modal backdrop" onClick={onClose} className="absolute inset-0 bg-black/65 backdrop-blur-sm" /><div className="relative z-10 w-full max-w-2xl max-h-[88vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-white shadow-2xl border border-neutral-200"><button type="button" onClick={onClose} aria-label="Close modal" className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/70 text-white flex items-center justify-center"><X size={16} /></button>{children}</div></div>;
+function Modal({ children, label, onClose }: { children: React.ReactNode; label: string; onClose: () => void }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const dialog = ref.current;
+    const previousOverflow = document.body.style.overflow;
+    dialog?.showModal();
+    document.body.style.overflow = "hidden";
+    return () => { dialog?.close(); document.body.style.overflow = previousOverflow; };
+  }, []);
+  return <dialog ref={ref} className="clinical-dialog" aria-label={label} onCancel={onClose} onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}><div className="clinical-dialog-content"><button type="button" onClick={onClose} aria-label="Close modal" className="clinical-dialog-close"><X size={20} /></button>{children}</div></dialog>;
+}
+
+function imageSources(source: string) {
+  return [400, 800, 1200].map((width) => `${source.replace(/w=\d+/, `w=${width}`)} ${width}w`).join(", ");
 }

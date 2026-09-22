@@ -17,8 +17,8 @@ export function LegacyPublicFrame({ children }: { children: ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   useRestoreReturnPosition();
 
-  return <main className="legacy-public min-h-screen bg-[#FAFAFA] text-neutral-950 overflow-x-hidden">
-    <header className="fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
+  return <main className="legacy-public refined-treatment min-h-screen bg-[#FAFAFA] text-neutral-950 overflow-x-hidden">
+    <header className="legacy-header fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
         <Link href="/" className="flex flex-col items-start select-none shrink-0">
           <span className="font-sans text-xl sm:text-2xl tracking-tighter uppercase font-black text-neutral-950 leading-none">SUGA<span className="text-neutral-400">.</span>HEALTH</span>
@@ -53,14 +53,14 @@ export function LegacyPublicFrame({ children }: { children: ReactNode }) {
 }
 
 export function LegacyPageHeader({ title, subtitle, image }: { title: string; subtitle: string; image: string }) {
-  return <section className="relative pt-8 pb-10 sm:pt-12 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-neutral-200/80 bg-white">
+  return <section className="treatment-page-hero relative pt-8 pb-10 sm:pt-12 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-neutral-200/80 bg-white">
     <div className="absolute inset-0 -z-0 opacity-10 md:opacity-15 grayscale overflow-hidden"><img src={image} alt="" className="w-full h-full object-cover" /><div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/80 to-white" /></div>
     <div className="relative z-10 max-w-7xl mx-auto w-full"><h1 className="font-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-neutral-950 leading-[1.15] pb-1 max-w-4xl">{title}</h1><p className="mt-4 sm:mt-5 text-base sm:text-lg text-neutral-600 max-w-2xl leading-relaxed font-normal">{subtitle}</p></div>
   </section>;
 }
 
 export function LegacySection({ children, surface = false }: { children: ReactNode; surface?: boolean }) {
-  return <section className={"py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 w-full " + (surface ? "bg-neutral-50" : "bg-white")}><div className="max-w-7xl mx-auto w-full">{children}</div></section>;
+  return <section className={"treatment-page-section py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 w-full " + (surface ? "bg-neutral-50" : "bg-white")}><div className="max-w-7xl mx-auto w-full">{children}</div></section>;
 }
 
 export function LegacyCta({ title, description }: { title: string; description: string }) {

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { rememberReturnPosition } from "./return-position";
 
@@ -13,28 +13,30 @@ const links = [
 ];
 
 export function MobilePublicMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     if (!open) return;
+    const dialog = dialogRef.current;
+    dialog?.showModal();
     const previousBodyOverflow = document.body.style.overflow;
     const previousHtmlOverflow = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
 
     return () => {
+      dialog?.close();
       document.body.style.overflow = previousBodyOverflow;
       document.documentElement.style.overflow = previousHtmlOverflow;
     };
   }, [open]);
 
-  if (!mounted || !open) return null;
+  if (!open) return null;
 
   return createPortal(
-    <div className="legacy-public fixed inset-x-0 top-[70px] z-[9999] h-[calc(100dvh-70px)] overflow-y-auto overscroll-contain bg-white border-t border-neutral-200 lg:hidden">
+    <dialog ref={dialogRef} aria-label="Site navigation" onCancel={onClose} className="legacy-public public-menu-dialog">
       <div className="max-w-xl mx-auto px-5 py-5 pb-10">
+        <button type="button" className="public-menu-close" onClick={onClose}>Close menu <span aria-hidden="true">×</span></button>
         <nav className="grid gap-2.5" aria-label="Mobile navigation">
           {links.map((link) => (
             <Link
@@ -68,7 +70,7 @@ export function MobilePublicMenu({ open, onClose }: { open: boolean; onClose: ()
           </Link>
         </div>
       </div>
-    </div>,
+    </dialog>,
     document.body,
   );
 }

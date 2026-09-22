@@ -80,7 +80,7 @@ export function TreatmentOptions({
           const items = [...(option.consultation_prescription_option_items ?? [])].sort((a, b) => a.position - b.position);
 
           return (
-            <article className={isSelected ? "patient-option-card selected" : "patient-option-card"} key={option.id}>
+            <article className={isSelected ? "patient-option-card selected" : "patient-option-card"} aria-label={option.title} key={option.id}>
               <header>
                 <div>
                   <span className="option-tier">{tierLabel[option.cost_tier] || tierLabel.custom}</span>
@@ -103,7 +103,7 @@ export function TreatmentOptions({
                     <div>
                       <strong>{item.medication_name}</strong>
                       <span>{item.strength} · {item.dosage_form}</span>
-                      <small>{item.frequency} · {item.duration}{item.instructions ? ` · ${item.instructions}` : ""}</small>
+                      <dl className="medicine-directions"><div><dt>Frequency</dt><dd>{item.frequency}</dd></div><div><dt>Duration</dt><dd>{item.duration}</dd></div>{item.instructions && <div className="wide"><dt>Instructions</dt><dd>{item.instructions}</dd></div>}</dl>
                     </div>
                   </div>
                 ))}

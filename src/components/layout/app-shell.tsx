@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bell, ClipboardList, Home, LogOut, MessageSquare, Stethoscope, UserRound } from "lucide-react";
-import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
+import { useState, type MouseEvent, type ReactNode } from "react";
 import { signOut } from "@/app/actions";
 import { ActionButton } from "@/components/ui/action-button";
 
@@ -29,27 +29,31 @@ export function AppShell({
 }) {
   const pathname = usePathname();
   const [pendingHref, setPendingHref] = useState<string | null>(null);
+  const [previousPathname, setPreviousPathname] = useState(pathname);
   const items =
     role === "patient"
       ? ["Home", "Consultations", "Messages", "Notifications", "Profile"]
       : ["Queue", "Active reviews", "Messages", "Notifications", "Profile"];
   const base = role === "patient" ? "/patient" : "/doctor";
 
-  useEffect(() => {
+  if (previousPathname !== pathname) {
+    setPreviousPathname(pathname);
     setPendingHref(null);
-  }, [pathname]);
+  }
 
   function hrefFor(item: string) {
     return item === items[0] ? base : `${base}/${item.toLowerCase().replaceAll(" ", "-")}`;
   }
 
   function isActive(item: string) {
+    if (role === "doctor" && item === "Active reviews" && pathname.startsWith("/doctor/consultations/")) return true;
     const href = hrefFor(item);
     if (item === items[0]) return pathname === href;
     return pathname === href || pathname.startsWith(`${href}/`);
   }
 
   function beginNavigation(event: MouseEvent<HTMLAnchorElement>, href: string) {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     if (href === pathname) return;
     if (pendingHref) {
       event.preventDefault();
@@ -59,7 +63,8 @@ export function AppShell({
   }
 
   return (
-    <div className="app-layout" aria-busy={Boolean(pendingHref)}>
+    <div className="app-layout" data-role={role} aria-busy={Boolean(pendingHref)}>
+      <a className="skip-link" href="#care-content">Skip to care content</a>
       <div className={pendingHref ? "portal-route-progress is-active" : "portal-route-progress"} aria-hidden="true" />
       <aside className="app-sidebar">
         <div className="sidebar-brand">
@@ -77,6 +82,7 @@ export function AppShell({
                 prefetch
                 className={`${isActive(item) ? "active" : ""} ${waiting ? "nav-pending" : ""}`}
                 href={href}
+                aria-current={isActive(item) ? "page" : undefined}
                 onClick={(event) => beginNavigation(event, href)}
                 aria-disabled={Boolean(pendingHref && !waiting)}
               >
@@ -101,7 +107,7 @@ export function AppShell({
           <span>{role === "doctor" ? "Clinical workspace" : "Private patient space"}</span>
           <strong>{name}</strong>
         </header>
-        <main className="app-content">{children}</main>
+        <main className="app-content" id="care-content" tabIndex={-1}>{children}</main>
       </div>
     </div>
   );

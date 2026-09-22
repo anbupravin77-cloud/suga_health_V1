@@ -293,6 +293,7 @@ export function ClinicalForm({
         <h2>Clinical assessment</h2>
         <p className="form-note">This note remains private to the clinical workspace.</p>
         <textarea
+          aria-label="Clinical assessment"
           value={clinicalNote}
           onChange={(event) => { setClinicalNote(event.target.value); setError(""); }}
           rows={7}
@@ -330,7 +331,7 @@ export function ClinicalForm({
               : [];
 
             return (
-              <article className="treatment-option-editor" key={option.key}>
+              <article className="treatment-option-editor" aria-label={`Prescription ${optionIndex + 1}: ${option.title}`} key={option.key}>
                 <header className="option-editor-header">
                   <div>
                     <span className="eyebrow">Prescription {optionIndex + 1}</span>
@@ -387,6 +388,7 @@ export function ClinicalForm({
                     {option.search && <button type="button" aria-label="Clear medicine search" onClick={() => updateOption(option.key, { search: "" })}><X size={15} /></button>}
                   </div>
 
+                  {query && matches.length === 0 && <p className="medicine-search-empty" role="status">No matching medicines. Try a different name, strength, or form.</p>}
                   {matches.length > 0 && (
                     <div className="medication-search-results">
                       {matches.map((medication) => (

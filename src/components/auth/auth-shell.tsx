@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 export function AuthShell({ title, description, children }: { title: string; description: string; children: ReactNode }) {
   return (
-    <main className="legacy-public min-h-screen flex items-center justify-center bg-stone-50 p-4">
+    <main className="legacy-public refined-auth min-h-screen flex items-center justify-center bg-stone-50 p-4">
       <section className="w-full max-w-lg rounded-2xl bg-white p-6 sm:p-8 shadow-sm border border-stone-200">
         <div className="mb-6 text-center">
           <Link href="/" className="inline-flex flex-col items-center mb-4">
