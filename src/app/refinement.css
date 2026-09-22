@@ -20,6 +20,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline-colo
 /* Public site: a common page edge, an open navbar, and alternating compositions. */
 .legacy-public { --public-ink: #171717; }
 .legacy-public p { letter-spacing: -.01em; }
+.public-image-fallback { display: grid; place-items: center; background: #e5e5df; color: #62625b; }
 .legacy-public .legacy-header { background: #fff; backdrop-filter: none; }
 .legacy-header nav { background: transparent; border: 0; gap: .1rem; }
 .legacy-header nav a { min-height: 44px; display: inline-flex; align-items: center; padding-inline: .8rem; font-size: .75rem; text-transform: none; letter-spacing: 0; }
@@ -35,7 +36,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline-colo
 .legacy-public footer p { line-height: 1.8; }
 .legacy-public footer :is(.text-neutral-400, .text-neutral-500) { color: #b4b4b0; }
 .refined-home > div > section { padding-block: var(--care-section); }
-.refined-home > div > section:not(.home-hero) { animation: none; filter: none; content-visibility: visible; }
+main.legacy-public.refined-home > div > section:not(.home-hero) { animation: none; filter: none; content-visibility: visible; }
 .refined-home .editorial-section-heading { max-width: none; margin: 0 0 2.75rem; align-items: flex-start; text-align: left; }
 .editorial-section-heading > span { font-size: .6875rem; letter-spacing: .12em; line-height: 1.6; }
 .editorial-section-heading h2 { max-width: 800px; font-family: var(--font-headline), Arial, sans-serif; font-size: clamp(2rem, 3.6vw, 3.5rem); font-weight: 500; line-height: 1.08; letter-spacing: -.035em; }
@@ -49,7 +50,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline-colo
 /* Hero: the existing message and care links meet one existing pathway photograph. */
 .refined-home > div > .home-hero { padding-top: 0; padding-bottom: 0; background: #f3f3ef; }
 .home-hero > div:first-child { background: #ebebe7; padding-block: .7rem; }
-.home-hero .animate-marquee { animation: none; justify-content: center; width: 100%; white-space: normal; }
+.home-hero .animate-marquee { animation: none; justify-content: center; width: 100%; min-width: 0; white-space: normal; }
 .home-hero .animate-marquee > span:not(:first-child) { display: none; }
 .home-hero .animate-marquee > span:first-child { flex-wrap: wrap; justify-content: center; gap: .4rem; }
 .home-hero .animate-marquee > span > span { padding-inline: .75rem; font-size: .625rem; letter-spacing: .08em; }
@@ -63,7 +64,8 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline-colo
 .hero-pathway-links .legacy-pill-link:hover::after { transform: translate(2px, -2px); }
 .hero-pathway-links > a:last-child { margin-top: 1.5rem; border-radius: 6px; min-height: 54px; box-shadow: none; }
 .home-hero-image { height: clamp(420px, 44vw, 590px); overflow: hidden; border-radius: 2px; }
-.home-hero-image img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.home-hero-image img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; filter: grayscale(100%); }
+.home-hero-image .public-image-fallback { width: 100%; height: 100%; }
 
 /* Pathways are three editorial chapters, not three identical tiles. */
 .home-pathways > .grid { display: flex; flex-direction: column; gap: 2rem; }

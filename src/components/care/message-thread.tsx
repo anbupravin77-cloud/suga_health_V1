@@ -29,12 +29,15 @@ export function MessageThread({
   const formRef = useRef<HTMLFormElement>(null);
   const [body, setBody] = useState("");
   const [localMessages, setLocalMessages] = useState(messages);
+  const [previousMessages, setPreviousMessages] = useState(messages);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
+  // Reconcile refreshed server props before rendering, retaining optimistic sends.
+  if (previousMessages !== messages) {
+    setPreviousMessages(messages);
     setLocalMessages(messages);
-  }, [messages]);
+  }
 
   useEffect(() => {
     const supabase = createClient();

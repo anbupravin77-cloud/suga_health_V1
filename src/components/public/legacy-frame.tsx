@@ -5,6 +5,7 @@ import { ArrowRight, Menu, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { rememberReturnPosition, useRestoreReturnPosition } from "./return-position";
 import { MobilePublicMenu } from "./mobile-public-menu";
+import { PublicImage } from "./public-image";
 
 const navLinks = [
   { name: "About", path: "/about", desc: "Our clinical mission & standards" },
@@ -54,7 +55,7 @@ export function LegacyPublicFrame({ children }: { children: ReactNode }) {
 
 export function LegacyPageHeader({ title, subtitle, image }: { title: string; subtitle: string; image: string }) {
   return <section className="treatment-page-hero relative pt-8 pb-10 sm:pt-12 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-neutral-200/80 bg-white">
-    <div className="absolute inset-0 -z-0 opacity-10 md:opacity-15 grayscale overflow-hidden"><img src={image} alt="" className="w-full h-full object-cover" /><div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/80 to-white" /></div>
+    <div className="absolute inset-0 -z-0 opacity-10 md:opacity-15 grayscale overflow-hidden"><PublicImage src={image} alt="" className="w-full h-full object-cover" /><div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/80 to-white" /></div>
     <div className="relative z-10 max-w-7xl mx-auto w-full"><h1 className="font-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-neutral-950 leading-[1.15] pb-1 max-w-4xl">{title}</h1><p className="mt-4 sm:mt-5 text-base sm:text-lg text-neutral-600 max-w-2xl leading-relaxed font-normal">{subtitle}</p></div>
   </section>;
 }
