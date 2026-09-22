@@ -50,12 +50,44 @@ main.legacy-public.refined-home > div > section:not(.home-hero) { animation: non
 /* Hero: the existing message and care links meet one existing pathway photograph. */
 .refined-home > div > .home-hero { padding-top: 0; padding-bottom: 0; background: #f3f3ef; }
 .home-hero > div:first-child { background: #ebebe7; padding-block: .7rem; }
-.home-hero .animate-marquee { animation: none; justify-content: center; width: 100%; min-width: 0; white-space: normal; }
-.home-hero .animate-marquee > span:not(:first-child) { display: none; }
-.home-hero .animate-marquee > span:first-child { flex-wrap: wrap; justify-content: center; gap: .4rem; }
+.home-hero .animate-marquee {
+  display: flex;
+  width: max-content;
+  min-width: max-content;
+  white-space: nowrap;
+  animation: home-ticker-run 30s linear infinite;
+  justify-content: flex-start;
+}
+.home-hero .animate-marquee > span {
+  display: inline-flex;
+  flex: none;
+  flex-wrap: nowrap;
+  align-items: center;
+}
 .home-hero .animate-marquee > span > span { padding-inline: .75rem; font-size: .625rem; letter-spacing: .08em; }
-.home-hero-composition { max-width: 1280px; display: grid; grid-template-columns: 1.13fr 1fr; gap: 4rem; padding-top: 3rem; padding-bottom: 3rem; align-items: center; }
-.home-hero-composition > div:first-child { align-items: flex-start; text-align: left; padding-block: 1.75rem; }
+.home-hero-composition {
+  width: min(1440px, calc(100% - 4rem));
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2.5rem, 5vw, 5rem);
+  padding-top: 3.5rem;
+  padding-bottom: 4.5rem;
+  align-items: stretch;
+}
+.home-hero-composition > div:first-child { align-items: flex-start; text-align: left; padding-block: 1.25rem 0; }
+.home-hero-composition .hero-bento {
+  width: 100%;
+}
+.home-hero-composition .hero-bento-primary {
+  min-height: clamp(560px, 55vw, 780px);
+}
+.home-hero-composition .hero-bento-small {
+  min-height: clamp(260px, 27vw, 360px);
+}
+.home-hero-composition .hero-bento-support {
+  min-height: clamp(220px, 23vw, 320px);
+}
 .home-hero .legacy-hero-title { max-width: 630px; font-size: clamp(2.75rem, 4.4vw, 4.2rem); line-height: 1.08 !important; letter-spacing: -.04em !important; animation: none; }
 .home-hero .legacy-hero-title br { display: none; }
 .hero-pathway-links { margin-top: 2.5rem; max-width: 390px; gap: 0; align-items: stretch; }
@@ -419,7 +451,15 @@ main.legacy-public.refined-home > div > section:not(.home-hero) { animation: non
   .queue-row .button { padding-inline: .8rem; }
 }
 @media (max-width: 900px) {
-  .home-hero-composition { gap: 2rem; }
+  .home-hero-composition {
+    width: min(100% - 2rem, 820px);
+    gap: 2rem;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+  .home-hero-composition .hero-bento-primary { min-height: 0; }
+  .home-hero-composition .hero-bento-small { min-height: 0; }
+  .home-hero-composition .hero-bento-support { min-height: 0; }
   .home-hero .legacy-hero-title { font-size: 2.75rem; }
   .home-pathways article { gap: 2rem; }
   .home-process, .home-faq { grid-template-columns: 1fr; gap: 1rem; }
@@ -485,14 +525,19 @@ main.legacy-public.refined-home > div > section:not(.home-hero) { animation: non
 @media (max-width: 640px) {
   .refined-home > div > section { padding-inline: 1.25rem; }
   .refined-home > div > .home-hero { padding-inline: 0; }
-  .home-hero-composition { grid-template-columns: 1fr; padding: 2rem 1.25rem 1.25rem; gap: 2rem; }
+  .home-hero-composition {
+    width: 100%;
+    grid-template-columns: 1fr;
+    padding: 2rem 1.25rem 1.5rem;
+    gap: 2rem;
+  }
   .home-hero-composition > div:first-child { padding: 0; }
   .home-hero .legacy-hero-title { font-size: clamp(2.35rem, 9.8vw, 3.25rem); max-width: 540px; }
   .hero-pathway-links { margin-top: 1.75rem; max-width: none; }
   .home-hero-image { height: 280px; }
   .home-hero-image img { object-position: center 42%; }
-  .home-hero .animate-marquee > span:first-child { gap: .1rem; }
-  .home-hero .animate-marquee > span > span { font-size: .5rem; padding-inline: .25rem; }
+  .home-hero .animate-marquee > span { gap: .1rem; }
+  .home-hero .animate-marquee > span > span { font-size: .5rem; padding-inline: .5rem; }
   .home-pathways article { grid-template-columns: 1fr; gap: .5rem; padding-bottom: 1.5rem; }
   .home-pathways article > div:first-child { height: 300px; min-height: 0; }
   .home-pathways article:nth-child(even) > div:first-child { order: 0; }
