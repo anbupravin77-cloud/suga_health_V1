@@ -330,8 +330,8 @@ export default function HomePage() {
 
           <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
             <Link href="/sign-in" className="hidden sm:inline-flex text-xs font-bold uppercase tracking-wider text-neutral-700 hover:text-neutral-950 mr-2">Sign In</Link>
-            <Link href="/sign-up" onClick={rememberReturnPosition} className="hidden sm:inline-flex items-center justify-center bg-neutral-950 px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase text-white hover:bg-neutral-800 transition-all group">
-              Start consultation <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" />
+            <Link href="/sign-up" onClick={rememberReturnPosition} className="start-consultation-swipe hidden sm:inline-flex items-center justify-center bg-neutral-950 px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase text-white group">
+              <span>Start consultation</span><ArrowRight size={14} className="ml-2" />
             </Link>
             <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
               {mobileMenuOpen ? <X size={23} /> : <Menu size={23} />}
@@ -346,12 +346,12 @@ export default function HomePage() {
         <section className="home-hero bg-[#FAFAFA] border-b border-neutral-200/80">
           <div className="home-trust-ticker" aria-label="Suga Health service highlights">
             <div className="animate-marquee">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <span key={i} aria-hidden={i > 0 ? true : undefined} className="home-ticker-sequence">
+              {[0, 1].map((group) => (
+                <span key={group} aria-hidden={group === 1 ? true : undefined} className="home-ticker-sequence">
                   <span>Fully confidential</span><b>✦</b>
                   <span>Free and discrete shipping</span><b>✦</b>
                   <span>100% online process</span><b>✦</b>
-                  <span>Used and trusted by millions around the world.</span>
+                  <span>Used and trusted by millions around the world.</span><b>✦</b>
                 </span>
               ))}
             </div>
@@ -370,7 +370,7 @@ export default function HomePage() {
                 <Link href="/weight-loss" className="home-action-pill">Medical weight loss <ArrowUpRight size={15} /></Link>
                 <Link href="/hair-growth" className="home-action-pill">Hair growth <ArrowUpRight size={15} /></Link>
                 <Link href="/sexual-health" className="home-action-pill">Sexual health <ArrowUpRight size={15} /></Link>
-                <Link href="/sign-up" onClick={rememberReturnPosition} className="home-action-pill home-action-primary">Start consultation <ArrowRight size={15} /></Link>
+                <Link href="/sign-up" onClick={rememberReturnPosition} className="home-action-pill home-action-primary start-consultation-swipe"><span>Start consultation</span><ArrowRight size={15} /></Link>
               </div>
             </div>
 
@@ -449,7 +449,7 @@ export default function HomePage() {
                     </div>
                     <div className="pathway-actions">
                       <Link href={pillar.path}>View protocol <ArrowRight size={14} /></Link>
-                      <Link href="/sign-up" onClick={rememberReturnPosition}>Start consultation <ArrowUpRight size={14} /></Link>
+                      <Link href="/sign-up" onClick={rememberReturnPosition} className="start-consultation-swipe"><span>Start consultation</span><ArrowUpRight size={14} /></Link>
                     </div>
                   </div>
                 </article>

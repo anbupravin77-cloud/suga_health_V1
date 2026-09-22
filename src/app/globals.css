@@ -2638,3 +2638,85 @@ main.legacy-public > div > section:nth-of-type(n+3) {
     padding-right: 1.5rem;
   }
 }
+
+
+/* Homepage button/ticker refinement */
+.refined-home .hero-action-grid .home-action-pill {
+  position: relative;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-sans), Arial, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.refined-home .hero-action-grid .home-action-pill > svg {
+  position: absolute;
+  right: 1rem;
+  flex: none;
+}
+
+/* Left-to-right colour inversion for Start consultation CTAs. */
+.refined-home .start-consultation-swipe {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #11110f !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  transition:
+    color .46s cubic-bezier(.22,.61,.36,1),
+    border-color .46s cubic-bezier(.22,.61,.36,1);
+}
+.refined-home .start-consultation-swipe::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: #ffffff;
+  transform: translate3d(-101%, 0, 0);
+  transition: transform .46s cubic-bezier(.22,.61,.36,1);
+  pointer-events: none;
+}
+.refined-home .start-consultation-swipe > span,
+.refined-home .start-consultation-swipe > svg {
+  position: relative;
+  z-index: 1;
+}
+.refined-home .start-consultation-swipe:hover,
+.refined-home .start-consultation-swipe:focus-visible {
+  color: #11110f !important;
+  -webkit-text-fill-color: #11110f !important;
+  border-color: #11110f !important;
+}
+.refined-home .start-consultation-swipe:hover::before,
+.refined-home .start-consultation-swipe:focus-visible::before {
+  transform: translate3d(0, 0, 0);
+}
+
+/* True continuous running ticker: two identical groups form a seamless loop. */
+@keyframes home-ticker-run {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+.refined-home .home-trust-ticker .animate-marquee {
+  display: flex;
+  width: max-content;
+  min-width: max-content;
+  padding: .82rem 0;
+  animation: home-ticker-run 30s linear infinite;
+  will-change: transform;
+}
+.refined-home .home-ticker-sequence {
+  flex: none;
+  padding-right: 0;
+}
+.refined-home .home-ticker-sequence span {
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .refined-home .start-consultation-swipe,
+  .refined-home .start-consultation-swipe::before {
+    transition: none !important;
+  }
+}
