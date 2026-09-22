@@ -100,9 +100,9 @@ const howItWorks = [
 ];
 
 const metrics = [
-  { value: "5 Min", title: "Intake Time", desc: "Thoughtful and comprehensive online questions" },
-  { value: "< 24h", title: "Doctor Review", desc: "Fast evaluation by board-certified physicians" },
-  { value: "100%", title: "Human Doctors", desc: "Every single chart is reviewed by real clinicians" },
+  { target: 5, suffix: " Min", title: "Intake Time", desc: "Thoughtful and comprehensive online questions" },
+  { target: 24, prefix: "< ", suffix: "h", title: "Doctor Review", desc: "Fast evaluation by board-certified physicians" },
+  { target: 100, suffix: "%", title: "Human Doctors", desc: "Every single chart is reviewed by real clinicians" },
 ];
 
 const traditional = [
@@ -502,7 +502,7 @@ export default function HomePage() {
             <div className="metric-ledger">
               {metrics.map((metric) => (
                 <article key={metric.title}>
-                  <strong>{metric.value}</strong>
+                  <CountUp target={metric.target} prefix={metric.prefix} suffix={metric.suffix} />
                   <div><span>{metric.title}</span><p>{metric.desc}</p></div>
                 </article>
               ))}
@@ -663,6 +663,52 @@ export default function HomePage() {
       </Modal>}
     </main>
   );
+}
+
+function CountUp({ target, prefix = "", suffix = "" }: { target: number; prefix?: string; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setValue(target);
+      return;
+    }
+
+    let frame = 0;
+    let started = false;
+    let startTime: number | null = null;
+
+    const animate = (time: number) => {
+      if (startTime === null) startTime = time;
+      const progress = Math.min((time - startTime) / 1050, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.round(target * eased));
+      if (progress < 1) frame = window.requestAnimationFrame(animate);
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started) {
+          started = true;
+          frame = window.requestAnimationFrame(animate);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.35 },
+    );
+
+    observer.observe(element);
+    return () => {
+      observer.disconnect();
+      window.cancelAnimationFrame(frame);
+    };
+  }, [target]);
+
+  return <span ref={ref} className="metric-count">{prefix}{value}{suffix}</span>;
 }
 
 function SectionHeader({ eyebrow, title, subtitle, children, dark = false }: { eyebrow: string; title: string; subtitle?: string; children?: React.ReactNode; dark?: boolean }) {
