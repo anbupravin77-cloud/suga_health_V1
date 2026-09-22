@@ -374,17 +374,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="hero-bento" aria-label="Suga Health care and treatment imagery">
+            <div className="hero-bento hero-bento-ro" aria-label="Suga Health care and treatment imagery">
               <div className="hero-bento-primary">
                 <PublicImage
                   key={heroSlides[heroSlide].src}
                   src={heroSlides[heroSlide].src}
                   srcSet={imageSources(heroSlides[heroSlide].src)}
-                  sizes="(max-width: 820px) 100vw, 68vw"
+                  sizes="(max-width: 820px) 100vw, 50vw"
                   alt={heroSlides[heroSlide].label}
                   fetchPriority="high"
                   width={1200}
-                  height={720}
+                  height={760}
                   className="hero-bento-slide-image"
                 />
                 <div className="hero-bento-caption">
@@ -400,28 +400,25 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="hero-bento-side">
-                <div className="hero-bento-small-grid">
-                  <button type="button" className="hero-bento-small" onClick={() => setSelectedProduct(products[0])} aria-label={"View " + products[0].name}>
-                    <PublicImage src={products[0].image} srcSet={imageSources(products[0].image)} sizes="220px" alt={products[0].name} width={420} height={420} />
-                    <span>Metabolic care</span>
-                    <strong>{products[0].name}</strong>
-                  </button>
-                  <button type="button" className="hero-bento-small" onClick={() => setSelectedProduct(products[4])} aria-label={"View " + products[4].name}>
-                    <PublicImage src={products[4].image} srcSet={imageSources(products[4].image)} sizes="220px" alt={products[4].name} width={420} height={420} />
-                    <span>Private care</span>
-                    <strong>{products[4].name}</strong>
-                  </button>
+              <button type="button" className="hero-bento-support" onClick={() => setSelectedDoctor(doctors[0])} aria-label={"View credentials for " + doctors[0].name}>
+                <PublicImage src={doctors[0].image} srcSet={imageSources(doctors[0].image)} sizes="(max-width: 820px) 50vw, 50vw" alt={doctors[0].name} width={760} height={960} />
+                <div>
+                  <span>Doctor-led from intake to follow-up</span>
+                  <strong>{doctors[0].name}, {doctors[0].credentials}</strong>
                 </div>
+              </button>
 
-                <button type="button" className="hero-bento-support" onClick={() => setSelectedDoctor(doctors[0])} aria-label={"View credentials for " + doctors[0].name}>
-                  <PublicImage src={doctors[0].image} srcSet={imageSources(doctors[0].image)} sizes="(max-width: 820px) 100vw, 32vw" alt={doctors[0].name} width={760} height={420} />
-                  <div>
-                    <span>Doctor-led from intake to follow-up</span>
-                    <strong>{doctors[0].name}, {doctors[0].credentials}</strong>
-                  </div>
-                </button>
-              </div>
+              <button type="button" className="hero-bento-small hero-bento-small-one" onClick={() => setSelectedProduct(products[0])} aria-label={"View " + products[0].name}>
+                <PublicImage src={products[0].image} srcSet={imageSources(products[0].image)} sizes="(max-width: 820px) 50vw, 25vw" alt={products[0].name} width={520} height={420} />
+                <span>Metabolic care</span>
+                <strong>{products[0].name}</strong>
+              </button>
+
+              <button type="button" className="hero-bento-small hero-bento-small-two" onClick={() => setSelectedProduct(products[4])} aria-label={"View " + products[4].name}>
+                <PublicImage src={products[4].image} srcSet={imageSources(products[4].image)} sizes="(max-width: 820px) 50vw, 25vw" alt={products[4].name} width={520} height={420} />
+                <span>Private care</span>
+                <strong>{products[4].name}</strong>
+              </button>
             </div>
           </div>
         </section>
