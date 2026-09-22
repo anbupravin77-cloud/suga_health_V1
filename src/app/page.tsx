@@ -9,6 +9,8 @@ import {
   Award,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   GraduationCap,
   HeartHandshake,
   Info,
@@ -66,6 +68,12 @@ const pillars = [
     img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop&grayscale=1",
   },
 ];
+
+const heroSlides = pillars.map((pillar) => ({
+  src: pillar.img,
+  label: pillar.title,
+  caption: pillar.subtitle,
+}));
 
 const timelines = {
   weight: [
@@ -287,7 +295,19 @@ export default function HomePage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [heroSlide, setHeroSlide] = useState(0);
   useRestoreReturnPosition();
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reducedMotion.matches) return;
+
+    const timer = window.setInterval(() => {
+      setHeroSlide((current) => (current + 1) % heroSlides.length);
+    }, 4600);
+
+    return () => window.clearInterval(timer);
+  }, []);
 
   const visibleProducts = productCategory === "all" ? products : products.filter((product) => product.category === productCategory);
 
@@ -323,187 +343,302 @@ export default function HomePage() {
       <MobilePublicMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
 
       <div className="pt-[70px]">
-        <section className="home-hero relative pb-10 sm:pb-14 md:pb-16 overflow-hidden bg-[#FAFAFA] border-b border-neutral-200/80">
-          <div className="w-full bg-[#F5F5F5] py-3.5 overflow-hidden border-b border-neutral-200/80">
-            <div className="animate-marquee items-center text-[11px] font-bold text-neutral-600 uppercase tracking-widest whitespace-nowrap">
+        <section className="home-hero bg-[#FAFAFA] border-b border-neutral-200/80">
+          <div className="home-trust-ticker" aria-label="Suga Health service highlights">
+            <div className="animate-marquee">
               {Array.from({ length: 4 }).map((_, i) => (
-                <span key={i} aria-hidden={i > 0 ? true : undefined} className="flex items-center shrink-0">
-                  <span className="px-6">Fully confidential</span><span className="text-neutral-300">✦</span>
-                  <span className="px-6">Free and discrete shipping</span><span className="text-neutral-300">✦</span>
-                  <span className="px-6">100% online process</span><span className="text-neutral-300">✦</span>
-                  <span className="px-6">Used and trusted by millions around the world.</span><span className="text-neutral-300">✦</span>
+                <span key={i} aria-hidden={i > 0 ? true : undefined} className="home-ticker-sequence">
+                  <span>Fully confidential</span><b>✦</b>
+                  <span>Free and discrete shipping</span><b>✦</b>
+                  <span>100% online process</span><b>✦</b>
+                  <span>Used and trusted by millions around the world.</span>
                 </span>
               ))}
             </div>
           </div>
 
-          <div className="home-hero-composition max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 md:pt-24 pb-8">
-            <div className="flex flex-col items-center text-center">
-              <h1 className="legacy-hero-title font-sans text-[20px] sm:text-4xl md:text-[2.5rem] lg:text-[2.75rem] tracking-tight text-neutral-900 leading-[1.4] text-balance max-w-2xl">
-                Clinically proven, FDA (USA) approved,<br className="hidden sm:block" /> treatment prescribed by experts.
-              </h1>
-              <div className="hero-pathway-links flex flex-col items-center gap-3.5 w-full max-w-[280px] sm:max-w-[320px] mt-10 sm:mt-14">
-                <Link href="/weight-loss" className="legacy-pill-link">Medical weight loss</Link>
-                <Link href="/hair-growth" className="legacy-pill-link">Hair growth</Link>
-                <Link href="/sexual-health" className="legacy-pill-link">Sexual health</Link>
-                <Link href="/sign-up" onClick={rememberReturnPosition} className="w-full inline-flex items-center justify-center bg-neutral-950 hover:bg-neutral-800 text-white px-6 py-4 rounded-[2rem] text-[15px] font-medium transition-colors mt-3 shadow-sm">Start consultation</Link>
+          <div className="home-hero-composition">
+            <div className="hero-intro-grid">
+              <div className="hero-intro-copy">
+                <span className="home-kicker">Private care. Real clinicians. Your pace.</span>
+                <h1 className="legacy-hero-title">
+                  Clinically proven, FDA (USA) approved, treatment prescribed by experts.
+                </h1>
+              </div>
+
+              <div className="hero-action-grid" aria-label="Explore Suga Health care">
+                <Link href="/weight-loss" className="home-action-pill">Medical weight loss <ArrowUpRight size={15} /></Link>
+                <Link href="/hair-growth" className="home-action-pill">Hair growth <ArrowUpRight size={15} /></Link>
+                <Link href="/sexual-health" className="home-action-pill">Sexual health <ArrowUpRight size={15} /></Link>
+                <Link href="/sign-up" onClick={rememberReturnPosition} className="home-action-pill home-action-primary">Start consultation <ArrowRight size={15} /></Link>
               </div>
             </div>
-            <div className="home-hero-image"><PublicImage src={pillars[0].img} srcSet={imageSources(pillars[0].img)} sizes="(max-width: 640px) 100vw, 50vw" alt="" fetchPriority="high" width={720} height={860} /></div>
-          </div>
-        </section>
 
-        <section id="treatments" className="home-pathways py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-          <SectionHeader eyebrow="Targeted Therapeutics" title="Focused Clinical Pathways" subtitle="Precision treatment protocols designed for sustained biological optimization." />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {pillars.map((pillar) => (
-              <article key={pillar.id} className="group relative bg-white rounded-2xl sm:rounded-3xl border border-neutral-200/90 hover:border-neutral-950 transition-colors duration-300 flex flex-col overflow-hidden">
-                <div className="relative h-56 sm:h-64 w-full overflow-hidden bg-neutral-100">
-                  <PublicImage loading="lazy" decoding="async" src={pillar.img} srcSet={imageSources(pillar.img)} sizes="(max-width: 640px) 100vw, 50vw" width={720} height={600} alt={pillar.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10" />
-                  <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <span className="text-xs uppercase tracking-widest text-neutral-300 font-semibold block mb-0.5">{pillar.subtitle}</span>
-                    <h3 className="font-sans text-2xl font-bold tracking-tight text-white">{pillar.title}</h3>
-                  </div>
+            <div className="hero-bento" aria-label="Suga Health care and treatment imagery">
+              <div className="hero-bento-primary">
+                <PublicImage
+                  key={heroSlides[heroSlide].src}
+                  src={heroSlides[heroSlide].src}
+                  srcSet={imageSources(heroSlides[heroSlide].src)}
+                  sizes="(max-width: 820px) 100vw, 68vw"
+                  alt={heroSlides[heroSlide].label}
+                  fetchPriority="high"
+                  width={1200}
+                  height={720}
+                  className="hero-bento-slide-image"
+                />
+                <div className="hero-bento-caption">
+                  <span>{heroSlides[heroSlide].caption}</span>
+                  <strong>{heroSlides[heroSlide].label}</strong>
                 </div>
-                <div className="p-5 sm:p-7 md:p-8 flex flex-col flex-grow justify-between">
+                <div className="hero-bento-controls">
+                  <button type="button" aria-label="Previous image" onClick={() => setHeroSlide((current) => (current - 1 + heroSlides.length) % heroSlides.length)}><ChevronLeft size={18} /></button>
+                  <div className="hero-bento-dots" aria-hidden="true">
+                    {heroSlides.map((slide, index) => <span key={slide.label} className={heroSlide === index ? "active" : ""} />)}
+                  </div>
+                  <button type="button" aria-label="Next image" onClick={() => setHeroSlide((current) => (current + 1) % heroSlides.length)}><ChevronRight size={18} /></button>
+                </div>
+              </div>
+
+              <div className="hero-bento-side">
+                <div className="hero-bento-small-grid">
+                  <button type="button" className="hero-bento-small" onClick={() => setSelectedProduct(products[0])} aria-label={"View " + products[0].name}>
+                    <PublicImage src={products[0].image} srcSet={imageSources(products[0].image)} sizes="220px" alt={products[0].name} width={420} height={420} />
+                    <span>Metabolic care</span>
+                    <strong>{products[0].name}</strong>
+                  </button>
+                  <button type="button" className="hero-bento-small" onClick={() => setSelectedProduct(products[4])} aria-label={"View " + products[4].name}>
+                    <PublicImage src={products[4].image} srcSet={imageSources(products[4].image)} sizes="220px" alt={products[4].name} width={420} height={420} />
+                    <span>Private care</span>
+                    <strong>{products[4].name}</strong>
+                  </button>
+                </div>
+
+                <button type="button" className="hero-bento-support" onClick={() => setSelectedDoctor(doctors[0])} aria-label={"View credentials for " + doctors[0].name}>
+                  <PublicImage src={doctors[0].image} srcSet={imageSources(doctors[0].image)} sizes="(max-width: 820px) 100vw, 32vw" alt={doctors[0].name} width={760} height={420} />
                   <div>
-                    <p className="text-neutral-600 text-sm leading-relaxed mb-5 sm:mb-6">{pillar.desc}</p>
-                    <div className="grid grid-cols-2 gap-2 mb-5 sm:mb-6 p-3 sm:p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200/80">
-                      <div><span className="legacy-label">Efficacy Rate</span><span className="text-xs font-bold text-neutral-900">{pillar.stats}</span></div>
-                      <div><span className="legacy-label">Expect Results</span><span className="text-xs font-bold text-neutral-900">{pillar.timeline}</span></div>
-                    </div>
-                    <div className="space-y-2.5 mb-6">
-                      {pillar.highlights.map((item) => <div key={item} className="flex items-start gap-2.5 text-xs text-neutral-700"><span className="w-4 h-4 rounded-full bg-neutral-100 flex items-center justify-center shrink-0"><Check size={11} /></span><span className="font-medium">{item}</span></div>)}
-                    </div>
+                    <span>Doctor-led from intake to follow-up</span>
+                    <strong>{doctors[0].name}, {doctors[0].credentials}</strong>
                   </div>
-                  <div className="pt-4 border-t border-neutral-100 flex items-center justify-between">
-                    <Link href={pillar.path} className="inline-flex items-center text-xs font-bold tracking-wider uppercase">View Protocol Details <ArrowRight size={14} className="ml-1.5" /></Link>
-                    <Link href="/sign-up" onClick={rememberReturnPosition} className="p-2.5 rounded-full bg-neutral-100 group-hover:bg-neutral-950 group-hover:text-white transition-colors" aria-label="Start consultation"><ArrowUpRight size={15} /></Link>
-                  </div>
-                </div>
-              </article>
-            ))}
+                </button>
+              </div>
+            </div>
           </div>
         </section>
 
-        <section className="home-progression py-10 sm:py-12 lg:py-16 bg-white border-y border-neutral-200/80">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="treatments" className="home-pathways home-editorial-section">
+          <div className="home-section-shell">
+            <SectionHeader eyebrow="Targeted Therapeutics" title="Focused Clinical Pathways" subtitle="Precision treatment protocols designed for sustained biological optimization." />
+            <div className="pathway-editorial-list">
+              {pillars.map((pillar, idx) => (
+                <article key={pillar.id} className="pathway-editorial-row">
+                  <div className="pathway-editorial-image">
+                    <PublicImage loading="lazy" decoding="async" src={pillar.img} srcSet={imageSources(pillar.img)} sizes="(max-width: 820px) 100vw, 44vw" width={900} height={680} alt={pillar.title} />
+                    <span>0{idx + 1}</span>
+                  </div>
+                  <div className="pathway-editorial-copy">
+                    <span className="home-kicker">{pillar.subtitle}</span>
+                    <h3>{pillar.title}</h3>
+                    <p>{pillar.desc}</p>
+                    <div className="pathway-proof-row">
+                      <div><span>Efficacy</span><strong>{pillar.stats}</strong></div>
+                      <div><span>Expected results</span><strong>{pillar.timeline}</strong></div>
+                    </div>
+                    <div className="pathway-highlight-list">
+                      {pillar.highlights.map((item) => <span key={item}><Check size={14} />{item}</span>)}
+                    </div>
+                    <div className="pathway-actions">
+                      <Link href={pillar.path}>View protocol <ArrowRight size={14} /></Link>
+                      <Link href="/sign-up" onClick={rememberReturnPosition}>Start consultation <ArrowUpRight size={14} /></Link>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="home-progression home-editorial-section bg-white">
+          <div className="home-section-shell">
             <SectionHeader eyebrow="Clinical Progression" title="Clear Milestones from Day 1" subtitle="Expect real, measurable physiological changes with continuous medical guidance.">
-              <div className="flex flex-wrap justify-center gap-1.5 p-1.5 bg-neutral-100 rounded-2xl sm:rounded-full mt-6 sm:mt-8 border border-neutral-200">
+              <div className="home-toggle-rail">
                 {([["weight","Weight Loss (GLP-1)"],["hair","Hair Regrowth"],["sexual","Sexual Vitality"]] as const).map(([key,label]) => (
                   <button key={key} type="button" aria-pressed={timelineCategory === key} onClick={() => setTimelineCategory(key)} className={timelineCategory === key ? "legacy-toggle legacy-toggle-active" : "legacy-toggle"}>{label}</button>
                 ))}
               </div>
             </SectionHeader>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            <div className="progression-line">
               {timelines[timelineCategory].map((step, idx) => (
-                <article key={step.phase} className="group bg-neutral-50/80 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-neutral-200/90 hover:bg-white hover:border-neutral-950 transition-all">
-                  <div className="flex items-center justify-between mb-6"><span className="px-3 py-1 rounded-full bg-neutral-950 text-white text-xs font-bold tracking-wider uppercase">{step.phase}</span><span className="text-xs font-bold text-neutral-400">Step 0{idx + 1}</span></div>
-                  <h3 className="font-sans text-xl font-bold text-neutral-950 mb-3 tracking-tight">{step.label}</h3>
-                  <p className="text-neutral-600 text-sm leading-relaxed">{step.description}</p>
+                <article key={step.phase} className="progression-step">
+                  <span className="progression-index">0{idx + 1}</span>
+                  <span className="progression-phase">{step.phase}</span>
+                  <h3>{step.label}</h3>
+                  <p>{step.description}</p>
                 </article>
               ))}
             </div>
-            <div className="mt-8 sm:mt-10 text-center"><Link href="/sign-up" onClick={rememberReturnPosition} className="legacy-dark-cta">See if you qualify today <ArrowRight size={14} className="ml-2" /></Link></div>
+            <div className="home-centered-action"><Link href="/sign-up" onClick={rememberReturnPosition} className="legacy-dark-cta">See if you qualify today <ArrowRight size={14} /></Link></div>
           </div>
         </section>
 
-        <section className="home-process py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <SectionHeader eyebrow="Intake Protocol" title="Clear. Fast. Confidential." subtitle="A frictionless medical pathway designed for immediate evaluation and discreet doorstep delivery." />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            {howItWorks.map((item, idx) => (
-              <article key={item.step} className="group rounded-2xl sm:rounded-3xl bg-white p-6 sm:p-8 lg:p-10 border border-neutral-200/90 hover:border-neutral-950 transition-colors">
-                <div className="flex items-center justify-between mb-6 sm:mb-8"><span className="w-12 h-12 rounded-2xl bg-neutral-100 flex items-center justify-center group-hover:bg-neutral-950 group-hover:text-white">{idx === 0 ? <Activity size={24} /> : idx === 1 ? <ShieldCheck size={24} /> : <Truck size={24} />}</span><span className="text-xs font-bold text-neutral-600 bg-neutral-100 px-3 py-1 rounded-full uppercase tracking-wider">{item.time}</span></div>
-                <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest block mb-2">Step {item.step}</span>
-                <h3 className="font-sans text-2xl font-bold text-neutral-950 mb-3 tracking-tight">{item.title}</h3>
-                <p className="text-neutral-600 text-sm leading-relaxed">{item.desc}</p>
-              </article>
-            ))}
+        <section className="home-process home-editorial-section">
+          <div className="home-section-shell">
+            <SectionHeader eyebrow="Intake Protocol" title="Clear. Fast. Confidential." subtitle="A frictionless medical pathway designed for immediate evaluation and discreet doorstep delivery." />
+            <div className="process-track">
+              {howItWorks.map((item, idx) => (
+                <article key={item.step} className="process-step">
+                  <div className="process-step-icon">{idx === 0 ? <Activity size={21} /> : idx === 1 ? <ShieldCheck size={21} /> : <Truck size={21} />}</div>
+                  <div className="process-step-copy">
+                    <span>Step {item.step} · {item.time}</span>
+                    <h3>{item.title}</h3>
+                    <p>{item.desc}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
-        <section className="home-metrics py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <SectionHeader eyebrow="Clinical Standards" title="Metrics that matter." />
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center">
-            {metrics.map((metric) => <article key={metric.title} className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-neutral-200/90 hover:border-neutral-950"><span className="font-sans text-4xl sm:text-5xl font-extrabold text-neutral-950 block mb-2">{metric.value}</span><span className="text-xs font-bold uppercase tracking-widest block mb-2">{metric.title}</span><p className="text-xs text-neutral-500">{metric.desc}</p></article>)}
+        <section className="home-metrics home-editorial-section">
+          <div className="home-section-shell">
+            <SectionHeader eyebrow="Clinical Standards" title="Metrics that matter." />
+            <div className="metric-ledger">
+              {metrics.map((metric) => (
+                <article key={metric.title}>
+                  <strong>{metric.value}</strong>
+                  <div><span>{metric.title}</span><p>{metric.desc}</p></div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
-        <section className="home-comparison py-10 sm:py-12 lg:py-16 bg-neutral-950 text-white">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="home-comparison home-editorial-section bg-neutral-950 text-white">
+          <div className="home-section-shell">
             <SectionHeader dark eyebrow="The Difference" title="The Suga Standard vs Traditional Healthcare" />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-              <article className="rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 bg-neutral-900 border border-neutral-800"><span className="legacy-label text-neutral-400 mb-4">Traditional System</span><ul className="space-y-3.5 text-sm text-neutral-400">{traditional.map((point) => <li key={point} className="flex items-start gap-3"><span className="text-neutral-600 font-bold">✕</span><span>{point}</span></li>)}</ul></article>
-              <article className="rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 bg-white text-neutral-950 border border-neutral-200"><span className="legacy-label text-neutral-500 mb-4">The Suga Model</span><ul className="space-y-3.5 text-sm">{sugaModel.map((point) => <li key={point} className="flex items-start gap-3"><span className="w-5 h-5 rounded-full bg-neutral-950 text-white flex items-center justify-center shrink-0 mt-0.5 text-xs">✓</span><span className="font-medium">{point}</span></li>)}</ul></article>
-            </div>
-          </div>
-        </section>
-
-        <section id="doctors" className="home-doctors py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <SectionHeader eyebrow="Medical Leadership & Care Team" title="Board-certified doctors behind every prescription." subtitle="No bots, no algorithmic shortcuts. Licensed US physicians personally evaluate every intake, design individualized treatment plans, and support you throughout your care." />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {doctors.map((doctor) => (
-              <article key={doctor.id} className="group bg-white rounded-2xl sm:rounded-3xl border border-neutral-200/90 hover:border-neutral-950 transition-all flex flex-col overflow-hidden shadow-sm">
-                <div className="relative h-64 sm:h-72 bg-neutral-100 overflow-hidden">
-                  <PublicImage loading="lazy" decoding="async" src={doctor.image} srcSet={imageSources(doctor.image)} sizes="(max-width: 640px) 100vw, (max-width: 1150px) 50vw, 25vw" width={480} height={640} alt={doctor.name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-                  <span className="absolute top-3.5 left-3.5 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-bold uppercase tracking-wider"><ShieldCheck size={12} />Verified MD/DO</span>
-                  <div className="absolute bottom-3.5 left-3.5 right-3.5 text-white"><h3 className="font-sans text-xl font-bold text-white">{doctor.name}</h3><span className="text-xs font-semibold text-neutral-300">{doctor.credentials} • {doctor.role}</span></div>
-                </div>
-                <div className="p-5 sm:p-6 flex flex-col flex-grow justify-between">
-                  <div><span className="inline-block text-[11px] font-bold uppercase tracking-wider text-neutral-700 bg-neutral-100 px-2.5 py-1 rounded-md mb-3">{doctor.specialty}</span><div className="space-y-2 mb-4 text-xs text-neutral-600"><div className="flex items-start gap-2"><GraduationCap size={14} className="mt-0.5" /><span className="font-medium">{doctor.education}</span></div><div className="flex items-start gap-2"><MapPin size={14} /><span>Licensed in {doctor.licensedStatesCount} States</span></div></div><p className="text-xs italic text-neutral-500 border-l-2 border-neutral-200 pl-3 hidden sm:block">“{doctor.quote}”</p></div>
-                  <div className="pt-3 mt-4 border-t border-neutral-100"><button type="button" onClick={() => setSelectedDoctor(doctor)} className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-neutral-300 hover:border-neutral-950 text-xs font-bold uppercase tracking-wider"><Award size={13} />View Credentials</button></div>
-                </div>
-              </article>
-            ))}
-          </div>
-          <div className="mt-10 sm:mt-12 lg:mt-14 rounded-2xl sm:rounded-3xl bg-neutral-950 text-white p-6 sm:p-8 lg:p-10">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-10">
-              <div className="text-center lg:text-left max-w-2xl"><div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-neutral-300 text-xs font-semibold mb-4"><HeartHandshake size={14} /><span>Direct Doctor Access Included</span></div><h3 className="font-sans text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">Care that feels personal.<br /><span className="text-neutral-300 font-medium">Guidance from real doctors, with someone you can reach whenever you need.</span></h3><p className="mt-3 text-xs sm:text-sm text-neutral-400">Your care doesn’t stop with a prescription. Message your clinician directly, request dosage adjustments, and receive periodic medical check-ins at zero added charge.</p></div>
-              <Link href="/sign-up" onClick={rememberReturnPosition} className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white text-neutral-950 text-xs font-bold uppercase tracking-wider">Meet Your Doctor <ArrowRight size={14} /></Link>
-            </div>
-          </div>
-        </section>
-
-        <section id="products" className="home-formulary py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <SectionHeader eyebrow="Prescription Formulary" title="Targeted therapies compounded for maximum bioavailability." subtitle="Doctor-formulated treatments with pure active pharmaceutical ingredients, prepared exclusively in state-licensed 503A/503B pharmacies.">
-            <div className="mt-7 sm:mt-8 flex justify-center">
-              <div className="flex flex-wrap justify-center p-1.5 bg-neutral-100 rounded-2xl sm:rounded-full border border-neutral-200 gap-1">
-                {([["all","All Formulations"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Health"]] as const).map(([key,label]) => <button key={key} type="button" aria-pressed={productCategory === key} onClick={() => setProductCategory(key)} className={productCategory === key ? "legacy-toggle legacy-toggle-active" : "legacy-toggle"}>{label}</button>)}
+            <div className="comparison-editorial">
+              <div className="comparison-column comparison-traditional">
+                <span className="home-kicker">Traditional System</span>
+                {traditional.map((point, index) => <div key={point} className="comparison-row"><b>0{index + 1}</b><p>{point}</p></div>)}
+              </div>
+              <div className="comparison-column comparison-suga">
+                <span className="home-kicker">The Suga Model</span>
+                {sugaModel.map((point, index) => <div key={point} className="comparison-row"><b><Check size={14} /></b><p>{point}</p></div>)}
               </div>
             </div>
-          </SectionHeader>
+          </div>
+        </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {visibleProducts.map((product) => (
-              <article key={product.id} className="group bg-white rounded-2xl sm:rounded-3xl border border-neutral-200/90 hover:border-neutral-950 transition-all flex flex-col overflow-hidden shadow-sm">
-                <div className="relative h-60 sm:h-64 bg-neutral-100 overflow-hidden">
-                  <PublicImage loading="lazy" decoding="async" src={product.image} srcSet={imageSources(product.image)} sizes="(max-width: 640px) 100vw, 210px" width={480} height={640} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                  <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between"><span className="px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-bold uppercase tracking-wider">{product.category === "weight" ? "Metabolic GLP-1" : product.category === "hair" ? "Trichology Formula" : "Endocrine / Vascular"}</span>{product.isPopular && <span className="px-2.5 py-1 rounded-full bg-neutral-950 text-white text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><Sparkles size={10} />Most Prescribed</span>}</div>
-                  <div className="absolute bottom-3 left-3.5 right-3.5 text-white flex items-center gap-1.5 text-[11px] font-semibold"><Layers size={12} /><span className="truncate">{product.deliveryMethod}</span></div>
+        <section id="doctors" className="home-doctors home-editorial-section">
+          <div className="home-section-shell">
+            <SectionHeader eyebrow="Medical Leadership & Care Team" title="Board-certified doctors behind every prescription." subtitle="No bots, no algorithmic shortcuts. Licensed US physicians personally evaluate every intake, design individualized treatment plans, and support you throughout your care." />
+            <div className="doctor-editorial-layout">
+              <article className="doctor-feature">
+                <div className="doctor-feature-image">
+                  <PublicImage loading="lazy" decoding="async" src={doctors[0].image} srcSet={imageSources(doctors[0].image)} sizes="(max-width: 820px) 100vw, 52vw" width={900} height={1050} alt={doctors[0].name} />
+                  <span><ShieldCheck size={13} /> Verified MD/DO</span>
                 </div>
-                <div className="p-5 sm:p-6 lg:p-7 flex flex-col flex-grow justify-between">
-                  <div><h3 className="font-sans text-lg sm:text-xl font-bold text-neutral-950 tracking-tight">{product.name}</h3><p className="mt-1 text-xs font-semibold text-neutral-500 font-mono line-clamp-1">{product.activeIngredients}</p><div className="my-4 p-3 rounded-xl bg-neutral-50 border border-neutral-200/80"><div className="flex items-start gap-2"><span className="w-4 h-4 rounded-full bg-neutral-900 text-white flex items-center justify-center shrink-0 mt-0.5"><Check size={10} /></span><span className="text-xs font-semibold text-neutral-800">{product.clinicalProof}</span></div></div></div>
-                  <div className="pt-4 border-t border-neutral-100"><div className="flex items-baseline gap-1.5"><span className="text-xs text-neutral-500">From</span><span className="font-sans text-2xl sm:text-3xl font-black">{product.startingPrice}</span><span className="text-xs text-neutral-500">/mo</span></div><div className="mt-2.5 mb-4 inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-semibold bg-neutral-100 px-2.5 py-1 rounded-full"><Truck size={12} />Free 2-Day Ship</div><div className="grid grid-cols-2 gap-2"><button type="button" onClick={() => setSelectedProduct(product)} className="inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-neutral-300 hover:border-neutral-950 text-xs font-bold uppercase tracking-wider"><Info size={13} />Details</button><Link href="/sign-up" onClick={rememberReturnPosition} className="inline-flex items-center justify-center gap-1 py-2.5 rounded-xl bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider">Get Started <ArrowRight size={13} /></Link></div></div>
+                <div className="doctor-feature-copy">
+                  <span className="home-kicker">{doctors[0].role}</span>
+                  <h3>{doctors[0].name}, {doctors[0].credentials}</h3>
+                  <p>{doctors[0].specialty}</p>
+                  <blockquote>“{doctors[0].quote}”</blockquote>
+                  <div className="doctor-facts">
+                    <span><GraduationCap size={14} />{doctors[0].education}</span>
+                    <span><MapPin size={14} />Licensed in {doctors[0].licensedStatesCount} States</span>
+                  </div>
+                  <button type="button" onClick={() => setSelectedDoctor(doctors[0])}>View credentials <ArrowRight size={14} /></button>
                 </div>
               </article>
-            ))}
+
+              <div className="doctor-roster">
+                {doctors.slice(1).map((doctor) => (
+                  <button type="button" key={doctor.id} className="doctor-roster-row" onClick={() => setSelectedDoctor(doctor)}>
+                    <PublicImage loading="lazy" decoding="async" src={doctor.image} srcSet={imageSources(doctor.image)} sizes="116px" width={240} height={280} alt={doctor.name} />
+                    <div>
+                      <span>{doctor.role}</span>
+                      <strong>{doctor.name}, {doctor.credentials}</strong>
+                      <p>{doctor.specialty}</p>
+                    </div>
+                    <ArrowUpRight size={18} />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="doctor-access-band">
+              <div><span><HeartHandshake size={15} /> Direct Doctor Access Included</span><h3>Care that feels personal.</h3><p>Guidance from real doctors, with someone you can reach whenever you need.</p></div>
+              <Link href="/sign-up" onClick={rememberReturnPosition}>Meet Your Doctor <ArrowRight size={14} /></Link>
+            </div>
           </div>
-
-          <div className="mt-8 sm:mt-10 pt-6 border-t border-neutral-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-xs text-neutral-500"><div className="flex items-center gap-2"><ShieldCheck size={16} /><span>All prescription treatments require online clinical evaluation and doctor approval.</span></div><div className="flex flex-wrap justify-center gap-4 text-neutral-700 font-medium"><span>✓ 100% US Licensed Pharmacies</span><span>✓ Authentic Ingredients</span><span>✓ Discreet Packaging</span></div></div>
         </section>
 
-        <section className="home-faq py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-          <SectionHeader eyebrow="Patient Education" title="Common Questions" subtitle="Straightforward answers about our clinical protocols and prescription process." />
-          <div className="space-y-3">{faqs.map((faq) => <details key={faq.q} className="group rounded-2xl bg-white border border-neutral-200/90 hover:border-neutral-950 overflow-hidden"><summary className="list-none cursor-pointer p-5 sm:p-6 flex items-center justify-between gap-4 font-sans font-bold text-base sm:text-lg"><span>{faq.q}</span><ChevronDown size={18} className="transition-transform group-open:rotate-180" /></summary><div className="px-5 pb-5 sm:px-6 sm:pb-6 text-sm sm:text-base text-neutral-600 leading-relaxed border-t border-neutral-100 pt-4">{faq.a}</div></details>)}</div>
+        <section id="products" className="home-formulary home-editorial-section bg-white">
+          <div className="home-section-shell">
+            <SectionHeader eyebrow="Prescription Formulary" title="Targeted therapies compounded for maximum bioavailability." subtitle="Doctor-formulated treatments with pure active pharmaceutical ingredients, prepared exclusively in state-licensed 503A/503B pharmacies.">
+              <div className="home-toggle-rail">
+                {([["all","All Formulations"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Health"]] as const).map(([key,label]) => <button key={key} type="button" aria-pressed={productCategory === key} onClick={() => setProductCategory(key)} className={productCategory === key ? "legacy-toggle legacy-toggle-active" : "legacy-toggle"}>{label}</button>)}
+              </div>
+            </SectionHeader>
+
+            <div className="formulary-index">
+              {visibleProducts.map((product) => (
+                <article key={product.id} className="formulary-row">
+                  <div className="formulary-image">
+                    <PublicImage loading="lazy" decoding="async" src={product.image} srcSet={imageSources(product.image)} sizes="180px" width={360} height={300} alt={product.name} />
+                    {product.isPopular && <span><Sparkles size={10} />Most prescribed</span>}
+                  </div>
+                  <div className="formulary-name">
+                    <span>{product.category === "weight" ? "Metabolic GLP-1" : product.category === "hair" ? "Trichology Formula" : "Endocrine / Vascular"}</span>
+                    <h3>{product.name}</h3>
+                    <p>{product.activeIngredients}</p>
+                  </div>
+                  <div className="formulary-proof">
+                    <span>Clinical reference</span>
+                    <p>{product.clinicalProof}</p>
+                  </div>
+                  <div className="formulary-price">
+                    <span>From</span>
+                    <strong>{product.startingPrice}<small>/mo</small></strong>
+                    <em><Truck size={12} />Free 2-Day Ship</em>
+                  </div>
+                  <div className="formulary-actions">
+                    <button type="button" onClick={() => setSelectedProduct(product)}>Details <Info size={13} /></button>
+                    <Link href="/sign-up" onClick={rememberReturnPosition}>Get started <ArrowRight size={13} /></Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div className="formulary-assurance">
+              <span><ShieldCheck size={16} />All prescription treatments require online clinical evaluation and doctor approval.</span>
+              <div><b>100% US Licensed Pharmacies</b><b>Authentic Ingredients</b><b>Discreet Packaging</b></div>
+            </div>
+          </div>
         </section>
 
-        <section className="home-final-cta py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="rounded-2xl sm:rounded-3xl bg-neutral-950 text-white p-6 sm:p-10 md:p-14 flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
-            <div className="max-w-2xl"><span className="text-xs font-bold tracking-widest text-neutral-400 uppercase block mb-2 sm:mb-3">Take the first step</span><h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-3 sm:mb-4">Your personalized medical plan is 5 minutes away.</h2><p className="text-neutral-400 text-base sm:text-lg">Answer quick medical questions. A licensed clinician will review your file and tailor your prescription.</p></div>
-            <Link href="/sign-up" onClick={rememberReturnPosition} className="w-full sm:w-auto inline-flex items-center justify-center bg-white text-neutral-950 px-8 py-4 rounded-full text-sm font-bold tracking-wider uppercase">Start Free Assessment <ArrowRight size={16} className="ml-2.5" /></Link>
+        <section className="home-faq home-editorial-section">
+          <div className="home-section-shell home-faq-shell">
+            <SectionHeader eyebrow="Patient Education" title="Common Questions" subtitle="Straightforward answers about our clinical protocols and prescription process." />
+            <div className="faq-editorial-list">
+              {faqs.map((faq, index) => (
+                <details key={faq.q}>
+                  <summary><span>0{index + 1}</span><strong>{faq.q}</strong><ChevronDown size={18} /></summary>
+                  <div>{faq.a}</div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="home-final-cta">
+          <div className="home-final-cta-inner">
+            <span className="home-kicker">Take the first step</span>
+            <div>
+              <h2>Your personalized medical plan is 5 minutes away.</h2>
+              <p>Answer quick medical questions. A licensed clinician will review your file and tailor your prescription.</p>
+            </div>
+            <Link href="/sign-up" onClick={rememberReturnPosition}>Start Free Assessment <ArrowRight size={16} /></Link>
           </div>
         </section>
       </div>
