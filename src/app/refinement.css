@@ -2475,3 +2475,79 @@ main.refined-home .faq-answer p {
     transition: none !important;
   }
 }
+
+
+/* =========================================================
+   Homepage spacing polish — ticker, metrics, FAQ, final CTA
+   ========================================================= */
+
+/* Make the running trust line compact without shrinking its horizontal rhythm. */
+main.refined-home .home-hero > .home-trust-ticker {
+  padding-block: 0 !important;
+}
+main.refined-home .home-trust-ticker .animate-marquee {
+  padding-block: .52rem !important;
+}
+main.refined-home .home-ticker-sequence b {
+  color: #d4a62a !important;
+}
+
+/* The hero no longer uses a kicker; keep the title composition deliberate. */
+main.refined-home .home-hero .hero-intro-copy {
+  gap: 0 !important;
+}
+
+/* Metrics: retain impact while using a more restrained professional scale. */
+main.refined-home .home-metrics .metric-count-value {
+  font-size: clamp(3.1rem, 5.6vw, 5rem) !important;
+  font-weight: 500 !important;
+  line-height: .92 !important;
+  letter-spacing: -.045em !important;
+}
+main.refined-home .home-metrics .metric-count-unit {
+  font-size: clamp(.88rem, 1.35vw, 1.1rem) !important;
+  letter-spacing: .045em !important;
+}
+
+/* FAQ: stay on the same white canvas and remove the oversized section gap. */
+main.refined-home > div > .home-faq {
+  padding-top: clamp(2.15rem, 3.7vw, 3.3rem) !important;
+  background: #fff !important;
+}
+main.refined-home .faq-heading {
+  margin-bottom: clamp(1.8rem, 3.4vw, 2.65rem) !important;
+}
+main.refined-home .faq-number {
+  font-size: .7rem !important;
+  font-weight: 600 !important;
+  letter-spacing: .035em !important;
+  color: #a2a29c !important;
+}
+
+@media (max-width: 640px) {
+  main.refined-home .home-trust-ticker .animate-marquee {
+    padding-block: .44rem !important;
+  }
+
+  main.refined-home .home-metrics .metric-count-value {
+    font-size: clamp(3.15rem, 13vw, 4.45rem) !important;
+  }
+  main.refined-home .home-metrics .metric-count-unit {
+    font-size: .88rem !important;
+  }
+
+  main.refined-home > div > .home-faq {
+    padding-top: 2rem !important;
+  }
+  main.refined-home .faq-heading {
+    margin-bottom: 1.65rem !important;
+  }
+  main.refined-home .faq-heading h2 {
+    font-size: clamp(2.15rem, 9.2vw, 2.9rem) !important;
+    line-height: 1.02 !important;
+    letter-spacing: -.04em !important;
+  }
+  main.refined-home .faq-number {
+    font-size: .68rem !important;
+  }
+}

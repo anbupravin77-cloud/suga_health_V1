@@ -384,7 +384,7 @@ export default function HomePage() {
                   <span>Fully confidential</span><b>✦</b>
                   <span>Free and discrete shipping</span><b>✦</b>
                   <span>100% online process</span><b>✦</b>
-                  <span>Used and trusted by millions around the world.</span><b>✦</b>
+                  <span>Used and trusted by millions around the world</span><b>✦</b>
                 </span>
               ))}
             </div>
@@ -393,7 +393,6 @@ export default function HomePage() {
           <div className="home-hero-composition">
             <div className="hero-intro-grid">
               <div className="hero-intro-copy">
-                <span className="home-kicker">Private care. Real clinicians. Your pace.</span>
                 <h1 className="legacy-hero-title">
                   Clinically proven, FDA (USA) approved, treatment prescribed by experts.
                 </h1>
@@ -770,7 +769,7 @@ export default function HomePage() {
           <div className="home-final-cta-inner">
             <span className="home-kicker">Take the first step</span>
             <div>
-              <h2>Your personalized medical plan is 5 minutes away.</h2>
+              <h2>Your personalized medical plan is&nbsp;5 minutes away.</h2>
               <p>Answer quick medical questions. A licensed clinician will review your file and tailor your prescription.</p>
             </div>
             <Link href="/sign-up" onClick={rememberReturnPosition}>Start Free Assessment <ArrowRight size={16} /></Link>
