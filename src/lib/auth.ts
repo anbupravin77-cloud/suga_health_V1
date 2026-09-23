@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { isAppRole, roleHome, type AppRole } from "@/lib/roles";
 
-export type AppRole = "patient" | "doctor";
+export type { AppRole } from "@/lib/roles";
 
 type SessionIdentity = {
   id: string;
@@ -48,30 +49,30 @@ async function resolveRole(expectedRole: AppRole, actionMode: boolean) {
   const identity = await readIdentity();
   if (!identity) redirect("/sign-in");
 
-  const { data: legacyProfile, error } = await readRoleProfile(identity);
-  if (error || !legacyProfile) redirect("/sign-in?error=profile");
+  const { data: profileRecord, error } = await readRoleProfile(identity);
+  if (error || !profileRecord) redirect("/sign-in?error=profile");
 
-  const role = String(legacyProfile.role) as AppRole;
+  const role: AppRole = isAppRole(profileRecord.role) ? profileRecord.role : "patient";
   if (role !== expectedRole) {
     if (actionMode) redirect("/sign-in?error=role");
-    redirect(role === "doctor" ? "/doctor" : "/patient");
+    redirect(roleHome(role));
   }
 
-  const composedName = [legacyProfile.first_name, legacyProfile.last_name]
+  const composedName = [profileRecord.first_name, profileRecord.last_name]
     .filter(Boolean)
     .join(" ")
     .trim();
 
   const profile: CompatibleProfile = {
-    id: legacyProfile.id,
+    id: profileRecord.id,
     role,
-    full_name: legacyProfile.display_name || composedName || null,
+    full_name: profileRecord.display_name || composedName || null,
   };
 
   return {
     user: {
       id: identity.id,
-      email: identity.email || legacyProfile.email || undefined,
+      email: identity.email || profileRecord.email || undefined,
     },
     profile,
   };

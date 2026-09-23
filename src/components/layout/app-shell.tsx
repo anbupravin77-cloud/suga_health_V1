@@ -6,6 +6,7 @@ import { Bell, ClipboardList, Home, LogOut, MessageSquare, Stethoscope, UserRoun
 import { useState, type MouseEvent, type ReactNode } from "react";
 import { signOut } from "@/app/actions";
 import { ActionButton } from "@/components/ui/action-button";
+import type { AppRole } from "@/lib/roles";
 
 const iconMap = {
   Home,
@@ -15,6 +16,35 @@ const iconMap = {
   Messages: MessageSquare,
   Notifications: Bell,
   Profile: UserRound,
+  Doctors: Stethoscope,
+  Pharmacists: ClipboardList,
+};
+
+const roleMeta: Record<AppRole, { label: string; workspace: string; base: string; items: string[] }> = {
+  patient: {
+    label: "PATIENT",
+    workspace: "Private patient space",
+    base: "/patient",
+    items: ["Home", "Consultations", "Messages", "Notifications", "Profile"],
+  },
+  doctor: {
+    label: "DOCTOR",
+    workspace: "Clinical workspace",
+    base: "/doctor",
+    items: ["Queue", "Active reviews", "Messages", "Notifications", "Profile"],
+  },
+  pharmacist: {
+    label: "PHARMACIST",
+    workspace: "Pharmacy workspace",
+    base: "/pharmacist",
+    items: ["Home"],
+  },
+  admin: {
+    label: "ADMIN",
+    workspace: "Staff administration",
+    base: "/admin",
+    items: ["Doctors", "Pharmacists"],
+  },
 };
 
 export function AppShell({
@@ -22,7 +52,7 @@ export function AppShell({
   name,
   children,
 }: {
-  role: "patient" | "doctor";
+  role: AppRole;
   active?: string;
   name: string;
   children: ReactNode;
@@ -30,11 +60,9 @@ export function AppShell({
   const pathname = usePathname();
   const [pendingHref, setPendingHref] = useState<string | null>(null);
   const [previousPathname, setPreviousPathname] = useState(pathname);
-  const items =
-    role === "patient"
-      ? ["Home", "Consultations", "Messages", "Notifications", "Profile"]
-      : ["Queue", "Active reviews", "Messages", "Notifications", "Profile"];
-  const base = role === "patient" ? "/patient" : "/doctor";
+  const meta = roleMeta[role];
+  const items = meta.items;
+  const base = meta.base;
 
   if (previousPathname !== pathname) {
     setPreviousPathname(pathname);
@@ -42,13 +70,14 @@ export function AppShell({
   }
 
   function hrefFor(item: string) {
+    if (role === "admin") return `${base}/${item.toLowerCase().replaceAll(" ", "-")}`;
     return item === items[0] ? base : `${base}/${item.toLowerCase().replaceAll(" ", "-")}`;
   }
 
   function isActive(item: string) {
     if (role === "doctor" && item === "Active reviews" && pathname.startsWith("/doctor/consultations/")) return true;
     const href = hrefFor(item);
-    if (item === items[0]) return pathname === href;
+    if (role !== "admin" && item === items[0]) return pathname === href;
     return pathname === href || pathname.startsWith(`${href}/`);
   }
 
@@ -69,7 +98,7 @@ export function AppShell({
       <aside className="app-sidebar">
         <div className="sidebar-brand">
           <Link className="wordmark" href="/">Suga.Health</Link>
-          <span>{role === "doctor" ? "DOCTOR" : "PATIENT"}</span>
+          <span>{meta.label}</span>
         </div>
         <nav aria-label={`${role} navigation`}>
           {items.map((item) => {
@@ -93,7 +122,9 @@ export function AppShell({
           })}
         </nav>
         <div className="sidebar-foot">
-          <p className="sidebar-note">Real care.<br />Clear next steps.</p>
+          <p className="sidebar-note">
+            {role === "admin" ? <>Controlled access.<br />Clear accountability.</> : <>Real care.<br />Clear next steps.</>}
+          </p>
           <form action={signOut}>
             <ActionButton className="sidebar-logout" type="submit" pendingLabel="Signing out…">
               <LogOut size={16} /> Sign out
@@ -104,7 +135,7 @@ export function AppShell({
       <div className="app-main">
         <header className="app-topbar">
           <Link className="mobile-app-brand" href="/">SUGA<span>.</span>HEALTH</Link>
-          <span>{role === "doctor" ? "Clinical workspace" : "Private patient space"}</span>
+          <span>{meta.workspace}</span>
           <strong>{name}</strong>
         </header>
         <main className="app-content" id="care-content" tabIndex={-1}>{children}</main>

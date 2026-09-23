@@ -18,36 +18,21 @@ npm run typecheck
 npm run build
 ```
 
-## Doctor provisioning
+## Staff provisioning
 
-New users are patients by default. Doctor access is granted through a controlled Supabase SQL operation after the clinician is verified. Replace the placeholder with the authenticated user ID:
+The protected admin portal manages clinician and pharmacy access:
 
-```sql
-begin;
+- `/admin/doctors` — search doctors and create a doctor login.
+- `/admin/pharmacists` — search pharmacists and create a pharmacist login.
+- Doctor creation collects name, age, email, password, and one or more treatment fields.
+- Supported doctor treatment fields are `weight`, `hair`, and `sex`.
+- Staff creation is performed by the authenticated `admin-create-staff` Supabase Edge Function.
+- The Supabase service-role secret stays inside the Edge Function and is never sent to the browser.
+- Created doctors sign in through the normal Suga.Health sign-in page and are routed to `/doctor`.
+- Created pharmacists sign in through the same sign-in page and are routed to `/pharmacist`.
+- Admin users are routed to `/admin`.
 
-update public.profiles
-set role = 'doctor'
-where id = '<AUTH_USER_UUID>';
-
-insert into public.doctor_profiles (
-  doctor_id,
-  professional_title,
-  specialization,
-  registration_number,
-  verified
-)
-values (
-  '<AUTH_USER_UUID>',
-  'Doctor',
-  '<SPECIALIZATION>',
-  '<REGISTRATION_NUMBER>',
-  true
-);
-
-commit;
-```
-
-Role and verification changes are intentionally unavailable through the public application.
+Google OAuth always requests the current application origin as its callback. The corresponding production callback URL must also be present in Supabase Auth → URL Configuration.
 
 ## V1 workflow
 
