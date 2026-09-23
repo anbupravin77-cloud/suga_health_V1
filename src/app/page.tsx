@@ -278,25 +278,24 @@ const products = [
 ];
 
 const customerVoices = [
-  {
-    id: "priya-chennai",
-    quote: "For the first time, I didn't feel rushed explaining what I was going through.",
-    name: "Priya",
-    age: 32,
-    city: "Chennai",
-    journey: "Weight care patient",
-  },
-  {
-    id: "arun-coimbatore",
-    quote: "I had questions after my consultation. Being able to message my doctor made the biggest difference.",
-    name: "Arun",
-    age: 41,
-    city: "Coimbatore",
-    journey: "Ongoing care patient",
-  },
+  { id: "sample-01", name: "Sample customer 01", age: 32, photo: "https://i.pravatar.cc/320?img=47", quote: "Sample copy: I felt heard, and the next steps were explained in a way I could actually follow." },
+  { id: "sample-02", name: "Sample customer 02", age: 41, photo: "https://i.pravatar.cc/320?img=12", quote: "Sample copy: Having one clear place for my consultation and follow-up made care feel much simpler." },
+  { id: "sample-03", name: "Sample customer 03", age: 29, photo: "https://i.pravatar.cc/320?img=32", quote: "Sample copy: The experience felt private, calm, and much more personal than I expected online." },
+  { id: "sample-04", name: "Sample customer 04", age: 36, photo: "https://i.pravatar.cc/320?img=5", quote: "Sample copy: I knew what would happen next at every stage, which made the whole process feel easier." },
+  { id: "sample-05", name: "Sample customer 05", age: 45, photo: "https://i.pravatar.cc/320?img=49", quote: "Sample copy: The clinician took time to answer the questions I had before deciding on a plan." },
+  { id: "sample-06", name: "Sample customer 06", age: 34, photo: "https://i.pravatar.cc/320?img=15", quote: "Sample copy: Follow-up felt connected to the consultation instead of like starting over again." },
+  { id: "sample-07", name: "Sample customer 07", age: 27, photo: "https://i.pravatar.cc/320?img=44", quote: "Sample copy: It felt reassuring to have a real person review my information and explain the options." },
+  { id: "sample-08", name: "Sample customer 08", age: 39, photo: "https://i.pravatar.cc/320?img=8", quote: "Sample copy: The care journey was straightforward without feeling rushed or impersonal." },
+  { id: "sample-09", name: "Sample customer 09", age: 31, photo: "https://i.pravatar.cc/320?img=23", quote: "Sample copy: I appreciated knowing who was reviewing my case and what I could expect afterwards." },
+  { id: "sample-10", name: "Sample customer 10", age: 43, photo: "https://i.pravatar.cc/320?img=53", quote: "Sample copy: Everything was presented clearly, without making the experience feel clinical or cold." },
+  { id: "sample-11", name: "Sample customer 11", age: 28, photo: "https://i.pravatar.cc/320?img=36", quote: "Sample copy: The process gave me enough space to explain what I needed before the consultation." },
+  { id: "sample-12", name: "Sample customer 12", age: 38, photo: "https://i.pravatar.cc/320?img=3", quote: "Sample copy: I liked that the care plan felt considered rather than automatically generated." },
+  { id: "sample-13", name: "Sample customer 13", age: 47, photo: "https://i.pravatar.cc/320?img=60", quote: "Sample copy: Questions after the appointment did not feel like an afterthought." },
+  { id: "sample-14", name: "Sample customer 14", age: 30, photo: "https://i.pravatar.cc/320?img=25", quote: "Sample copy: The service felt easy to use while still keeping the doctor at the centre of care." },
+  { id: "sample-15", name: "Sample customer 15", age: 35, photo: "https://i.pravatar.cc/320?img=51", quote: "Sample copy: I could understand the recommendation and why it was being suggested." },
+  { id: "sample-16", name: "Sample customer 16", age: 42, photo: "https://i.pravatar.cc/320?img=11", quote: "Sample copy: The experience was focused and convenient without feeling transactional." },
+  { id: "sample-17", name: "Sample customer 17", age: 33, photo: "https://i.pravatar.cc/320?img=41", quote: "Sample copy: From review to follow-up, the experience felt like one continuous conversation." },
 ];
-
-const voiceCities = ["Chennai", "Coimbatore", "Madurai", "Trichy", "Salem", "Erode", "Puducherry"];
 
 const faqs = [
   { q: "How does an online consultation work?", a: "You complete a 5-minute medical questionnaire covering your health history, symptoms, and lifestyle. A board-certified US physician reviews your submission within 24 hours." },
@@ -621,46 +620,41 @@ export default function HomePage() {
           <div className="home-section-shell">
             <div className="voices-heading">
               <span className="home-kicker">Voice of Our Customers</span>
-              <h2 id="voices-title">Voices, not testimonials.</h2>
-              <p>Short moments from patients describing what care felt like—not a wall of reviews.</p>
+              <h2 id="voices-title">Care, in their own words.</h2>
+              <p>A living portrait wall that brings one customer story into focus at a time.</p>
+              <span className="voices-demo-note">Demo preview — placeholder portraits and sample copy must be replaced with verified customer stories before publishing.</span>
             </div>
 
-            <div className="voices-stage">
-              <div className="voices-story" key={customerVoices[voiceIndex].id}>
-                <span className="voices-quote-mark" aria-hidden="true">“</span>
-                <blockquote>{customerVoices[voiceIndex].quote}</blockquote>
-                <div className="voices-person">
-                  <strong>{customerVoices[voiceIndex].name}, {customerVoices[voiceIndex].age} · {customerVoices[voiceIndex].city}</strong>
-                  <span>{customerVoices[voiceIndex].journey}</span>
-                </div>
-              </div>
-
-              <div className="voices-wave-panel" aria-label="Abstract voice waveform visualization">
-                <div className="voices-wave" aria-hidden="true">
-                  {[34, 56, 42, 74, 52, 88, 61, 47, 79, 58, 92, 66, 49, 73, 55, 84, 63, 45, 70, 39].map((height, index) => (
-                    <span key={index} style={{ "--voice-height": `${height}%`, "--voice-delay": `${index * 55}ms` } as React.CSSProperties} />
-                  ))}
-                </div>
-                <div className="voices-wave-caption">
-                  <span>Patient voice</span>
-                  <strong>{customerVoices[voiceIndex].city}</strong>
-                </div>
-              </div>
+            <div className="voices-honeycomb" role="list" aria-label="Sample customer stories">
+              {customerVoices.map((customer, index) => {
+                const active = index === voiceIndex;
+                return (
+                  <button
+                    key={customer.id}
+                    type="button"
+                    role="listitem"
+                    className={`voice-hex ${active ? "is-active" : ""}`}
+                    aria-label={`${customer.name}, age ${customer.age}`}
+                    aria-pressed={active}
+                    onClick={() => setVoiceIndex(index)}
+                  >
+                    <img src={customer.photo} alt="" loading="lazy" />
+                    <span className="voice-hex-scrim" aria-hidden="true" />
+                  </button>
+                );
+              })}
             </div>
 
-            <div className="voice-trail" aria-label="Patient voice trail across cities">
-              <div className="voice-trail-line" aria-hidden="true">
-                <span
-                  className="voice-trail-indicator"
-                  style={{ "--voice-city-index": voiceCities.indexOf(customerVoices[voiceIndex].city) } as React.CSSProperties}
-                />
+            <article className="voice-testimonial" key={customerVoices[voiceIndex].id} aria-live="polite">
+              <div className="voice-testimonial-person">
+                <img src={customerVoices[voiceIndex].photo} alt="" />
+                <div>
+                  <strong>{customerVoices[voiceIndex].name}</strong>
+                  <span>Age {customerVoices[voiceIndex].age}</span>
+                </div>
               </div>
-              <div className="voice-trail-cities">
-                {voiceCities.map((city) => (
-                  <span key={city} className={city === customerVoices[voiceIndex].city ? "active" : ""}>{city}</span>
-                ))}
-              </div>
-            </div>
+              <blockquote>“{customerVoices[voiceIndex].quote}”</blockquote>
+            </article>
           </div>
         </section>
 
