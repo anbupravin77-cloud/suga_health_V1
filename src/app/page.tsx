@@ -317,6 +317,7 @@ export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [heroSlide, setHeroSlide] = useState(0);
   const [voiceIndex, setVoiceIndex] = useState(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   useRestoreReturnPosition();
 
   useEffect(() => {
@@ -726,16 +727,41 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="home-faq home-editorial-section">
+        <section className="home-faq home-editorial-section" aria-labelledby="faq-title">
           <div className="home-section-shell home-faq-shell">
-            <SectionHeader eyebrow="Patient Education" title="Common Questions" subtitle="Straightforward answers about our clinical protocols and prescription process." />
+            <div className="faq-heading">
+              <h2 id="faq-title">Frequently Asked Questions</h2>
+              <p>Clear answers about consultations, prescriptions, privacy, and ongoing care.</p>
+            </div>
+
             <div className="faq-editorial-list">
-              {faqs.map((faq, index) => (
-                <details key={faq.q}>
-                  <summary><span>0{index + 1}</span><strong>{faq.q}</strong><ChevronDown size={18} /></summary>
-                  <div>{faq.a}</div>
-                </details>
-              ))}
+              {faqs.map((faq, index) => {
+                const isOpen = openFaq === index;
+                return (
+                  <article className={`faq-item ${isOpen ? "is-open" : ""}`} key={faq.q}>
+                    <button
+                      type="button"
+                      className="faq-question"
+                      aria-expanded={isOpen}
+                      aria-controls={`faq-answer-${index}`}
+                      onClick={() => setOpenFaq((current) => current === index ? null : index)}
+                    >
+                      <span className="faq-number">{String(index + 1).padStart(2, "0")}</span>
+                      <strong>{faq.q}</strong>
+                      <span className="faq-icon" aria-hidden="true"><ChevronDown size={20} /></span>
+                    </button>
+                    <div
+                      id={`faq-answer-${index}`}
+                      className="faq-answer-shell"
+                      aria-hidden={!isOpen}
+                    >
+                      <div className="faq-answer">
+                        <p>{faq.a}</p>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </div>
         </section>
