@@ -277,6 +277,27 @@ const products = [
   },
 ];
 
+const customerVoices = [
+  {
+    id: "priya-chennai",
+    quote: "For the first time, I didn't feel rushed explaining what I was going through.",
+    name: "Priya",
+    age: 32,
+    city: "Chennai",
+    journey: "Weight care patient",
+  },
+  {
+    id: "arun-coimbatore",
+    quote: "I had questions after my consultation. Being able to message my doctor made the biggest difference.",
+    name: "Arun",
+    age: 41,
+    city: "Coimbatore",
+    journey: "Ongoing care patient",
+  },
+];
+
+const voiceCities = ["Chennai", "Coimbatore", "Madurai", "Trichy", "Salem", "Erode", "Puducherry"];
+
 const faqs = [
   { q: "How does an online consultation work?", a: "You complete a 5-minute medical questionnaire covering your health history, symptoms, and lifestyle. A board-certified US physician reviews your submission within 24 hours." },
   { q: "Are the medications real and FDA-approved?", a: "All prescribed treatments are reviewed by licensed clinicians and dispensed through licensed pharmacy partners where appropriate." },
@@ -296,6 +317,7 @@ export default function HomePage() {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [heroSlide, setHeroSlide] = useState(0);
+  const [voiceIndex, setVoiceIndex] = useState(0);
   useRestoreReturnPosition();
 
   useEffect(() => {
@@ -305,6 +327,17 @@ export default function HomePage() {
     const timer = window.setInterval(() => {
       setHeroSlide((current) => (current + 1) % heroSlides.length);
     }, 4600);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reducedMotion.matches) return;
+
+    const timer = window.setInterval(() => {
+      setVoiceIndex((current) => (current + 1) % customerVoices.length);
+    }, 5200);
 
     return () => window.clearInterval(timer);
   }, []);
@@ -580,6 +613,53 @@ export default function HomePage() {
               <Link href="/sign-up" onClick={rememberReturnPosition} className="start-consultation-swipe">
                 <span>Start consultation</span><ArrowRight size={15} />
               </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="home-voices home-editorial-section" aria-labelledby="voices-title">
+          <div className="home-section-shell">
+            <div className="voices-heading">
+              <span className="home-kicker">Voice of Our Customers</span>
+              <h2 id="voices-title">Voices, not testimonials.</h2>
+              <p>Short moments from patients describing what care felt like—not a wall of reviews.</p>
+            </div>
+
+            <div className="voices-stage">
+              <div className="voices-story" key={customerVoices[voiceIndex].id}>
+                <span className="voices-quote-mark" aria-hidden="true">“</span>
+                <blockquote>{customerVoices[voiceIndex].quote}</blockquote>
+                <div className="voices-person">
+                  <strong>{customerVoices[voiceIndex].name}, {customerVoices[voiceIndex].age} · {customerVoices[voiceIndex].city}</strong>
+                  <span>{customerVoices[voiceIndex].journey}</span>
+                </div>
+              </div>
+
+              <div className="voices-wave-panel" aria-label="Abstract voice waveform visualization">
+                <div className="voices-wave" aria-hidden="true">
+                  {[34, 56, 42, 74, 52, 88, 61, 47, 79, 58, 92, 66, 49, 73, 55, 84, 63, 45, 70, 39].map((height, index) => (
+                    <span key={index} style={{ "--voice-height": `${height}%`, "--voice-delay": `${index * 55}ms` } as React.CSSProperties} />
+                  ))}
+                </div>
+                <div className="voices-wave-caption">
+                  <span>Patient voice</span>
+                  <strong>{customerVoices[voiceIndex].city}</strong>
+                </div>
+              </div>
+            </div>
+
+            <div className="voice-trail" aria-label="Patient voice trail across cities">
+              <div className="voice-trail-line" aria-hidden="true">
+                <span
+                  className="voice-trail-indicator"
+                  style={{ "--voice-city-index": voiceCities.indexOf(customerVoices[voiceIndex].city) } as React.CSSProperties}
+                />
+              </div>
+              <div className="voice-trail-cities">
+                {voiceCities.map((city) => (
+                  <span key={city} className={city === customerVoices[voiceIndex].city ? "active" : ""}>{city}</span>
+                ))}
+              </div>
             </div>
           </div>
         </section>
