@@ -59,7 +59,8 @@ export function AuthForm({ mode }: { mode: Mode }) {
     }
 
     const { data: profile } = await supabase.from("profiles").select("role").single();
-    const role = isAppRole(profile?.role) ? profile.role : "patient";
+    const profileRole = profile?.role;
+    const role = isAppRole(profileRole) ? profileRole : "patient";
     const fallback = searchParams.get("next");
     router.replace(fallback && roleOwnsPath(role, fallback) ? fallback : roleHome(role));
     router.refresh();
