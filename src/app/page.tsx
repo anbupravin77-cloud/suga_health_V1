@@ -534,43 +534,52 @@ export default function HomePage() {
         <section id="doctors" className="home-doctors home-editorial-section">
           <div className="home-section-shell">
             <SectionHeader eyebrow="Medical Leadership & Care Team" title="Board-certified doctors behind every prescription." subtitle="No bots, no algorithmic shortcuts. Licensed US physicians personally evaluate every intake, design individualized treatment plans, and support you throughout your care." />
-            <div className="doctor-editorial-layout">
-              <article className="doctor-feature">
-                <div className="doctor-feature-image">
-                  <PublicImage loading="lazy" decoding="async" src={doctors[0].image} srcSet={imageSources(doctors[0].image)} sizes="(max-width: 820px) 100vw, 52vw" width={900} height={1050} alt={doctors[0].name} />
-                  <span><ShieldCheck size={13} /> Verified MD/DO</span>
-                </div>
-                <div className="doctor-feature-copy">
-                  <span className="home-kicker">{doctors[0].role}</span>
-                  <h3>{doctors[0].name}, {doctors[0].credentials}</h3>
-                  <p>{doctors[0].specialty}</p>
-                  <blockquote>“{doctors[0].quote}”</blockquote>
-                  <div className="doctor-facts">
-                    <span><GraduationCap size={14} />{doctors[0].education}</span>
-                    <span><MapPin size={14} />Licensed in {doctors[0].licensedStatesCount} States</span>
-                  </div>
-                  <button type="button" onClick={() => setSelectedDoctor(doctors[0])}>View credentials <ArrowRight size={14} /></button>
-                </div>
-              </article>
 
-              <div className="doctor-roster">
-                {doctors.slice(1).map((doctor) => (
-                  <button type="button" key={doctor.id} className="doctor-roster-row" onClick={() => setSelectedDoctor(doctor)}>
-                    <PublicImage loading="lazy" decoding="async" src={doctor.image} srcSet={imageSources(doctor.image)} sizes="116px" width={240} height={280} alt={doctor.name} />
-                    <div>
-                      <span>{doctor.role}</span>
-                      <strong>{doctor.name}, {doctor.credentials}</strong>
-                      <p>{doctor.specialty}</p>
+            <div className="doctor-card-grid">
+              {doctors.map((doctor) => (
+                <article key={doctor.id} className="doctor-card">
+                  <div className="doctor-card-image">
+                    <PublicImage
+                      loading="lazy"
+                      decoding="async"
+                      src={doctor.image}
+                      srcSet={imageSources(doctor.image)}
+                      sizes="(max-width: 720px) 100vw, (max-width: 1080px) 50vw, 33vw"
+                      width={760}
+                      height={620}
+                      alt={doctor.name}
+                    />
+                    <span className="doctor-verified"><ShieldCheck size={13} /> Verified MD/DO</span>
+                  </div>
+
+                  <div className="doctor-card-body">
+                    <span className="doctor-role">{doctor.role}</span>
+                    <h3>{doctor.name}, {doctor.credentials}</h3>
+                    <p className="doctor-specialty">{doctor.specialty}</p>
+                    <p className="doctor-quote">“{doctor.quote}”</p>
+
+                    <div className="doctor-card-facts">
+                      <span><GraduationCap size={15} />{doctor.education}</span>
+                      <span><MapPin size={15} />Licensed in {doctor.licensedStatesCount} States</span>
                     </div>
-                    <ArrowUpRight size={18} />
-                  </button>
-                ))}
-              </div>
+
+                    <button type="button" className="doctor-credentials-button" onClick={() => setSelectedDoctor(doctor)}>
+                      View credentials <ArrowRight size={15} />
+                    </button>
+                  </div>
+                </article>
+              ))}
             </div>
 
-            <div className="doctor-access-band">
-              <div><span><HeartHandshake size={15} /> Direct Doctor Access Included</span><h3>Care that feels personal.</h3><p>Guidance from real doctors, with someone you can reach whenever you need.</p></div>
-              <Link href="/sign-up" onClick={rememberReturnPosition}>Meet Your Doctor <ArrowRight size={14} /></Link>
+            <div className="doctor-trust-band">
+              <div>
+                <span><HeartHandshake size={16} /> Direct clinician access included</span>
+                <h3>Real doctors. Direct access. Care built around you.</h3>
+                <p>Your consultation is reviewed by a licensed clinician, with ongoing support throughout your care.</p>
+              </div>
+              <Link href="/sign-up" onClick={rememberReturnPosition} className="start-consultation-swipe">
+                <span>Start consultation</span><ArrowRight size={15} />
+              </Link>
             </div>
           </div>
         </section>
@@ -578,35 +587,59 @@ export default function HomePage() {
         <section id="products" className="home-formulary home-editorial-section bg-white">
           <div className="home-section-shell">
             <SectionHeader eyebrow="Prescription Formulary" title="Targeted therapies compounded for maximum bioavailability." subtitle="Doctor-formulated treatments with pure active pharmaceutical ingredients, prepared exclusively in state-licensed 503A/503B pharmacies.">
-              <div className="home-toggle-rail">
-                {([["all","All Formulations"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Health"]] as const).map(([key,label]) => <button key={key} type="button" aria-pressed={productCategory === key} onClick={() => setProductCategory(key)} className={productCategory === key ? "legacy-toggle legacy-toggle-active" : "legacy-toggle"}>{label}</button>)}
+              <div className="product-filter-bar" role="group" aria-label="Filter prescription formulary">
+                {([["all","All Formulations"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Health"]] as const).map(([key,label]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    aria-pressed={productCategory === key}
+                    onClick={() => setProductCategory(key)}
+                    className={productCategory === key ? "product-filter active" : "product-filter"}
+                  >
+                    {label}
+                  </button>
+                ))}
               </div>
             </SectionHeader>
 
-            <div className="formulary-index">
+            <div className="product-card-grid">
               {visibleProducts.map((product) => (
-                <article key={product.id} className="formulary-row">
-                  <div className="formulary-image">
-                    <PublicImage loading="lazy" decoding="async" src={product.image} srcSet={imageSources(product.image)} sizes="180px" width={360} height={300} alt={product.name} />
-                    {product.isPopular && <span><Sparkles size={10} />Most prescribed</span>}
+                <article key={product.id} className="product-card">
+                  <div className="product-card-image">
+                    <PublicImage
+                      loading="lazy"
+                      decoding="async"
+                      src={product.image}
+                      srcSet={imageSources(product.image)}
+                      sizes="(max-width: 720px) 100vw, (max-width: 1080px) 50vw, 33vw"
+                      width={720}
+                      height={560}
+                      alt={product.name}
+                    />
+                    {product.isPopular && <span className="product-popular"><Sparkles size={11} />Most prescribed</span>}
                   </div>
-                  <div className="formulary-name">
-                    <span>{product.category === "weight" ? "Metabolic GLP-1" : product.category === "hair" ? "Trichology Formula" : "Endocrine / Vascular"}</span>
+
+                  <div className="product-card-body">
+                    <span className="product-category">{product.category === "weight" ? "Metabolic GLP-1" : product.category === "hair" ? "Trichology Formula" : "Endocrine / Vascular"}</span>
                     <h3>{product.name}</h3>
-                    <p>{product.activeIngredients}</p>
-                  </div>
-                  <div className="formulary-proof">
-                    <span>Clinical reference</span>
-                    <p>{product.clinicalProof}</p>
-                  </div>
-                  <div className="formulary-price">
-                    <span>From</span>
-                    <strong>{product.startingPrice}<small>/mo</small></strong>
-                    <em><Truck size={12} />Free 2-Day Ship</em>
-                  </div>
-                  <div className="formulary-actions">
-                    <button type="button" onClick={() => setSelectedProduct(product)}>Details <Info size={13} /></button>
-                    <Link href="/sign-up" onClick={rememberReturnPosition}>Get started <ArrowRight size={13} /></Link>
+                    <p className="product-ingredients">{product.activeIngredients}</p>
+
+                    <div className="product-clinical-reference">
+                      <span>Clinical reference</span>
+                      <p>{product.clinicalProof}</p>
+                    </div>
+
+                    <div className="product-card-bottom">
+                      <div className="product-card-price">
+                        <span>From</span>
+                        <strong>{product.startingPrice}<small>/mo</small></strong>
+                        <em><Truck size={13} />Free 2-Day Ship</em>
+                      </div>
+                      <div className="product-card-actions">
+                        <button type="button" onClick={() => setSelectedProduct(product)}>Details <Info size={14} /></button>
+                        <Link href="/sign-up" onClick={rememberReturnPosition}>Get started <ArrowRight size={14} /></Link>
+                      </div>
+                    </div>
                   </div>
                 </article>
               ))}
@@ -722,13 +755,38 @@ function SectionHeader({ eyebrow, title, subtitle, children, dark = false }: { e
 
 function Modal({ children, label, onClose }: { children: React.ReactNode; label: string; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
+
   useEffect(() => {
     const dialog = ref.current;
-    const previousOverflow = document.body.style.overflow;
+    const scrollY = window.scrollY;
+    const body = document.body;
+    const html = document.documentElement;
+    const previous = {
+      bodyOverflow: body.style.overflow,
+      bodyPosition: body.style.position,
+      bodyTop: body.style.top,
+      bodyWidth: body.style.width,
+      htmlOverflow: html.style.overflow,
+    };
+
     dialog?.showModal();
-    document.body.style.overflow = "hidden";
-    return () => { dialog?.close(); document.body.style.overflow = previousOverflow; };
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+
+    return () => {
+      dialog?.close();
+      html.style.overflow = previous.htmlOverflow;
+      body.style.overflow = previous.bodyOverflow;
+      body.style.position = previous.bodyPosition;
+      body.style.top = previous.bodyTop;
+      body.style.width = previous.bodyWidth;
+      window.scrollTo(0, scrollY);
+    };
   }, []);
+
   return <dialog ref={ref} className="clinical-dialog" aria-label={label} onCancel={onClose} onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}><div className="clinical-dialog-content"><button type="button" onClick={onClose} aria-label="Close modal" className="clinical-dialog-close"><X size={20} /></button>{children}</div></dialog>;
 }
 

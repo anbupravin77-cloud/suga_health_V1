@@ -1527,3 +1527,468 @@ main.refined-home .home-metrics .metric-ledger p {
     border-radius: 20px !important;
   }
 }
+
+
+/* =========================================================
+   Doctors + formulary card refinement
+   ========================================================= */
+
+/* Metrics: larger numbers, stronger labels, without extra-heavy weight. */
+main.refined-home .home-metrics .metric-count-value {
+  font-size: clamp(3.6rem, 7vw, 6rem) !important;
+  font-weight: 500 !important;
+  line-height: .88 !important;
+}
+main.refined-home .home-metrics .metric-count-unit {
+  font-size: clamp(1rem, 1.8vw, 1.35rem) !important;
+  font-weight: 500 !important;
+}
+main.refined-home .home-metrics .metric-ledger article > div > span {
+  font-size: clamp(.9rem, 1.4vw, 1.05rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: .055em !important;
+}
+
+/* Doctors: every clinician uses the same complete card system. */
+main.refined-home .doctor-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+main.refined-home .doctor-card {
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dcdcd6;
+  border-radius: 24px;
+  background: #fbfbf8;
+}
+main.refined-home .doctor-card-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.22 / 1;
+  overflow: hidden;
+  background: #ecece7;
+}
+main.refined-home .doctor-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+}
+main.refined-home .doctor-verified {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  padding: .5rem .72rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.92);
+  color: #252522;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+main.refined-home .doctor-card-body {
+  flex: 1;
+  padding: clamp(1.35rem, 3vw, 2rem);
+  display: flex;
+  flex-direction: column;
+}
+main.refined-home .doctor-role {
+  color: #777771;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+main.refined-home .doctor-card h3 {
+  margin: .55rem 0 .4rem;
+  font-family: var(--font-headline), Arial, sans-serif;
+  font-size: clamp(1.65rem, 3vw, 2.45rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -.04em;
+}
+main.refined-home .doctor-specialty {
+  margin: 0;
+  color: #62625d;
+  font-size: .88rem;
+  line-height: 1.55;
+}
+main.refined-home .doctor-quote {
+  margin: 1.35rem 0;
+  padding-left: 1rem;
+  border-left: 1px solid #bcbcb6;
+  color: #444440;
+  font-size: .9rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+main.refined-home .doctor-card-facts {
+  display: grid;
+  gap: .55rem;
+  color: #64645f;
+  font-size: .75rem;
+  line-height: 1.45;
+}
+main.refined-home .doctor-card-facts span {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+}
+main.refined-home .doctor-card-facts svg {
+  flex: 0 0 auto;
+  margin-top: .12rem;
+}
+main.refined-home .doctor-credentials-button {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 1.6rem;
+  padding: .8rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  border: 1px solid #cfcfca;
+  border-radius: 999px;
+  background: #fff;
+  color: #171715;
+  font: inherit;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+}
+main.refined-home .doctor-credentials-button:hover {
+  border-color: #171715;
+}
+main.refined-home .doctor-trust-band {
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(1.6rem, 4vw, 3rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2rem;
+  align-items: center;
+  border-radius: 24px;
+  background: #11110f;
+  color: #fff;
+}
+main.refined-home .doctor-trust-band > div > span {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  color: #a9a9a4;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .075em;
+  text-transform: uppercase;
+}
+main.refined-home .doctor-trust-band h3 {
+  max-width: 18ch;
+  margin: .7rem 0 .5rem;
+  color: #fff;
+  font-family: var(--font-headline), Arial, sans-serif;
+  font-size: clamp(1.9rem, 4vw, 3.5rem);
+  font-weight: 500;
+  line-height: .98;
+  letter-spacing: -.045em;
+}
+main.refined-home .doctor-trust-band p {
+  max-width: 58ch;
+  margin: 0;
+  color: #adada8;
+  font-size: .86rem;
+  line-height: 1.6;
+}
+main.refined-home .doctor-trust-band > a {
+  min-width: 190px;
+  min-height: 52px;
+  padding: .9rem 1.15rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+  border: 1px solid #fff;
+  border-radius: 999px;
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+
+/* Product filter: compact segmented control with clear active state. */
+main.refined-home .product-filter-bar {
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 1.7rem;
+  padding: .35rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  border: 1px solid #d9d9d4;
+  border-radius: 16px;
+  background: #f2f2ef;
+}
+main.refined-home .product-filter {
+  min-height: 42px;
+  padding: .7rem 1rem;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #64645f;
+  font: inherit;
+  font-size: .74rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+main.refined-home .product-filter:hover {
+  color: #171715;
+  background: rgba(255,255,255,.7);
+}
+main.refined-home .product-filter.active {
+  background: #11110f;
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.12);
+}
+
+/* Products: standard premium product cards rather than long plain rows. */
+main.refined-home .product-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+main.refined-home .product-card {
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dcdcd6;
+  border-radius: 22px;
+  background: #fbfbf8;
+}
+main.refined-home .product-card-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.15 / 1;
+  overflow: hidden;
+  background: #ecece7;
+}
+main.refined-home .product-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+main.refined-home .product-popular {
+  position: absolute;
+  left: .9rem;
+  bottom: .9rem;
+  padding: .48rem .65rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  border-radius: 999px;
+  background: #11110f;
+  color: #fff;
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+main.refined-home .product-card-body {
+  flex: 1;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+main.refined-home .product-category {
+  color: #85857f;
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+main.refined-home .product-card h3 {
+  margin: .45rem 0 .35rem;
+  font-family: var(--font-headline), Arial, sans-serif;
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -.035em;
+}
+main.refined-home .product-ingredients {
+  margin: 0;
+  color: #666660;
+  font-size: .78rem;
+  line-height: 1.5;
+}
+main.refined-home .product-clinical-reference {
+  margin: 1.15rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid #dfdfda;
+}
+main.refined-home .product-clinical-reference span,
+main.refined-home .product-card-price > span {
+  display: block;
+  margin-bottom: .3rem;
+  color: #888882;
+  font-size: .57rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+main.refined-home .product-clinical-reference p {
+  margin: 0;
+  color: #5f5f59;
+  font-size: .72rem;
+  line-height: 1.5;
+}
+main.refined-home .product-card-bottom {
+  margin-top: auto;
+  padding-top: 1.2rem;
+}
+main.refined-home .product-card-price strong {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -.035em;
+}
+main.refined-home .product-card-price strong small {
+  margin-left: .2rem;
+  color: #777771;
+  font-size: .66rem;
+  font-weight: 500;
+}
+main.refined-home .product-card-price em {
+  margin-top: .45rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  color: #676761;
+  font-size: .64rem;
+  font-style: normal;
+}
+main.refined-home .product-card-actions {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .55rem;
+}
+main.refined-home .product-card-actions > * {
+  min-height: 46px;
+  padding: .72rem .85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  border: 1px solid #cecec9;
+  border-radius: 999px;
+  background: #fff;
+  color: #171715;
+  font: inherit;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+main.refined-home .product-card-actions a {
+  border-color: #11110f;
+  background: #11110f;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+/* Modal remains independently scrollable while page behind it is locked. */
+.clinical-dialog {
+  overscroll-behavior: contain;
+}
+.clinical-dialog-content {
+  max-height: min(88dvh, 860px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 1050px) {
+  main.refined-home .product-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 780px) {
+  main.refined-home .doctor-card-grid {
+    grid-template-columns: 1fr;
+  }
+  main.refined-home .doctor-card-image {
+    aspect-ratio: 1.18 / 1;
+  }
+  main.refined-home .doctor-trust-band {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+  }
+  main.refined-home .doctor-trust-band > a {
+    width: 100%;
+  }
+  main.refined-home .product-filter-bar {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  main.refined-home .product-filter {
+    width: 100%;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 640px) {
+  main.refined-home .home-metrics .metric-count-value {
+    font-size: clamp(3.8rem, 18vw, 5.5rem) !important;
+  }
+  main.refined-home .home-metrics .metric-count-unit {
+    font-size: .98rem !important;
+  }
+  main.refined-home .home-metrics .metric-ledger article > div > span {
+    font-size: .95rem !important;
+  }
+
+  main.refined-home .doctor-card {
+    border-radius: 20px;
+  }
+  main.refined-home .doctor-card-image {
+    aspect-ratio: 1.1 / 1;
+  }
+  main.refined-home .doctor-card-body {
+    padding: 1.25rem;
+  }
+  main.refined-home .doctor-card h3 {
+    font-size: 1.8rem;
+  }
+  main.refined-home .doctor-trust-band {
+    padding: 1.4rem;
+    border-radius: 20px;
+  }
+
+  main.refined-home .product-card-grid {
+    grid-template-columns: 1fr;
+  }
+  main.refined-home .product-card {
+    border-radius: 20px;
+  }
+  main.refined-home .product-card-image {
+    aspect-ratio: 1.3 / 1;
+  }
+  main.refined-home .product-card-body {
+    padding: 1.15rem;
+  }
+  main.refined-home .product-filter-bar {
+    border-radius: 14px;
+  }
+}
