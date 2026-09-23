@@ -1992,3 +1992,154 @@ main.refined-home .product-card-actions a {
     border-radius: 14px;
   }
 }
+
+
+/* =========================================================
+   Doctor + product card spacing / responsive polish
+   ========================================================= */
+main.refined-home .home-doctors .home-section-shell,
+main.refined-home .home-formulary .home-section-shell {
+  width: min(1220px, calc(100% - 2.5rem));
+}
+
+main.refined-home .home-doctors .doctor-card-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: clamp(1.25rem, 2.3vw, 2rem) !important;
+  align-items: stretch;
+}
+main.refined-home .home-doctors .doctor-card {
+  height: 100%;
+}
+main.refined-home .home-doctors .doctor-card > .doctor-card-image {
+  min-height: 0 !important;
+  height: auto !important;
+}
+main.refined-home .home-doctors .doctor-card > .doctor-card-body {
+  padding: clamp(1.45rem, 2.4vw, 2rem) !important;
+}
+main.refined-home .home-doctors .doctor-card .doctor-role {
+  margin-bottom: .15rem;
+}
+main.refined-home .home-doctors .doctor-card h3 {
+  margin-top: .45rem !important;
+  margin-bottom: .55rem !important;
+}
+main.refined-home .home-doctors .doctor-card .doctor-specialty {
+  margin-bottom: .15rem !important;
+}
+main.refined-home .home-doctors .doctor-card .doctor-quote {
+  margin: 1.45rem 0 1.35rem !important;
+}
+main.refined-home .home-doctors .doctor-card .doctor-card-facts {
+  gap: .7rem !important;
+  margin-bottom: 1.45rem;
+}
+main.refined-home .home-doctors .doctor-card .doctor-credentials-button {
+  margin-top: auto !important;
+}
+
+main.refined-home .home-formulary .product-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: clamp(1.25rem, 2vw, 1.75rem) !important;
+  align-items: stretch;
+}
+main.refined-home .home-formulary .product-card {
+  height: 100%;
+}
+main.refined-home .home-formulary .product-card > .product-card-image {
+  min-height: 0 !important;
+  height: auto !important;
+}
+main.refined-home .home-formulary .product-card > .product-card-body {
+  padding: clamp(1.35rem, 2.1vw, 1.75rem) !important;
+}
+main.refined-home .home-formulary .product-card .product-category {
+  margin-bottom: .1rem;
+}
+main.refined-home .home-formulary .product-card h3 {
+  margin-top: .45rem !important;
+  margin-bottom: .55rem !important;
+}
+main.refined-home .home-formulary .product-card .product-ingredients {
+  margin-bottom: .2rem !important;
+}
+main.refined-home .home-formulary .product-card .product-clinical-reference {
+  margin-top: 1.35rem !important;
+  padding-top: 1.15rem !important;
+}
+main.refined-home .home-formulary .product-card .product-card-bottom {
+  margin-top: auto !important;
+  padding-top: 1.35rem !important;
+}
+main.refined-home .home-formulary .product-card .product-card-actions {
+  margin-top: 1.15rem !important;
+  gap: .65rem !important;
+}
+
+@media (max-width: 1180px) {
+  main.refined-home .home-formulary .product-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 860px) {
+  main.refined-home .home-doctors .home-section-shell,
+  main.refined-home .home-formulary .home-section-shell {
+    width: min(100% - 2rem, 820px);
+  }
+
+  main.refined-home .home-doctors .doctor-card-grid,
+  main.refined-home .home-formulary .product-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1.15rem !important;
+  }
+
+  main.refined-home .home-doctors .doctor-card > .doctor-card-body,
+  main.refined-home .home-formulary .product-card > .product-card-body {
+    padding: 1.35rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  main.refined-home .home-doctors .home-section-shell,
+  main.refined-home .home-formulary .home-section-shell {
+    width: calc(100% - 1.5rem) !important;
+  }
+
+  main.refined-home .home-doctors .doctor-card-grid,
+  main.refined-home .home-formulary .product-card-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.35rem !important;
+  }
+
+  main.refined-home .home-doctors .doctor-card,
+  main.refined-home .home-formulary .product-card {
+    width: 100%;
+    max-width: none;
+  }
+
+  main.refined-home .home-doctors .doctor-card > .doctor-card-body {
+    padding: 1.35rem 1.25rem 1.25rem !important;
+  }
+  main.refined-home .home-formulary .product-card > .product-card-body {
+    padding: 1.3rem 1.2rem 1.2rem !important;
+  }
+
+  main.refined-home .home-doctors .doctor-card .doctor-quote {
+    margin-block: 1.25rem !important;
+  }
+  main.refined-home .home-doctors .doctor-card .doctor-card-facts {
+    margin-bottom: 1.25rem;
+  }
+
+  main.refined-home .home-formulary .product-card .product-clinical-reference {
+    margin-top: 1.2rem !important;
+    padding-top: 1rem !important;
+  }
+  main.refined-home .home-formulary .product-card .product-card-bottom {
+    padding-top: 1.2rem !important;
+  }
+  main.refined-home .home-formulary .product-card .product-card-actions {
+    margin-top: 1rem !important;
+  }
+}
