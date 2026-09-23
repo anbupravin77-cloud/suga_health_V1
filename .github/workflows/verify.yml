@@ -2,7 +2,7 @@ name: Verify
 
 on:
   push:
-    branches: [main, admin-staff-provisioning]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
