@@ -1,1 +1,5 @@
-export default function Loading() { return <main className="system-state"><div className="loading-line" /><p>Preparing your secure space…</p></main>; }
+import { CubeLoader } from "@/components/public/cube-loader";
+
+export default function Loading() {
+  return <CubeLoader />;
+}
