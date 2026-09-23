@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { isAppRole, roleHome, roleOwnsPath } from "@/lib/roles";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -11,11 +12,19 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       const { data: profile } = await supabase.from("profiles").select("role").single();
-      const rolePath = profile?.role === "doctor" ? "/doctor" : "/patient";
-      const safeNext = requestedNext?.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : rolePath;
-      return NextResponse.redirect(`${origin}${safeNext}`);
+      const role = isAppRole(profile?.role) ? profile.role : "patient";
+      const rolePath = roleHome(role);
+      const safeNext =
+        requestedNext &&
+        requestedNext.startsWith("/") &&
+        !requestedNext.startsWith("//") &&
+        roleOwnsPath(role, requestedNext)
+          ? requestedNext
+          : rolePath;
+
+      return NextResponse.redirect(new URL(safeNext, origin));
     }
   }
 
-  return NextResponse.redirect(`${origin}/sign-in?error=callback`);
+  return NextResponse.redirect(new URL("/sign-in?error=callback", origin));
 }
