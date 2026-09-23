@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, Eye, EyeOff, Loader2, Mail } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { isAppRole, roleHome, roleOwnsPath } from "@/lib/roles";
 
 type Mode = "sign-in" | "sign-up" | "forgot-password";
 
@@ -58,8 +59,9 @@ export function AuthForm({ mode }: { mode: Mode }) {
     }
 
     const { data: profile } = await supabase.from("profiles").select("role").single();
+    const role = isAppRole(profile?.role) ? profile.role : "patient";
     const fallback = searchParams.get("next");
-    router.replace(fallback || (profile?.role === "doctor" ? "/doctor" : "/patient"));
+    router.replace(fallback && roleOwnsPath(role, fallback) ? fallback : roleHome(role));
     router.refresh();
   }
 
@@ -69,7 +71,10 @@ export function AuthForm({ mode }: { mode: Mode }) {
     const supabase = createClient();
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+        queryParams: { prompt: "select_account" },
+      },
     });
     if (oauthError) {
       setLoading(false);
