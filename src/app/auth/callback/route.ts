@@ -12,7 +12,8 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       const { data: profile } = await supabase.from("profiles").select("role").single();
-      const role = isAppRole(profile?.role) ? profile.role : "patient";
+      const profileRole = profile?.role;
+      const role = isAppRole(profileRole) ? profileRole : "patient";
       const rolePath = roleHome(role);
       const safeNext =
         requestedNext &&
