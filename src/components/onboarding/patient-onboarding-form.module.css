@@ -79,20 +79,26 @@
 .group:nth-of-type(3) { animation-delay: 170ms; }
 .group:nth-of-type(4) { animation-delay: 220ms; }
 
-.group legend {
-  float: left;
-  width: 180px;
+.group h2 {
+  margin: 0;
   padding: 4px 24px 0 0;
   color: var(--onboarding-ink);
   font-family: inherit;
   font-size: .84rem;
   font-weight: 600;
+  line-height: 1.2;
   letter-spacing: -.01em;
 }
 
-.group > label,
-.group > div {
+.groupBody,
+.group > .twoColumn,
+.group > .measureGrid {
   grid-column: 2;
+}
+
+.groupBody {
+  display: grid;
+  gap: 18px;
 }
 
 .twoColumn,
@@ -100,10 +106,6 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
-}
-
-.group > .field + .twoColumn {
-  margin-top: 18px;
 }
 
 .field {
@@ -347,14 +349,13 @@
     padding: 24px 0 26px;
   }
 
-  .group legend {
-    float: none;
-    width: auto;
+  .group h2 {
     padding: 0;
   }
 
-  .group > label,
-  .group > div {
+  .groupBody,
+  .group > .twoColumn,
+  .group > .measureGrid {
     grid-column: 1;
   }
 
@@ -362,10 +363,6 @@
   .measureGrid {
     grid-template-columns: 1fr;
     gap: 16px;
-  }
-
-  .group > .field + .twoColumn {
-    margin-top: 0;
   }
 
   .field input {
