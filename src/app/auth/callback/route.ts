@@ -10,10 +10,20 @@ export async function GET(request: Request) {
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
+
     if (!error) {
-      const { data: profile } = await supabase.from("profiles").select("role").single();
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role, requires_onboarding")
+        .single();
+
       const profileRole = profile?.role;
       const role = isAppRole(profileRole) ? profileRole : "patient";
+
+      if (role === "patient" && profile?.requires_onboarding) {
+        return NextResponse.redirect(new URL("/onboarding", origin));
+      }
+
       const rolePath = roleHome(role);
       const safeNext =
         requestedNext &&
