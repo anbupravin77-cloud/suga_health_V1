@@ -136,10 +136,12 @@ export function AuthForm({ mode }: { mode: Mode }) {
     setLoading(false);
 
     if (otpError) {
-      if (isSignIn && /signups? not allowed|user not found|does not exist/i.test(otpError.message)) {
+      if (/unsupported phone provider/i.test(otpError.message)) {
+        setError("Mobile OTP is not configured on the server yet. Please use Email or Google while SMS setup is being completed.");
+      } else if (isSignIn && /signups? not allowed|user not found|does not exist/i.test(otpError.message)) {
         setError("No account was found for this mobile number. Create a patient account first.");
       } else {
-        setError(otpError.message || "We couldn't send the OTP. Please try again.");
+        setError("We couldn't send the OTP. Please try again.");
       }
       return;
     }
