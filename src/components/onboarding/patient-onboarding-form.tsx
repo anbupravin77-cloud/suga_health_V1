@@ -58,7 +58,7 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
       <section className={styles.stage}>
         <h1 className={styles.title}>Complete your profile</h1>
 
-        <form action={action} className={styles.form} noValidate>
+        <form action={action} className={styles.form}>
           <section className={styles.group} aria-labelledby="name-group">
             <h2 id="name-group">Your name</h2>
             <div className={styles.twoColumn}>
