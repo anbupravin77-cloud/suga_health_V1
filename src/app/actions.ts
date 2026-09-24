@@ -335,9 +335,9 @@ export async function completePatientOnboarding(
 
   if (!firstName || !lastName) return { error: "Enter your name." };
   if (!/^\S+@\S+\.\S+$/.test(email)) return { error: "Enter a valid email." };
-  if (password.length < 8) return { error: "Use 8+ characters." };
+  if (password.length < 8) return { error: "Use at least 8 characters for your password." };
   if (password !== confirmPassword) return { error: "Passwords do not match." };
-  if (!address) return { error: "Enter your address." };
+  if (!address) return { error: "Enter your shipping address." };
 
   const birthDate = new Date(`${dateOfBirth}T00:00:00`);
   const today = new Date();
@@ -347,7 +347,7 @@ export async function completePatientOnboarding(
     birthDate.getFullYear() < 1900 ||
     birthDate > today
   ) {
-    return { error: "Check date of birth." };
+    return { error: "Check your date of birth." };
   }
 
   if (weightValue === null || weightValue <= 0) return { error: "Enter your weight." };
@@ -363,28 +363,13 @@ export async function completePatientOnboarding(
       ? Math.round(heightValue * 10) / 10
       : Math.round(heightValue * 2.54 * 10) / 10;
 
-  if (weightKg > 500 || heightCm > 300) return { error: "Check body details." };
+  if (weightKg > 500 || heightCm > 300) return { error: "Check your measurements." };
 
   const displayName = `${firstName} ${lastName}`.trim();
-  const authUpdate: {
-    email?: string;
-    password: string;
-    data: { full_name: string; first_name: string; last_name: string };
-  } = {
-    password,
-    data: {
-      full_name: displayName,
-      first_name: firstName,
-      last_name: lastName,
-    },
-  };
 
-  if (email !== (user.email ?? "").toLowerCase()) authUpdate.email = email;
-
-  const { error: authError } = await supabase.auth.updateUser(authUpdate);
-  if (authError) return { error: "Account details failed." };
-
-  const { error: profileError } = await supabase
+  // Persist patient-entered details first. If an auth mutation fails afterward,
+  // onboarding stays required and the patient's form data remains available.
+  const { error: draftProfileError } = await supabase
     .from("profiles")
     .update({
       email,
@@ -398,12 +383,50 @@ export async function completePatientOnboarding(
       date_of_birth: dateOfBirth,
       weight_kg: weightKg,
       height_cm: heightCm,
+    })
+    .eq("id", user.id);
+
+  if (draftProfileError) {
+    console.error("Onboarding profile draft failed", draftProfileError);
+    return { error: "We couldn't save your profile. Please try again." };
+  }
+
+  const { error: credentialsError } = await supabase.auth.updateUser({
+    password,
+    data: {
+      full_name: displayName,
+      first_name: firstName,
+      last_name: lastName,
+    },
+  });
+
+  if (credentialsError) {
+    console.error("Onboarding credential update failed", credentialsError);
+    return { error: "Your profile is safe, but the password couldn't be saved. Please try another password." };
+  }
+
+  // A phone-created account may be given an email that already belongs to a
+  // different Supabase identity. Keep that email as the patient's contact
+  // address and do not block onboarding when auth email linking is unavailable.
+  if (email !== (user.email ?? "").toLowerCase()) {
+    const { error: emailLinkError } = await supabase.auth.updateUser({ email });
+    if (emailLinkError) {
+      console.warn("Onboarding email auth link skipped", emailLinkError.message);
+    }
+  }
+
+  const { error: completionError } = await supabase
+    .from("profiles")
+    .update({
       profile_completed_at: new Date().toISOString(),
       requires_onboarding: false,
     })
     .eq("id", user.id);
 
-  if (profileError) return { error: "Profile failed to save." };
+  if (completionError) {
+    console.error("Onboarding completion flag failed", completionError);
+    return { error: "Your details were saved, but setup couldn't finish. Please try again." };
+  }
 
   revalidatePath("/patient");
   revalidatePath("/patient/profile");
