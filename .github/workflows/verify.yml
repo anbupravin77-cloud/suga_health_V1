@@ -2,7 +2,7 @@ name: Verify
 
 on:
   push:
-    branches: [main, phone-otp-auth]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
