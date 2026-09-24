@@ -326,7 +326,12 @@ export async function completePatientOnboarding(
   const email = value(formData, "email").toLowerCase();
   const password = String(formData.get("new_password") ?? "");
   const confirmPassword = String(formData.get("confirm_password") ?? "");
-  const address = value(formData, "address");
+  const streetAddress1 = value(formData, "street_address_1");
+  const streetAddress2 = value(formData, "street_address_2");
+  const city = value(formData, "city");
+  const region = value(formData, "region");
+  const postalCode = value(formData, "postal_code");
+  const country = value(formData, "country");
   const dateOfBirth = value(formData, "date_of_birth");
   const weightValue = numberValue(formData, "weight_value");
   const heightValue = numberValue(formData, "height_value");
@@ -337,7 +342,9 @@ export async function completePatientOnboarding(
   if (!/^\S+@\S+\.\S+$/.test(email)) return { error: "Enter a valid email." };
   if (password.length < 8) return { error: "Use at least 8 characters for your password." };
   if (password !== confirmPassword) return { error: "Passwords do not match." };
-  if (!address) return { error: "Enter your shipping address." };
+  if (!streetAddress1 || !city || !region || !postalCode || !country) {
+    return { error: "Complete your shipping address." };
+  }
 
   const birthDate = new Date(`${dateOfBirth}T00:00:00`);
   const today = new Date();
@@ -367,9 +374,7 @@ export async function completePatientOnboarding(
 
   const displayName = `${firstName} ${lastName}`.trim();
 
-  // Persist patient-entered details first. If an auth mutation fails afterward,
-  // onboarding stays required and the patient's form data remains available.
-  const { error: draftProfileError } = await supabase
+  const { error: profileError } = await supabase
     .from("profiles")
     .update({
       email,
@@ -378,7 +383,12 @@ export async function completePatientOnboarding(
       display_name: displayName,
       shipping_address: {
         recipientName: displayName,
-        line1: address,
+        line1: streetAddress1,
+        line2: streetAddress2 || null,
+        city,
+        region,
+        postalCode,
+        country,
       },
       date_of_birth: dateOfBirth,
       weight_kg: weightKg,
@@ -386,8 +396,8 @@ export async function completePatientOnboarding(
     })
     .eq("id", user.id);
 
-  if (draftProfileError) {
-    console.error("Onboarding profile draft failed", draftProfileError);
+  if (profileError) {
+    console.error("Onboarding profile update failed", profileError);
     return { error: "We couldn't save your profile. Please try again." };
   }
 
@@ -402,12 +412,9 @@ export async function completePatientOnboarding(
 
   if (credentialsError) {
     console.error("Onboarding credential update failed", credentialsError);
-    return { error: "Your profile is safe, but the password couldn't be saved. Please try another password." };
+    return { error: "Your details are saved, but the password couldn't be updated. Please try again." };
   }
 
-  // A phone-created account may be given an email that already belongs to a
-  // different Supabase identity. Keep that email as the patient's contact
-  // address and do not block onboarding when auth email linking is unavailable.
   if (email !== (user.email ?? "").toLowerCase()) {
     const { error: emailLinkError } = await supabase.auth.updateUser({ email });
     if (emailLinkError) {
