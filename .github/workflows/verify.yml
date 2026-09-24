@@ -2,7 +2,7 @@ name: Verify
 
 on:
   push:
-    branches: [main, onboarding-glass-address-rls]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
