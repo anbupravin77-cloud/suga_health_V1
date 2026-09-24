@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { getSupabaseEnv } from "@/lib/env";
 
-const protectedPrefixes = ["/patient", "/doctor", "/pharmacist", "/admin"];
+const protectedPrefixes = ["/patient", "/doctor", "/pharmacist", "/admin", "/onboarding"];
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
