@@ -9,7 +9,12 @@ type InitialProfile = {
   firstName: string;
   lastName: string;
   email: string;
-  address: string;
+  streetAddress1: string;
+  streetAddress2: string;
+  city: string;
+  region: string;
+  postalCode: string;
+  country: string;
   dateOfBirth: string;
   weightKg: number | null;
   heightCm: number | null;
@@ -18,7 +23,11 @@ type InitialProfile = {
 type Step = 0 | 1 | 2;
 
 const initialState: OnboardingState = { error: "" };
-const sectionTitles = ["Personal details", "Shipping address", "Physical measurements"] as const;
+const titles = [
+  "Tell us about you",
+  "Where should care reach you?",
+  "A few final details",
+] as const;
 
 function rounded(value: number) {
   return String(Math.round(value * 10) / 10);
@@ -44,7 +53,7 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
   const progress = ((step + 1) / 3) * 100;
 
   function field(name: string) {
-    return formRef.current?.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement | null;
+    return formRef.current?.elements.namedItem(name) as HTMLInputElement | null;
   }
 
   function validateFields(names: string[]) {
@@ -61,8 +70,8 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
   }
 
   function continueFromPersonal() {
-    const confirm = field("confirm_password") as HTMLInputElement | null;
-    const password = field("new_password") as HTMLInputElement | null;
+    const confirm = field("confirm_password");
+    const password = field("new_password");
     confirm?.setCustomValidity("");
 
     if (
@@ -89,7 +98,18 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
   }
 
   function continueFromAddress() {
-    if (!validateFields(["address"])) return;
+    if (
+      !validateFields([
+        "street_address_1",
+        "city",
+        "region",
+        "postal_code",
+        "country",
+      ])
+    ) {
+      return;
+    }
+
     setStep(2);
   }
 
@@ -116,11 +136,6 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
       <div className={styles.ambientGlow} aria-hidden="true" />
 
       <section className={styles.card} aria-labelledby="onboarding-title">
-        <div className={styles.cardTop}>
-          <span className={styles.brand}>SUGA.HEALTH</span>
-          <span className={styles.setupLabel}>Profile setup</span>
-        </div>
-
         <div
           className={styles.progressTrack}
           role="progressbar"
@@ -132,13 +147,13 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
           <span className={styles.progressFill} style={{ width: `${progress}%` }} />
         </div>
 
+        <div className={styles.cardTop}>
+          <span className={styles.brand}>SUGA.HEALTH</span>
+          <span className={styles.setupLabel}>Profile setup</span>
+        </div>
+
         <div className={styles.headingBlock}>
-          <p className={styles.eyebrow}>{sectionTitles[step]}</p>
-          <h1 id="onboarding-title" className={styles.title}>
-            {step === 0 && "Tell us about you"}
-            {step === 1 && "Where should care reach you?"}
-            {step === 2 && "A few final details"}
-          </h1>
+          <h1 id="onboarding-title" className={styles.title}>{titles[step]}</h1>
         </div>
 
         <form ref={formRef} action={action} className={styles.form}>
@@ -254,16 +269,72 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
               data-state={panelState(1, step)}
               aria-hidden={step !== 1}
             >
-              <div className={styles.addressField}>
-                <label htmlFor="address">Shipping address</label>
-                <textarea
-                  id="address"
-                  name="address"
-                  defaultValue={initial.address}
-                  autoComplete="street-address"
-                  rows={5}
-                  required={step === 1}
-                />
+              <div className={styles.addressGrid}>
+                <div className={styles.fieldWide}>
+                  <label htmlFor="street-address-1">Street address</label>
+                  <input
+                    id="street-address-1"
+                    name="street_address_1"
+                    defaultValue={initial.streetAddress1}
+                    autoComplete="address-line1"
+                    required={step === 1}
+                  />
+                </div>
+
+                <div className={styles.fieldWide}>
+                  <label htmlFor="street-address-2">Address line 2</label>
+                  <input
+                    id="street-address-2"
+                    name="street_address_2"
+                    defaultValue={initial.streetAddress2}
+                    autoComplete="address-line2"
+                  />
+                </div>
+
+                <div className={styles.field}>
+                  <label htmlFor="city">City</label>
+                  <input
+                    id="city"
+                    name="city"
+                    defaultValue={initial.city}
+                    autoComplete="address-level2"
+                    required={step === 1}
+                  />
+                </div>
+
+                <div className={styles.field}>
+                  <label htmlFor="region">Region / State</label>
+                  <input
+                    id="region"
+                    name="region"
+                    defaultValue={initial.region}
+                    autoComplete="address-level1"
+                    required={step === 1}
+                  />
+                </div>
+
+                <div className={styles.field}>
+                  <label htmlFor="postal-code">Postal / ZIP code</label>
+                  <input
+                    id="postal-code"
+                    name="postal_code"
+                    defaultValue={initial.postalCode}
+                    autoComplete="postal-code"
+                    inputMode="text"
+                    required={step === 1}
+                  />
+                </div>
+
+                <div className={styles.field}>
+                  <label htmlFor="country">Country</label>
+                  <input
+                    id="country"
+                    name="country"
+                    defaultValue={initial.country || "India"}
+                    autoComplete="country-name"
+                    required={step === 1}
+                  />
+                </div>
               </div>
             </section>
 
