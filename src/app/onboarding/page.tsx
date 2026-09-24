@@ -6,6 +6,12 @@ import { createClient } from "@/lib/supabase/server";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Profile setup | Suga.Health" };
 
+function addressValue(address: unknown, key: string) {
+  if (!address || typeof address !== "object" || Array.isArray(address)) return "";
+  const value = (address as Record<string, unknown>)[key];
+  return value == null ? "" : String(value);
+}
+
 export default async function OnboardingPage() {
   const { user } = await requireRole("patient");
   const supabase = await createClient();
@@ -18,21 +24,18 @@ export default async function OnboardingPage() {
 
   if (!profile?.requires_onboarding) redirect("/patient");
 
-  const address =
-    profile.shipping_address &&
-    typeof profile.shipping_address === "object" &&
-    !Array.isArray(profile.shipping_address) &&
-    "line1" in profile.shipping_address
-      ? String(profile.shipping_address.line1 ?? "")
-      : "";
-
   return (
     <PatientOnboardingForm
       initial={{
         firstName: profile.first_name ?? "",
         lastName: profile.last_name ?? "",
         email: profile.email ?? user.email ?? "",
-        address,
+        streetAddress1: addressValue(profile.shipping_address, "line1"),
+        streetAddress2: addressValue(profile.shipping_address, "line2"),
+        city: addressValue(profile.shipping_address, "city"),
+        region: addressValue(profile.shipping_address, "region"),
+        postalCode: addressValue(profile.shipping_address, "postalCode"),
+        country: addressValue(profile.shipping_address, "country"),
         dateOfBirth: profile.date_of_birth ?? "",
         weightKg: profile.weight_kg === null ? null : Number(profile.weight_kg),
         heightCm: profile.height_cm === null ? null : Number(profile.height_cm),
