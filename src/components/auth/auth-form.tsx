@@ -24,7 +24,6 @@ export function AuthForm({ mode }: { mode: Mode }) {
   const [showPassword, setShowPassword] = useState(false);
   const [authMethod, setAuthMethod] = useState<AuthMethod>("email");
   const [phone, setPhone] = useState("");
-  const [phoneName, setPhoneName] = useState("");
   const [sentPhone, setSentPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -43,9 +42,19 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
   async function routeAuthenticatedUser() {
     const supabase = createClient();
-    const { data: profile } = await supabase.from("profiles").select("role").single();
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role, requires_onboarding")
+      .single();
     const profileRole = profile?.role;
     const role = isAppRole(profileRole) ? profileRole : "patient";
+
+    if (role === "patient" && profile?.requires_onboarding) {
+      router.replace("/onboarding");
+      router.refresh();
+      return;
+    }
+
     const fallback = searchParams.get("next");
     router.replace(fallback && roleOwnsPath(role, fallback) ? fallback : roleHome(role));
     router.refresh();
@@ -71,7 +80,6 @@ export function AuthForm({ mode }: { mode: Mode }) {
     const form = new FormData(event.currentTarget);
     const email = String(form.get("email") ?? "");
     const password = String(form.get("password") ?? "");
-    const fullName = String(form.get("fullName") ?? "");
     const supabase = createClient();
 
     if (mode === "forgot-password") {
@@ -84,16 +92,25 @@ export function AuthForm({ mode }: { mode: Mode }) {
     }
 
     if (mode === "sign-up") {
-      const { error: signUpError } = await supabase.auth.signUp({
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/auth/callback`,
-          data: { full_name: fullName },
         },
       });
+
+      if (signUpError) {
+        setLoading(false);
+        return setError("We couldn't create your account. Please review the details and try again.");
+      }
+
+      if (signUpData.session) {
+        await routeAuthenticatedUser();
+        return;
+      }
+
       setLoading(false);
-      if (signUpError) return setError("We couldn't create your account. Please review the details and try again.");
       return setMessage("Account created. Check your email to confirm your address.");
     }
 
@@ -118,18 +135,11 @@ export function AuthForm({ mode }: { mode: Mode }) {
       return;
     }
 
-    if (isSignUp && phoneName.trim().length < 2) {
-      setLoading(false);
-      setError("Enter your full name before requesting the OTP.");
-      return;
-    }
-
     const supabase = createClient();
     const { error: otpError } = await supabase.auth.signInWithOtp({
       phone: normalizedPhone,
       options: {
         shouldCreateUser: isSignUp,
-        data: isSignUp ? { full_name: phoneName.trim() } : undefined,
       },
     });
 
@@ -181,7 +191,6 @@ export function AuthForm({ mode }: { mode: Mode }) {
       .from("profiles")
       .update({
         phone_number: sentPhone,
-        ...(isSignUp && phoneName.trim() ? { display_name: phoneName.trim() } : {}),
       })
       .eq("id", data.user.id);
 
@@ -248,13 +257,6 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
       {(mode === "forgot-password" || authMethod === "email") && !otpSent && (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-          {isSignUp && (
-            <div>
-              <label htmlFor="fullName" className="mb-1 block text-xs font-semibold text-stone-700">Full Name</label>
-              <input id="fullName" name="fullName" type="text" autoComplete="name" className="w-full rounded-lg border border-stone-200 px-3.5 py-2.5 text-xs focus:border-stone-900 focus:outline-none" required />
-            </div>
-          )}
-
           <div>
             <label htmlFor="email" className="mb-1 block text-xs font-semibold text-stone-700">Email Address</label>
             <input id="email" name="email" type="email" placeholder="name@example.com" autoComplete="email" className="w-full rounded-lg border border-stone-200 px-3.5 py-2.5 text-xs focus:border-stone-900 focus:outline-none" required />
@@ -302,21 +304,6 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
       {mode !== "forgot-password" && authMethod === "phone" && !otpSent && (
         <div className="space-y-4">
-          {isSignUp && (
-            <div>
-              <label htmlFor="phoneFullName" className="mb-1 block text-xs font-semibold text-stone-700">Full Name</label>
-              <input
-                id="phoneFullName"
-                type="text"
-                value={phoneName}
-                onChange={(event) => setPhoneName(event.target.value)}
-                autoComplete="name"
-                placeholder="Your full name"
-                className="w-full rounded-lg border border-stone-200 px-3.5 py-2.5 text-xs focus:border-stone-900 focus:outline-none"
-              />
-            </div>
-          )}
-
           <div>
             <label htmlFor="mobileNumber" className="mb-1 block text-xs font-semibold text-stone-700">Mobile Number</label>
             <input
