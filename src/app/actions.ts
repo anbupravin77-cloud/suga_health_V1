@@ -310,6 +310,106 @@ export async function markNotificationsRead(formData: FormData) {
   revalidatePath(`/${role}/notifications`);
 }
 
+export type OnboardingState = {
+  error: string;
+};
+
+export async function completePatientOnboarding(
+  _previousState: OnboardingState,
+  formData: FormData,
+): Promise<OnboardingState> {
+  const { user } = await requireActionRole("patient");
+  const supabase = await createClient();
+
+  const firstName = value(formData, "first_name");
+  const lastName = value(formData, "last_name");
+  const email = value(formData, "email").toLowerCase();
+  const password = String(formData.get("new_password") ?? "");
+  const confirmPassword = String(formData.get("confirm_password") ?? "");
+  const address = value(formData, "address");
+  const dateOfBirth = value(formData, "date_of_birth");
+  const weightValue = numberValue(formData, "weight_value");
+  const heightValue = numberValue(formData, "height_value");
+  const weightUnit = value(formData, "weight_unit") === "lb" ? "lb" : "kg";
+  const heightUnit = value(formData, "height_unit") === "in" ? "in" : "cm";
+
+  if (!firstName || !lastName) return { error: "Enter your name." };
+  if (!/^\S+@\S+\.\S+$/.test(email)) return { error: "Enter a valid email." };
+  if (password.length < 8) return { error: "Use 8+ characters." };
+  if (password !== confirmPassword) return { error: "Passwords do not match." };
+  if (!address) return { error: "Enter your address." };
+
+  const birthDate = new Date(`${dateOfBirth}T00:00:00`);
+  const today = new Date();
+  if (
+    !dateOfBirth ||
+    Number.isNaN(birthDate.getTime()) ||
+    birthDate.getFullYear() < 1900 ||
+    birthDate > today
+  ) {
+    return { error: "Check date of birth." };
+  }
+
+  if (weightValue === null || weightValue <= 0) return { error: "Enter your weight." };
+  if (heightValue === null || heightValue <= 0) return { error: "Enter your height." };
+
+  const weightKg =
+    weightUnit === "kg"
+      ? Math.round(weightValue * 10) / 10
+      : Math.round(weightValue * 0.45359237 * 10) / 10;
+
+  const heightCm =
+    heightUnit === "cm"
+      ? Math.round(heightValue * 10) / 10
+      : Math.round(heightValue * 2.54 * 10) / 10;
+
+  if (weightKg > 500 || heightCm > 300) return { error: "Check body details." };
+
+  const displayName = `${firstName} ${lastName}`.trim();
+  const authUpdate: {
+    email?: string;
+    password: string;
+    data: { full_name: string; first_name: string; last_name: string };
+  } = {
+    password,
+    data: {
+      full_name: displayName,
+      first_name: firstName,
+      last_name: lastName,
+    },
+  };
+
+  if (email !== (user.email ?? "").toLowerCase()) authUpdate.email = email;
+
+  const { error: authError } = await supabase.auth.updateUser(authUpdate);
+  if (authError) return { error: "Account details failed." };
+
+  const { error: profileError } = await supabase
+    .from("profiles")
+    .update({
+      email,
+      first_name: firstName,
+      last_name: lastName,
+      display_name: displayName,
+      shipping_address: {
+        recipientName: displayName,
+        line1: address,
+      },
+      date_of_birth: dateOfBirth,
+      weight_kg: weightKg,
+      height_cm: heightCm,
+      profile_completed_at: new Date().toISOString(),
+      requires_onboarding: false,
+    })
+    .eq("id", user.id);
+
+  if (profileError) return { error: "Profile failed to save." };
+
+  revalidatePath("/patient");
+  revalidatePath("/patient/profile");
+  redirect("/patient");
+}
+
 export async function updateProfile(formData: FormData) {
   const role: AppRole = value(formData, "role") === "doctor" ? "doctor" : "patient";
   const { user } = await requireActionRole(role);
