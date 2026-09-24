@@ -59,90 +59,98 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
         <h1 className={styles.title}>Complete your profile</h1>
 
         <form action={action} className={styles.form} noValidate>
-          <fieldset className={styles.group}>
-            <legend>Your name</legend>
+          <section className={styles.group} aria-labelledby="name-group">
+            <h2 id="name-group">Your name</h2>
             <div className={styles.twoColumn}>
-              <label className={styles.field}>
-                <span>First name</span>
-                <input name="first_name" defaultValue={initial.firstName} autoComplete="given-name" required />
-              </label>
-              <label className={styles.field}>
-                <span>Last name</span>
-                <input name="last_name" defaultValue={initial.lastName} autoComplete="family-name" required />
-              </label>
+              <div className={styles.field}>
+                <label htmlFor="first-name">First name</label>
+                <input id="first-name" name="first_name" defaultValue={initial.firstName} autoComplete="given-name" required />
+              </div>
+              <div className={styles.field}>
+                <label htmlFor="last-name">Last name</label>
+                <input id="last-name" name="last_name" defaultValue={initial.lastName} autoComplete="family-name" required />
+              </div>
             </div>
-          </fieldset>
+          </section>
 
-          <fieldset className={styles.group}>
-            <legend>Account access</legend>
-            <label className={styles.field}>
-              <span>Email</span>
-              <input name="email" type="email" defaultValue={initial.email} autoComplete="email" required />
-            </label>
-            <div className={styles.twoColumn}>
-              <label className={styles.field}>
-                <span>New password</span>
-                <span className={styles.passwordWrap}>
-                  <input
-                    name="new_password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="new-password"
-                    minLength={8}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((visible) => !visible)}
-                    aria-label={showPassword ? "Hide new password" : "Show new password"}
-                    aria-pressed={showPassword}
-                  >
-                    {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
-                  </button>
-                </span>
-              </label>
+          <section className={styles.group} aria-labelledby="access-group">
+            <h2 id="access-group">Account access</h2>
+            <div className={styles.groupBody}>
+              <div className={styles.field}>
+                <label htmlFor="onboarding-email">Email</label>
+                <input id="onboarding-email" name="email" type="email" defaultValue={initial.email} autoComplete="email" required />
+              </div>
 
-              <label className={styles.field}>
-                <span>Confirm password</span>
-                <span className={styles.passwordWrap}>
-                  <input
-                    name="confirm_password"
-                    type={showConfirm ? "text" : "password"}
-                    autoComplete="new-password"
-                    minLength={8}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirm((visible) => !visible)}
-                    aria-label={showConfirm ? "Hide confirmed password" : "Show confirmed password"}
-                    aria-pressed={showConfirm}
-                  >
-                    {showConfirm ? <EyeOff size={17} /> : <Eye size={17} />}
-                  </button>
-                </span>
-              </label>
+              <div className={styles.twoColumn}>
+                <div className={styles.field}>
+                  <label htmlFor="new-password">New password</label>
+                  <div className={styles.passwordWrap}>
+                    <input
+                      id="new-password"
+                      name="new_password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      minLength={8}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((visible) => !visible)}
+                      aria-label={showPassword ? "Hide new password" : "Show new password"}
+                      aria-pressed={showPassword}
+                    >
+                      {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className={styles.field}>
+                  <label htmlFor="confirm-password">Confirm password</label>
+                  <div className={styles.passwordWrap}>
+                    <input
+                      id="confirm-password"
+                      name="confirm_password"
+                      type={showConfirm ? "text" : "password"}
+                      autoComplete="new-password"
+                      minLength={8}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirm((visible) => !visible)}
+                      aria-label={showConfirm ? "Hide confirmed password" : "Show confirmed password"}
+                      aria-pressed={showConfirm}
+                    >
+                      {showConfirm ? <EyeOff size={17} /> : <Eye size={17} />}
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </fieldset>
+          </section>
 
-          <fieldset className={styles.group}>
-            <legend>Personal details</legend>
-            <label className={styles.field}>
-              <span>Address</span>
-              <input name="address" defaultValue={initial.address} autoComplete="street-address" required />
-            </label>
-            <label className={styles.field}>
-              <span>Date of birth</span>
-              <input name="date_of_birth" type="date" defaultValue={initial.dateOfBirth} autoComplete="bday" required />
-            </label>
-          </fieldset>
+          <section className={styles.group} aria-labelledby="personal-group">
+            <h2 id="personal-group">Personal details</h2>
+            <div className={styles.groupBody}>
+              <div className={styles.field}>
+                <label htmlFor="address">Address</label>
+                <input id="address" name="address" defaultValue={initial.address} autoComplete="street-address" required />
+              </div>
+              <div className={styles.field}>
+                <label htmlFor="date-of-birth">Date of birth</label>
+                <input id="date-of-birth" name="date_of_birth" type="date" defaultValue={initial.dateOfBirth} autoComplete="bday" required />
+              </div>
+            </div>
+          </section>
 
-          <fieldset className={styles.group}>
-            <legend>Body details</legend>
+          <section className={styles.group} aria-labelledby="body-group">
+            <h2 id="body-group">Body details</h2>
             <div className={styles.measureGrid}>
-              <label className={styles.field}>
-                <span>Weight</span>
-                <span className={styles.measureInput}>
+              <div className={styles.field}>
+                <label htmlFor="weight-value">Weight</label>
+                <div className={styles.measureInput}>
                   <input
+                    id="weight-value"
                     name="weight_value"
                     value={weightValue}
                     onChange={(event) => setWeightValue(event.target.value)}
@@ -157,13 +165,14 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
                     <button type="button" className={weightUnit === "kg" ? styles.activeUnit : ""} onClick={() => changeWeightUnit("kg")} aria-pressed={weightUnit === "kg"}>kg</button>
                     <button type="button" className={weightUnit === "lb" ? styles.activeUnit : ""} onClick={() => changeWeightUnit("lb")} aria-pressed={weightUnit === "lb"}>lb</button>
                   </span>
-                </span>
-              </label>
+                </div>
+              </div>
 
-              <label className={styles.field}>
-                <span>Height</span>
-                <span className={styles.measureInput}>
+              <div className={styles.field}>
+                <label htmlFor="height-value">Height</label>
+                <div className={styles.measureInput}>
                   <input
+                    id="height-value"
                     name="height_value"
                     value={heightValue}
                     onChange={(event) => setHeightValue(event.target.value)}
@@ -178,10 +187,10 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
                     <button type="button" className={heightUnit === "cm" ? styles.activeUnit : ""} onClick={() => changeHeightUnit("cm")} aria-pressed={heightUnit === "cm"}>cm</button>
                     <button type="button" className={heightUnit === "in" ? styles.activeUnit : ""} onClick={() => changeHeightUnit("in")} aria-pressed={heightUnit === "in"}>in</button>
                   </span>
-                </span>
-              </label>
+                </div>
+              </div>
             </div>
-          </fieldset>
+          </section>
 
           <input type="hidden" name="weight_unit" value={weightUnit} />
           <input type="hidden" name="height_unit" value={heightUnit} />
