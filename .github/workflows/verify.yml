@@ -2,7 +2,7 @@ name: Verify
 
 on:
   push:
-    branches: [main, onboarding-save-ui-refinement]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
