@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, Eye, EyeOff, Loader2, Mail, Phone, RefreshCw, ShieldCheck } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { getAuthCallbackUrl } from "@/lib/auth-redirect";
 import { isAppRole, roleHome, roleOwnsPath } from "@/lib/roles";
 
 type Mode = "sign-in" | "sign-up" | "forgot-password";
@@ -42,14 +43,32 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
   async function routeAuthenticatedUser() {
     const supabase = createClient();
-    const { data: profile } = await supabase
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      router.replace("/sign-in?error=session");
+      router.refresh();
+      return;
+    }
+
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("role, requires_onboarding")
-      .single();
-    const profileRole = profile?.role;
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profileError || !profile) {
+      router.replace("/sign-in?error=profile");
+      router.refresh();
+      return;
+    }
+
+    const profileRole = profile.role;
     const role = isAppRole(profileRole) ? profileRole : "patient";
 
-    if (role === "patient" && profile?.requires_onboarding) {
+    if (role === "patient" && profile.requires_onboarding) {
       router.replace("/onboarding");
       router.refresh();
       return;
@@ -84,7 +103,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
     if (mode === "forgot-password") {
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/callback?next=/patient`,
+        redirectTo: getAuthCallbackUrl(window.location.origin, "/patient"),
       });
       setLoading(false);
       if (resetError) return setError("We couldn't send the reset link. Please try again.");
@@ -96,7 +115,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: getAuthCallbackUrl(window.location.origin),
         },
       });
 
@@ -209,7 +228,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: getAuthCallbackUrl(window.location.origin, searchParams.get("next")),
         queryParams: { prompt: "select_account" },
       },
     });
