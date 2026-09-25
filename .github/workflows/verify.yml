@@ -2,7 +2,7 @@ name: Verify
 
 on:
   push:
-    branches: [main, fix-v1-google-oauth-redirect]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
