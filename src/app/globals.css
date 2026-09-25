@@ -1414,29 +1414,42 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   padding-bottom: clamp(2rem, 5vw, 5rem);
 }
 .refined-home .home-trust-ticker {
+  position: relative;
   overflow: hidden;
+  white-space: nowrap;
   border-bottom: 1px solid #e4e4e1;
   background: #f3f3f0;
 }
 .refined-home .home-trust-ticker .animate-marquee {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  width: max-content;
   min-width: max-content;
   padding: .82rem 0;
-  animation-duration: 34s;
+  animation: home-ticker-run 30s linear infinite;
+  will-change: transform;
 }
 .refined-home .home-ticker-sequence {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
-  padding-right: 2rem;
+  white-space: nowrap;
   color: #656561;
   font-size: .64rem;
-  font-weight: 800;
+  font-weight: 600;
+  line-height: 1;
   letter-spacing: .12em;
   text-transform: uppercase;
 }
 .refined-home .home-ticker-sequence span {
+  display: inline-block;
+  flex: 0 0 auto;
   padding-inline: 1.4rem;
+  white-space: nowrap;
 }
 .refined-home .home-ticker-sequence b {
+  flex: 0 0 auto;
   color: #c2c2bd;
   font-size: .58rem;
   font-weight: 400;
@@ -2698,25 +2711,10 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   transform: translate3d(0, 0, 0);
 }
 
-/* True continuous running ticker: two identical groups form a seamless loop. */
+/* Two identical ticker groups create one seamless, non-breaking loop. */
 @keyframes home-ticker-run {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-50%, 0, 0); }
-}
-.refined-home .home-trust-ticker .animate-marquee {
-  display: flex;
-  width: max-content;
-  min-width: max-content;
-  padding: .82rem 0;
-  animation: home-ticker-run 30s linear infinite;
-  will-change: transform;
-}
-.refined-home .home-ticker-sequence {
-  flex: none;
-  padding-right: 0;
-}
-.refined-home .home-ticker-sequence span {
-  white-space: nowrap;
 }
 
 @media (prefers-reduced-motion: reduce) {
