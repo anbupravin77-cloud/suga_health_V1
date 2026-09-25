@@ -1419,15 +1419,18 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   white-space: nowrap;
   border-bottom: 1px solid #e4e4e1;
   background: #f3f3f0;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 1.5rem, #000 calc(100% - 1.5rem), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 1.5rem, #000 calc(100% - 1.5rem), transparent 100%);
 }
-.refined-home .home-trust-ticker .animate-marquee {
+.refined-home .home-trust-ticker .home-marquee-track {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
+  gap: 0;
   width: max-content;
   min-width: max-content;
   padding: .82rem 0;
-  animation: home-ticker-run 30s linear infinite;
+  animation: home-ticker-run 36s linear infinite;
   will-change: transform;
 }
 .refined-home .home-ticker-sequence {
@@ -2378,7 +2381,7 @@ main.legacy-public > div > section:nth-of-type(n+3) {
 }
 @media (prefers-reduced-motion: reduce) {
   .refined-home .hero-bento-slide-image,
-  .refined-home .home-trust-ticker .animate-marquee {
+  .refined-home .home-trust-ticker .home-marquee-track {
     animation: none !important;
   }
   .refined-home .hero-bento-slide-image,
@@ -2714,7 +2717,7 @@ main.legacy-public > div > section:nth-of-type(n+3) {
 /* Two identical ticker groups create one seamless, non-breaking loop. */
 @keyframes home-ticker-run {
   from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(-25%, 0, 0); }
 }
 
 @media (prefers-reduced-motion: reduce) {

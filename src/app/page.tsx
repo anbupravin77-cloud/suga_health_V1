@@ -378,9 +378,9 @@ export default function HomePage() {
       <div className="pt-[70px]">
         <section className="home-hero bg-[#FAFAFA] border-b border-neutral-200/80">
           <div className="home-trust-ticker" aria-label="Suga Health service highlights">
-            <div className="animate-marquee">
-              {[0, 1].map((group) => (
-                <span key={group} aria-hidden={group === 1 ? true : undefined} className="home-ticker-sequence">
+            <div className="home-marquee-track">
+              {[0, 1, 2, 3].map((group) => (
+                <span key={group} aria-hidden={group > 0 ? true : undefined} className="home-ticker-sequence">
                   <span>Fully confidential</span><b>✦</b>
                   <span>Free and discrete shipping</span><b>✦</b>
                   <span>100% online process</span><b>✦</b>
