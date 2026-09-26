@@ -1458,9 +1458,9 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   font-weight: 400;
 }
 .refined-home .home-hero-composition {
-  width: min(1180px, calc(100% - 2rem));
+  width: min(1240px, calc(100% - 2rem));
   margin-inline: auto;
-  padding-top: clamp(3rem, 7vw, 6.5rem);
+  padding-top: clamp(1.25rem, 2.6vw, 2.75rem);
 }
 .refined-home .hero-intro-grid {
   display: grid;
@@ -1474,13 +1474,13 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   gap: 1rem;
 }
 .refined-home .legacy-hero-title {
-  max-width: 850px;
+  max-width: 980px;
   margin: 0;
   color: #11110f;
-  font-size: clamp(2.55rem, 6.2vw, 6.7rem);
+  font-size: clamp(3rem, 6.8vw, 7.4rem);
   font-weight: 720;
-  line-height: .92;
-  letter-spacing: -.065em;
+  line-height: .9;
+  letter-spacing: -.068em;
   text-wrap: balance;
   clip-path: none !important;
 }
@@ -2576,7 +2576,7 @@ main.legacy-public > div > section:nth-of-type(n+3) {
     letter-spacing: .09em;
   }
   .refined-home .home-ticker-sequence span { padding-inline: 1rem; }
-  .refined-home .home-hero-composition { padding-top: 2.7rem; }
+  .refined-home .home-hero-composition { padding-top: 1.75rem; }
   .refined-home .hero-intro-grid { margin-bottom: 1.8rem; }
   .refined-home .legacy-hero-title {
     font-size: clamp(2.45rem, 13.2vw, 4.25rem);
