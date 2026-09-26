@@ -365,7 +365,7 @@ export default function HomePage() {
             <Link href="/sign-in" className="mobile-home-signin suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
             <Link href="/sign-up" onClick={rememberReturnPosition} className="mobile-home-start suga-btn suga-btn-primary suga-btn-compact hidden sm:inline-flex">
               <span className="mobile-home-start-full">Start consultation</span>
-              <span className="mobile-home-start-short" aria-hidden="true">Start</span>
+              <span className="mobile-home-start-short">Start</span>
               <ArrowRight size={15} />
             </Link>
             <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="mobile-home-menu lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
