@@ -2816,3 +2816,399 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   .staff-profile-card { grid-template-columns: 1fr; }
   .staff-profile-card > div, .staff-profile-card > div:nth-child(even), .staff-profile-card > div.wide { grid-column: 1; border-right: 0; }
 }
+
+
+/* =========================================================
+   Suga.Health liquid button system
+   Premium, restrained motion shared across public + app UI.
+   ========================================================= */
+
+.suga-btn,
+.button {
+  --suga-button-ease: cubic-bezier(.22,.61,.36,1);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 50px;
+  padding: .78rem 1.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .62rem;
+  border-radius: 999px;
+  font-family: var(--font-sans), Arial, sans-serif;
+  font-size: clamp(.9rem, .86rem + .12vw, 1rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: .005em;
+  text-transform: none;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform .38s var(--suga-button-ease),
+    color .38s var(--suga-button-ease),
+    border-color .38s var(--suga-button-ease),
+    background-color .38s var(--suga-button-ease),
+    background-size .46s var(--suga-button-ease),
+    box-shadow .38s var(--suga-button-ease);
+}
+
+.suga-btn svg,
+.button svg {
+  flex: 0 0 auto;
+  transition:
+    transform .34s var(--suga-button-ease),
+    color .28s ease,
+    opacity .2s ease;
+}
+
+.suga-btn.suga-btn-secondary,
+.button.button-secondary {
+  border: 1px solid #cfcfc8;
+  background-color: rgba(255,255,255,.88);
+  background-image:
+    radial-gradient(ellipse at 15% 50%, #11110f 0 49%, #24231f 51%, transparent 55%);
+  background-repeat: no-repeat;
+  background-position: 15% 50%;
+  background-size: 0% 0%;
+  color: #171715;
+  -webkit-text-fill-color: currentColor;
+}
+
+.suga-btn.suga-btn-primary,
+.button.button-primary {
+  border: 1px solid #11110f;
+  background-color: #11110f;
+  background-image:
+    radial-gradient(ellipse at 14% 50%, #34332f 0 48%, #24231f 51%, transparent 55%),
+    radial-gradient(circle at 88% 50%, rgba(205,174,112,.30) 0 30%, rgba(205,174,112,.11) 44%, transparent 62%);
+  background-repeat: no-repeat, no-repeat;
+  background-position: 14% 50%, 88% 50%;
+  background-size: 0% 0%, 0 0;
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+  font-size: clamp(.98rem, .92rem + .18vw, 1.1rem);
+  font-weight: 650;
+}
+
+.suga-btn.suga-btn-account {
+  min-height: 46px;
+  padding: .68rem 1.15rem;
+  border: 1px solid #c8b99a;
+  background-color: #f3ead8;
+  background-image:
+    radial-gradient(ellipse at 15% 50%, #11110f 0 49%, #24231f 51%, transparent 55%);
+  background-repeat: no-repeat;
+  background-position: 15% 50%;
+  background-size: 0% 0%;
+  color: #191814;
+  -webkit-text-fill-color: currentColor;
+  font-size: clamp(.9rem, .86rem + .1vw, .98rem);
+  font-weight: 600;
+}
+
+.suga-btn.suga-btn-danger,
+.button.button-danger,
+.text-button.remove {
+  border-color: #c98982;
+  background-color: #fff7f6;
+  color: #8f302b;
+  -webkit-text-fill-color: currentColor;
+}
+
+.suga-btn.suga-btn-danger,
+.button.button-danger {
+  background-image:
+    radial-gradient(ellipse at 15% 50%, #91372f 0 49%, #7f2d28 51%, transparent 55%);
+  background-repeat: no-repeat;
+  background-position: 15% 50%;
+  background-size: 0% 0%;
+}
+
+.suga-btn.suga-btn-utility,
+.button.button-text {
+  min-height: 40px;
+  padding: .48rem .8rem;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #4e4d48;
+  font-size: clamp(.82rem, .8rem + .08vw, .88rem);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.suga-btn-compact {
+  min-height: 46px;
+  padding: .68rem 1.1rem;
+}
+
+.suga-btn-large {
+  min-height: 56px;
+  padding: .9rem 1.7rem;
+  font-size: clamp(1rem, .96rem + .2vw, 1.12rem) !important;
+}
+
+.suga-btn-inline {
+  min-height: 44px;
+  padding: .66rem 1rem;
+  font-size: clamp(.86rem, .82rem + .1vw, .94rem) !important;
+}
+
+.suga-btn-full {
+  width: 100%;
+}
+
+.suga-btn:focus-visible,
+.button:focus-visible {
+  outline: 3px solid rgba(17,17,15,.18);
+  outline-offset: 3px;
+}
+
+.suga-btn.suga-btn-account:focus-visible {
+  outline-color: rgba(189,157,96,.35);
+}
+
+.suga-btn:active:not(:disabled),
+.button:active:not(:disabled) {
+  transform: translateY(0) scale(.98);
+  transition-duration: .09s;
+}
+
+.suga-btn:disabled,
+.button:disabled,
+.suga-btn[aria-disabled="true"],
+.button[aria-disabled="true"] {
+  opacity: .58;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+  background-size: 0% 0% !important;
+}
+
+.button-primary::after,
+.legacy-public .legacy-action-dark::after,
+.legacy-public a.bg-neutral-950::after {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .suga-btn.suga-btn-secondary:hover,
+  .suga-btn.suga-btn-secondary:focus-visible,
+  .button.button-secondary:hover,
+  .button.button-secondary:focus-visible {
+    border-color: #11110f;
+    background-size: 360% 680%;
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(17,17,15,.10);
+  }
+
+  .suga-btn.suga-btn-primary:hover,
+  .suga-btn.suga-btn-primary:focus-visible,
+  .button.button-primary:hover,
+  .button.button-primary:focus-visible {
+    border-color: #2b2924;
+    background-size: 350% 700%, 118px 118px;
+    background-position: 14% 50%, 88% 50%;
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(17,17,15,.16);
+  }
+
+  .suga-btn.suga-btn-account:hover,
+  .suga-btn.suga-btn-account:focus-visible {
+    border-color: #11110f;
+    background-size: 360% 680%;
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(17,17,15,.10);
+  }
+
+  .suga-btn.suga-btn-danger:hover,
+  .button.button-danger:hover {
+    background-size: 360% 680%;
+    border-color: #7f2d28;
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .suga-btn:not(.suga-btn-utility):hover svg,
+  .suga-btn:not(.suga-btn-utility):focus-visible svg,
+  .button:not(.button-text):hover svg,
+  .button:not(.button-text):focus-visible svg {
+    transform: translateX(5px);
+  }
+
+  .suga-btn.suga-btn-utility:hover,
+  .button.button-text:hover {
+    background: #f0f0ec;
+    color: #11110f;
+    transform: translateY(-1px);
+  }
+}
+
+/* Homepage hero buttons: larger typography to match the editorial scale. */
+.refined-home .hero-action-grid .home-action-pill.suga-btn {
+  min-height: 58px;
+  padding: .9rem 1.5rem;
+  border-radius: 999px;
+  font-family: var(--font-sans), Arial, sans-serif;
+  font-size: clamp(.98rem, .9rem + .22vw, 1.12rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: .002em;
+  text-transform: none;
+}
+
+.refined-home .hero-action-grid .home-action-pill.suga-btn > svg {
+  right: 1.15rem;
+}
+
+.refined-home .pathway-actions .suga-btn,
+.refined-home .formulary-actions > .suga-btn,
+.refined-home .doctor-credentials-button.suga-btn {
+  min-height: 46px;
+  padding: .72rem 1rem;
+  border-radius: 999px;
+  font-size: clamp(.86rem, .82rem + .1vw, .94rem);
+  font-weight: 600;
+  letter-spacing: .002em;
+  text-transform: none;
+}
+
+.refined-home .doctor-trust-band .suga-btn-primary {
+  min-height: 52px;
+  padding-inline: 1.3rem;
+}
+
+.refined-home .home-final-cta a.suga-btn-primary {
+  min-height: 54px;
+  padding: .84rem 1.35rem;
+  border-color: #e6dcc7;
+  background-color: #f3ead8;
+  background-image:
+    radial-gradient(ellipse at 15% 50%, #fff 0 47%, #eee5d3 51%, transparent 55%),
+    radial-gradient(circle at 88% 50%, rgba(205,174,112,.32) 0 30%, transparent 60%);
+  background-size: 0% 0%, 0 0;
+  color: #11110f !important;
+  -webkit-text-fill-color: #11110f !important;
+  font-size: clamp(.96rem, .91rem + .16vw, 1.08rem);
+  font-weight: 650;
+  text-transform: none;
+  letter-spacing: .004em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .refined-home .home-final-cta a.suga-btn-primary:hover {
+    background-size: 340% 680%, 118px 118px;
+    color: #11110f !important;
+    -webkit-text-fill-color: #11110f !important;
+  }
+}
+
+/* Authenticated app and admin inherit the same hierarchy. */
+.staff-add-button,
+.staff-modal-actions .button {
+  border-radius: 999px;
+}
+
+.sidebar-logout {
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+.text-button,
+.icon-text-button {
+  font-size: clamp(.8rem, .77rem + .08vw, .86rem);
+  font-weight: 600;
+}
+
+/* Segmented/filter controls stay restrained rather than using liquid motion. */
+.legacy-toggle,
+.product-filter,
+.staff-specialty-option {
+  font-size: clamp(.78rem, .75rem + .08vw, .84rem);
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+
+@media (max-width: 720px) {
+  .suga-btn,
+  .button {
+    min-height: 46px;
+    padding: .72rem 1.05rem;
+    font-size: .9rem;
+  }
+
+  .suga-btn.suga-btn-primary,
+  .button.button-primary {
+    font-size: .94rem;
+  }
+
+  .suga-btn.suga-btn-account {
+    min-height: 44px;
+    font-size: .9rem;
+  }
+
+  .suga-btn-large {
+    min-height: 50px;
+    font-size: .98rem !important;
+  }
+
+  .refined-home .hero-action-grid .home-action-pill.suga-btn {
+    width: min(88vw, 330px);
+    min-height: 50px;
+    padding: .76rem 1.1rem;
+    font-size: .95rem;
+  }
+
+  .refined-home .hero-action-grid .home-action-pill.suga-btn > svg {
+    right: .95rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .suga-btn,
+  .button,
+  .suga-btn svg,
+  .button svg {
+    transition-duration: .01ms !important;
+  }
+
+  .suga-btn.suga-btn-secondary,
+  .button.button-secondary,
+  .suga-btn.suga-btn-account,
+  .suga-btn.suga-btn-danger,
+  .button.button-danger,
+  .suga-btn.suga-btn-primary,
+  .button.button-primary {
+    background-image: none !important;
+  }
+
+  .suga-btn:hover,
+  .button:hover,
+  .suga-btn:focus-visible,
+  .button:focus-visible {
+    transform: none !important;
+  }
+
+  .suga-btn.suga-btn-secondary:hover,
+  .button.button-secondary:hover,
+  .suga-btn.suga-btn-account:hover {
+    background-color: #11110f;
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+  }
+
+  .suga-btn.suga-btn-primary:hover,
+  .button.button-primary:hover {
+    background-color: #2b2a27;
+  }
+}
