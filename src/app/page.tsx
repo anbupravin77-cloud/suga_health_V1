@@ -407,7 +407,7 @@ export default function HomePage() {
             </div>
 
             <div className="hero-bento hero-bento-ro" aria-label="Suga Health care and treatment imagery">
-              <div className="hero-bento-primary">
+              <div className={`hero-bento-primary editorial-media editorial-media-large editorial-media-${pillars[heroSlide].id}`}>
                 <PublicImage
                   key={heroSlides[heroSlide].src}
                   src={heroSlides[heroSlide].src}
@@ -432,7 +432,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <button type="button" className="hero-bento-support" onClick={() => setSelectedDoctor(doctors[0])} aria-label={"View credentials for " + doctors[0].name}>
+              <button type="button" className="hero-bento-support editorial-media editorial-media-doctor editorial-media-clickable" onClick={() => setSelectedDoctor(doctors[0])} aria-label={"View credentials for " + doctors[0].name}>
                 <PublicImage src={doctors[0].image} srcSet={imageSources(doctors[0].image)} sizes="(max-width: 820px) 50vw, 50vw" alt={doctors[0].name} width={760} height={960} />
                 <div>
                   <span>Doctor-led from intake to follow-up</span>
@@ -440,13 +440,13 @@ export default function HomePage() {
                 </div>
               </button>
 
-              <button type="button" className="hero-bento-small hero-bento-small-one" onClick={() => setSelectedProduct(products[0])} aria-label={"View " + products[0].name}>
+              <button type="button" className="hero-bento-small hero-bento-small-one editorial-media editorial-media-product editorial-media-weight editorial-media-clickable" onClick={() => setSelectedProduct(products[0])} aria-label={"View " + products[0].name}>
                 <PublicImage src={products[0].image} srcSet={imageSources(products[0].image)} sizes="(max-width: 820px) 50vw, 25vw" alt={products[0].name} width={520} height={420} />
                 <span>Metabolic care</span>
                 <strong>{products[0].name}</strong>
               </button>
 
-              <button type="button" className="hero-bento-small hero-bento-small-two" onClick={() => setSelectedProduct(products[4])} aria-label={"View " + products[4].name}>
+              <button type="button" className="hero-bento-small hero-bento-small-two editorial-media editorial-media-product editorial-media-sexual editorial-media-clickable" onClick={() => setSelectedProduct(products[4])} aria-label={"View " + products[4].name}>
                 <PublicImage src={products[4].image} srcSet={imageSources(products[4].image)} sizes="(max-width: 820px) 50vw, 25vw" alt={products[4].name} width={520} height={420} />
                 <span>Private care</span>
                 <strong>{products[4].name}</strong>
@@ -461,7 +461,7 @@ export default function HomePage() {
             <div className="pathway-editorial-list">
               {pillars.map((pillar, idx) => (
                 <article key={pillar.id} className="pathway-editorial-row">
-                  <div className="pathway-editorial-image">
+                  <div className={`pathway-editorial-image editorial-media editorial-media-large editorial-media-${pillar.id}`}>
                     <PublicImage loading="lazy" decoding="async" src={pillar.img} srcSet={imageSources(pillar.img)} sizes="(max-width: 820px) 100vw, 44vw" width={900} height={680} alt={pillar.title} />
                     <span>0{idx + 1}</span>
                   </div>
@@ -570,7 +570,7 @@ export default function HomePage() {
             <div className="doctor-card-grid">
               {doctors.map((doctor) => (
                 <article key={doctor.id} className="doctor-card">
-                  <div className="doctor-card-image">
+                  <div className="doctor-card-image editorial-media editorial-media-doctor">
                     <PublicImage
                       loading="lazy"
                       decoding="async"
@@ -679,7 +679,7 @@ export default function HomePage() {
             <div className="product-card-grid">
               {visibleProducts.map((product) => (
                 <article key={product.id} className="product-card">
-                  <div className="product-card-image">
+                  <div className={`product-card-image editorial-media editorial-media-product editorial-media-${product.category}`}>
                     <PublicImage
                       loading="lazy"
                       decoding="async"
