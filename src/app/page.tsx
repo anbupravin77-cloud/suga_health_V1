@@ -346,9 +346,9 @@ export default function HomePage() {
 
   return (
     <main className="legacy-public refined-home min-h-screen bg-[#FAFAFA] text-neutral-950 overflow-x-hidden">
-      <header className="legacy-header fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
-          <Link href="/" className="flex flex-col items-start select-none shrink-0">
+      <header className="legacy-header mobile-home-header fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
+        <div className="mobile-home-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
+          <Link href="/" className="mobile-home-brand flex flex-col items-start select-none shrink-0">
             <span className="font-sans text-xl sm:text-2xl tracking-tighter uppercase font-black text-neutral-950 leading-none">SUGA<span className="text-neutral-400">.</span>HEALTH</span>
             <span className="brand-tagline text-neutral-500 mt-0.5">live naturally</span>
           </Link>
@@ -361,12 +361,14 @@ export default function HomePage() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-            <Link href="/sign-in" className="suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
-            <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-compact hidden sm:inline-flex">
-              <span>Start consultation</span><ArrowRight size={15} />
+          <div className="mobile-home-header-actions flex items-center gap-2.5 sm:gap-3 shrink-0">
+            <Link href="/sign-in" className="mobile-home-signin suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
+            <Link href="/sign-up" onClick={rememberReturnPosition} className="mobile-home-start suga-btn suga-btn-primary suga-btn-compact hidden sm:inline-flex">
+              <span className="mobile-home-start-full">Start consultation</span>
+              <span className="mobile-home-start-short">Start</span>
+              <ArrowRight size={15} />
             </Link>
-            <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
+            <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="mobile-home-menu lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
               {mobileMenuOpen ? <X size={23} /> : <Menu size={23} />}
             </button>
 
@@ -375,7 +377,7 @@ export default function HomePage() {
       </header>
       <MobilePublicMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
 
-      <div className="pt-[70px]">
+      <div className="home-page-content pt-[70px]">
         <section className="home-hero bg-[#FAFAFA] border-b border-neutral-200/80">
           <div className="home-trust-ticker" aria-label="Suga Health service highlights">
             <div className="home-marquee-track">
