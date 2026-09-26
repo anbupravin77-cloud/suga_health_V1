@@ -15,7 +15,7 @@ const medications = [
 
 export default function WeightLossPage() {
   return <LegacyPublicFrame>
-    <LegacyPageHeader title="Medical Weight Loss. Driven by Biology." subtitle="FDA-approved GLP-1 treatments prescribed by licensed US clinicians to quiet biological cravings and restore metabolic balance." image="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2000&auto=format&fit=crop&grayscale=1" />
+    <LegacyPageHeader title="Medical Weight Loss. Driven by Biology." subtitle="FDA-approved GLP-1 treatments prescribed by licensed US clinicians to quiet biological cravings and restore metabolic balance." image="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2000&auto=format&fit=crop&grayscale=1" tone="weight" />
     <LegacySection surface>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
         <div className="lg:col-span-5 relative lg:sticky lg:top-32">
