@@ -429,7 +429,7 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
           <div className={styles.actions}>
             {step > 0 ? (
               <button
-                className={styles.backButton}
+                className={`${styles.backButton} suga-btn suga-btn-secondary`}
                 type="button"
                 onClick={() => setStep((current) => (current - 1) as Step)}
                 disabled={pending}
@@ -443,7 +443,7 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
 
             {step < 2 ? (
               <button
-                className={styles.primaryButton}
+                className={`${styles.primaryButton} suga-btn suga-btn-primary`}
                 type="button"
                 onClick={step === 0 ? continueFromPersonal : continueFromAddress}
               >
@@ -451,7 +451,7 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
                 <ArrowRight size={17} />
               </button>
             ) : (
-              <button className={styles.primaryButton} type="submit" disabled={pending}>
+              <button className={`${styles.primaryButton} suga-btn suga-btn-primary`} type="submit" disabled={pending}>
                 {pending ? <Loader2 className={styles.spinner} size={18} /> : "Save & Continue"}
                 {!pending && <ArrowRight size={17} />}
               </button>
