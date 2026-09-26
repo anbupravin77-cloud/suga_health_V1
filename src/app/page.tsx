@@ -377,7 +377,7 @@ export default function HomePage() {
       </header>
       <MobilePublicMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
 
-      <div className="pt-[70px]">
+      <div className="home-page-content pt-[70px]">
         <section className="home-hero bg-[#FAFAFA] border-b border-neutral-200/80">
           <div className="home-trust-ticker" aria-label="Suga Health service highlights">
             <div className="home-marquee-track">
