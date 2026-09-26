@@ -54,7 +54,7 @@ export function MobilePublicMenu({ open, onClose }: { open: boolean; onClose: ()
           <Link
             href="/sign-in"
             onClick={onClose}
-            className="legacy-action-light rounded-2xl border border-neutral-300 bg-white p-4 text-center text-sm font-bold"
+            className="suga-btn suga-btn-account suga-btn-full"
           >
             Sign In
           </Link>
@@ -64,7 +64,7 @@ export function MobilePublicMenu({ open, onClose }: { open: boolean; onClose: ()
               rememberReturnPosition();
               onClose();
             }}
-            className="legacy-action-dark rounded-full bg-neutral-950 p-4 text-center text-xs font-bold uppercase tracking-wider"
+            className="suga-btn suga-btn-primary suga-btn-full"
           >
             Start consultation
           </Link>
