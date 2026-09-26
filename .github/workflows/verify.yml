@@ -2,7 +2,7 @@ name: Verify
 
 on:
   push:
-    branches: [main, optimize-mobile-home-hero-header]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
