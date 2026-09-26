@@ -362,9 +362,9 @@ export default function HomePage() {
           </nav>
 
           <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-            <Link href="/sign-in" className="hidden sm:inline-flex text-xs font-bold uppercase tracking-wider text-neutral-700 hover:text-neutral-950 mr-2">Sign In</Link>
-            <Link href="/sign-up" onClick={rememberReturnPosition} className="start-consultation-swipe hidden sm:inline-flex items-center justify-center bg-neutral-950 px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase text-white group">
-              <span>Start consultation</span><ArrowRight size={14} className="ml-2" />
+            <Link href="/sign-in" className="suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
+            <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-compact hidden sm:inline-flex">
+              <span>Start consultation</span><ArrowRight size={15} />
             </Link>
             <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
               {mobileMenuOpen ? <X size={23} /> : <Menu size={23} />}
@@ -399,10 +399,10 @@ export default function HomePage() {
               </div>
 
               <div className="hero-action-grid" aria-label="Explore Suga Health care">
-                <Link href="/weight-loss" className="home-action-pill">Medical weight loss <ArrowUpRight size={15} /></Link>
-                <Link href="/hair-growth" className="home-action-pill">Hair growth <ArrowUpRight size={15} /></Link>
-                <Link href="/sexual-health" className="home-action-pill">Sexual health <ArrowUpRight size={15} /></Link>
-                <Link href="/sign-up" onClick={rememberReturnPosition} className="home-action-pill home-action-primary start-consultation-swipe"><span>Start consultation</span><ArrowRight size={15} /></Link>
+                <Link href="/weight-loss" className="home-action-pill suga-btn suga-btn-secondary">Medical weight loss <ArrowUpRight size={16} /></Link>
+                <Link href="/hair-growth" className="home-action-pill suga-btn suga-btn-secondary">Hair growth <ArrowUpRight size={16} /></Link>
+                <Link href="/sexual-health" className="home-action-pill suga-btn suga-btn-secondary">Sexual health <ArrowUpRight size={16} /></Link>
+                <Link href="/sign-up" onClick={rememberReturnPosition} className="home-action-pill home-action-primary suga-btn suga-btn-primary"><span>Start consultation</span><ArrowRight size={16} /></Link>
               </div>
             </div>
 
@@ -477,8 +477,8 @@ export default function HomePage() {
                       {pillar.highlights.map((item) => <span key={item}><Check size={14} />{item}</span>)}
                     </div>
                     <div className="pathway-actions">
-                      <Link href={pillar.path}>View protocol <ArrowRight size={14} /></Link>
-                      <Link href="/sign-up" onClick={rememberReturnPosition} className="start-consultation-swipe"><span>Start consultation</span><ArrowUpRight size={14} /></Link>
+                      <Link href={pillar.path} className="suga-btn suga-btn-secondary suga-btn-inline">View protocol <ArrowRight size={15} /></Link>
+                      <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline"><span>Start consultation</span><ArrowUpRight size={15} /></Link>
                     </div>
                   </div>
                 </article>
@@ -508,7 +508,7 @@ export default function HomePage() {
                 </article>
               ))}
             </div>
-            <div className="home-centered-action"><Link href="/sign-up" onClick={rememberReturnPosition} className="legacy-dark-cta">See if you qualify today <ArrowRight size={14} /></Link></div>
+            <div className="home-centered-action"><Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary">See if you qualify today <ArrowRight size={16} /></Link></div>
           </div>
         </section>
 
@@ -595,7 +595,7 @@ export default function HomePage() {
                       <span><MapPin size={15} />Licensed in {doctor.licensedStatesCount} States</span>
                     </div>
 
-                    <button type="button" className="doctor-credentials-button" onClick={() => setSelectedDoctor(doctor)}>
+                    <button type="button" className="doctor-credentials-button suga-btn suga-btn-secondary suga-btn-inline" onClick={() => setSelectedDoctor(doctor)}>
                       View credentials <ArrowRight size={15} />
                     </button>
                   </div>
@@ -609,8 +609,8 @@ export default function HomePage() {
                 <h3>Real doctors. Direct access. Care built around you.</h3>
                 <p>Your consultation is reviewed by a licensed clinician, with ongoing support throughout your care.</p>
               </div>
-              <Link href="/sign-up" onClick={rememberReturnPosition} className="start-consultation-swipe">
-                <span>Start consultation</span><ArrowRight size={15} />
+              <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary">
+                <span>Start consultation</span><ArrowRight size={16} />
               </Link>
             </div>
           </div>
@@ -710,8 +710,8 @@ export default function HomePage() {
                         <em><Truck size={13} />Free 2-Day Ship</em>
                       </div>
                       <div className="product-card-actions">
-                        <button type="button" onClick={() => setSelectedProduct(product)}>Details <Info size={14} /></button>
-                        <Link href="/sign-up" onClick={rememberReturnPosition}>Get started <ArrowRight size={14} /></Link>
+                        <button type="button" className="suga-btn suga-btn-secondary suga-btn-inline" onClick={() => setSelectedProduct(product)}>Details <Info size={15} /></button>
+                        <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline">Get started <ArrowRight size={15} /></Link>
                       </div>
                     </div>
                   </div>
@@ -772,7 +772,7 @@ export default function HomePage() {
               <h2>Your personalized medical plan is&nbsp;5 minutes away.</h2>
               <p>Answer quick medical questions. A licensed clinician will review your file and tailor your prescription.</p>
             </div>
-            <Link href="/sign-up" onClick={rememberReturnPosition}>Start Free Assessment <ArrowRight size={16} /></Link>
+            <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-large">Start Free Assessment <ArrowRight size={17} /></Link>
           </div>
         </section>
       </div>
