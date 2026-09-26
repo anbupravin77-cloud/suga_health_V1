@@ -2869,7 +2869,7 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   border: 1px solid #cfcfc8;
   background-color: rgba(255,255,255,.88);
   background-image:
-    radial-gradient(ellipse at 15% 50%, #11110f 0 49%, #24231f 51%, transparent 55%);
+    radial-gradient(ellipse at 15% 50%, #e7e5df 0 49%, #d8d5ce 51%, transparent 55%);
   background-repeat: no-repeat;
   background-position: 15% 50%;
   background-size: 0% 0%;
@@ -2977,6 +2977,18 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   transition-duration: .09s;
 }
 
+.suga-btn.suga-btn-secondary:active:not(:disabled),
+.button.button-secondary:active:not(:disabled) {
+  color: #11110f;
+  -webkit-text-fill-color: #11110f;
+}
+
+.suga-btn.suga-btn-secondary:active:not(:disabled) svg,
+.button.button-secondary:active:not(:disabled) svg {
+  color: #11110f;
+  stroke: currentColor;
+}
+
 .suga-btn:disabled,
 .button:disabled,
 .suga-btn[aria-disabled="true"],
@@ -2999,12 +3011,12 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   .suga-btn.suga-btn-secondary:focus-visible,
   .button.button-secondary:hover,
   .button.button-secondary:focus-visible {
-    border-color: #11110f;
+    border-color: #9f9d96;
     background-size: 360% 680%;
-    color: #fff;
-    -webkit-text-fill-color: #fff;
+    color: #11110f;
+    -webkit-text-fill-color: #11110f;
     transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(17,17,15,.10);
+    box-shadow: 0 10px 24px rgba(17,17,15,.08);
   }
 
   .suga-btn.suga-btn-primary:hover,
