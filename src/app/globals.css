@@ -3466,3 +3466,214 @@ main.legacy-public > div > section:nth-of-type(n+3) {
     transform: none !important;
   }
 }
+
+
+/* =========================================================
+   Homepage Mobile M/L refinement (320px–430px only)
+   Keeps tablet and desktop presentation unchanged.
+   ========================================================= */
+
+.mobile-home-start-short {
+  display: none;
+}
+
+@media (max-width: 430px) {
+  .refined-home .mobile-home-header {
+    height: 68px;
+  }
+
+  .refined-home .mobile-home-header-inner {
+    width: 100%;
+    height: 68px;
+    min-width: 0;
+    padding-left: 14px;
+    padding-right: 14px;
+    gap: 8px;
+  }
+
+  .refined-home .mobile-home-brand {
+    min-width: 0;
+    flex: 0 0 auto;
+  }
+
+  .refined-home .mobile-home-brand > span:first-child {
+    font-size: 1.18rem !important;
+    line-height: .94;
+    letter-spacing: -.045em !important;
+    white-space: nowrap;
+  }
+
+  .refined-home .mobile-home-brand .brand-tagline {
+    margin-top: 3px;
+    font-size: .52rem;
+    letter-spacing: .19em;
+    white-space: nowrap;
+  }
+
+  .refined-home .mobile-home-header-actions {
+    min-width: 0;
+    margin-left: auto;
+    gap: 6px !important;
+    flex: 0 0 auto;
+  }
+
+  .refined-home .mobile-home-signin,
+  .refined-home .mobile-home-start {
+    display: inline-flex !important;
+    flex: 0 0 auto;
+    min-height: 44px;
+    height: 44px;
+    padding: .56rem .82rem;
+    border-radius: 999px;
+    font-size: .88rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .refined-home .mobile-home-start-full {
+    display: none;
+  }
+
+  .refined-home .mobile-home-start-short {
+    display: inline;
+  }
+
+  .refined-home .mobile-home-start > svg {
+    display: none;
+  }
+
+  .refined-home .mobile-home-menu {
+    display: none !important;
+  }
+
+  .refined-home .home-page-content {
+    padding-top: 68px !important;
+  }
+
+  .refined-home .home-trust-ticker {
+    max-width: 100vw;
+  }
+
+  .refined-home .home-hero {
+    padding-bottom: 2.5rem;
+  }
+
+  .refined-home .home-hero-composition {
+    width: min(100% - 1rem, 430px);
+    padding-top: 1.25rem;
+  }
+
+  .refined-home .hero-intro-grid {
+    width: 100%;
+    gap: 1.9rem;
+    margin-bottom: 3rem;
+  }
+
+  .refined-home .hero-intro-copy {
+    width: 100%;
+    justify-items: center;
+  }
+
+  .refined-home .legacy-hero-title {
+    width: calc(100vw - 32px);
+    max-width: 400px;
+    margin-inline: auto;
+    font-size: clamp(2.18rem, 9.8vw, 2.65rem);
+    font-weight: 540;
+    line-height: 1.01;
+    letter-spacing: -.038em;
+    text-align: center;
+    text-wrap: balance;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .refined-home .hero-action-grid {
+    width: calc(100vw - 32px);
+    max-width: 400px;
+    margin-inline: auto;
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .refined-home .hero-action-grid .home-action-pill.suga-btn {
+    width: 100%;
+    min-height: 58px;
+    height: 58px;
+    justify-self: stretch;
+    padding: .82rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .refined-home .hero-action-grid .home-action-pill.suga-btn > svg {
+    right: 1.2rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .refined-home .mobile-home-header-inner {
+    padding-left: 12px;
+    padding-right: 12px;
+    gap: 5px;
+  }
+
+  .refined-home .mobile-home-brand > span:first-child {
+    font-size: 1.02rem !important;
+  }
+
+  .refined-home .mobile-home-brand .brand-tagline {
+    font-size: .46rem;
+    letter-spacing: .16em;
+  }
+
+  .refined-home .mobile-home-header-actions {
+    gap: 5px !important;
+  }
+
+  .refined-home .mobile-home-signin,
+  .refined-home .mobile-home-start {
+    min-height: 42px;
+    height: 42px;
+    padding: .52rem .66rem;
+    font-size: .81rem;
+  }
+
+  .refined-home .home-hero-composition {
+    width: min(100% - .75rem, 360px);
+    padding-top: 1.1rem;
+  }
+
+  .refined-home .legacy-hero-title {
+    width: calc(100vw - 28px);
+    max-width: 340px;
+    font-size: clamp(2.02rem, 9.4vw, 2.28rem);
+    line-height: 1.02;
+    letter-spacing: -.035em;
+  }
+
+  .refined-home .hero-intro-grid {
+    gap: 1.65rem;
+    margin-bottom: 2.65rem;
+  }
+
+  .refined-home .hero-action-grid {
+    width: calc(100vw - 28px);
+    max-width: 340px;
+    gap: 8px;
+  }
+
+  .refined-home .hero-action-grid .home-action-pill.suga-btn {
+    min-height: 56px;
+    height: 56px;
+    padding-inline: 1.1rem;
+    font-size: .96rem;
+  }
+
+  .refined-home .hero-action-grid .home-action-pill.suga-btn > svg {
+    right: 1rem;
+  }
+}
