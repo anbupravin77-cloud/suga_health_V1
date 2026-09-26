@@ -29,8 +29,8 @@ export function LegacyPublicFrame({ children }: { children: ReactNode }) {
           {navLinks.map((link) => <Link key={link.name} href={link.path} className="px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase text-neutral-600 hover:text-neutral-950 hover:bg-neutral-200/60 transition-all whitespace-nowrap">{link.name}</Link>)}
         </nav>
         <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-          <Link href="/sign-in" className="hidden sm:inline-flex text-xs font-bold uppercase tracking-wider text-neutral-700 hover:text-neutral-950 mr-2">Sign In</Link>
-          <Link href="/sign-up" onClick={rememberReturnPosition} className="legacy-action-dark hidden sm:inline-flex items-center justify-center bg-neutral-950 px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase text-white hover:bg-neutral-800 transition-all group">Start consultation <ArrowRight size={14} className="ml-2" /></Link>
+          <Link href="/sign-in" className="suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
+          <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-compact hidden sm:inline-flex">Start consultation <ArrowRight size={15} /></Link>
           <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
             {mobileMenuOpen ? <X size={23} /> : <Menu size={23} />}
           </button>
@@ -65,5 +65,5 @@ export function LegacySection({ children, surface = false }: { children: ReactNo
 }
 
 export function LegacyCta({ title, description }: { title: string; description: string }) {
-  return <LegacySection><div className="max-w-3xl mx-auto text-center py-4 sm:py-6"><h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-950 mb-4 sm:mb-6 tracking-tight">{title}</h2><p className="text-neutral-600 text-base sm:text-lg leading-relaxed mb-6 sm:mb-8 max-w-xl mx-auto">{description}</p><Link href="/sign-up" onClick={rememberReturnPosition} className="legacy-action-dark inline-flex items-center justify-center bg-neutral-950 border border-neutral-950 px-8 py-3.5 sm:py-4 rounded-full text-xs font-bold tracking-wider uppercase text-white hover:bg-neutral-800 transition-all group">Start Free Assessment <ArrowRight size={16} className="ml-2.5" /></Link></div></LegacySection>;
+  return <LegacySection><div className="max-w-3xl mx-auto text-center py-4 sm:py-6"><h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-950 mb-4 sm:mb-6 tracking-tight">{title}</h2><p className="text-neutral-600 text-base sm:text-lg leading-relaxed mb-6 sm:mb-8 max-w-xl mx-auto">{description}</p><Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-large">Start Free Assessment <ArrowRight size={17} /></Link></div></LegacySection>;
 }
