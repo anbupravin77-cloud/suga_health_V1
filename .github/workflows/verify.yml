@@ -2,7 +2,7 @@ name: Verify
 
 on:
   push:
-    branches: [main]
+    branches: [main, fix-public-mobile-header-consistency]
   workflow_dispatch:
 
 jobs:
