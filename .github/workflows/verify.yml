@@ -2,7 +2,7 @@ name: Verify
 
 on:
   push:
-    branches: [main, polish-mobile-hero-buttons]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
