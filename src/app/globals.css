@@ -3677,3 +3677,102 @@ main.legacy-public > div > section:nth-of-type(n+3) {
     right: 1rem;
   }
 }
+
+
+/* =========================================================
+   Mobile header + hero button palette polish (<=430px)
+   Presentation-only. Desktop/tablet and global button system stay unchanged.
+   ========================================================= */
+@media (max-width: 430px) {
+  .refined-home .mobile-home-signin {
+    display: none !important;
+  }
+
+  .refined-home .mobile-home-header-actions {
+    gap: 0 !important;
+  }
+
+  .refined-home .mobile-home-start {
+    min-height: 44px;
+    height: 44px;
+    padding-inline: 1rem;
+    border-color: #171715;
+    background-color: #171715;
+    background-image:
+      radial-gradient(ellipse at 14% 50%, #34312c 0 48%, #26231f 51%, transparent 55%),
+      radial-gradient(circle at 88% 50%, rgba(205,174,112,.24) 0 30%, rgba(205,174,112,.08) 44%, transparent 62%);
+    color: #f8f5ef !important;
+    -webkit-text-fill-color: #f8f5ef !important;
+    font-size: .9rem;
+    font-weight: 600;
+    letter-spacing: -.012em;
+    box-shadow: none;
+  }
+
+  .refined-home .hero-action-grid .home-action-pill.suga-btn {
+    font-family: var(--font-sans), Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -.014em;
+    box-shadow: none;
+  }
+
+  .refined-home .hero-action-grid .home-action-pill.suga-btn-secondary {
+    border-color: #d8d1c5;
+    background-color: #f2ede4;
+    background-image:
+      radial-gradient(ellipse at 15% 50%, #e8e0d4 0 49%, #dad0c1 51%, transparent 55%);
+    color: #1c1b18;
+    -webkit-text-fill-color: #1c1b18;
+  }
+
+  .refined-home .hero-action-grid .home-action-pill.suga-btn-secondary > svg {
+    color: #1c1b18;
+    stroke: currentColor;
+  }
+
+  .refined-home .hero-action-grid .home-action-primary.suga-btn-primary {
+    border-color: #171715;
+    background-color: #171715;
+    background-image:
+      radial-gradient(ellipse at 14% 50%, #34312c 0 48%, #26231f 51%, transparent 55%),
+      radial-gradient(circle at 88% 50%, rgba(205,174,112,.24) 0 30%, rgba(205,174,112,.08) 44%, transparent 62%);
+    color: #f8f5ef !important;
+    -webkit-text-fill-color: #f8f5ef !important;
+  }
+
+  .refined-home .hero-action-grid .home-action-primary.suga-btn-primary > svg {
+    color: #f8f5ef;
+    stroke: currentColor;
+  }
+
+  .refined-home .hero-action-grid .home-action-pill.suga-btn-secondary:active:not(:disabled) {
+    border-color: #c9c0b2;
+    background-color: #ebe4d8;
+    color: #171715;
+    -webkit-text-fill-color: #171715;
+  }
+
+  .refined-home .hero-action-grid .home-action-primary.suga-btn-primary:active:not(:disabled),
+  .refined-home .mobile-home-start:active:not(:disabled) {
+    border-color: #24211d;
+    background-color: #24211d;
+    color: #f8f5ef !important;
+    -webkit-text-fill-color: #f8f5ef !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .refined-home .mobile-home-start {
+    min-height: 42px;
+    height: 42px;
+    padding-inline: .9rem;
+    font-size: .84rem;
+  }
+
+  .refined-home .hero-action-grid .home-action-pill.suga-btn {
+    font-size: .96rem;
+    letter-spacing: -.012em;
+  }
+}
