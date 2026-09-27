@@ -19,19 +19,23 @@ export function LegacyPublicFrame({ children }: { children: ReactNode }) {
   useRestoreReturnPosition();
 
   return <main className="legacy-public refined-treatment min-h-screen bg-[#FAFAFA] text-neutral-950 overflow-x-hidden">
-    <header className="legacy-header fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
-        <Link href="/" className="flex flex-col items-start select-none shrink-0">
+    <header className="legacy-header treatment-mobile-header fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
+      <div className="treatment-mobile-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
+        <Link href="/" className="treatment-mobile-brand flex flex-col items-start select-none shrink-0">
           <span className="font-sans text-xl sm:text-2xl tracking-tighter uppercase font-black text-neutral-950 leading-none">SUGA<span className="text-neutral-400">.</span>HEALTH</span>
           <span className="brand-tagline text-neutral-500 mt-0.5">live naturally</span>
         </Link>
         <nav className="hidden lg:flex items-center gap-1 xl:gap-2 bg-neutral-100/80 p-1.5 rounded-full border border-neutral-200/80">
           {navLinks.map((link) => <Link key={link.name} href={link.path} className="px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase text-neutral-600 hover:text-neutral-950 hover:bg-neutral-200/60 transition-all whitespace-nowrap">{link.name}</Link>)}
         </nav>
-        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-          <Link href="/sign-in" className="suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
-          <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-compact hidden sm:inline-flex">Start consultation <ArrowRight size={15} /></Link>
-          <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
+        <div className="treatment-mobile-header-actions flex items-center gap-2.5 sm:gap-3 shrink-0">
+          <Link href="/sign-in" className="treatment-mobile-signin suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
+          <Link href="/sign-up" onClick={rememberReturnPosition} className="treatment-mobile-start suga-btn suga-btn-primary suga-btn-compact hidden sm:inline-flex">
+            <span className="treatment-mobile-start-full">Start consultation</span>
+            <span className="treatment-mobile-start-short">Start</span>
+            <ArrowRight size={15} />
+          </Link>
+          <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="treatment-mobile-menu lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
             {mobileMenuOpen ? <X size={23} /> : <Menu size={23} />}
           </button>
 
@@ -39,7 +43,7 @@ export function LegacyPublicFrame({ children }: { children: ReactNode }) {
       </div>
     </header>
     <MobilePublicMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
-    <div className="pt-[70px]">{children}</div>
+    <div className="treatment-public-content pt-[70px]">{children}</div>
     <footer className="bg-neutral-950 text-neutral-300 py-12 md:py-16 border-t border-neutral-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 mb-10 sm:mb-12">
