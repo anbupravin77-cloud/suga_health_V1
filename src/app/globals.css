@@ -3776,3 +3776,130 @@ main.legacy-public > div > section:nth-of-type(n+3) {
     letter-spacing: -.012em;
   }
 }
+
+
+/* =========================================================
+   Shared public treatment/about mobile header consistency
+   Mirrors the homepage mobile header only at <=430px.
+   ========================================================= */
+.treatment-mobile-start-short {
+  display: none;
+}
+
+@media (max-width: 430px) {
+  .refined-treatment .treatment-mobile-header {
+    height: 68px;
+  }
+
+  .refined-treatment .treatment-mobile-header-inner {
+    width: 100%;
+    height: 68px;
+    min-width: 0;
+    padding-left: 14px;
+    padding-right: 14px;
+    gap: 8px;
+  }
+
+  .refined-treatment .treatment-mobile-brand {
+    min-width: 0;
+    flex: 0 0 auto;
+  }
+
+  .refined-treatment .treatment-mobile-brand > span:first-child {
+    font-size: 1.18rem !important;
+    line-height: .94;
+    letter-spacing: -.045em !important;
+    white-space: nowrap;
+  }
+
+  .refined-treatment .treatment-mobile-brand .brand-tagline {
+    margin-top: 3px;
+    font-size: .52rem;
+    letter-spacing: .19em;
+    white-space: nowrap;
+  }
+
+  .refined-treatment .treatment-mobile-header-actions {
+    min-width: 0;
+    margin-left: auto;
+    gap: 0 !important;
+    flex: 0 0 auto;
+  }
+
+  .refined-treatment .treatment-mobile-signin {
+    display: none !important;
+  }
+
+  .refined-treatment .treatment-mobile-start {
+    display: inline-flex !important;
+    flex: 0 0 auto;
+    min-height: 44px;
+    height: 44px;
+    padding: .56rem 1rem;
+    border-radius: 999px;
+    border-color: #171715;
+    background-color: #171715;
+    background-image:
+      radial-gradient(ellipse at 14% 50%, #34312c 0 48%, #26231f 51%, transparent 55%),
+      radial-gradient(circle at 88% 50%, rgba(205,174,112,.24) 0 30%, rgba(205,174,112,.08) 44%, transparent 62%);
+    color: #f8f5ef !important;
+    -webkit-text-fill-color: #f8f5ef !important;
+    font-size: .9rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -.012em;
+    white-space: nowrap;
+    box-shadow: none;
+  }
+
+  .refined-treatment .treatment-mobile-start-full {
+    display: none;
+  }
+
+  .refined-treatment .treatment-mobile-start-short {
+    display: inline;
+  }
+
+  .refined-treatment .treatment-mobile-start > svg {
+    display: none;
+  }
+
+  .refined-treatment .treatment-mobile-menu {
+    display: none !important;
+  }
+
+  .refined-treatment .treatment-public-content {
+    padding-top: 68px !important;
+  }
+
+  .refined-treatment .treatment-mobile-start:active:not(:disabled) {
+    border-color: #24211d;
+    background-color: #24211d;
+    color: #f8f5ef !important;
+    -webkit-text-fill-color: #f8f5ef !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .refined-treatment .treatment-mobile-header-inner {
+    padding-left: 12px;
+    padding-right: 12px;
+    gap: 5px;
+  }
+
+  .refined-treatment .treatment-mobile-brand > span:first-child {
+    font-size: 1.02rem !important;
+  }
+
+  .refined-treatment .treatment-mobile-brand .brand-tagline {
+    font-size: .46rem;
+    letter-spacing: .16em;
+  }
+
+  .refined-treatment .treatment-mobile-start {
+    min-height: 42px;
+    height: 42px;
+    padding-inline: .9rem;
+    font-size: .84rem;
+  }
+}
