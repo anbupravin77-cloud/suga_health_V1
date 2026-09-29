@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Open_Sans, Source_Sans_3 } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import "./refinement.css";
 
@@ -32,5 +33,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body className={`${brand.variable} ${sans.variable} ${headline.variable}`}>{children}</body></html>;
+  return <html lang="en"><body className={`${brand.variable} ${sans.variable} ${headline.variable}`}>{children}<SpeedInsights /></body></html>;
 }
