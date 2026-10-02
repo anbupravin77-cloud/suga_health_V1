@@ -4055,3 +4055,144 @@ main.legacy-public > div > section:nth-of-type(n+3) {
     max-width: 52ch;
   }
 }
+
+
+/* =========================================================
+   Premium section-heading geometry + restrained text motion
+   ========================================================= */
+.refined-home .editorial-section-heading-centered {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: clamp(.5rem, 2vw, 1.5rem);
+  padding-right: clamp(.5rem, 2vw, 1.5rem);
+  display: grid !important;
+  justify-items: center !important;
+  align-content: center;
+  text-align: center !important;
+}
+
+.refined-home .editorial-section-heading-centered h2,
+.refined-home .editorial-section-heading-centered p {
+  width: 100%;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+.refined-home .editorial-section-heading-centered h2 {
+  max-width: none !important;
+}
+
+.refined-home .editorial-section-heading-centered p {
+  max-width: 64ch !important;
+}
+
+/* The short section titles stay on a single premium line. */
+.refined-home .home-pathways .editorial-section-heading-centered h2,
+.refined-home .home-progression .editorial-section-heading-centered h2,
+.refined-home .home-process .editorial-section-heading-centered h2,
+.refined-home .home-metrics .editorial-section-heading-centered h2 {
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+
+/* Doctor headline is intentionally locked to exactly two lines. */
+.refined-home .home-doctors .editorial-section-heading-centered h2 {
+  display: grid;
+  justify-items: center;
+  max-width: 30ch !important;
+  white-space: normal;
+}
+
+.refined-home .home-doctors .section-title-line {
+  display: block;
+  white-space: nowrap;
+}
+
+.refined-home .editorial-section-heading-centered > .home-toggle-rail,
+.refined-home .editorial-section-heading-centered > .product-filter-bar {
+  justify-self: center;
+}
+
+/* Refined reveal: soft opacity + lift + tiny blur, once per text block. */
+.refined-home .premium-text-reveal {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  filter: blur(3px);
+  transition:
+    opacity 720ms cubic-bezier(.16, 1, .3, 1),
+    transform 820ms cubic-bezier(.16, 1, .3, 1),
+    filter 760ms cubic-bezier(.16, 1, .3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform, filter;
+}
+
+.refined-home .premium-text-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0);
+}
+
+@media (max-width: 820px) {
+  .refined-home .editorial-section-heading-centered {
+    width: 100% !important;
+    padding-inline: .35rem;
+  }
+
+  .refined-home .home-pathways .editorial-section-heading-centered h2,
+  .refined-home .home-progression .editorial-section-heading-centered h2,
+  .refined-home .home-process .editorial-section-heading-centered h2,
+  .refined-home .home-metrics .editorial-section-heading-centered h2 {
+    max-width: none !important;
+    font-size: clamp(1.72rem, 5.2vw, 2.4rem);
+  }
+
+  .refined-home .home-doctors .editorial-section-heading-centered h2 {
+    font-size: clamp(1.7rem, 5vw, 2.35rem);
+  }
+
+  .refined-home .editorial-section-heading-centered p {
+    max-width: 56ch !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .refined-home .home-pathways .editorial-section-heading-centered h2,
+  .refined-home .home-progression .editorial-section-heading-centered h2,
+  .refined-home .home-process .editorial-section-heading-centered h2,
+  .refined-home .home-metrics .editorial-section-heading-centered h2 {
+    font-size: clamp(1.35rem, 5.8vw, 1.62rem);
+    letter-spacing: -.035em;
+  }
+
+  .refined-home .home-doctors .editorial-section-heading-centered h2 {
+    font-size: clamp(1.42rem, 6vw, 1.72rem);
+    line-height: 1.02;
+  }
+
+  .refined-home .editorial-section-heading-centered p {
+    max-width: 34ch !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .refined-home .premium-text-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* Keep the formulary hero line visually continuous at the tablet/desktop width used in the review. */
+@media (min-width: 560px) {
+  .refined-home .home-formulary .editorial-section-heading-centered h2 {
+    max-width: none !important;
+    white-space: nowrap;
+    text-wrap: nowrap;
+    font-size: clamp(1.55rem, 3.8vw, 3.35rem);
+  }
+}
