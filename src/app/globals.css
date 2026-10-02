@@ -4014,3 +4014,6 @@ main.legacy-public > div > section:nth-of-type(n+3) {
 @media (hover:hover) and (pointer:fine){.public-desktop-nav-link:hover{color:#171715;background:#fff;transform:translateY(-1px)}.public-desktop-nav-link:hover::after{transform:scaleX(1)}}
 @media (max-width:430px){.refined-home .mobile-home-start,.refined-treatment .treatment-mobile-start{padding-inline:.82rem;font-size:.78rem;letter-spacing:-.018em}.refined-home .mobile-home-start-full,.refined-treatment .treatment-mobile-start-full{display:inline}}
 @media (max-width:360px){.refined-home .mobile-home-start,.refined-treatment .treatment-mobile-start{padding-inline:.66rem;font-size:.72rem}}
+
+/* Keep legacy compact label hidden after the mobile CTA copy upgrade. */
+@media (max-width:430px){.refined-home .mobile-home-start-short,.refined-treatment .treatment-mobile-start-short{display:none!important}}
