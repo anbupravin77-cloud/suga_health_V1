@@ -342,6 +342,36 @@ export default function HomePage() {
     return () => window.clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const root = document.querySelector(".home-page-content");
+    if (!root) return;
+
+    const targets = Array.from(root.querySelectorAll<HTMLElement>(
+      "h1, h2, h3, p, .home-kicker, .pathway-highlight-list > span, .process-step-copy, .metric-ledger > article, .comparison-row, .doctor-card-body, .doctor-trust-band > div, .voice-testimonial, .product-card-body, .formulary-assurance, .faq-question, .faq-answer"
+    ));
+
+    targets.forEach((element, index) => {
+      element.classList.add("premium-text-reveal");
+      element.style.setProperty("--reveal-delay", `${(index % 4) * 55}ms`);
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          (entry.target as HTMLElement).classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -7% 0px" },
+    );
+
+    targets.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, []);
+
   const visibleProducts = productCategory === "all" ? products : products.filter((product) => product.category === productCategory);
 
   return (
@@ -537,7 +567,7 @@ export default function HomePage() {
 
         <section className="home-metrics home-editorial-section">
           <div className="home-section-shell">
-            <SectionHeader centered hideEyebrow eyebrow="Clinical Standards" title="Metrics that matter." />
+            <SectionHeader centered hideEyebrow eyebrow="Clinical Standards" title="Metrics that matter." subtitle="Fast access, real clinician review, and human-led care measured at every step." />
             <div className="metric-ledger">
               {metrics.map((metric) => (
                 <article key={metric.title}>
@@ -567,7 +597,7 @@ export default function HomePage() {
 
         <section id="doctors" className="home-doctors home-editorial-section">
           <div className="home-section-shell">
-            <SectionHeader centered hideEyebrow eyebrow="Medical Leadership & Care Team" title="Board-certified doctors behind every prescription." subtitle="No bots, no algorithmic shortcuts. Licensed US physicians personally evaluate every intake, design individualized treatment plans, and support you throughout your care." />
+            <SectionHeader centered hideEyebrow eyebrow="Medical Leadership & Care Team" title={<><span className="section-title-line">Board-certified doctors</span><span className="section-title-line">behind every prescription.</span></>} subtitle="No bots, no algorithmic shortcuts. Licensed US physicians personally evaluate every intake, design individualized treatment plans, and support you throughout your care." />
 
             <div className="doctor-card-grid">
               {doctors.map((doctor) => (
@@ -850,7 +880,7 @@ function CountUp({ target, prefix = "", suffix = "" }: { target: number; prefix?
   return <span ref={ref} className="metric-count"><span className="metric-count-value">{prefix}{value}</span><span className="metric-count-unit">{suffix}</span></span>;
 }
 
-function SectionHeader({ eyebrow, title, subtitle, children, dark = false, centered = false, hideEyebrow = false }: { eyebrow: string; title: string; subtitle?: string; children?: React.ReactNode; dark?: boolean; centered?: boolean; hideEyebrow?: boolean }) {
+function SectionHeader({ eyebrow, title, subtitle, children, dark = false, centered = false, hideEyebrow = false }: { eyebrow: string; title: React.ReactNode; subtitle?: string; children?: React.ReactNode; dark?: boolean; centered?: boolean; hideEyebrow?: boolean }) {
   return <div className={`editorial-section-heading text-center max-w-3xl mx-auto mb-10 sm:mb-12 flex flex-col items-center ${centered ? "editorial-section-heading-centered" : ""}`}>{!hideEyebrow && <span className={"text-xs font-bold tracking-widest uppercase block mb-2.5 " + (dark ? "text-neutral-400" : "text-neutral-500")}>{eyebrow}</span>}<h2 className={"font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.15] text-balance " + (dark ? "text-white" : "text-neutral-950")}>{title}</h2>{subtitle && <p className={"mt-3.5 sm:mt-4 text-sm sm:text-base max-w-2xl leading-relaxed " + (dark ? "text-neutral-400" : "text-neutral-600")}>{subtitle}</p>}{children}</div>;
 }
 
