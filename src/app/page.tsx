@@ -360,9 +360,12 @@ export default function HomePage() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          (entry.target as HTMLElement).classList.add("is-visible");
-          observer.unobserve(entry.target);
+          const element = entry.target as HTMLElement;
+          if (entry.isIntersecting) {
+            element.classList.add("is-visible");
+          } else {
+            element.classList.remove("is-visible");
+          }
         });
       },
       { threshold: 0.12, rootMargin: "0px 0px -7% 0px" },
