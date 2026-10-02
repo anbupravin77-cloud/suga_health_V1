@@ -459,7 +459,7 @@ export default function HomePage() {
 
         <section id="treatments" className="home-pathways home-editorial-section">
           <div className="home-section-shell">
-            <SectionHeader eyebrow="Targeted Therapeutics" title="Focused Clinical Pathways" subtitle="Precision treatment protocols designed for sustained biological optimization." />
+            <SectionHeader centered hideEyebrow eyebrow="Targeted Therapeutics" title="Focused Clinical Pathways" subtitle="Precision treatment protocols designed for sustained biological optimization." />
             <div className="pathway-editorial-list">
               {pillars.map((pillar, idx) => (
                 <article key={pillar.id} className="pathway-editorial-row">
@@ -491,7 +491,7 @@ export default function HomePage() {
 
         <section className="home-progression home-editorial-section bg-white">
           <div className="home-section-shell">
-            <SectionHeader eyebrow="Clinical Progression" title="Clear Milestones from Day 1" subtitle="Expect real, measurable physiological changes with continuous medical guidance.">
+            <SectionHeader centered hideEyebrow eyebrow="Clinical Progression" title="Clear Milestones from Day 1" subtitle="Expect real, measurable physiological changes with continuous medical guidance.">
               <div className="home-toggle-rail">
                 {([["weight","Weight Loss (GLP-1)"],["hair","Hair Regrowth"],["sexual","Sexual Vitality"]] as const).map(([key,label]) => (
                   <button key={key} type="button" aria-pressed={timelineCategory === key} onClick={() => setTimelineCategory(key)} className={timelineCategory === key ? "legacy-toggle legacy-toggle-active" : "legacy-toggle"}>{label}</button>
@@ -516,7 +516,7 @@ export default function HomePage() {
 
         <section className="home-process home-editorial-section">
           <div className="home-section-shell">
-            <SectionHeader eyebrow="Intake Protocol" title="Clear. Fast. Confidential." subtitle="A frictionless medical pathway designed for immediate evaluation and discrete doorstep delivery." />
+            <SectionHeader centered hideEyebrow eyebrow="Intake Protocol" title="Clear. Fast. Confidential." subtitle="A frictionless medical pathway designed for immediate evaluation and discrete doorstep delivery." />
             <div className="process-track">
               {howItWorks.map((item, idx) => (
                 <article key={item.step} className="process-step">
@@ -537,7 +537,7 @@ export default function HomePage() {
 
         <section className="home-metrics home-editorial-section">
           <div className="home-section-shell">
-            <SectionHeader eyebrow="Clinical Standards" title="Metrics that matter." />
+            <SectionHeader centered hideEyebrow eyebrow="Clinical Standards" title="Metrics that matter." />
             <div className="metric-ledger">
               {metrics.map((metric) => (
                 <article key={metric.title}>
@@ -567,7 +567,7 @@ export default function HomePage() {
 
         <section id="doctors" className="home-doctors home-editorial-section">
           <div className="home-section-shell">
-            <SectionHeader eyebrow="Medical Leadership & Care Team" title="Board-certified doctors behind every prescription." subtitle="No bots, no algorithmic shortcuts. Licensed US physicians personally evaluate every intake, design individualized treatment plans, and support you throughout your care." />
+            <SectionHeader centered hideEyebrow eyebrow="Medical Leadership & Care Team" title="Board-certified doctors behind every prescription." subtitle="No bots, no algorithmic shortcuts. Licensed US physicians personally evaluate every intake, design individualized treatment plans, and support you throughout your care." />
 
             <div className="doctor-card-grid">
               {doctors.map((doctor) => (
@@ -662,7 +662,7 @@ export default function HomePage() {
 
         <section id="products" className="home-formulary home-editorial-section bg-white">
           <div className="home-section-shell">
-            <SectionHeader eyebrow="Prescription Formulary" title="Targeted therapies compounded for maximum bioavailability." subtitle="Doctor-formulated treatments with pure active pharmaceutical ingredients, prepared exclusively in state-licensed 503A/503B pharmacies.">
+            <SectionHeader centered hideEyebrow eyebrow="Prescription Formulary" title="Targeted therapies compounded for maximum bioavailability." subtitle="Doctor-formulated treatments with pure active pharmaceutical ingredients, prepared exclusively in state-licensed 503A/503B pharmacies.">
               <div className="product-filter-bar" role="group" aria-label="Filter prescription formulary">
                 {([["all","All Formulations"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Health"]] as const).map(([key,label]) => (
                   <button
@@ -850,8 +850,8 @@ function CountUp({ target, prefix = "", suffix = "" }: { target: number; prefix?
   return <span ref={ref} className="metric-count"><span className="metric-count-value">{prefix}{value}</span><span className="metric-count-unit">{suffix}</span></span>;
 }
 
-function SectionHeader({ eyebrow, title, subtitle, children, dark = false }: { eyebrow: string; title: string; subtitle?: string; children?: React.ReactNode; dark?: boolean }) {
-  return <div className="editorial-section-heading text-center max-w-3xl mx-auto mb-10 sm:mb-12 flex flex-col items-center"><span className={"text-xs font-bold tracking-widest uppercase block mb-2.5 " + (dark ? "text-neutral-400" : "text-neutral-500")}>{eyebrow}</span><h2 className={"font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.15] text-balance " + (dark ? "text-white" : "text-neutral-950")}>{title}</h2>{subtitle && <p className={"mt-3.5 sm:mt-4 text-sm sm:text-base max-w-2xl leading-relaxed " + (dark ? "text-neutral-400" : "text-neutral-600")}>{subtitle}</p>}{children}</div>;
+function SectionHeader({ eyebrow, title, subtitle, children, dark = false, centered = false, hideEyebrow = false }: { eyebrow: string; title: string; subtitle?: string; children?: React.ReactNode; dark?: boolean; centered?: boolean; hideEyebrow?: boolean }) {
+  return <div className={`editorial-section-heading text-center max-w-3xl mx-auto mb-10 sm:mb-12 flex flex-col items-center ${centered ? "editorial-section-heading-centered" : ""}`}>{!hideEyebrow && <span className={"text-xs font-bold tracking-widest uppercase block mb-2.5 " + (dark ? "text-neutral-400" : "text-neutral-500")}>{eyebrow}</span>}<h2 className={"font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.15] text-balance " + (dark ? "text-white" : "text-neutral-950")}>{title}</h2>{subtitle && <p className={"mt-3.5 sm:mt-4 text-sm sm:text-base max-w-2xl leading-relaxed " + (dark ? "text-neutral-400" : "text-neutral-600")}>{subtitle}</p>}{children}</div>;
 }
 
 function Modal({ children, label, onClose }: { children: React.ReactNode; label: string; onClose: () => void }) {
