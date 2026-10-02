@@ -4261,3 +4261,87 @@ main.legacy-public > div > section:nth-of-type(n+3) {
     max-width: 320px;
   }
 }
+
+
+/* =========================================================
+   Mobile pathway image + heading scale refinement
+   Full-width horizontal treatment, fixed image height, replayable reveals.
+   ========================================================= */
+@media (max-width: 430px) {
+  /* Three treatment images: wide, horizontal, fixed-height, almost edge-to-edge. */
+  .refined-home .home-pathways .pathway-editorial-image {
+    width: calc(100vw - 16px);
+    max-width: none;
+    min-height: 0;
+    height: 220px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    border-radius: 18px;
+  }
+
+  .refined-home .home-pathways .pathway-editorial-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* The numeric image badges add noise on mobile. */
+  .refined-home .home-pathways .pathway-editorial-image > span {
+    display: none;
+  }
+
+  /* Give section titles real hierarchy on mobile while keeping short titles on one line. */
+  .refined-home .home-pathways .editorial-section-heading-centered h2,
+  .refined-home .home-process .editorial-section-heading-centered h2,
+  .refined-home .home-metrics .editorial-section-heading-centered h2 {
+    font-size: clamp(1.72rem, 7vw, 2rem);
+    line-height: 1.02;
+    letter-spacing: -.045em;
+  }
+
+  .refined-home .home-progression .editorial-section-heading-centered h2 {
+    font-size: clamp(1.55rem, 6.2vw, 1.8rem);
+    line-height: 1.02;
+    letter-spacing: -.04em;
+  }
+
+  .refined-home .home-doctors .editorial-section-heading-centered h2 {
+    font-size: clamp(1.72rem, 7vw, 2rem);
+    line-height: 1.02;
+    letter-spacing: -.045em;
+  }
+
+  .refined-home .home-formulary .editorial-section-heading-centered h2 {
+    font-size: clamp(1.62rem, 6.5vw, 1.9rem);
+    line-height: 1.04;
+    letter-spacing: -.04em;
+  }
+
+  .refined-home .editorial-section-heading-centered p {
+    margin-top: .8rem !important;
+    font-size: .82rem;
+    line-height: 1.65;
+  }
+}
+
+@media (max-width: 360px) {
+  .refined-home .home-pathways .pathway-editorial-image {
+    width: calc(100vw - 12px);
+    height: 205px;
+  }
+
+  .refined-home .home-pathways .editorial-section-heading-centered h2,
+  .refined-home .home-process .editorial-section-heading-centered h2,
+  .refined-home .home-metrics .editorial-section-heading-centered h2 {
+    font-size: 1.58rem;
+  }
+
+  .refined-home .home-progression .editorial-section-heading-centered h2 {
+    font-size: 1.46rem;
+  }
+
+  .refined-home .home-doctors .editorial-section-heading-centered h2 {
+    font-size: 1.6rem;
+  }
+}
