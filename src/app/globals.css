@@ -4017,3 +4017,41 @@ main.legacy-public > div > section:nth-of-type(n+3) {
 
 /* Keep legacy compact label hidden after the mobile CTA copy upgrade. */
 @media (max-width:430px){.refined-home .mobile-home-start-short,.refined-treatment .treatment-mobile-start-short{display:none!important}}
+
+
+/* Center the section intro blocks marked in the visual review. */
+.refined-home .editorial-section-heading-centered {
+  width: min(100%, 820px);
+  margin-inline: auto;
+  text-align: center !important;
+  align-items: center !important;
+}
+
+.refined-home .editorial-section-heading-centered h2,
+.refined-home .editorial-section-heading-centered p {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+.refined-home .editorial-section-heading-centered > .home-toggle-rail,
+.refined-home .editorial-section-heading-centered > .product-filter-bar {
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+}
+
+@media (max-width: 820px) {
+  .refined-home .editorial-section-heading-centered {
+    width: min(100%, 640px);
+    padding-inline: .35rem;
+  }
+
+  .refined-home .editorial-section-heading-centered h2 {
+    max-width: 20ch;
+  }
+
+  .refined-home .editorial-section-heading-centered p {
+    max-width: 52ch;
+  }
+}
