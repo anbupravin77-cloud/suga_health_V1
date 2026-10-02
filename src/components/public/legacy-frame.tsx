@@ -25,8 +25,8 @@ export function LegacyPublicFrame({ children }: { children: ReactNode }) {
           <span className="font-sans text-xl sm:text-2xl tracking-tighter uppercase font-black text-neutral-950 leading-none">SUGA<span className="text-neutral-400">.</span>HEALTH</span>
           <span className="brand-tagline text-neutral-500 mt-0.5">live naturally</span>
         </Link>
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2 bg-neutral-100/80 p-1.5 rounded-full border border-neutral-200/80">
-          {navLinks.map((link) => <Link key={link.name} href={link.path} className="px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase text-neutral-600 hover:text-neutral-950 hover:bg-neutral-200/60 transition-all whitespace-nowrap">{link.name}</Link>)}
+        <nav className="public-desktop-nav hidden lg:flex items-center">
+          {navLinks.map((link) => <Link key={link.name} href={link.path} className="public-desktop-nav-link">{link.name}</Link>)}
         </nav>
         <div className="treatment-mobile-header-actions flex items-center gap-2.5 sm:gap-3 shrink-0">
           <Link href="/sign-in" className="treatment-mobile-signin suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
