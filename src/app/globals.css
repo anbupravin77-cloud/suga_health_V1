@@ -4185,3 +4185,14 @@ main.legacy-public > div > section:nth-of-type(n+3) {
     transition: none !important;
   }
 }
+
+
+/* Keep the formulary hero line visually continuous at the tablet/desktop width used in the review. */
+@media (min-width: 560px) {
+  .refined-home .home-formulary .editorial-section-heading-centered h2 {
+    max-width: none !important;
+    white-space: nowrap;
+    text-wrap: nowrap;
+    font-size: clamp(1.55rem, 3.8vw, 3.35rem);
+  }
+}
