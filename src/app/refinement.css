@@ -22,9 +22,9 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline-colo
 .legacy-public p { letter-spacing: -.01em; }
 .public-image-fallback { display: grid; place-items: center; background: #e5e5df; color: #62625b; }
 .legacy-public .legacy-header { background: #fff; backdrop-filter: none; }
-.legacy-header nav { background: transparent; border: 0; gap: .1rem; }
-.legacy-header nav a { min-height: 44px; display: inline-flex; align-items: center; padding-inline: .8rem; font-size: .75rem; text-transform: none; letter-spacing: 0; }
-.legacy-header nav a:hover { background: #f2f2ef; }
+.legacy-header nav:not(.public-desktop-nav) { background: transparent; border: 0; gap: .1rem; }
+.legacy-header nav:not(.public-desktop-nav) a { min-height: 44px; display: inline-flex; align-items: center; padding-inline: .8rem; font-size: .75rem; text-transform: none; letter-spacing: 0; }
+.legacy-header nav:not(.public-desktop-nav) a:hover { background: #f2f2ef; }
 .legacy-header button { min-width: 44px; min-height: 44px; }
 .legacy-header a[href="/sign-in"] { min-height: 44px; align-items: center; }
 .legacy-public :is(.legacy-dark-cta, .legacy-action-dark, .legacy-action-light) { min-height: 48px; border-radius: 6px; }
