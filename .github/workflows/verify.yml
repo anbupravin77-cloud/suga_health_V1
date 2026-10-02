@@ -2,7 +2,7 @@ name: Verify
 
 on:
   push:
-    branches: [main, header-cta-desktop-nav-polish]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
