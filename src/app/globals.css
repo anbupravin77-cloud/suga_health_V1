@@ -4196,3 +4196,68 @@ main.legacy-public > div > section:nth-of-type(n+3) {
     font-size: clamp(1.55rem, 3.8vw, 3.35rem);
   }
 }
+
+
+/* =========================================================
+   Mobile hero balance pass
+   Tighter centered copy + shorter CTA stack on <=430px.
+   ========================================================= */
+@media (max-width: 430px) {
+  .refined-home .home-hero-composition {
+    width: 100%;
+    padding-inline: 0;
+  }
+
+  .refined-home .hero-intro-grid {
+    width: 100%;
+    justify-items: center;
+  }
+
+  .refined-home .hero-intro-copy {
+    width: min(calc(100vw - 40px), 360px);
+    margin-inline: auto;
+    display: grid;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .refined-home .legacy-hero-title {
+    width: 100%;
+    max-width: 350px;
+    margin-inline: auto;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .refined-home .hero-action-grid {
+    width: min(calc(100vw - 48px), 350px);
+    max-width: 350px;
+    margin-inline: auto;
+    justify-items: stretch;
+  }
+
+  .refined-home .hero-action-grid .home-action-pill.suga-btn {
+    width: 100%;
+    max-width: 350px;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 360px) {
+  .refined-home .hero-intro-copy {
+    width: min(calc(100vw - 30px), 330px);
+  }
+
+  .refined-home .legacy-hero-title {
+    max-width: 320px;
+  }
+
+  .refined-home .hero-action-grid {
+    width: min(calc(100vw - 36px), 320px);
+    max-width: 320px;
+  }
+
+  .refined-home .hero-action-grid .home-action-pill.suga-btn {
+    max-width: 320px;
+  }
+}
