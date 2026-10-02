@@ -353,9 +353,9 @@ export default function HomePage() {
             <span className="brand-tagline text-neutral-500 mt-0.5">live naturally</span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 bg-neutral-100/80 p-1.5 rounded-full border border-neutral-200/80">
+          <nav className="public-desktop-nav hidden lg:flex items-center">
             {navLinks.map((link) => (
-              <Link key={link.name} href={link.path} className="px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase text-neutral-600 hover:text-neutral-950 hover:bg-neutral-200/60 transition-all whitespace-nowrap">
+              <Link key={link.name} href={link.path} className="public-desktop-nav-link">
                 {link.name}
               </Link>
             ))}
