@@ -8,7 +8,7 @@
     linear-gradient(90deg, rgba(247,232,232,.62) 0%, rgba(247,232,232,.28) 36%, rgba(247,232,232,.03) 61%),
     radial-gradient(circle at 4% 88%, rgba(118,148,226,.35), transparent 29%),
     radial-gradient(circle at 58% 96%, rgba(244,194,165,.28), transparent 31%),
-    url("/images/landing-test-hero.webp") center center / cover no-repeat;
+    url("/images/file_00000000afd48211998f4e3e8da86d36.png") center center / cover no-repeat;
 }
 
 .suga-concept__nav {
@@ -111,7 +111,7 @@
     background:
       linear-gradient(90deg, rgba(247,232,232,.92) 0%, rgba(247,232,232,.75) 45%, rgba(247,232,232,.14) 74%),
       radial-gradient(circle at 8% 90%, rgba(118,148,226,.30), transparent 35%),
-      url("/images/landing-test-hero.webp") 62% bottom / auto 78% no-repeat,
+      url("/images/file_00000000afd48211998f4e3e8da86d36.png") 62% bottom / auto 78% no-repeat,
       #f3e6e6;
   }
   .suga-concept__nav {
