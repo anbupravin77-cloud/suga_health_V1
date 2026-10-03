@@ -32,10 +32,12 @@ export default async function PatientProfilePage({
     .eq("id", identity.id)
     .single();
 
-  const displayName =
-    data?.display_name ||
-    [data?.first_name, data?.last_name].filter(Boolean).join(" ") ||
-    "Patient";
+  const displayName: string =
+    String(
+      data?.display_name ||
+      [data?.first_name, data?.last_name].filter(Boolean).join(" ") ||
+      "Patient"
+    );
   const initials = displayName
     .split(/\s+/)
     .slice(0, 2)
