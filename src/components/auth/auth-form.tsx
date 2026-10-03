@@ -239,52 +239,48 @@ export function AuthForm({ mode }: { mode: Mode }) {
   }
 
   return (
-    <div>
+    <div className="auth-form-premium">
       {mode !== "forgot-password" && !otpSent && (
-        <div className="mb-5 grid grid-cols-2 rounded-xl bg-stone-100 p-1" aria-label="Choose sign in method">
-          <button
-            type="button"
-            onClick={() => selectMethod("email")}
-            className={`flex min-h-10 items-center justify-center gap-2 rounded-lg px-3 text-xs font-semibold transition-all ${
-              authMethod === "email"
-                ? "bg-white text-stone-950 shadow-sm ring-1 ring-stone-200"
-                : "text-stone-500 hover:text-stone-900"
-            }`}
-            aria-pressed={authMethod === "email"}
-          >
-            <Mail className="h-3.5 w-3.5" />
-            Email
-          </button>
-          <button
-            type="button"
-            onClick={() => selectMethod("phone")}
-            className={`flex min-h-10 items-center justify-center gap-2 rounded-lg px-3 text-xs font-semibold transition-all ${
-              authMethod === "phone"
-                ? "bg-white text-stone-950 shadow-sm ring-1 ring-stone-200"
-                : "text-stone-500 hover:text-stone-900"
-            }`}
-            aria-pressed={authMethod === "phone"}
-          >
-            <Phone className="h-3.5 w-3.5" />
-            Mobile OTP
-          </button>
-        </div>
+        <>
+          <nav className="auth-route-tabs" aria-label="Account access">
+            <Link href="/sign-in" className={isSignIn ? "is-active" : ""} aria-current={isSignIn ? "page" : undefined}>
+              Sign In
+            </Link>
+            <Link href="/sign-up" className={isSignUp ? "is-active" : ""} aria-current={isSignUp ? "page" : undefined}>
+              Sign Up
+            </Link>
+          </nav>
+
+          <div className="auth-method-tabs" aria-label="Choose authentication method">
+            <button type="button" onClick={() => selectMethod("email")} className={authMethod === "email" ? "is-active" : ""} aria-pressed={authMethod === "email"}>
+              <Mail aria-hidden="true" />
+              Email
+            </button>
+            <button type="button" onClick={() => selectMethod("phone")} className={authMethod === "phone" ? "is-active" : ""} aria-pressed={authMethod === "phone"}>
+              <Phone aria-hidden="true" />
+              Mobile OTP
+            </button>
+          </div>
+        </>
       )}
 
-      {error && <div className="mb-5 rounded-lg bg-red-50 p-3 text-xs text-red-700 border border-red-200" role="alert">{error}</div>}
-      {message && <div className="mb-5 rounded-lg bg-emerald-50 p-3 text-xs text-emerald-800 border border-emerald-200" role="status">{message}</div>}
+      {error && <div className="auth-notice auth-notice-error" role="alert">{error}</div>}
+      {message && <div className="auth-notice auth-notice-success" role="status">{message}</div>}
 
       {(mode === "forgot-password" || authMethod === "email") && !otpSent && (
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-          <div>
-            <label htmlFor="email" className="mb-1 block text-xs font-semibold text-stone-700">Email Address</label>
-            <input id="email" name="email" type="email" placeholder="name@example.com" autoComplete="email" className="w-full rounded-lg border border-stone-200 px-3.5 py-2.5 text-xs focus:border-stone-900 focus:outline-none" required />
-          </div>
+        <form onSubmit={handleSubmit} className="auth-fields">
+          <label className="auth-field" htmlFor="email">
+            <span>Email Address</span>
+            <div className="auth-input-shell">
+              <Mail aria-hidden="true" />
+              <input id="email" name="email" type="email" placeholder="name@example.com" autoComplete="email" required />
+            </div>
+          </label>
 
           {mode !== "forgot-password" && (
-            <div>
-              <label htmlFor="password" className="mb-1 block text-xs font-semibold text-stone-700">Password</label>
-              <div className="relative">
+            <label className="auth-field" htmlFor="password">
+              <span>Password</span>
+              <div className="auth-input-shell">
                 <input
                   id="password"
                   name="password"
@@ -292,101 +288,93 @@ export function AuthForm({ mode }: { mode: Mode }) {
                   placeholder="••••••••"
                   autoComplete={isSignIn ? "current-password" : "new-password"}
                   minLength={8}
-                  className="w-full rounded-lg border border-stone-200 px-3.5 py-2.5 pr-11 text-xs focus:border-stone-900 focus:outline-none"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((visible) => !visible)}
-                  className="absolute right-2 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg bg-white text-stone-600 shadow-sm ring-1 ring-stone-200 hover:bg-stone-50 hover:text-stone-950"
+                  className="auth-password-toggle"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                   aria-pressed={showPassword}
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? <EyeOff aria-hidden="true" /> : <Eye aria-hidden="true" />}
                 </button>
               </div>
-            </div>
+            </label>
           )}
 
           {isSignIn && (
-            <div className="flex justify-end">
-              <Link className="text-xs text-stone-500 hover:text-stone-900 underline underline-offset-4" href="/forgot-password">Forgot password?</Link>
+            <div className="auth-forgot-row">
+              <Link href="/forgot-password">Forgot password?</Link>
             </div>
           )}
 
-          <button type="submit" disabled={loading} className="suga-btn suga-btn-primary suga-btn-full">
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : mode === "sign-in" ? "Sign In" : mode === "sign-up" ? "Create Patient Account" : "Send Reset Link"}
-            {!loading && <ArrowRight className="h-3.5 w-3.5" />}
+          <button type="submit" disabled={loading} className="suga-btn suga-btn-primary suga-btn-full auth-primary-action">
+            <span>{loading ? "Please wait" : mode === "sign-in" ? "Sign In" : mode === "sign-up" ? "Create Patient Account" : "Send Reset Link"}</span>
+            {loading ? <Loader2 className="auth-spinner" aria-hidden="true" /> : <ArrowRight aria-hidden="true" />}
           </button>
         </form>
       )}
 
       {mode !== "forgot-password" && authMethod === "phone" && !otpSent && (
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="mobileNumber" className="mb-1 block text-xs font-semibold text-stone-700">Mobile Number</label>
-            <input
-              id="mobileNumber"
-              type="tel"
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-              autoComplete="tel"
-              inputMode="tel"
-              placeholder="+91 98765 43210"
-              className="w-full rounded-lg border border-stone-200 px-3.5 py-2.5 text-xs focus:border-stone-900 focus:outline-none"
-            />
-            <p className="mt-1.5 text-[10px] leading-4 text-stone-400">Include the country code. We will send a 6-digit verification code by SMS.</p>
-          </div>
+        <div className="auth-fields">
+          <label className="auth-field" htmlFor="mobileNumber">
+            <span>Mobile Number</span>
+            <div className="auth-input-shell auth-phone-shell">
+              <Phone aria-hidden="true" />
+              <input
+                id="mobileNumber"
+                type="tel"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
+                autoComplete="tel"
+                inputMode="tel"
+                placeholder="+91 98765 43210"
+              />
+            </div>
+          </label>
 
-          <button
-            type="button"
-            disabled={loading}
-            onClick={sendPhoneOtp}
-            className="suga-btn suga-btn-primary suga-btn-full"
-          >
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Phone className="h-4 w-4" />}
-            {isSignUp ? "Send OTP & Continue" : "Send OTP"}
+          <button type="button" disabled={loading} onClick={sendPhoneOtp} className="suga-btn suga-btn-primary suga-btn-full auth-primary-action">
+            <span>{loading ? "Please wait" : isSignUp ? "Send OTP & Continue" : "Send OTP"}</span>
+            {loading ? <Loader2 className="auth-spinner" aria-hidden="true" /> : <ArrowRight aria-hidden="true" />}
           </button>
-
-          <div className="flex items-start gap-2.5 rounded-lg bg-stone-50 px-3 py-2.5 text-[10px] leading-4 text-stone-500">
-            <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-stone-700" />
-            <span>{isSignUp ? "Mobile sign-up creates a patient account. Staff accounts remain administrator-managed." : "Sign in will only work for an existing account registered with this mobile number."}</span>
-          </div>
         </div>
       )}
 
       {otpSent && (
-        <form onSubmit={verifyPhoneOtp} className="space-y-4">
-          <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
-            <div className="flex items-center gap-2 text-xs font-semibold text-stone-900">
-              <ShieldCheck className="h-4 w-4" />
-              Verify your mobile
+        <form onSubmit={verifyPhoneOtp} className="auth-fields auth-otp-fields">
+          <div className="auth-otp-heading">
+            <ShieldCheck aria-hidden="true" />
+            <div>
+              <strong>Verify your mobile</strong>
+              <span>{sentPhone}</span>
             </div>
-            <p className="mt-1.5 text-[10px] leading-4 text-stone-500">Enter the 6-digit OTP sent to {sentPhone}.</p>
           </div>
 
-          <div>
-            <label htmlFor="phoneOtp" className="mb-1 block text-xs font-semibold text-stone-700">Verification Code</label>
-            <input
-              id="phoneOtp"
-              type="text"
-              inputMode="numeric"
-              autoComplete="one-time-code"
-              maxLength={6}
-              value={otp}
-              onChange={(event) => setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))}
-              placeholder="000000"
-              className="w-full rounded-lg border border-stone-200 px-3.5 py-3 text-center text-lg font-semibold tracking-[0.35em] focus:border-stone-900 focus:outline-none"
-              autoFocus
-            />
-          </div>
+          <label className="auth-field" htmlFor="phoneOtp">
+            <span>Verification Code</span>
+            <div className="auth-input-shell">
+              <input
+                id="phoneOtp"
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={6}
+                value={otp}
+                onChange={(event) => setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))}
+                placeholder="000000"
+                className="auth-otp-input"
+                autoFocus
+              />
+            </div>
+          </label>
 
-          <button type="submit" disabled={loading || otp.length !== 6} className="suga-btn suga-btn-primary suga-btn-full">
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
-            Verify & Continue
+          <button type="submit" disabled={loading || otp.length !== 6} className="suga-btn suga-btn-primary suga-btn-full auth-primary-action">
+            <span>{loading ? "Please wait" : "Verify & Continue"}</span>
+            {loading ? <Loader2 className="auth-spinner" aria-hidden="true" /> : <ArrowRight aria-hidden="true" />}
           </button>
 
-          <div className="flex items-center justify-between gap-3 text-[10px]">
+          <div className="auth-otp-actions">
             <button
               type="button"
               disabled={loading}
@@ -397,18 +385,12 @@ export function AuthForm({ mode }: { mode: Mode }) {
                 setError("");
                 setResendSeconds(0);
               }}
-              className="font-semibold text-stone-600 underline underline-offset-4 hover:text-stone-950 disabled:opacity-50"
             >
               Change number
             </button>
 
-            <button
-              type="button"
-              disabled={loading || resendSeconds > 0}
-              onClick={resendPhoneOtp}
-              className="flex items-center gap-1.5 font-semibold text-stone-600 hover:text-stone-950 disabled:text-stone-400"
-            >
-              <RefreshCw className="h-3 w-3" />
+            <button type="button" disabled={loading || resendSeconds > 0} onClick={resendPhoneOtp}>
+              <RefreshCw aria-hidden="true" />
               {resendSeconds > 0 ? `Resend in ${resendSeconds}s` : "Resend OTP"}
             </button>
           </div>
@@ -417,28 +399,19 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
       {mode !== "forgot-password" && !otpSent && (
         <>
-          <div className="mt-5 relative flex items-center justify-center">
-            <div className="border-t border-stone-200 w-full" />
-            <span className="bg-white px-3 text-[9px] font-semibold uppercase tracking-wider text-stone-400 absolute">Or continue with</span>
-          </div>
-          <div className="mt-5">
-            <button type="button" onClick={signInWithGoogle} disabled={loading} className="suga-btn suga-btn-secondary suga-btn-full">
-              <Mail className="h-4 w-4 text-stone-500" />
-              Continue with Google
-            </button>
-          </div>
+          <div className="auth-divider"><span>OR</span></div>
+          <button type="button" onClick={signInWithGoogle} disabled={loading} className="suga-btn suga-btn-secondary suga-btn-full auth-google-action">
+            <span className="auth-google-mark" aria-hidden="true">G</span>
+            <span>Continue with Google</span>
+          </button>
         </>
       )}
 
-      <p className="mt-5 text-center text-xs text-stone-500">
-        {isSignIn ? (
-          <>New patient? <Link href="/sign-up" className="font-semibold text-stone-950 underline underline-offset-4">Create account</Link></>
-        ) : isSignUp ? (
-          <>Already registered? <Link href="/sign-in" className="font-semibold text-stone-950 underline underline-offset-4">Sign in</Link></>
-        ) : (
-          <>Remembered your password? <Link href="/sign-in" className="font-semibold text-stone-950 underline underline-offset-4">Sign in</Link></>
-        )}
-      </p>
+      {mode === "forgot-password" && (
+        <div className="auth-reset-return">
+          <Link href="/sign-in">Back to Sign In</Link>
+        </div>
+      )}
     </div>
   );
 }
