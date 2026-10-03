@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Activity, Sparkles, ShieldCheck } from "lucide-react";
+import { ArrowRight, HeartPulse, Sparkles, ShieldCheck } from "lucide-react";
 import "./landing-test.css";
 
 export const metadata = {
@@ -10,7 +10,6 @@ export const metadata = {
 export default function LandingTestPage() {
   return (
     <main className="suga-concept">
-      <div className="suga-concept__wash" aria-hidden="true" />
       <header className="suga-concept__nav">
         <Link href="/" className="suga-concept__brand" aria-label="Suga.Health home">
           <span>SUGA.HEALTH</span>
@@ -45,17 +44,17 @@ export default function LandingTestPage() {
 
           <div className="suga-concept__treatments">
             <Link href="/weight-loss" className="suga-concept__glassPill">
-              <span className="suga-concept__pillIcon"><Activity size={21} strokeWidth={1.8} /></span>
+              <span className="suga-concept__pillIcon"><HeartPulse size={20} strokeWidth={1.7} /></span>
               <span>Medical weight loss</span>
               <ArrowRight size={18} strokeWidth={1.7} />
             </Link>
             <Link href="/hair-growth" className="suga-concept__glassPill">
-              <span className="suga-concept__pillIcon"><Sparkles size={20} strokeWidth={1.8} /></span>
+              <span className="suga-concept__pillIcon"><Sparkles size={19} strokeWidth={1.7} /></span>
               <span>Hair growth</span>
               <ArrowRight size={18} strokeWidth={1.7} />
             </Link>
             <Link href="/sexual-health" className="suga-concept__glassPill">
-              <span className="suga-concept__pillIcon"><ShieldCheck size={20} strokeWidth={1.8} /></span>
+              <span className="suga-concept__pillIcon"><ShieldCheck size={19} strokeWidth={1.7} /></span>
               <span>Sexual health</span>
               <ArrowRight size={18} strokeWidth={1.7} />
             </Link>
@@ -63,12 +62,8 @@ export default function LandingTestPage() {
 
           <Link href="/patient/consultations/new" className="suga-concept__mainCta">
             <span>Start consultation</span>
-            <ArrowRight size={25} strokeWidth={1.7} />
+            <ArrowRight size={24} strokeWidth={1.7} />
           </Link>
-        </div>
-
-        <div className="suga-concept__doctor" aria-hidden="true">
-          <img src="/images/doctor-consultation.png" alt="" />
         </div>
       </section>
     </main>
