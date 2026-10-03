@@ -1,7 +1,7 @@
 import { ConsultationForm } from "@/components/care/consultation-form";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata = { title: "Start consultation" };
+export const metadata = { title: "New consultation" };
 
 function ageFromDate(dateOfBirth: string | null) {
   if (!dateOfBirth) return null;
@@ -22,12 +22,11 @@ export default async function NewConsultationPage() {
     .single();
 
   return (
-    <>
-      <section className="dashboard-heading compact-heading">
+    <div>
+      <section className="patient-page-heading">
         <div>
-          <span className="eyebrow">Private consultation</span>
-          <h1>Start your clinical intake.</h1>
-          <p>Six short steps. Your answers stay in the Patient Portal while the clinical data is routed securely to the assigned doctor.</p>
+          <h1>New Consultation</h1>
+          <p>Four clear steps. Your answers stay private until you submit them to the clinical team.</p>
         </div>
       </section>
       <ConsultationForm
@@ -38,6 +37,6 @@ export default async function NewConsultationPage() {
           sex: profile?.sex ?? null,
         }}
       />
-    </>
+    </div>
   );
 }
