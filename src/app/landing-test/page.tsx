@@ -1,15 +1,14 @@
+"use client";
+
 import Link from "next/link";
-import { ArrowRight, HeartPulse, Sparkles, ShieldCheck } from "lucide-react";
+import { ArrowRight, UserRound, Sprout, Mars } from "lucide-react";
 import "./landing-test.css";
 
-export const metadata = {
-  title: "Suga.Health — Landing concept",
-  description: "Experimental Suga.Health landing page concept.",
-};
+import { rememberReturnPosition } from "@/components/public/return-position";
 
 export default function LandingTestPage() {
   return (
-    <main className="suga-concept">
+    <section className="suga-concept" aria-label="Doctor-led care">
       <header className="suga-concept__nav">
         <Link href="/" className="suga-concept__brand" aria-label="Suga.Health home">
           <span>SUGA.HEALTH</span>
@@ -24,8 +23,9 @@ export default function LandingTestPage() {
         </nav>
 
         <div className="suga-concept__navActions">
-          <Link href="/login" className="suga-concept__login">Login</Link>
-          <Link href="/patient/consultations/new" className="suga-concept__navCta">
+
+          <Link href="/sign-in" className="suga-concept__login">Login</Link>
+          <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-concept__navCta">
             Start consultation <ArrowRight size={18} strokeWidth={1.8} />
           </Link>
         </div>
@@ -44,28 +44,28 @@ export default function LandingTestPage() {
 
           <div className="suga-concept__treatments">
             <Link href="/weight-loss" className="suga-concept__glassPill">
-              <span className="suga-concept__pillIcon"><HeartPulse size={20} strokeWidth={1.7} /></span>
+              <span className="suga-concept__pillIcon"><UserRound size={20} strokeWidth={1.7} /></span>
               <span>Medical weight loss</span>
               <ArrowRight size={18} strokeWidth={1.7} />
             </Link>
             <Link href="/hair-growth" className="suga-concept__glassPill">
-              <span className="suga-concept__pillIcon"><Sparkles size={19} strokeWidth={1.7} /></span>
+              <span className="suga-concept__pillIcon"><Sprout size={19} strokeWidth={1.7} /></span>
               <span>Hair growth</span>
               <ArrowRight size={18} strokeWidth={1.7} />
             </Link>
             <Link href="/sexual-health" className="suga-concept__glassPill">
-              <span className="suga-concept__pillIcon"><ShieldCheck size={19} strokeWidth={1.7} /></span>
+              <span className="suga-concept__pillIcon"><Mars size={19} strokeWidth={1.7} /></span>
               <span>Sexual health</span>
               <ArrowRight size={18} strokeWidth={1.7} />
             </Link>
           </div>
 
-          <Link href="/patient/consultations/new" className="suga-concept__mainCta">
+          <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-concept__mainCta">
             <span>Start consultation</span>
             <ArrowRight size={24} strokeWidth={1.7} />
           </Link>
         </div>
       </section>
-    </main>
+    </section>
   );
 }
