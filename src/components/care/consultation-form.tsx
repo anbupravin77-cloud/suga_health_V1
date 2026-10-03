@@ -1,8 +1,16 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, LoaderCircle, Save, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  CheckCircle2,
+  LoaderCircle,
+  Save,
+  ShieldCheck,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { saveConsultationDraft, submitConsultation } from "@/app/actions";
 
 type IntakeDefaults = {
@@ -50,29 +58,22 @@ const conditionOptions = [
 const careAreas = [
   {
     id: "weight",
-    title: "Medical Weight Loss",
+    title: "Weight Loss",
     description: "Doctor-guided metabolic and weight-management care.",
   },
   {
     id: "hair",
     title: "Hair Growth",
-    description: "Clinical assessment for hair loss, density, and regrowth.",
+    description: "Clinical assessment for hair loss, density and regrowth.",
   },
   {
     id: "sex",
     title: "Sexual Health",
-    description: "Private clinician-led care for sexual health and vitality.",
+    description: "Private clinician-led care for sexual health concerns.",
   },
 ];
 
-const stepNames = [
-  "Care area",
-  "Measurements",
-  "Screening",
-  "Medication",
-  "Context",
-  "Consent",
-];
+const steps = ["Reason", "Your details", "Medical history", "Review"];
 
 function readString(value: unknown, fallback = "") {
   return typeof value === "string" ? value : fallback;
@@ -84,7 +85,9 @@ function readNumberString(value: unknown, fallback = "") {
 
 function initialState(draft?: Draft, defaults?: IntakeDefaults): FormState {
   const r = draft?.responses ?? {};
-  const conditions = Array.isArray(r.conditions) ? r.conditions.filter((item): item is string => typeof item === "string") : [];
+  const conditions = Array.isArray(r.conditions)
+    ? r.conditions.filter((item): item is string => typeof item === "string")
+    : [];
 
   return {
     primaryConcern: draft?.primary_concern || readString(r.primary_concern, "weight"),
@@ -107,6 +110,10 @@ function initialState(draft?: Draft, defaults?: IntakeDefaults): FormState {
   };
 }
 
+function careTitle(id: string) {
+  return careAreas.find((area) => area.id === id)?.title || id;
+}
+
 export function ConsultationForm({
   draft,
   defaults,
@@ -117,21 +124,12 @@ export function ConsultationForm({
   const router = useRouter();
   const [draftId, setDraftId] = useState(draft?.id ?? "");
   const [step, setStep] = useState(1);
-  const stepContentRef = useRef<HTMLDivElement>(null);
-  const previousStepRef = useRef(step);
   const [form, setForm] = useState<FormState>(() => initialState(draft, defaults));
   const [error, setError] = useState("");
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const progress = useMemo(() => Math.round((step / 6) * 100), [step]);
-
-  useEffect(() => {
-    if (previousStepRef.current === step) return;
-    previousStepRef.current = step;
-    stepContentRef.current?.focus({ preventScroll: true });
-    stepContentRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
-  }, [step]);
+  const progress = useMemo(() => Math.round((step / steps.length) * 100), [step]);
 
   function patch<K extends keyof FormState>(key: K, next: FormState[K]) {
     setForm((current) => ({ ...current, [key]: next }));
@@ -182,37 +180,37 @@ export function ConsultationForm({
   }
 
   function validate(currentStep: number) {
-    if (currentStep === 1 && !form.primaryConcern) return "Choose the care area you want help with.";
+    if (currentStep === 1 && !form.primaryConcern) return "Choose what you would like help with.";
+
     if (currentStep === 2) {
       if (form.heightUnit === "cm" && !form.heightCm) return "Enter your height.";
-      if (form.heightUnit === "ftin" && !form.heightFeet) return "Enter your height in feet and inches.";
+      if (form.heightUnit === "ftin" && !form.heightFeet) return "Enter your height.";
       if (!form.weightValue) return "Enter your weight.";
       if (!form.age) return "Enter your age.";
       if (!form.sex) return "Select the option that applies to you.";
+      if (!form.careGoal.trim()) return "Briefly describe what you want help with.";
     }
-    if (currentStep === 3 && form.conditions.length === 0) {
-      return 'Select any applicable conditions or choose "None of the above".';
+
+    if (currentStep === 3) {
+      if (form.conditions.length === 0) {
+        return 'Select any applicable conditions or choose "None of the above".';
+      }
+      if (!form.currentMedications.trim()) return 'List current medications or enter "None".';
+      if (!form.allergies.trim()) return 'List known drug allergies or enter "None".';
     }
-    if (currentStep === 4 && !form.currentMedications.trim()) {
-      return 'List current medications or enter "None".';
-    }
-    if (currentStep === 4 && !form.allergies.trim()) {
-      return 'List known drug allergies or enter "None".';
-    }
-    if (currentStep === 5 && !form.careGoal.trim()) {
-      return "Tell the doctor what you want help with or what outcome you are seeking.";
-    }
+
     if (
-      currentStep === 6 &&
+      currentStep === 4 &&
       (!form.consentTruth || !form.consentTelehealth || !form.consentPrivacy)
     ) {
       return "All three consent statements are required before submission.";
     }
+
     return "";
   }
 
   async function saveProgress(silent = false) {
-    if (saveState === "saving" || isSubmitting) return;
+    if (saveState === "saving" || isSubmitting) return true;
     setSaveState("saving");
     const result = await saveConsultationDraft(toFormData());
 
@@ -220,15 +218,16 @@ export function ConsultationForm({
       setDraftId(result.id);
       setSaveState("saved");
       if (!silent) setError("");
-      window.setTimeout(() => setSaveState("idle"), 1600);
-      return;
+      window.setTimeout(() => setSaveState("idle"), 1400);
+      return true;
     }
 
     setSaveState("idle");
     if (!silent) setError(result.error || "We couldn’t save your draft.");
+    return false;
   }
 
-  function nextStep() {
+  async function nextStep() {
     const validationError = validate(step);
     if (validationError) {
       setError(validationError);
@@ -236,18 +235,21 @@ export function ConsultationForm({
     }
 
     setError("");
-    setStep((current) => Math.min(6, current + 1));
-    void saveProgress(true);
+    await saveProgress(true);
+    setStep((current) => Math.min(steps.length, current + 1));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function previousStep() {
+    setError("");
+    setStep((current) => Math.max(1, current - 1));
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   async function handleSubmit() {
-    const validationError = validate(6);
+    const validationError = validate(4);
     if (validationError) {
       setError(validationError);
-      return;
-    }
-    if (saveState === "saving") {
-      setError("Finishing your draft save. Submit again in a moment.");
       return;
     }
 
@@ -265,48 +267,68 @@ export function ConsultationForm({
     router.refresh();
   }
 
+  if (isSubmitting) {
+    return (
+      <section className="patient-submit-state" aria-live="polite">
+        <span className="patient-submit-icon"><LoaderCircle className="action-spinner" size={34} /></span>
+        <h2>Submitting your consultation…</h2>
+        <p>Please wait while we securely save your details and place the consultation into the clinical workflow.</p>
+        <div className="patient-submit-progress"><span /></div>
+      </section>
+    );
+  }
+
   return (
-    <section className="intake-wizard" aria-label="Medical consultation intake">
-      <header className="intake-progress-header">
-        <div>
-          <span className="eyebrow">Private medical intake</span>
-          <strong>Step {step} of 6 · {stepNames[step - 1]}</strong>
+    <section className="patient-intake">
+      <header className="patient-intake-header">
+        <div className="patient-intake-stepper" aria-label="Consultation steps">
+          {steps.map((name, index) => {
+            const number = index + 1;
+            const complete = step > number;
+            const current = step === number;
+            return (
+              <div className={current ? "is-current" : complete ? "is-complete" : ""} key={name}>
+                <span>{complete ? <Check size={14} /> : number}</span>
+                <small>{name}</small>
+              </div>
+            );
+          })}
         </div>
+        <div className="patient-intake-progress"><span style={{ width: `${progress}%` }} /></div>
         <button
+          className="patient-save-draft"
           type="button"
-          className="intake-save"
           onClick={() => void saveProgress(false)}
-          disabled={saveState === "saving" || isSubmitting}
+          disabled={saveState === "saving"}
         >
           {saveState === "saving" ? <LoaderCircle size={15} className="action-spinner" /> : <Save size={15} />}
-          {saveState === "saving" ? "Saving…" : saveState === "saved" ? "Saved" : "Save progress"}
+          {saveState === "saving" ? "Saving…" : saveState === "saved" ? "Saved" : "Save draft"}
         </button>
-        <div className="intake-progress-track" role="progressbar" aria-label="Consultation progress" aria-valuemin={0} aria-valuemax={6} aria-valuenow={step} aria-valuetext={`Step ${step} of 6: ${stepNames[step - 1]}`}>
-          <span style={{ width: `${progress}%` }} />
-        </div>
       </header>
-      <ol className="intake-step-rail" aria-label="Consultation steps">{stepNames.map((name, index) => <li key={name} aria-current={step === index + 1 ? "step" : undefined} className={step > index + 1 ? "is-complete" : ""}><span>{step > index + 1 ? <Check size={14} /> : index + 1}</span>{name}</li>)}</ol>
 
-      <div className="intake-step" key={step} ref={stepContentRef} tabIndex={-1} aria-label={`Step ${step}: ${stepNames[step - 1]}`}>
+      {error && <p className="page-error patient-intake-error" role="alert">{error}</p>}
+
+      <div className="patient-intake-card">
         {step === 1 && (
           <>
-            <div className="intake-step-copy">
-              <span>01</span>
-              <div>
-                <h2>What would you like help with?</h2>
-                <p>Choose the clinical pathway for this consultation.</p>
-              </div>
+            <div className="patient-intake-copy">
+              <span className="patient-kicker">STEP 1 OF 4</span>
+              <h2>What would you like help with?</h2>
+              <p>Select the care area for this consultation.</p>
             </div>
-            <div className="intake-choice-grid">
+
+            <div className="patient-care-choice-grid">
               {careAreas.map((area) => (
                 <button
                   type="button"
                   key={area.id}
-                  className={form.primaryConcern === area.id ? "intake-choice selected" : "intake-choice"}
-                  aria-pressed={form.primaryConcern === area.id}
+                  className={form.primaryConcern === area.id ? "is-selected" : ""}
                   onClick={() => patch("primaryConcern", area.id)}
+                  aria-pressed={form.primaryConcern === area.id}
                 >
-                  <span className="choice-check">{form.primaryConcern === area.id ? <Check size={15} /> : null}</span>
+                  <span className="patient-choice-check">
+                    {form.primaryConcern === area.id && <Check size={15} />}
+                  </span>
                   <strong>{area.title}</strong>
                   <small>{area.description}</small>
                 </button>
@@ -317,54 +339,67 @@ export function ConsultationForm({
 
         {step === 2 && (
           <>
-            <div className="intake-step-copy">
-              <span>02</span>
-              <div>
-                <h2>Your measurements and basics</h2>
-                <p>Use whichever measurement system is most comfortable.</p>
-              </div>
+            <div className="patient-intake-copy">
+              <span className="patient-kicker">STEP 2 OF 4</span>
+              <h2>Tell us what is going on.</h2>
+              <p>Share the basic information your clinician needs to understand this consultation.</p>
             </div>
 
-            <div className="intake-field-block">
-              <div className="field-label-row">
-                <label htmlFor={form.heightUnit === "cm" ? "intake-height" : "intake-height-feet"}>Height</label>
-                <div className="unit-switch">
-                  <button type="button" className={form.heightUnit === "cm" ? "active" : ""} aria-pressed={form.heightUnit === "cm"} onClick={() => patch("heightUnit", "cm")}>cm</button>
-                  <button type="button" className={form.heightUnit === "ftin" ? "active" : ""} aria-pressed={form.heightUnit === "ftin"} onClick={() => patch("heightUnit", "ftin")}>ft / in</button>
+            <div className="patient-form-grid">
+              <div className="patient-form-field">
+                <div className="patient-field-heading">
+                  <label>Height</label>
+                  <div className="patient-unit-switch">
+                    <button type="button" className={form.heightUnit === "cm" ? "is-active" : ""} onClick={() => patch("heightUnit", "cm")}>cm</button>
+                    <button type="button" className={form.heightUnit === "ftin" ? "is-active" : ""} onClick={() => patch("heightUnit", "ftin")}>ft / in</button>
+                  </div>
                 </div>
+                {form.heightUnit === "cm" ? (
+                  <input type="number" min="1" inputMode="decimal" value={form.heightCm} onChange={(e) => patch("heightCm", e.target.value)} placeholder="e.g. 175" />
+                ) : (
+                  <div className="patient-split-inputs">
+                    <input aria-label="Height in feet" type="number" min="1" value={form.heightFeet} onChange={(e) => patch("heightFeet", e.target.value)} placeholder="Feet" />
+                    <input aria-label="Height in inches" type="number" min="0" max="11" value={form.heightInches} onChange={(e) => patch("heightInches", e.target.value)} placeholder="Inches" />
+                  </div>
+                )}
               </div>
-              {form.heightUnit === "cm" ? (
-                <input type="number" inputMode="decimal" min="1" id="intake-height" value={form.heightCm} onChange={(e) => patch("heightCm", e.target.value)} placeholder="e.g. 175" />
-              ) : (
-                <div className="split-inputs">
-                  <label><span>Feet</span><input type="number" inputMode="numeric" min="1" id="intake-height-feet" value={form.heightFeet} onChange={(e) => patch("heightFeet", e.target.value)} placeholder="5" /></label>
-                  <label><span>Inches</span><input type="number" inputMode="numeric" min="0" max="11" value={form.heightInches} onChange={(e) => patch("heightInches", e.target.value)} placeholder="9" /></label>
-                </div>
-              )}
-            </div>
 
-            <div className="intake-field-block">
-              <div className="field-label-row">
-                <label htmlFor="intake-weight">Weight</label>
-                <div className="unit-switch">
-                  <button type="button" className={form.weightUnit === "kg" ? "active" : ""} aria-pressed={form.weightUnit === "kg"} onClick={() => patch("weightUnit", "kg")}>kg</button>
-                  <button type="button" className={form.weightUnit === "lb" ? "active" : ""} aria-pressed={form.weightUnit === "lb"} onClick={() => patch("weightUnit", "lb")}>lb</button>
+              <div className="patient-form-field">
+                <div className="patient-field-heading">
+                  <label>Weight</label>
+                  <div className="patient-unit-switch">
+                    <button type="button" className={form.weightUnit === "kg" ? "is-active" : ""} onClick={() => patch("weightUnit", "kg")}>kg</button>
+                    <button type="button" className={form.weightUnit === "lb" ? "is-active" : ""} onClick={() => patch("weightUnit", "lb")}>lb</button>
+                  </div>
                 </div>
+                <input type="number" min="1" inputMode="decimal" value={form.weightValue} onChange={(e) => patch("weightValue", e.target.value)} placeholder="Your weight" />
               </div>
-              <input type="number" inputMode="decimal" min="1" id="intake-weight" value={form.weightValue} onChange={(e) => patch("weightValue", e.target.value)} placeholder={form.weightUnit === "kg" ? "e.g. 78" : "e.g. 172"} />
-            </div>
 
-            <div className="intake-two-col">
-              <label>Age<input type="number" inputMode="numeric" min="1" max="120" value={form.age} onChange={(e) => patch("age", e.target.value)} placeholder="Age" /></label>
-              <label>
-                Sex
+              <label className="patient-form-field">
+                <span>Age</span>
+                <input type="number" min="18" max="120" value={form.age} onChange={(e) => patch("age", e.target.value)} placeholder="Age" />
+              </label>
+
+              <label className="patient-form-field">
+                <span>Sex</span>
                 <select value={form.sex} onChange={(e) => patch("sex", e.target.value)}>
                   <option value="">Select</option>
-                  <option value="female">Female</option>
                   <option value="male">Male</option>
-                  <option value="other">Other</option>
+                  <option value="female">Female</option>
+                  <option value="intersex">Intersex</option>
                   <option value="prefer-not-to-say">Prefer not to say</option>
                 </select>
+              </label>
+
+              <label className="patient-form-field patient-wide-field">
+                <span>What are you experiencing, and what would you like help with?</span>
+                <textarea
+                  rows={6}
+                  value={form.careGoal}
+                  onChange={(e) => patch("careGoal", e.target.value)}
+                  placeholder="Describe your symptoms, when they started, and the outcome you are hoping for."
+                  maxLength={3000}
+                />
               </label>
             </div>
           </>
@@ -372,122 +407,150 @@ export function ConsultationForm({
 
         {step === 3 && (
           <>
-            <div className="intake-step-copy">
-              <span>03</span>
-              <div>
-                <h2>Medical screening</h2>
-                <p>Select anything that currently applies or has applied in the past.</p>
-              </div>
+            <div className="patient-intake-copy">
+              <span className="patient-kicker">STEP 3 OF 4</span>
+              <h2>Medical history</h2>
+              <p>Answer what applies to you. This information helps the clinician review your consultation safely.</p>
             </div>
-            <div className="condition-list">
-              {conditionOptions.map((condition) => {
-                const selected = form.conditions.includes(condition);
-                return (
+
+            <fieldset className="patient-history-fieldset">
+              <legend>Do any of these apply to you?</legend>
+              <div className="patient-condition-grid">
+                {conditionOptions.map((condition) => (
                   <button
                     type="button"
                     key={condition}
-                    className={selected ? "condition-option selected" : "condition-option"}
-                    aria-pressed={selected}
+                    className={form.conditions.includes(condition) ? "is-selected" : ""}
                     onClick={() => toggleCondition(condition)}
+                    aria-pressed={form.conditions.includes(condition)}
                   >
-                    <span>{condition}</span>
-                    <span className="condition-check">{selected ? <Check size={15} /> : null}</span>
+                    <span>{form.conditions.includes(condition) ? <Check size={14} /> : null}</span>
+                    {condition}
                   </button>
-                );
-              })}
+                ))}
+              </div>
+            </fieldset>
+
+            <div className="patient-form-grid">
+              <label className="patient-form-field">
+                <span>Current medications</span>
+                <textarea
+                  rows={4}
+                  value={form.currentMedications}
+                  onChange={(e) => patch("currentMedications", e.target.value)}
+                  placeholder='List medications, or enter "None".'
+                />
+              </label>
+
+              <label className="patient-form-field">
+                <span>Known drug allergies</span>
+                <textarea
+                  rows={4}
+                  value={form.allergies}
+                  onChange={(e) => patch("allergies", e.target.value)}
+                  placeholder='List allergies, or enter "None".'
+                />
+              </label>
+
+              <label className="patient-form-field patient-wide-field">
+                <span>Relevant medical history <small>Optional</small></span>
+                <textarea
+                  rows={5}
+                  value={form.medicalHistory}
+                  onChange={(e) => patch("medicalHistory", e.target.value)}
+                  placeholder="Previous treatment, surgery, diagnoses or anything else your clinician should know."
+                />
+              </label>
             </div>
           </>
         )}
 
         {step === 4 && (
           <>
-            <div className="intake-step-copy">
-              <span>04</span>
+            <div className="patient-intake-copy">
+              <span className="patient-kicker">STEP 4 OF 4</span>
+              <h2>Review your information</h2>
+              <p>Check the details below before sending them to the clinical team.</p>
+            </div>
+
+            <div className="patient-review-list">
               <div>
-                <h2>Medication and allergies</h2>
-                <p>This helps the doctor review possible interactions and contraindications.</p>
+                <span>Consultation</span>
+                <strong>{careTitle(form.primaryConcern)}</strong>
+                <button type="button" onClick={() => setStep(1)}>Edit</button>
+              </div>
+              <div>
+                <span>Your concern</span>
+                <strong>{form.careGoal}</strong>
+                <button type="button" onClick={() => setStep(2)}>Edit</button>
+              </div>
+              <div>
+                <span>Measurements</span>
+                <strong>
+                  {form.heightUnit === "cm" ? `${form.heightCm} cm` : `${form.heightFeet} ft ${form.heightInches || 0} in`}
+                  {" · "}
+                  {form.weightValue} {form.weightUnit}
+                  {" · "}
+                  age {form.age}
+                </strong>
+                <button type="button" onClick={() => setStep(2)}>Edit</button>
+              </div>
+              <div>
+                <span>Medical screening</span>
+                <strong>{form.conditions.join(", ")}</strong>
+                <button type="button" onClick={() => setStep(3)}>Edit</button>
+              </div>
+              <div>
+                <span>Current medications</span>
+                <strong>{form.currentMedications}</strong>
+                <button type="button" onClick={() => setStep(3)}>Edit</button>
+              </div>
+              <div>
+                <span>Allergies</span>
+                <strong>{form.allergies}</strong>
+                <button type="button" onClick={() => setStep(3)}>Edit</button>
               </div>
             </div>
-            <label>
-              Current medications
-              <textarea rows={4} value={form.currentMedications} onChange={(e) => patch("currentMedications", e.target.value)} placeholder="List prescriptions, supplements, or enter None" />
-            </label>
-            <label>
-              Known drug allergies
-              <textarea rows={4} value={form.allergies} onChange={(e) => patch("allergies", e.target.value)} placeholder="List allergies or enter None" />
-            </label>
+
+            <div className="patient-consent-card">
+              <ShieldCheck size={24} />
+              <div>
+                <h3>Consent and confirmation</h3>
+                <label>
+                  <input type="checkbox" checked={form.consentTruth} onChange={(e) => patch("consentTruth", e.target.checked)} />
+                  <span>I confirm that the information I provided is accurate to the best of my knowledge.</span>
+                </label>
+                <label>
+                  <input type="checkbox" checked={form.consentTelehealth} onChange={(e) => patch("consentTelehealth", e.target.checked)} />
+                  <span>I consent to receiving care through the Suga.Health telehealth workflow.</span>
+                </label>
+                <label>
+                  <input type="checkbox" checked={form.consentPrivacy} onChange={(e) => patch("consentPrivacy", e.target.checked)} />
+                  <span>I understand that my information is used to provide and manage this consultation.</span>
+                </label>
+              </div>
+            </div>
           </>
         )}
 
-        {step === 5 && (
-          <>
-            <div className="intake-step-copy">
-              <span>05</span>
-              <div>
-                <h2>Medical context</h2>
-                <p>Give the doctor the details that will make the review more useful.</p>
-              </div>
-            </div>
-            <label>
-              Relevant medical history <em>Optional</em>
-              <textarea rows={5} value={form.medicalHistory} onChange={(e) => patch("medicalHistory", e.target.value)} placeholder="Previous diagnoses, procedures, treatment history, or anything clinically relevant" />
-            </label>
-            <label>
-              What would you like the doctor to help you achieve?
-              <textarea rows={5} value={form.careGoal} onChange={(e) => patch("careGoal", e.target.value)} placeholder="Describe the concern, symptoms, changes you noticed, and what you hope to improve" />
-            </label>
-          </>
-        )}
-
-        {step === 6 && (
-          <>
-            <div className="intake-step-copy">
-              <span>06</span>
-              <div>
-                <h2>Review and consent</h2>
-                <p>Confirm these statements before the consultation is sent for doctor review.</p>
-              </div>
-            </div>
-            <div className="consent-list">
-              <label className={form.consentTruth ? "consent-row checked" : "consent-row"}>
-                <input type="checkbox" checked={form.consentTruth} onChange={(e) => patch("consentTruth", e.target.checked)} />
-                <span><strong>Truthfulness</strong>I confirm that the health information I provided is accurate and complete.</span>
-              </label>
-              <label className={form.consentTelehealth ? "consent-row checked" : "consent-row"}>
-                <input type="checkbox" checked={form.consentTelehealth} onChange={(e) => patch("consentTelehealth", e.target.checked)} />
-                <span><strong>Telehealth evaluation</strong>I consent to a clinician reviewing this information as part of an online consultation.</span>
-              </label>
-              <label className={form.consentPrivacy ? "consent-row checked" : "consent-row"}>
-                <input type="checkbox" checked={form.consentPrivacy} onChange={(e) => patch("consentPrivacy", e.target.checked)} />
-                <span><strong>Medical privacy</strong>I acknowledge that my consultation information will be handled as private health information.</span>
-              </label>
-            </div>
-            <div className="intake-security-note"><ShieldCheck size={18} /><span>Your submission stays inside your patient account and is routed as clinical data to the assigned doctor.</span></div>
-          </>
-        )}
-
-        {error && <p className="page-error intake-error" role="alert">{error}</p>}
-
-        <footer className="intake-controls">
+        <footer className="patient-intake-actions">
           {step > 1 ? (
-            <button type="button" className="button button-secondary" onClick={() => { setError(""); setStep((current) => Math.max(1, current - 1)); }} disabled={isSubmitting}>
+            <button className="patient-secondary-button" type="button" onClick={previousStep}>
               <ArrowLeft size={16} /> Back
             </button>
           ) : <span />}
 
-          {step < 6 ? (
-            <button type="button" className="button button-primary motion-cta" onClick={nextStep} disabled={isSubmitting}>
+          {step < steps.length ? (
+            <button className="patient-primary-button" type="button" onClick={() => void nextStep()}>
               Continue <ArrowRight size={16} />
             </button>
           ) : (
-            <button type="button" className="button button-primary motion-cta" onClick={() => void handleSubmit()} disabled={isSubmitting || saveState === "saving"}>
-              {isSubmitting ? <><LoaderCircle size={16} className="action-spinner" /> Submitting…</> : <><CheckCircle2 size={16} /> Submit for doctor review</>}
+            <button className="patient-primary-button" type="button" onClick={() => void handleSubmit()}>
+              <CheckCircle2 size={17} /> Submit Consultation
             </button>
           )}
         </footer>
       </div>
-
-      <p className="privacy-note">For emergencies or urgent symptoms, contact local emergency services rather than waiting for an online review.</p>
     </section>
   );
 }
