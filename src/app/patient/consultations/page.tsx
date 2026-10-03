@@ -46,13 +46,14 @@ export default async function ConsultationsPage({
   }
   if (search) consultationQuery = consultationQuery.ilike("primary_concern", `%${search}%`);
 
-  const { data = [] } = await consultationQuery;
+  const { data: consultationRows } = await consultationQuery;
+  const data = consultationRows ?? [];
   const selectedId =
     data.find((item) => item.id === query.selected)?.id ||
     data[0]?.id ||
     null;
 
-  let selected: {
+  type ConsultationDetail = {
     id: string;
     primary_concern: string;
     status: string;
@@ -62,7 +63,9 @@ export default async function ConsultationsPage({
     assigned_to: string | null;
     selected_prescription_option_id: string | null;
     responses: Record<string, unknown> | null;
-  } | null = null;
+  };
+
+  let selected: ConsultationDetail | null = null;
   let doctor: { full_name: string | null; professional_title: string | null; specialization: string | null } | null = null;
   let treatment: {
     title: string;
@@ -82,7 +85,7 @@ export default async function ConsultationsPage({
       .eq("id", selectedId)
       .single();
 
-    selected = selectedRow as typeof selected;
+    selected = selectedRow as ConsultationDetail | null;
 
     if (selected?.assigned_to) {
       const { data: doctors } = await supabase.rpc("v1_get_consultation_doctor", {
