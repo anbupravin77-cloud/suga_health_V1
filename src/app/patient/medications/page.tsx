@@ -45,13 +45,14 @@ export default async function MedicationsPage({
   const view = params.view === "latest" || params.view === "history" ? params.view : "all";
   const supabase = await createClient();
 
-  const { data: consultations = [] } = await supabase
+  const { data: consultationRows } = await supabase
     .from("consultations")
     .select("id, primary_concern, selected_prescription_option_id, completed_at, updated_at")
     .eq("status", "completed")
     .not("selected_prescription_option_id", "is", null)
     .order("completed_at", { ascending: false });
 
+  const consultations = consultationRows ?? [];
   const consultationMap = new Map(
     consultations.map((consultation) => [consultation.id, consultation]),
   );
@@ -62,11 +63,12 @@ export default async function MedicationsPage({
   let medications: MedicationRow[] = [];
 
   if (selectedOptionIds.length) {
-    const { data: options = [] } = await supabase
+    const { data: optionRows } = await supabase
       .from("consultation_prescription_options")
       .select("id, consultation_id, title, finalized_at, consultation_prescription_option_items(id, medication_catalog_id, medication_name, strength, dosage_form, frequency, duration, instructions, position)")
       .in("id", selectedOptionIds);
 
+    const options = optionRows ?? [];
     medications = options.flatMap((option) => {
       const consultation = consultationMap.get(option.consultation_id);
       return (option.consultation_prescription_option_items ?? []).map((item) => ({
