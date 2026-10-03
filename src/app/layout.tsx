@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Open_Sans, Source_Sans_3 } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans, Open_Sans, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import "./refinement.css";
 
@@ -14,6 +14,13 @@ const sans = Open_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
   weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+const authSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-auth",
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -32,5 +39,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body className={`${brand.variable} ${sans.variable} ${headline.variable}`}>{children}</body></html>;
+  return <html lang="en"><body className={`${brand.variable} ${sans.variable} ${headline.variable} ${authSans.variable}`}>{children}</body></html>;
 }
