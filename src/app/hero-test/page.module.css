@@ -1,0 +1,264 @@
+.page {
+  min-height: 100svh;
+  background: #ead9d5;
+  color: #111;
+  overflow: hidden;
+}
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 78% 24%, rgba(236, 200, 203, .72), transparent 34%),
+    radial-gradient(circle at 20% 86%, rgba(132, 172, 230, .58), transparent 24%),
+    radial-gradient(circle at 50% 80%, rgba(255, 220, 197, .66), transparent 28%),
+    #eadbd8;
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  background-image: url("/images/doctor-consultation.png");
+  background-repeat: no-repeat;
+  background-position: 74% 50%;
+  background-size: cover;
+  filter: none;
+  opacity: .9;
+}
+
+.wash {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(90deg, rgba(247, 239, 236, .94) 0%, rgba(247, 239, 236, .76) 34%, rgba(247, 239, 236, .16) 61%, rgba(236, 213, 219, .12) 100%),
+    linear-gradient(0deg, rgba(168, 190, 235, .32) 0%, transparent 24%);
+  pointer-events: none;
+}
+
+.nav {
+  position: absolute;
+  top: 24px;
+  left: 2.7%;
+  right: 2.7%;
+  z-index: 5;
+  min-height: 76px;
+  padding: 12px 22px 12px 28px;
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto minmax(260px, 1fr);
+  align-items: center;
+  gap: 24px;
+  border: 1px solid rgba(255,255,255,.48);
+  border-radius: 999px;
+  background: rgba(255,255,255,.24);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 10px 35px rgba(91,61,67,.06);
+  backdrop-filter: blur(18px) saturate(125%);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+}
+
+.brand {
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.brand strong {
+  font-size: clamp(18px, 1.55vw, 27px);
+  font-weight: 850;
+  letter-spacing: -.055em;
+}
+
+.brand span {
+  margin-top: 4px;
+  font-family: Georgia, serif;
+  font-size: 10px;
+  letter-spacing: .24em;
+  color: rgba(20,20,20,.62);
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 3vw, 50px);
+  font-size: 14px;
+  font-weight: 520;
+}
+
+.navLinks a, .login { transition: opacity .18s ease; }
+.navLinks a:hover, .login:hover { opacity: .55; }
+
+.navActions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.login {
+  font-size: 14px;
+  font-weight: 520;
+}
+
+.navCta, .primaryCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #151515;
+  color: #fff;
+  border-radius: 999px;
+  transition: transform .2s ease, background .2s ease;
+}
+
+.navCta {
+  min-width: 225px;
+  min-height: 50px;
+  padding: 0 21px 0 28px;
+  font-size: 15px;
+}
+
+.navCta:hover, .primaryCta:hover {
+  transform: translateY(-2px);
+  background: #242424;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 1536px);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: clamp(145px, 16vh, 185px) 6% 54px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.content h1 {
+  width: min(760px, 52vw);
+  margin: 0 0 34px;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(52px, 5.25vw, 82px);
+  font-weight: 520;
+  line-height: .88;
+  letter-spacing: -.065em;
+  text-wrap: initial;
+}
+
+.content h1 span { display: block; }
+.content h1 .accent { color: #a98e84; }
+
+.treatments {
+  width: min(860px, 60vw);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.treatment {
+  min-height: 72px;
+  padding: 9px 17px 9px 12px;
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(255,255,255,.5);
+  border-radius: 999px;
+  background: rgba(255,255,255,.38);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.56);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  font-size: 15px;
+  font-weight: 520;
+  transition: transform .2s ease, background .2s ease;
+}
+
+.treatment:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.52);
+}
+
+.icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,.56);
+  border: 1px solid rgba(255,255,255,.6);
+}
+
+.treatmentArrow { opacity: .72; }
+
+.primaryCta {
+  width: min(395px, 100%);
+  min-height: 78px;
+  padding: 0 28px 0 40px;
+  font-size: 20px;
+  font-weight: 520;
+}
+
+@media (max-width: 980px) {
+  .nav {
+    grid-template-columns: 1fr auto;
+    min-height: 68px;
+  }
+  .navLinks { display: none; }
+  .navActions .login { display: none; }
+  .navCta { min-width: auto; padding-inline: 20px; }
+  .content { padding-inline: 5%; }
+  .content h1 { width: min(680px, 75vw); font-size: clamp(48px, 7vw, 72px); }
+  .treatments { width: min(720px, 85vw); }
+  .photo { background-position: 64% 50%; }
+}
+
+@media (max-width: 700px) {
+  .hero { min-height: 100svh; }
+  .photo {
+    background-position: 58% 38%;
+    background-size: auto 72%;
+    opacity: .55;
+  }
+  .wash {
+    background:
+      linear-gradient(180deg, rgba(247,239,236,.28) 0%, rgba(247,239,236,.76) 43%, rgba(247,239,236,.97) 70%),
+      linear-gradient(0deg, rgba(154,185,235,.34), transparent 28%);
+  }
+  .nav { top: 14px; left: 14px; right: 14px; padding: 10px 14px 10px 18px; }
+  .brand strong { font-size: 18px; }
+  .brand span { font-size: 8px; }
+  .navCta { min-height: 44px; font-size: 13px; }
+  .navCta svg { display: none; }
+  .content {
+    min-height: 100svh;
+    justify-content: flex-end;
+    padding: 120px 22px 28px;
+  }
+  .content h1 {
+    width: 100%;
+    margin-bottom: 24px;
+    font-size: clamp(44px, 13.5vw, 64px);
+    line-height: .91;
+  }
+  .treatments {
+    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .treatment { min-height: 58px; }
+  .primaryCta { width: 100%; min-height: 64px; }
+}
+
+@media (max-width: 440px) {
+  .navCta { display: none; }
+  .nav { grid-template-columns: 1fr; }
+  .content h1 { font-size: clamp(42px, 13vw, 56px); }
+}
