@@ -23,12 +23,11 @@ export default async function EditConsultationPage({
   if (data.status !== "draft") redirect(`/patient/consultations/${id}`);
 
   return (
-    <>
-      <section className="dashboard-heading compact-heading">
+    <div>
+      <section className="patient-page-heading">
         <div>
-          <span className="eyebrow">Saved draft</span>
-          <h1>Continue your clinical intake.</h1>
-          <p>Your changes remain private until you submit the final consent step.</p>
+          <h1>Continue Consultation</h1>
+          <p>Your saved draft remains private until you review and submit it.</p>
         </div>
       </section>
       {query.error && <p className="page-error" role="alert">We couldn’t save or submit this consultation. Review the details and try again.</p>}
@@ -39,6 +38,6 @@ export default async function EditConsultationPage({
           responses: (data.responses ?? {}) as Record<string, unknown>,
         }}
       />
-    </>
+    </div>
   );
 }
