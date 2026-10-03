@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ReferenceHero } from "@/components/public/reference-hero";
 import { useEffect, useRef, useState } from "react";
 import {
   Activity,
@@ -9,14 +10,11 @@ import {
   Award,
   Check,
   ChevronDown,
-  ChevronLeft,
-  ChevronRight,
   GraduationCap,
   HeartHandshake,
   Info,
   Layers,
   MapPin,
-  Menu,
   ShieldCheck,
   Sparkles,
   Truck,
@@ -25,13 +23,6 @@ import {
 import { rememberReturnPosition, useRestoreReturnPosition } from "@/components/public/return-position";
 import { MobilePublicMenu } from "@/components/public/mobile-public-menu";
 import { PublicImage } from "@/components/public/public-image";
-
-const navLinks = [
-  { name: "About", path: "/about", desc: "Our clinical mission & standards" },
-  { name: "Weight Loss", path: "/weight-loss", desc: "GLP-1 medical protocols" },
-  { name: "Hair Growth", path: "/hair-growth", desc: "Follicular regeneration" },
-  { name: "Sexual Health", path: "/sexual-health", desc: "Performance & longevity" },
-];
 
 const pillars = [
   {
@@ -68,12 +59,6 @@ const pillars = [
     img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop&grayscale=1",
   },
 ];
-
-const heroSlides = pillars.map((pillar) => ({
-  src: pillar.img,
-  label: pillar.title,
-  caption: pillar.subtitle,
-}));
 
 const timelines = {
   weight: [
@@ -315,21 +300,9 @@ export default function HomePage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [heroSlide, setHeroSlide] = useState(0);
   const [voiceIndex, setVoiceIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   useRestoreReturnPosition();
-
-  useEffect(() => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reducedMotion.matches) return;
-
-    const timer = window.setInterval(() => {
-      setHeroSlide((current) => (current + 1) % heroSlides.length);
-    }, 4600);
-
-    return () => window.clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -379,117 +352,9 @@ export default function HomePage() {
 
   return (
     <main className="legacy-public refined-home min-h-screen bg-[#FAFAFA] text-neutral-950 overflow-x-hidden">
-      <header className="legacy-header mobile-home-header fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
-        <div className="mobile-home-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
-          <Link href="/" className="mobile-home-brand flex flex-col items-start select-none shrink-0">
-            <span className="font-sans text-xl sm:text-2xl tracking-tighter uppercase font-black text-neutral-950 leading-none">SUGA<span className="text-neutral-400">.</span>HEALTH</span>
-            <span className="brand-tagline text-neutral-500 mt-0.5">live naturally</span>
-          </Link>
-
-          <nav className="public-desktop-nav hidden lg:flex items-center" aria-label="Primary navigation">
-            {navLinks.map((link) => (
-              <Link key={link.name} href={link.path} className="public-desktop-nav-link">
-                {link.name}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="mobile-home-header-actions flex items-center gap-2.5 sm:gap-3 shrink-0">
-            <Link href="/sign-in" className="mobile-home-signin suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
-            <Link href="/sign-up" onClick={rememberReturnPosition} className="mobile-home-start suga-btn suga-btn-primary suga-btn-compact hidden sm:inline-flex">
-              <span className="mobile-home-start-full">Start consultation</span>
-              <span className="mobile-home-start-short">Start</span>
-              <ArrowRight size={15} />
-            </Link>
-            <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="mobile-home-menu lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
-              {mobileMenuOpen ? <X size={23} /> : <Menu size={23} />}
-            </button>
-
-          </div>
-        </div>
-      </header>
+      <ReferenceHero onMenu={() => setMobileMenuOpen(true)} />
       <MobilePublicMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
-
-      <div className="home-page-content pt-[70px]">
-        <section className="home-hero bg-[#FAFAFA] border-b border-neutral-200/80">
-          <div className="home-trust-ticker" aria-label="Suga Health service highlights">
-            <div className="home-marquee-track">
-              {[0, 1, 2, 3].map((group) => (
-                <span key={group} aria-hidden={group > 0 ? true : undefined} className="home-ticker-sequence">
-                  <span>Fully confidential</span><b>✦</b>
-                  <span>Free and discrete shipping</span><b>✦</b>
-                  <span>100% online process</span><b>✦</b>
-                  <span>Used and trusted by millions around the world</span><b>✦</b>
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="home-hero-composition">
-            <div className="hero-intro-grid">
-              <div className="hero-intro-copy">
-                <h1 className="legacy-hero-title">
-                  Clinically proven, FDA (USA) approved, treatment prescribed by experts.
-                </h1>
-              </div>
-
-              <div className="hero-action-grid" aria-label="Explore Suga Health care">
-                <Link href="/weight-loss" className="home-action-pill suga-btn suga-btn-secondary">Medical weight loss <ArrowUpRight size={16} /></Link>
-                <Link href="/hair-growth" className="home-action-pill suga-btn suga-btn-secondary">Hair growth <ArrowUpRight size={16} /></Link>
-                <Link href="/sexual-health" className="home-action-pill suga-btn suga-btn-secondary">Sexual health <ArrowUpRight size={16} /></Link>
-                <Link href="/sign-up" onClick={rememberReturnPosition} className="home-action-pill home-action-primary suga-btn suga-btn-primary"><span>Start consultation</span><ArrowRight size={16} /></Link>
-              </div>
-            </div>
-
-            <div className="hero-bento hero-bento-ro" aria-label="Suga Health care and treatment imagery">
-              <div className={`hero-bento-primary editorial-media editorial-media-large editorial-media-${pillars[heroSlide].id}`}>
-                <PublicImage
-                  key={heroSlides[heroSlide].src}
-                  src={heroSlides[heroSlide].src}
-                  srcSet={imageSources(heroSlides[heroSlide].src)}
-                  sizes="(max-width: 820px) 100vw, 50vw"
-                  alt={heroSlides[heroSlide].label}
-                  fetchPriority="high"
-                  width={1200}
-                  height={760}
-                  className="hero-bento-slide-image"
-                />
-                <div className="hero-bento-caption">
-                  <span>{heroSlides[heroSlide].caption}</span>
-                  <strong>{heroSlides[heroSlide].label}</strong>
-                </div>
-                <div className="hero-bento-controls">
-                  <button type="button" aria-label="Previous image" onClick={() => setHeroSlide((current) => (current - 1 + heroSlides.length) % heroSlides.length)}><ChevronLeft size={18} /></button>
-                  <div className="hero-bento-dots" aria-hidden="true">
-                    {heroSlides.map((slide, index) => <span key={slide.label} className={heroSlide === index ? "active" : ""} />)}
-                  </div>
-                  <button type="button" aria-label="Next image" onClick={() => setHeroSlide((current) => (current + 1) % heroSlides.length)}><ChevronRight size={18} /></button>
-                </div>
-              </div>
-
-              <button type="button" className="hero-bento-support editorial-media editorial-media-doctor editorial-media-clickable" onClick={() => setSelectedDoctor(doctors[0])} aria-label={"View credentials for " + doctors[0].name}>
-                <PublicImage src={doctors[0].image} srcSet={imageSources(doctors[0].image)} sizes="(max-width: 820px) 50vw, 50vw" alt={doctors[0].name} width={760} height={960} />
-                <div>
-                  <span>Doctor-led from intake to follow-up</span>
-                  <strong>{doctors[0].name}, {doctors[0].credentials}</strong>
-                </div>
-              </button>
-
-              <button type="button" className="hero-bento-small hero-bento-small-one editorial-media editorial-media-product editorial-media-weight editorial-media-clickable" onClick={() => setSelectedProduct(products[0])} aria-label={"View " + products[0].name}>
-                <PublicImage src={products[0].image} srcSet={imageSources(products[0].image)} sizes="(max-width: 820px) 50vw, 25vw" alt={products[0].name} width={520} height={420} />
-                <span>Metabolic care</span>
-                <strong>{products[0].name}</strong>
-              </button>
-
-              <button type="button" className="hero-bento-small hero-bento-small-two editorial-media editorial-media-product editorial-media-sexual editorial-media-clickable" onClick={() => setSelectedProduct(products[4])} aria-label={"View " + products[4].name}>
-                <PublicImage src={products[4].image} srcSet={imageSources(products[4].image)} sizes="(max-width: 820px) 50vw, 25vw" alt={products[4].name} width={520} height={420} />
-                <span>Private care</span>
-                <strong>{products[4].name}</strong>
-              </button>
-            </div>
-          </div>
-        </section>
-
+      <div className="home-page-content">
         <section id="treatments" className="home-pathways home-editorial-section">
           <div className="home-section-shell">
             <SectionHeader centered hideEyebrow eyebrow="Targeted Therapeutics" title="Focused Clinical Pathways" subtitle="Precision treatment protocols designed for sustained biological optimization." />
