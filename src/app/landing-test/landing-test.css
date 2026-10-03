@@ -108,38 +108,85 @@
 @media (max-width: 760px) {
   .suga-concept {
     min-height: 100svh;
+    overflow-x: hidden;
     background:
-      linear-gradient(90deg, rgba(247,232,232,.92) 0%, rgba(247,232,232,.75) 45%, rgba(247,232,232,.14) 74%),
-      radial-gradient(circle at 8% 90%, rgba(118,148,226,.30), transparent 35%),
-      url("/images/file_00000000afd48211998f4e3e8da86d36.png") 62% bottom / auto 78% no-repeat,
-      #f3e6e6;
+      linear-gradient(90deg, rgba(247,232,232,.70) 0%, rgba(247,232,232,.34) 48%, rgba(247,232,232,.02) 78%),
+      url("/images/file_00000000afd48211998f4e3e8da86d36.png") center top / cover no-repeat;
   }
+
   .suga-concept__nav {
     width: calc(100% - 28px);
-    min-height: 64px;
+    min-height: 58px;
     margin-top: 14px;
-    padding: 8px 10px 8px 20px;
+    padding: 7px 9px 7px 18px;
+    grid-template-columns: 1fr auto;
     gap: 8px;
   }
-  .suga-concept__brand span { font-size: 1rem; }
-  .suga-concept__brand small { font-size: .46rem; margin-top: 4px; }
+  .suga-concept__brand span { font-size: .9rem; }
+  .suga-concept__brand small { font-size: .4rem; margin-top: 4px; }
+  .suga-concept__links { display: none; }
   .suga-concept__login { display: none; }
   .suga-concept__navActions { gap: 0; }
-  .suga-concept__navCta { min-width: 155px; min-height: 44px; padding: 0 14px; font-size: .69rem; }
+  .suga-concept__navCta { min-width: 158px; min-height: 43px; padding: 0 13px 0 18px; font-size: .68rem; }
   .suga-concept__navCta svg { width: 14px; }
 
-  .suga-concept__hero { min-height: calc(100svh - 78px); padding: 58px 22px 34px; }
+  .suga-concept__hero {
+    min-height: calc(100svh - 72px);
+    padding: 56px 22px 34px;
+  }
   .suga-concept__copy { width: 100%; }
-  .suga-concept__copy h1 { max-width: 78%; font-size: clamp(2.75rem,11.8vw,4rem); line-height: .89; }
+  .suga-concept__copy h1 {
+    max-width: 82%;
+    font-size: clamp(2.65rem, 11vw, 3.8rem);
+    line-height: .89;
+  }
   .suga-concept__copy h1 span:last-child { white-space: normal; }
 
+  /* Keep the original three-pill design on mobile. Scale it instead of turning it into stacked cards. */
   .suga-concept__treatments {
-    width: min(88%, 420px);
+    width: min(100%, 650px);
     margin-top: 30px;
-    grid-template-columns: 1fr;
-    gap: 9px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
   }
-  .suga-concept__glassPill { height: 57px; grid-template-columns: 36px 1fr auto; padding: 0 15px; font-size: .78rem; }
-  .suga-concept__pillIcon { width: 34px; height: 34px; }
-  .suga-concept__mainCta { width: min(88%, 420px); min-height: 62px; margin-top: 12px; padding: 0 24px; font-size: .95rem; }
+  .suga-concept__glassPill {
+    height: 52px;
+    min-width: 0;
+    padding: 0 8px;
+    grid-template-columns: 29px minmax(0,1fr) 13px;
+    gap: 5px;
+    font-size: clamp(.5rem, 2.15vw, .67rem);
+  }
+  .suga-concept__pillIcon { width: 28px; height: 28px; }
+  .suga-concept__pillIcon svg { width: 15px; height: 15px; }
+  .suga-concept__glassPill > svg { width: 13px; height: 13px; }
+  .suga-concept__glassPill > span:nth-child(2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .suga-concept__mainCta {
+    width: min(70%, 390px);
+    min-height: 59px;
+    margin-top: 13px;
+    padding: 0 22px 0 27px;
+    font-size: .88rem;
+  }
+}
+
+/* A phone browser requesting Desktop site has a wide CSS viewport but a short/tall physical screen.
+   Keep the hero composition proportional instead of letting the background zoom/crop wildly. */
+@media (min-width: 761px) and (max-height: 900px) {
+  .suga-concept {
+    background:
+      linear-gradient(90deg, rgba(247,232,232,.62) 0%, rgba(247,232,232,.28) 36%, rgba(247,232,232,.03) 61%),
+      url("/images/file_00000000afd48211998f4e3e8da86d36.png") center center / cover no-repeat;
+  }
+  .suga-concept__nav { margin-top: 16px; min-height: 64px; }
+  .suga-concept__hero { min-height: calc(100svh - 80px); padding-top: clamp(42px,6vh,70px); }
+  .suga-concept__copy h1 { font-size: clamp(3rem,4.7vw,4.6rem); }
+  .suga-concept__treatments { margin-top: 26px; }
+  .suga-concept__glassPill { height: 62px; }
+  .suga-concept__mainCta { min-height: 66px; }
 }
