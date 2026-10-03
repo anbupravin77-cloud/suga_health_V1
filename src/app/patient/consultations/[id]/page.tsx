@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   CalendarDays,
   Check,
+  ClipboardList,
   Clock3,
   FilePenLine,
   MessageSquare,
