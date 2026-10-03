@@ -26,12 +26,13 @@ export default async function PatientMessagesPage({
   const identity = await requireIdentity();
   const supabase = await createClient();
 
-  const { data: rawThreads = [] } = await supabase
+  const { data: rawThreadRows } = await supabase
     .from("message_threads")
     .select("id, consultation_id, doctor_id, updated_at, last_message_preview, last_message_at, patient_unread_count, consultations(primary_concern, status, updated_at)")
     .order("updated_at", { ascending: false })
     .limit(80);
 
+  const rawThreads = rawThreadRows ?? [];
   const threads = rawThreads.filter((thread) => {
     if (!search) return true;
     const concern = thread.consultations?.[0]?.primary_concern || "";
