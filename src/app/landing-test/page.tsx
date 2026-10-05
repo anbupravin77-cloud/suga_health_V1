@@ -1,10 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { Bebas_Neue } from "next/font/google";
 import { ArrowRight, Menu, UserRound, Sprout, Mars, X } from "lucide-react";
 import { useState } from "react";
 import { rememberReturnPosition } from "@/components/public/return-position";
 import "./landing-test.css";
+
+const bebasNeue = Bebas_Neue({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 const treatments = [
   { href: "/weight-loss", label: "Medical weight loss", Icon: UserRound },
@@ -16,7 +22,7 @@ export default function LandingTestPage() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <main className="landing-test">
+    <main className={`${bebasNeue.className} landing-test`}>
       <header className="landing-test__nav">
         <Link href="/" className="landing-test__brand" aria-label="Suga.Health home">
           <strong>SUGA.HEALTH</strong>
