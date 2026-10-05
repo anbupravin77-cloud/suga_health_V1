@@ -8,7 +8,7 @@
   background:
     linear-gradient(90deg, rgba(248, 239, 239, .38) 0%, rgba(248, 239, 239, .12) 47%, rgba(248, 239, 239, 0) 72%),
     url("/images/file_00000000afd48211998f4e3e8da86d36.png") center center / cover no-repeat;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: inherit;
 }
 
 .landing-test *,
@@ -54,7 +54,7 @@
 
 .landing-test__brand strong {
   font-size: clamp(20px, 1.65vw, 28px);
-  font-weight: 800;
+  font-weight: 400;
   letter-spacing: -.055em;
 }
 
@@ -73,7 +73,7 @@
   justify-content: center;
   gap: clamp(28px, 3.5vw, 68px);
   font-size: clamp(15px, 1.08vw, 19px);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .landing-test__links a,
@@ -94,7 +94,7 @@
 
 .landing-test__login {
   font-size: clamp(15px, 1.08vw, 19px);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .landing-test__nav-cta {
@@ -109,7 +109,7 @@
   background: #1d1d1d;
   color: #fff !important;
   font-size: 17px;
-  font-weight: 500;
+  font-weight: 400;
   box-shadow: 0 10px 26px rgba(0,0,0,.12);
   transition: transform .2s ease, background .2s ease;
 }
@@ -149,9 +149,9 @@
   max-width: 930px;
   display: flex;
   flex-direction: column;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: inherit;
   font-size: clamp(66px, 5.55vw, 108px);
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: -.065em;
   line-height: .88;
 }
@@ -192,7 +192,7 @@
   backdrop-filter: blur(17px) saturate(125%);
   -webkit-backdrop-filter: blur(17px) saturate(125%);
   font-size: clamp(15px, 1.06vw, 19px);
-  font-weight: 500;
+  font-weight: 400;
   transition: transform .2s ease, background .2s ease;
 }
 
@@ -225,7 +225,7 @@
   border-radius: 999px;
   background: #1b1b1b;
   color: #fff !important;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: inherit;
   font-size: clamp(22px, 1.7vw, 30px);
   font-weight: 400;
   letter-spacing: -.025em;
@@ -418,7 +418,7 @@
     backdrop-filter: blur(16px) saturate(125%);
     -webkit-backdrop-filter: blur(16px) saturate(125%);
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1;
   }
 
