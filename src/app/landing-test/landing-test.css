@@ -8,7 +8,7 @@
   background:
     linear-gradient(90deg, rgba(248, 239, 239, .38) 0%, rgba(248, 239, 239, .12) 47%, rgba(248, 239, 239, 0) 72%),
     url("/images/file_00000000afd48211998f4e3e8da86d36.png") center center / cover no-repeat;
-  font-family: var(--font-sans), Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .landing-test *,
@@ -149,9 +149,9 @@
   max-width: 930px;
   display: flex;
   flex-direction: column;
-  font-family: var(--font-headline), var(--font-sans), Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: clamp(66px, 5.55vw, 108px);
-  font-weight: 500;
+  font-weight: 300;
   letter-spacing: -.065em;
   line-height: .88;
 }
@@ -225,9 +225,9 @@
   border-radius: 999px;
   background: #1b1b1b;
   color: #fff !important;
-  font-family: var(--font-headline), var(--font-sans), Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: clamp(22px, 1.7vw, 30px);
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -.025em;
   box-shadow: 0 16px 34px rgba(0,0,0,.12);
   transition: transform .2s ease, background .2s ease;
