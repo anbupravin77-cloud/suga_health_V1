@@ -37,9 +37,9 @@ export default function LandingTestPage() {
         </nav>
 
         <div className="landing-test__actions">
-          <Link href="/sign-in" className="landing-test__login">Login</Link>
+          <Link href="/patient-flow-test/account?mode=login" className="landing-test__login">Login</Link>
           <Link
-            href="/sign-up"
+            href="/patient-flow-test/account"
             onClick={rememberReturnPosition}
             className="landing-test__nav-cta"
           >
@@ -65,7 +65,7 @@ export default function LandingTestPage() {
           <Link href="/weight-loss" onClick={() => setMenuOpen(false)}>Weight Loss</Link>
           <Link href="/hair-growth" onClick={() => setMenuOpen(false)}>Hair Growth</Link>
           <Link href="/sexual-health" onClick={() => setMenuOpen(false)}>Sexual Health</Link>
-          <Link href="/sign-in" onClick={() => setMenuOpen(false)}>Login</Link>
+          <Link href="/patient-flow-test/account?mode=login" onClick={() => setMenuOpen(false)}>Login</Link>
         </nav>
       )}
 
@@ -93,7 +93,7 @@ export default function LandingTestPage() {
           </div>
 
           <Link
-            href="/sign-up"
+            href="/patient-flow-test/account"
             onClick={rememberReturnPosition}
             className="landing-test__main-cta"
           >
