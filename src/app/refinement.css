@@ -3593,3 +3593,89 @@ main.refined-home .faq-number {
   .patient-v2 .patient-flow-arrow { width:48px; height:48px; flex-basis:48px; }
   .patient-v2 .patient-intake-actions .patient-primary-button { flex:0 1 auto !important; min-width:180px !important; }
 }
+
+
+/* 2026 internal clinical shell unification */
+.app-layout {
+  background:#fff !important;
+  color:#0a0a0a;
+  font-family:var(--font-sans),Arial,sans-serif;
+}
+.app-layout .app-sidebar {
+  background:#fff !important;
+  color:#0a0a0a !important;
+  border-right:1px solid #e5e5e1 !important;
+}
+.app-layout .sidebar-brand > span { color:#6f6f69 !important; }
+.app-layout .app-sidebar nav { gap:0 !important; }
+.app-layout .app-sidebar nav a {
+  min-height:50px;
+  border:0 !important;
+  border-bottom:1px solid #efefec !important;
+  border-radius:0 !important;
+  background:#fff !important;
+  color:#5b5b55 !important;
+}
+.app-layout .app-sidebar nav a:hover { background:#fafaf8 !important; color:#000 !important; }
+.app-layout .app-sidebar nav a.active {
+  background:#fff !important;
+  color:#000 !important;
+  box-shadow:inset 2px 0 0 #000 !important;
+}
+.app-layout .sidebar-note { color:#5f5f59 !important; border-top-color:#dfdfda !important; }
+.app-layout .sidebar-logout { color:#111 !important; }
+.app-layout .app-topbar { background:#fff !important; border-bottom-color:#ecece8 !important; }
+.app-layout .app-content { background:#fff !important; }
+.app-layout .dashboard-heading h1,
+.app-layout .case-header h1 {
+  font-family:var(--font-headline),Georgia,serif !important;
+  font-size:clamp(2.8rem,4.5vw,4.8rem) !important;
+  font-weight:500 !important;
+  line-height:.98 !important;
+  letter-spacing:-.03em !important;
+}
+.app-layout .dashboard-heading,
+.app-layout .case-header { border-bottom-color:#111 !important; }
+.app-layout .feature-panel,
+.app-layout .notification-card,
+.app-layout .detail-card,
+.app-layout .treatment-summary,
+.app-layout .aside-card,
+.app-layout .workspace-block,
+.app-layout .completed-panel {
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+.app-layout .feature-panel,
+.app-layout .detail-card,
+.app-layout .workspace-block,
+.app-layout .completed-panel {
+  background:#fff !important;
+}
+.app-layout .notification-card {
+  background:#fff !important;
+  color:#000 !important;
+  border-block:1px solid #111 !important;
+}
+.app-layout .notification-card p { color:#62625d !important; }
+.app-layout .active-case,
+.app-layout .patient-brief {
+  background:#fff !important;
+  border-left:0 !important;
+  border-top:1px solid #111 !important;
+  border-bottom:1px solid #deded9 !important;
+}
+.app-layout .queue-table,
+.app-layout .record-list { border-top:1px solid #111 !important; }
+.app-layout .queue-head,
+.app-layout .queue-row,
+.app-layout .record-list > a { border-bottom-color:#e5e5e1 !important; }
+.app-layout .queue-row:hover,
+.app-layout .record-list > a:hover { background:#fafaf8 !important; }
+.app-layout .case-action-panel {
+  border-radius:0 !important;
+  background:#fff !important;
+  border-block:1px solid #111 !important;
+}
+.app-layout .button-primary { border-radius:999px !important; background:#000 !important; color:#fff !important; }
+.app-layout .button-secondary { border-radius:999px !important; background:#fff !important; color:#000 !important; border-color:#d2d2cd !important; }
