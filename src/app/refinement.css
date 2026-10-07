@@ -3336,3 +3336,36 @@ main.refined-home .faq-number {
   .auth-editorial-media { min-height:0; aspect-ratio:16 / 8; border-radius:20px; }
   .auth-editorial-form { max-width:none; }
 }
+
+
+/* 2026 homepage treatment options */
+.suga-home-options {
+  width:min(1280px,calc(100% - clamp(2rem,8vw,8rem)));
+  margin:0 auto;
+  padding:clamp(6rem,10vw,10rem) 0;
+}
+.suga-home-option-list { border-top:1px solid #111; }
+.suga-home-option-list article {
+  display:grid;
+  grid-template-columns:180px minmax(0,1fr);
+  gap:clamp(1.5rem,4vw,3rem);
+  align-items:center;
+  min-height:220px;
+  padding:2rem 0;
+  border-bottom:1px solid var(--suga-line);
+}
+.suga-home-option-media { aspect-ratio:1; border-radius:22px; }
+.suga-home-option-media-1 { background:linear-gradient(145deg,var(--suga-yellow),var(--suga-blush)); }
+.suga-home-option-media-2 { background:linear-gradient(145deg,var(--suga-lavender),var(--suga-blue)); }
+.suga-home-option-media-3 { background:linear-gradient(145deg,var(--suga-pink),var(--suga-blush)); }
+.suga-home-option-list article > div:last-child { max-width:760px; }
+.suga-home-option-list article > div:last-child > span { color:#777770; font-size:.76rem; font-weight:600; letter-spacing:.04em; }
+.suga-home-option-list h3 { margin:.4rem 0 .75rem; font-family:var(--font-headline),Georgia,serif; font-size:clamp(2rem,3.3vw,3.2rem); font-weight:500; line-height:1.02; }
+.suga-home-option-list p { max-width:58ch; margin:0; color:var(--suga-muted); font-size:.98rem; line-height:1.7; }
+@media(max-width:720px){
+  .suga-home-options { width:calc(100% - 2rem); padding:5.2rem 0; }
+  .suga-home-option-list article { grid-template-columns:96px minmax(0,1fr); gap:1rem; min-height:0; padding:1.6rem 0; align-items:start; }
+  .suga-home-option-media { border-radius:18px; }
+  .suga-home-option-list h3 { font-size:1.9rem; }
+  .suga-home-option-list p { font-size:.92rem; }
+}
