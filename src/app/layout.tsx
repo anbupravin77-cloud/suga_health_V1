@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, DM_Sans, Open_Sans, Source_Sans_3 } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans, Newsreader, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import "./refinement.css";
 
@@ -10,7 +10,7 @@ const brand = Cormorant_Garamond({
   display: "swap",
 });
 
-const sans = Open_Sans({
+const sans = Source_Sans_3({
   subsets: ["latin"],
   variable: "--font-sans",
   weight: ["400", "500", "600", "700", "800"],
@@ -24,7 +24,7 @@ const authSans = DM_Sans({
   display: "swap",
 });
 
-const headline = Source_Sans_3({
+const headline = Newsreader({
   subsets: ["latin"],
   variable: "--font-headline",
   weight: ["400", "500", "600"],
