@@ -443,17 +443,7 @@ export default function HomePage() {
 
             <div className="hero-bento hero-bento-ro" aria-label="Suga Health care and treatment imagery">
               <div className={`hero-bento-primary editorial-media editorial-media-large editorial-media-${pillars[heroSlide].id}`}>
-                <PublicImage
-                  key={heroSlides[heroSlide].src}
-                  src={heroSlides[heroSlide].src}
-                  srcSet={imageSources(heroSlides[heroSlide].src)}
-                  sizes="(max-width: 820px) 100vw, 50vw"
-                  alt={heroSlides[heroSlide].label}
-                  fetchPriority="high"
-                  width={1200}
-                  height={760}
-                  className="hero-bento-slide-image"
-                />
+                <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
                 <div className="hero-bento-caption">
                   <span>{heroSlides[heroSlide].caption}</span>
                   <strong>{heroSlides[heroSlide].label}</strong>
@@ -468,7 +458,7 @@ export default function HomePage() {
               </div>
 
               <button type="button" className="hero-bento-support editorial-media editorial-media-doctor editorial-media-clickable" onClick={() => setSelectedDoctor(doctors[0])} aria-label={"View credentials for " + doctors[0].name}>
-                <PublicImage src={doctors[0].image} srcSet={imageSources(doctors[0].image)} sizes="(max-width: 820px) 50vw, 50vw" alt={doctors[0].name} width={760} height={960} />
+                <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
                 <div>
                   <span>Doctor-led from intake to follow-up</span>
                   <strong>{doctors[0].name}, {doctors[0].credentials}</strong>
@@ -476,13 +466,13 @@ export default function HomePage() {
               </button>
 
               <button type="button" className="hero-bento-small hero-bento-small-one editorial-media editorial-media-product editorial-media-weight editorial-media-clickable" onClick={() => setSelectedProduct(products[0])} aria-label={"View " + products[0].name}>
-                <PublicImage src={products[0].image} srcSet={imageSources(products[0].image)} sizes="(max-width: 820px) 50vw, 25vw" alt={products[0].name} width={520} height={420} />
+                <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
                 <span>Metabolic care</span>
                 <strong>{products[0].name}</strong>
               </button>
 
               <button type="button" className="hero-bento-small hero-bento-small-two editorial-media editorial-media-product editorial-media-sexual editorial-media-clickable" onClick={() => setSelectedProduct(products[4])} aria-label={"View " + products[4].name}>
-                <PublicImage src={products[4].image} srcSet={imageSources(products[4].image)} sizes="(max-width: 820px) 50vw, 25vw" alt={products[4].name} width={520} height={420} />
+                <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
                 <span>Private care</span>
                 <strong>{products[4].name}</strong>
               </button>
@@ -497,7 +487,7 @@ export default function HomePage() {
               {pillars.map((pillar, idx) => (
                 <article key={pillar.id} className="pathway-editorial-row">
                   <div className={`pathway-editorial-image editorial-media editorial-media-large editorial-media-${pillar.id}`}>
-                    <PublicImage loading="lazy" decoding="async" src={pillar.img} srcSet={imageSources(pillar.img)} sizes="(max-width: 820px) 100vw, 44vw" width={900} height={680} alt={pillar.title} />
+                    <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
                     <span>0{idx + 1}</span>
                   </div>
                   <div className="pathway-editorial-copy">
@@ -606,16 +596,7 @@ export default function HomePage() {
               {doctors.map((doctor) => (
                 <article key={doctor.id} className="doctor-card">
                   <div className="doctor-card-image editorial-media editorial-media-doctor">
-                    <PublicImage
-                      loading="lazy"
-                      decoding="async"
-                      src={doctor.image}
-                      srcSet={imageSources(doctor.image)}
-                      sizes="(max-width: 720px) 100vw, (max-width: 1080px) 50vw, 33vw"
-                      width={760}
-                      height={620}
-                      alt={doctor.name}
-                    />
+                    <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
                     <span className="doctor-verified"><ShieldCheck size={13} /> Verified MD/DO</span>
                   </div>
 
@@ -673,7 +654,7 @@ export default function HomePage() {
                     aria-pressed={active}
                     onClick={() => setVoiceIndex(index)}
                   >
-                    <img src={customer.photo} alt="" loading="lazy" />
+                    <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
                     <span className="voice-hex-scrim" aria-hidden="true" />
                   </button>
                 );
@@ -682,7 +663,7 @@ export default function HomePage() {
 
             <article className="voice-testimonial" key={customerVoices[voiceIndex].id} aria-live="polite">
               <div className="voice-testimonial-person">
-                <img src={customerVoices[voiceIndex].photo} alt="" />
+                <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
                 <div>
                   <strong>{customerVoices[voiceIndex].name}</strong>
                   <span>Age {customerVoices[voiceIndex].age}</span>
@@ -715,16 +696,7 @@ export default function HomePage() {
               {visibleProducts.map((product) => (
                 <article key={product.id} className="product-card">
                   <div className={`product-card-image editorial-media editorial-media-product editorial-media-${product.category}`}>
-                    <PublicImage
-                      loading="lazy"
-                      decoding="async"
-                      src={product.image}
-                      srcSet={imageSources(product.image)}
-                      sizes="(max-width: 720px) 100vw, (max-width: 1080px) 50vw, 33vw"
-                      width={720}
-                      height={560}
-                      alt={product.name}
-                    />
+                    <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
                     {product.isPopular && <span className="product-popular"><Sparkles size={11} />Most prescribed</span>}
                   </div>
 
@@ -824,7 +796,7 @@ export default function HomePage() {
       </footer>
 
       {selectedDoctor && <Modal label={selectedDoctor.name} onClose={() => setSelectedDoctor(null)}>
-        <div className="p-5 sm:p-7 bg-neutral-950 text-white flex items-center gap-4"><PublicImage loading="lazy" decoding="async" src={selectedDoctor.image} alt={selectedDoctor.name} className="w-20 h-20 rounded-2xl object-cover object-top" /><div><span className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Board-Certified Clinician</span><h3 className="font-sans text-2xl font-extrabold text-white">{selectedDoctor.name}, {selectedDoctor.credentials}</h3><p className="text-xs text-neutral-300">{selectedDoctor.role}</p></div></div>
+        <div className="p-5 sm:p-7 bg-neutral-950 text-white flex items-center gap-4"><div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} /><div><span className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Board-Certified Clinician</span><h3 className="font-sans text-2xl font-extrabold text-white">{selectedDoctor.name}, {selectedDoctor.credentials}</h3><p className="text-xs text-neutral-300">{selectedDoctor.role}</p></div></div>
         <div className="p-5 sm:p-7 space-y-5"><div><span className="legacy-label">Clinical Specialty</span><p className="text-sm text-neutral-700">{selectedDoctor.specialty}</p></div><div><span className="legacy-label">Board Certification</span><p className="text-sm text-neutral-700">{selectedDoctor.boardCertification}</p></div><div><span className="legacy-label">Education</span><p className="text-sm text-neutral-700">{selectedDoctor.education}</p></div><div><span className="legacy-label">About</span><p className="text-sm text-neutral-700">{selectedDoctor.bio}</p></div><div className="text-xs font-bold uppercase tracking-wider text-neutral-500">{selectedDoctor.yearsOfExperience} years clinical practice</div></div>
       </Modal>}
 
