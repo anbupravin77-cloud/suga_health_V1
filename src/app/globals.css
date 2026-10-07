@@ -6486,3 +6486,134 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   .patient-v2 *::before,
   .patient-v2 *::after{scroll-behavior:auto!important;transition:none!important;animation-duration:.01ms!important}
 }
+
+
+/* Suga homepage monochrome + pastel image placeholders */
+.refined-home,
+.refined-home .home-page-content,
+.refined-home .home-editorial-section,
+.refined-home .home-section-shell,
+.refined-home .home-hero,
+.refined-home .home-progression,
+.refined-home .home-formulary,
+.refined-home .home-faq,
+.refined-home .home-final-cta,
+.refined-home .doctor-trust-band,
+.refined-home .formulary-assurance {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+.refined-home h1,
+.refined-home h2,
+.refined-home h3,
+.refined-home h4,
+.refined-home p,
+.refined-home span,
+.refined-home strong,
+.refined-home small,
+.refined-home a,
+.refined-home button,
+.refined-home blockquote {
+  color: #000000;
+}
+
+.refined-home .suga-btn-primary,
+.refined-home .home-action-primary {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+}
+.refined-home .suga-btn-primary *,
+.refined-home .home-action-primary * {
+  color: #ffffff !important;
+}
+
+.refined-home .suga-btn-secondary,
+.refined-home .home-action-pill:not(.home-action-primary),
+.refined-home .product-filter,
+.refined-home .legacy-toggle {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #d8d8d8 !important;
+}
+
+.refined-home .product-filter.active,
+.refined-home .legacy-toggle-active {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+}
+
+/* One image slot, one rounded pastel surface. No nested-card effect. */
+.refined-home .editorial-media,
+.refined-home .hero-bento-primary,
+.refined-home .hero-bento-support,
+.refined-home .hero-bento-small,
+.refined-home .pathway-editorial-image,
+.refined-home .doctor-card-image,
+.refined-home .product-card-image,
+.refined-home .voice-hex {
+  overflow: hidden;
+  background: transparent !important;
+  border-radius: 28px !important;
+}
+
+.refined-home .home-empty-image {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: inherit;
+  border-radius: inherit;
+  background: #ffeEec;
+  box-shadow: none !important;
+}
+
+/* Pastel palette from supplied references:
+   pink #FEB7C9, blush #FFEEEC, yellow #FFF6C1,
+   lavender #ECDBFF, blue #DFEBF9 */
+.refined-home .editorial-media-weight .home-empty-image,
+.refined-home .hero-bento-primary .home-empty-image {
+  background: linear-gradient(145deg, #FEB7C9 0%, #FFEEEC 100%) !important;
+}
+.refined-home .editorial-media-hair .home-empty-image,
+.refined-home .hero-bento-support .home-empty-image {
+  background: linear-gradient(145deg, #ECDBFF 0%, #DFEBF9 100%) !important;
+}
+.refined-home .editorial-media-sexual .home-empty-image,
+.refined-home .hero-bento-small-two .home-empty-image {
+  background: linear-gradient(145deg, #FFEEEC 0%, #FEB7C9 100%) !important;
+}
+.refined-home .editorial-media-product .home-empty-image,
+.refined-home .hero-bento-small-one .home-empty-image {
+  background: linear-gradient(145deg, #FFF6C1 0%, #FFEEEC 100%) !important;
+}
+.refined-home .editorial-media-doctor .home-empty-image,
+.refined-home .doctor-card-image .home-empty-image {
+  background: linear-gradient(145deg, #DFEBF9 0%, #ECDBFF 100%) !important;
+}
+.refined-home .voice-hex .home-empty-image {
+  background: linear-gradient(145deg, #FEB7C9 0%, #ECDBFF 100%) !important;
+}
+
+/* Remove dark image scrims/overlays left over from real-photo treatment. */
+.refined-home .editorial-media::before,
+.refined-home .editorial-media::after,
+.refined-home .hero-bento-primary::before,
+.refined-home .hero-bento-support::before,
+.refined-home .hero-bento-small::before,
+.refined-home .doctor-card-image::before,
+.refined-home .product-card-image::before {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Cards stay white; only the designated image slot gets pastel color. */
+.refined-home .doctor-card,
+.refined-home .product-card,
+.refined-home .pathway-editorial-row,
+.refined-home .voice-testimonial {
+  background: #ffffff !important;
+  border-color: #e5e5e5 !important;
+  box-shadow: none !important;
+}
