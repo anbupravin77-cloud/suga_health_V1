@@ -24,7 +24,6 @@ import {
 } from "lucide-react";
 import { rememberReturnPosition, useRestoreReturnPosition } from "@/components/public/return-position";
 import { MobilePublicMenu } from "@/components/public/mobile-public-menu";
-import { PublicImage } from "@/components/public/public-image";
 
 const navLinks = [
   { name: "About", path: "/about", desc: "Our clinical mission & standards" },
@@ -378,7 +377,7 @@ export default function HomePage() {
   const visibleProducts = productCategory === "all" ? products : products.filter((product) => product.category === productCategory);
 
   return (
-    <main className="legacy-public refined-home min-h-screen bg-[#FAFAFA] text-neutral-950 overflow-x-hidden">
+    <main className="legacy-public refined-home min-h-screen bg-white text-black overflow-x-hidden">
       <header className="legacy-header mobile-home-header fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
         <div className="mobile-home-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
           <Link href="/" className="mobile-home-brand flex flex-col items-start select-none shrink-0">
@@ -411,7 +410,7 @@ export default function HomePage() {
       <MobilePublicMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
 
       <div className="home-page-content pt-[70px]">
-        <section className="home-hero bg-[#FAFAFA] border-b border-neutral-200/80">
+        <section className="home-hero bg-white border-b border-neutral-200/80">
           <div className="home-trust-ticker" aria-label="Suga Health service highlights">
             <div className="home-marquee-track">
               {[0, 1, 2, 3].map((group) => (
@@ -444,37 +443,18 @@ export default function HomePage() {
             <div className="hero-bento hero-bento-ro" aria-label="Suga Health care and treatment imagery">
               <div className={`hero-bento-primary editorial-media editorial-media-large editorial-media-${pillars[heroSlide].id}`}>
                 <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
-                <div className="hero-bento-caption">
-                  <span>{heroSlides[heroSlide].caption}</span>
-                  <strong>{heroSlides[heroSlide].label}</strong>
-                </div>
-                <div className="hero-bento-controls">
-                  <button type="button" aria-label="Previous image" onClick={() => setHeroSlide((current) => (current - 1 + heroSlides.length) % heroSlides.length)}><ChevronLeft size={18} /></button>
-                  <div className="hero-bento-dots" aria-hidden="true">
-                    {heroSlides.map((slide, index) => <span key={slide.label} className={heroSlide === index ? "active" : ""} />)}
-                  </div>
-                  <button type="button" aria-label="Next image" onClick={() => setHeroSlide((current) => (current + 1) % heroSlides.length)}><ChevronRight size={18} /></button>
-                </div>
               </div>
 
               <button type="button" className="hero-bento-support editorial-media editorial-media-doctor editorial-media-clickable" onClick={() => setSelectedDoctor(doctors[0])} aria-label={"View credentials for " + doctors[0].name}>
                 <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
-                <div>
-                  <span>Doctor-led from intake to follow-up</span>
-                  <strong>{doctors[0].name}, {doctors[0].credentials}</strong>
-                </div>
               </button>
 
               <button type="button" className="hero-bento-small hero-bento-small-one editorial-media editorial-media-product editorial-media-weight editorial-media-clickable" onClick={() => setSelectedProduct(products[0])} aria-label={"View " + products[0].name}>
                 <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
-                <span>Metabolic care</span>
-                <strong>{products[0].name}</strong>
               </button>
 
               <button type="button" className="hero-bento-small hero-bento-small-two editorial-media editorial-media-product editorial-media-sexual editorial-media-clickable" onClick={() => setSelectedProduct(products[4])} aria-label={"View " + products[4].name}>
                 <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
-                <span>Private care</span>
-                <strong>{products[4].name}</strong>
               </button>
             </div>
           </div>
@@ -488,7 +468,6 @@ export default function HomePage() {
                 <article key={pillar.id} className="pathway-editorial-row">
                   <div className={`pathway-editorial-image editorial-media editorial-media-large editorial-media-${pillar.id}`}>
                     <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
-                    <span>0{idx + 1}</span>
                   </div>
                   <div className="pathway-editorial-copy">
                     <span className="home-kicker">{pillar.subtitle}</span>
