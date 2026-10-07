@@ -90,6 +90,27 @@ const journeys = {
   ],
 };
 
+const treatmentExamples = [
+  {
+    area: "Weight loss",
+    title: "GLP-1 treatment options",
+    copy: "A clinician may discuss medicines such as semaglutide or tirzepatide when your history and treatment goals make them appropriate.",
+    path: "/weight-loss",
+  },
+  {
+    area: "Hair growth",
+    title: "Finasteride and minoxidil",
+    copy: "These treatments address different parts of pattern hair loss and can be considered separately or together depending on the case.",
+    path: "/hair-growth",
+  },
+  {
+    area: "Sexual health",
+    title: "Sildenafil and tadalafil",
+    copy: "PDE5 inhibitors can be considered after a clinician reviews symptoms, current medicines and relevant health risks.",
+    path: "/sexual-health",
+  },
+];
+
 const faqs = [
   {
     q: "Will I definitely receive a prescription?",
@@ -293,6 +314,30 @@ export default function HomePage() {
             <span><Check size={15} />Treatment details remain in your account</span>
           </div>
           <Link href="/about" className="suga-home-text-link">How our care model works <ArrowRight size={16} /></Link>
+        </div>
+      </section>
+
+      <section className="suga-home-options">
+        <div className="suga-home-section-intro">
+          <h2>Treatment options come after the clinical question.</h2>
+          <p>
+            These are examples of medicines a clinician may discuss. The consultation decides
+            whether any of them are suitable for you.
+          </p>
+        </div>
+
+        <div className="suga-home-option-list">
+          {treatmentExamples.map((item, index) => (
+            <article key={item.title}>
+              <div className={`suga-home-option-media suga-home-option-media-${index + 1}`} aria-label="Image placeholder" role="img" />
+              <div>
+                <span>{item.area}</span>
+                <h3>{item.title}</h3>
+                <p>{item.copy}</p>
+                <Link href={item.path} className="suga-home-text-link">See treatment details <ArrowRight size={16} /></Link>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 
