@@ -71,17 +71,17 @@ const careAreas = [
   {
     id: "weight",
     title: "Weight Loss",
-    description: "Doctor-guided metabolic and weight-management care.",
+    description: "Discuss medically guided weight-management options.",
   },
   {
     id: "hair",
     title: "Hair Growth",
-    description: "Clinical assessment for hair loss, density and regrowth.",
+    description: "Explore treatment for thinning or pattern hair loss.",
   },
   {
     id: "sex",
     title: "Sexual Health",
-    description: "Private clinician-led care for sexual health concerns.",
+    description: "Discuss sexual health concerns confidentially.",
   },
 ];
 
@@ -295,6 +295,16 @@ export function ConsultationForm({
     setInvalidSection(null);
     setError("");
     try {
+      // Persist completed personal details alongside the draft so resuming does
+      // not ask for the same details again. Incomplete drafts remain saveable.
+      if (!validate(2)) {
+        const basics = await saveConsultationBasics(toFormData());
+        if (!basics.ok) {
+          setSaveState("idle");
+          setError(basics.error || "We couldn’t save your personal details.");
+          return;
+        }
+      }
       const result = await saveConsultationDraft(toFormData());
       if (result.ok && result.id) {
         setDraftId(result.id);
