@@ -53,8 +53,8 @@ export default async function ContinueConsultationPage({
       </header>
       <div className="standalone-intake-content">
         <div className="standalone-intake-intro">
-          <h1>Continue your consultation.</h1>
-          <p>Your draft is still private. Review the details and submit when you're ready.</p>
+          <h1>Continue your consultation</h1>
+          <p>Your saved answers appear below. Update anything you need, then submit the form.</p>
         </div>
         {query.error && (
           <p className="page-error" role="alert">
