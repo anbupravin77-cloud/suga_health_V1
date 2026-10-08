@@ -12,7 +12,7 @@ const links = [
   { name: "Sexual Health", path: "/sexual-health" },
 ];
 
-export function MobilePublicMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function MobilePublicMenu({ open, onClose, fontClassName }: { open: boolean; onClose: () => void; fontClassName?: string }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export function MobilePublicMenu({ open, onClose }: { open: boolean; onClose: ()
   if (!open) return null;
 
   return createPortal(
-    <dialog ref={dialogRef} aria-label="Site navigation" onCancel={onClose} className="legacy-public public-menu-dialog">
+    <dialog ref={dialogRef} aria-label="Site navigation" onCancel={onClose} className={`legacy-public public-menu-dialog ${fontClassName ?? ""}`}>
       <div className="max-w-xl mx-auto px-5 py-5 pb-10">
         <button type="button" className="public-menu-close" onClick={onClose}>Close menu <span aria-hidden="true">×</span></button>
         <nav className="grid gap-2.5" aria-label="Mobile navigation">
