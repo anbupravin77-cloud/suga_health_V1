@@ -45,8 +45,8 @@ export default async function StartConsultationPage({
       </header>
       <div className="standalone-intake-content">
         <div className="standalone-intake-intro">
-          <h1>Let's get to know your health.</h1>
-          <p>One guided form for your details and consultation. Your clinician receives the answers only when you submit.</p>
+          <h1>Your health consultation</h1>
+          <p>Complete the details below on one page. Your answers are sent for clinical review when you submit.</p>
           {replayFirstTime && (
             <p className="standalone-intake-qa-note" role="status">
               Test mode: starting fresh. Your existing test account and past consultations are preserved.
