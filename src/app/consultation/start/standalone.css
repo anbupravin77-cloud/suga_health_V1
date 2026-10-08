@@ -1,0 +1,257 @@
+/* Standalone consultation: intentionally outside patient dashboard shell. */
+.standalone-intake {
+  min-height: 100svh;
+  background: #faf9f6 !important;
+  color: #20231e;
+  font-family: var(--font-sans), Arial, sans-serif;
+}
+
+.standalone-intake-header {
+  height: 70px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 0 clamp(18px, 5vw, 70px);
+  background: #fff;
+  border-bottom: 1px solid #e8e4dd;
+}
+
+.standalone-intake-logo {
+  width: max-content;
+  color: #111;
+  font-size: 20px;
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: -.055em;
+}
+
+.standalone-intake-private {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #62645c;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.standalone-intake-exit {
+  display: inline-flex;
+  justify-self: end;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  color: #45463f;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.standalone-intake-exit:hover { color: #111; }
+
+.standalone-intake-content {
+  width: min(920px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: clamp(30px, 5vw, 66px) 0 90px;
+}
+
+.standalone-intake-intro {
+  max-width: 670px;
+  margin-bottom: 26px;
+}
+
+.standalone-intake-intro h1 {
+  margin: 0;
+  color: #1b1d1a;
+  font-size: clamp(32px, 4.5vw, 54px);
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: -.045em;
+}
+
+.standalone-intake-intro p {
+  max-width: 65ch;
+  margin: 12px 0 0;
+  color: #6a6b65;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.standalone-intake .patient-intake {
+  gap: 16px;
+}
+
+.standalone-intake .patient-intake-header {
+  padding: 18px;
+}
+
+.standalone-intake .patient-intake-stepper {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 3px;
+  padding-right: 114px;
+}
+
+.standalone-intake .patient-intake-stepper > div:not(:last-child)::after {
+  left: 56%;
+  width: 87%;
+}
+
+.standalone-intake .patient-intake-stepper > div small {
+  color: #666760;
+  font-size: 11px;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.standalone-intake .patient-intake-card {
+  padding: clamp(23px, 4vw, 42px);
+}
+
+.standalone-intake .patient-intake-copy h2 {
+  font-size: clamp(25px, 3vw, 33px);
+  line-height: 1.13;
+}
+
+.standalone-intake .patient-intake-copy p {
+  color: #696b64;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.standalone-intake .patient-form-field > span,
+.standalone-intake .patient-form-field > label,
+.standalone-intake .patient-field-heading label,
+.standalone-intake .patient-history-fieldset legend {
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.standalone-intake .patient-form-field input,
+.standalone-intake .patient-form-field select,
+.standalone-intake .patient-form-field textarea {
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.standalone-intake .patient-form-grid {
+  gap: 18px;
+}
+
+.standalone-intake .patient-condition-grid button {
+  min-height: 54px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.standalone-intake .patient-care-choice-grid strong {
+  font-size: 16px;
+}
+
+.standalone-intake .patient-care-choice-grid small {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.standalone-intake .patient-review-list span,
+.standalone-intake .patient-review-list strong,
+.standalone-intake .patient-review-list button {
+  font-size: 13px;
+}
+
+.standalone-intake .patient-consent-card label {
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.standalone-intake .patient-consent-card h3 {
+  font-size: 16px;
+}
+
+.standalone-intake .patient-intake-actions {
+  justify-content: space-between;
+}
+
+.standalone-intake .patient-flow-arrow {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #171a16;
+  border-radius: 50%;
+  background: #171a16;
+  color: #fff;
+  cursor: pointer;
+}
+
+.standalone-intake .patient-flow-arrow:hover {
+  background: #30352e;
+}
+
+.standalone-intake .patient-flow-arrow:focus-visible {
+  outline: 2px solid #171a16;
+  outline-offset: 4px;
+}
+
+@media (max-width: 700px) {
+  .standalone-intake-header {
+    height: 62px;
+    grid-template-columns: 1fr auto;
+    padding: 0 16px;
+  }
+
+  .standalone-intake-logo { font-size: 18px; }
+  .standalone-intake-private { display: none; }
+
+  .standalone-intake-content {
+    width: calc(100% - 28px);
+    padding: 28px 0 70px;
+  }
+
+  .standalone-intake-intro p { font-size: 15px; }
+
+  .standalone-intake .patient-intake-header {
+    padding-top: 58px;
+  }
+
+  .standalone-intake .patient-intake-stepper {
+    padding-right: 0;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .standalone-intake .patient-intake-stepper > div small {
+    display: none;
+  }
+
+  .standalone-intake .patient-intake-stepper > div:not(:last-child)::after {
+    left: 60%;
+    width: 80%;
+  }
+
+  .standalone-intake .patient-intake-card {
+    padding: 24px 16px;
+  }
+
+  .standalone-intake .patient-form-grid,
+  .standalone-intake .patient-condition-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .standalone-intake .patient-review-list > div {
+    grid-template-columns: 1fr auto;
+  }
+
+  .standalone-intake .patient-review-list strong {
+    grid-column: 1;
+  }
+
+  .standalone-intake .patient-review-list button {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .standalone-intake .patient-intake-actions .patient-primary-button {
+    width: auto;
+    flex: 0 1 auto;
+  }
+}
