@@ -32,6 +32,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
   const isSignIn = mode === "sign-in";
   const isSignUp = mode === "sign-up";
+  const phoneOtpEnabled = process.env.NEXT_PUBLIC_ENABLE_PHONE_OTP === "true";
   const requestedNext = searchParams.get("next");
   const authSuffix = requestedNext ? `?next=${encodeURIComponent(requestedNext)}` : "";
 
@@ -247,16 +248,18 @@ export function AuthForm({ mode }: { mode: Mode }) {
             </Link>
           </nav>
 
-          <div className="auth-method-tabs" aria-label="Choose authentication method">
-            <button type="button" onClick={() => selectMethod("email")} className={authMethod === "email" ? "is-active" : ""} aria-pressed={authMethod === "email"}>
-              <Mail aria-hidden="true" />
-              Email
-            </button>
-            <button type="button" onClick={() => selectMethod("phone")} className={authMethod === "phone" ? "is-active" : ""} aria-pressed={authMethod === "phone"}>
-              <Phone aria-hidden="true" />
-              Mobile OTP
-            </button>
-          </div>
+          {phoneOtpEnabled && (
+            <div className="auth-method-tabs" aria-label="Choose authentication method">
+              <button type="button" onClick={() => selectMethod("email")} className={authMethod === "email" ? "is-active" : ""} aria-pressed={authMethod === "email"}>
+                <Mail aria-hidden="true" />
+                Email
+              </button>
+              <button type="button" onClick={() => selectMethod("phone")} className={authMethod === "phone" ? "is-active" : ""} aria-pressed={authMethod === "phone"}>
+                <Phone aria-hidden="true" />
+                Mobile OTP
+              </button>
+            </div>
+          )}
         </>
       )}
 
@@ -312,7 +315,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
         </form>
       )}
 
-      {mode !== "forgot-password" && authMethod === "phone" && !otpSent && (
+      {phoneOtpEnabled && mode !== "forgot-password" && authMethod === "phone" && !otpSent && (
         <div className="auth-fields">
           <label className="auth-field" htmlFor="mobileNumber">
             <span>Mobile Number</span>
@@ -337,7 +340,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
         </div>
       )}
 
-      {otpSent && (
+      {phoneOtpEnabled && otpSent && (
         <form onSubmit={verifyPhoneOtp} className="auth-fields auth-otp-fields">
           <div className="auth-otp-heading">
             <ShieldCheck aria-hidden="true" />
