@@ -7,6 +7,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { getAuthCallbackUrl } from "@/lib/auth-redirect";
 import { isAppRole, roleHome, roleCanReturnTo } from "@/lib/roles";
+import { isQaPatient, QA_FRESH_INTAKE_PATH, QA_PATIENT_EMAIL } from "@/lib/qa-patient";
 
 type Mode = "sign-in" | "sign-up" | "forgot-password";
 type AuthMethod = "email" | "phone";
@@ -71,6 +72,13 @@ export function AuthForm({ mode }: { mode: Mode }) {
     const profileRole = profile.role;
     const role = isAppRole(profileRole) ? profileRole : "patient";
 
+    // QA account always rehearses first-time intake; real patients retain their usual redirects.
+    if (role === "patient" && isQaPatient(user.id)) {
+      router.replace(QA_FRESH_INTAKE_PATH);
+      router.refresh();
+      return;
+    }
+
     const fallback = searchParams.get("next");
     router.replace(fallback && roleCanReturnTo(role, fallback) ? fallback : roleHome(role));
     router.refresh();
@@ -108,6 +116,26 @@ export function AuthForm({ mode }: { mode: Mode }) {
     }
 
     if (mode === "sign-up") {
+      // A real account cannot be re-created with the same email. For this one QA
+      // identity, verify the existing password and replay the new-patient flow.
+      if (email.trim().toLowerCase() === QA_PATIENT_EMAIL) {
+        const { data: qaSession, error: qaError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (qaError || !qaSession.user || !isQaPatient(qaSession.user.id)) {
+          if (qaSession.user && !isQaPatient(qaSession.user.id)) {
+            await supabase.auth.signOut();
+          }
+          setLoading(false);
+          return setError("Use the existing test account password to restart the new-patient flow.");
+        }
+
+        await routeAuthenticatedUser();
+        return;
+      }
+
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
