@@ -5,114 +5,69 @@ import { ArrowRight, Menu, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { rememberReturnPosition, useRestoreReturnPosition } from "./return-position";
 import { MobilePublicMenu } from "./mobile-public-menu";
+import { PublicImage } from "./public-image";
 
 const navLinks = [
-  { name: "About", path: "/about" },
-  { name: "Weight Loss", path: "/weight-loss" },
-  { name: "Hair Growth", path: "/hair-growth" },
-  { name: "Sexual Health", path: "/sexual-health" },
+  { name: "About", path: "/about", desc: "Our clinical mission & standards" },
+  { name: "Weight Loss", path: "/weight-loss", desc: "GLP-1 medical protocols" },
+  { name: "Hair Growth", path: "/hair-growth", desc: "Follicular regeneration" },
+  { name: "Sexual Health", path: "/sexual-health", desc: "Performance & longevity" },
 ];
 
 export function LegacyPublicFrame({ children }: { children: ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   useRestoreReturnPosition();
 
-  return <main className="legacy-public refined-treatment editorial-public min-h-screen bg-white text-black overflow-x-hidden">
-    <header className="editorial-public-header">
-      <div className="editorial-public-header-inner">
-        <Link href="/" className="editorial-public-brand">
-          <strong>SUGA.HEALTH</strong>
-          <span>live naturally</span>
+  return <main className="legacy-public refined-treatment min-h-screen bg-[#FAFAFA] text-neutral-950 overflow-x-hidden">
+    <header className="legacy-header treatment-mobile-header fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
+      <div className="treatment-mobile-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
+        <Link href="/" className="treatment-mobile-brand flex flex-col items-start select-none shrink-0">
+          <span className="font-sans text-xl sm:text-2xl tracking-tighter uppercase font-black text-neutral-950 leading-none">SUGA<span className="text-neutral-400">.</span>HEALTH</span>
+          <span className="brand-tagline text-neutral-500 mt-0.5">live naturally</span>
         </Link>
-
-        <nav className="editorial-public-nav" aria-label="Primary navigation">
-          {navLinks.map((link) => <Link key={link.path} href={link.path}>{link.name}</Link>)}
+        <nav className="public-desktop-nav hidden lg:flex items-center" aria-label="Primary navigation">
+          {navLinks.map((link) => <Link key={link.name} href={link.path} className="public-desktop-nav-link">{link.name}</Link>)}
         </nav>
-
-        <div className="editorial-public-actions">
-          <Link href="/sign-in" className="editorial-public-signin">Sign in</Link>
-          <Link href="/sign-up" onClick={rememberReturnPosition} className="editorial-public-primary">
-            Start consultation <ArrowRight size={16} />
+        <div className="treatment-mobile-header-actions flex items-center gap-2.5 sm:gap-3 shrink-0">
+          <Link href="/sign-in" className="treatment-mobile-signin suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
+          <Link href="/sign-up" onClick={rememberReturnPosition} className="treatment-mobile-start suga-btn suga-btn-primary suga-btn-compact hidden sm:inline-flex">
+            <span className="treatment-mobile-start-full">Start consultation</span>
+            <span className="treatment-mobile-start-short">Start</span>
+            <ArrowRight size={15} />
           </Link>
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen((open) => !open)}
-            className="editorial-public-menu"
-            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileMenuOpen}
-          >
-            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="treatment-mobile-menu lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
+            {mobileMenuOpen ? <X size={23} /> : <Menu size={23} />}
           </button>
+
         </div>
       </div>
     </header>
-
     <MobilePublicMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
-
-    <div className="editorial-public-content">{children}</div>
-
-    <footer className="editorial-public-footer">
-      <div>
-        <Link href="/" className="editorial-public-brand">
-          <strong>SUGA.HEALTH</strong>
-          <span>live naturally</span>
-        </Link>
-        <p>Private online care with clinician review before treatment.</p>
+    <div className="treatment-public-content pt-[70px]">{children}</div>
+    <footer className="bg-neutral-950 text-neutral-300 py-12 md:py-16 border-t border-neutral-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 mb-10 sm:mb-12">
+          <div className="md:col-span-6"><Link href="/" className="flex flex-col items-start mb-6"><span className="font-sans text-2xl tracking-tighter uppercase font-black text-white">SUGA<span className="text-neutral-500">.</span>HEALTH</span><span className="brand-tagline text-neutral-400 mt-0.5">live naturally</span></Link><p className="text-neutral-400 max-w-md text-sm leading-relaxed">Confidential, doctor-guided treatments for medical weight loss, hair restoration, and sexual vitality. Real treatments delivered with care and complete privacy.</p></div>
+          <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Clinical Treatments</h4><ul className="space-y-3 text-sm text-neutral-400"><li><Link href="/weight-loss">Medical Weight Loss (GLP-1)</Link></li><li><Link href="/hair-growth">Hair Regrowth & Density</Link></li><li><Link href="/sexual-health">Sexual Health & Performance</Link></li><li><Link href="/sign-up" onClick={rememberReturnPosition}>Start Online Consultation</Link></li></ul></div>
+          <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Medical Practice</h4><ul className="space-y-3 text-sm text-neutral-400"><li><Link href="/#doctors">Our Doctors & Medical Board</Link></li><li><Link href="/#products">Our Products & Formulary</Link></li><li><Link href="/about">About Our Clinical Mission</Link></li><li><Link href="/sign-up" onClick={rememberReturnPosition}>Patient Medical Intake</Link></li></ul></div>
+        </div>
+        <div className="pt-6 border-t border-neutral-800 text-xs text-neutral-500 space-y-2"><p>Suga.Health facilitates telehealth consultations through licensed medical professionals. Prescription products require an online evaluation with a licensed healthcare provider.</p><p>For emergencies, contact local emergency services.</p><p>© {new Date().getFullYear()} Suga.Health. All rights reserved.</p></div>
       </div>
-
-      <nav aria-label="Footer navigation">
-        <Link href="/about">About</Link>
-        <Link href="/weight-loss">Weight Loss</Link>
-        <Link href="/hair-growth">Hair Growth</Link>
-        <Link href="/sexual-health">Sexual Health</Link>
-        <Link href="/sign-in">Sign in</Link>
-      </nav>
-
-      <p className="editorial-public-legal">
-        Suga.Health facilitates telehealth consultations through licensed medical professionals.
-        Prescription treatment requires clinical review. For emergencies, contact local emergency services.
-      </p>
     </footer>
   </main>;
 }
 
-export function LegacyPageHeader({
-  title,
-  subtitle,
-  image: _image,
-  tone = "neutral",
-}: {
-  title: string;
-  subtitle: string;
-  image: string;
-  tone?: "neutral" | "weight" | "hair" | "sexual";
-}) {
-  return <section className="editorial-page-hero">
-    <div className="editorial-page-hero-copy">
-      <h1>{title}</h1>
-      <p>{subtitle}</p>
-      <Link href="/sign-up" onClick={rememberReturnPosition} className="editorial-public-primary">
-        Start consultation <ArrowRight size={16} />
-      </Link>
-    </div>
-    <div className={`editorial-page-hero-media editorial-page-hero-media-${tone}`} aria-label="Image placeholder" role="img" />
+export function LegacyPageHeader({ title, subtitle, image, tone = "neutral" }: { title: string; subtitle: string; image: string; tone?: "neutral" | "weight" | "hair" | "sexual" }) {
+  return <section className={`treatment-page-hero treatment-page-hero-${tone} relative pt-8 pb-10 sm:pt-12 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-neutral-200/80 bg-white`}>
+    <div className="treatment-hero-media absolute z-0 grayscale overflow-hidden"><PublicImage src={image} alt="" className="w-full h-full object-cover" /><div className="absolute inset-0 treatment-hero-media-wash" /></div>
+    <div className="relative z-10 max-w-7xl mx-auto w-full"><h1 className="font-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-neutral-950 leading-[1.15] pb-1 max-w-4xl">{title}</h1><p className="mt-4 sm:mt-5 text-base sm:text-lg text-neutral-600 max-w-2xl leading-relaxed font-normal">{subtitle}</p></div>
   </section>;
 }
 
 export function LegacySection({ children, surface = false }: { children: ReactNode; surface?: boolean }) {
-  return <section className={surface ? "editorial-page-section editorial-page-section-soft" : "editorial-page-section"}>
-    <div className="editorial-page-shell">{children}</div>
-  </section>;
+  return <section className={"treatment-page-section py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 w-full " + (surface ? "bg-neutral-50" : "bg-white")}><div className="max-w-7xl mx-auto w-full">{children}</div></section>;
 }
 
 export function LegacyCta({ title, description }: { title: string; description: string }) {
-  return <section className="editorial-page-cta">
-    <div>
-      <h2>{title}</h2>
-      <p>{description}</p>
-    </div>
-    <Link href="/sign-up" onClick={rememberReturnPosition} className="editorial-public-primary editorial-public-primary-lg">
-      Start consultation <ArrowRight size={17} />
-    </Link>
-  </section>;
+  return <LegacySection><div className="max-w-3xl mx-auto text-center py-4 sm:py-6"><h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-950 mb-4 sm:mb-6 tracking-tight">{title}</h2><p className="text-neutral-600 text-base sm:text-lg leading-relaxed mb-6 sm:mb-8 max-w-xl mx-auto">{description}</p><Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-large">Start Free Assessment <ArrowRight size={17} /></Link></div></LegacySection>;
 }

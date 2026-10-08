@@ -535,14 +535,14 @@ export function ConsultationForm({
 
         <footer className="patient-intake-actions">
           {step > 1 ? (
-            <button className="patient-flow-arrow patient-flow-arrow-back" type="button" onClick={previousStep} aria-label="Previous step">
-              <ArrowLeft size={20} />
+            <button className="patient-secondary-button" type="button" onClick={previousStep}>
+              <ArrowLeft size={16} /> Back
             </button>
           ) : <span />}
 
           {step < steps.length ? (
-            <button className="patient-flow-arrow patient-flow-arrow-next" type="button" onClick={() => void nextStep()} aria-label="Continue to next step">
-              <ArrowRight size={20} />
+            <button className="patient-primary-button" type="button" onClick={() => void nextStep()}>
+              Continue <ArrowRight size={16} />
             </button>
           ) : (
             <button className="patient-primary-button" type="button" onClick={() => void handleSubmit()}>
