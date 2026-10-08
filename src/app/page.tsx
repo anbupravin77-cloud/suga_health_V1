@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Inter } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
 import {
   Activity,
@@ -24,6 +25,8 @@ import {
 } from "lucide-react";
 import { rememberReturnPosition, useRestoreReturnPosition } from "@/components/public/return-position";
 import { MobilePublicMenu } from "@/components/public/mobile-public-menu";
+
+const homeInter = Inter({ subsets: ["latin"], variable: "--font-home", display: "swap" });
 
 const navLinks = [
   { name: "About", path: "/about", desc: "Our clinical mission & standards" },
@@ -377,7 +380,7 @@ export default function HomePage() {
   const visibleProducts = productCategory === "all" ? products : products.filter((product) => product.category === productCategory);
 
   return (
-    <main className="legacy-public refined-home min-h-screen bg-white text-black overflow-x-hidden">
+    <main className={`legacy-public refined-home ${homeInter.variable} min-h-screen bg-white text-black overflow-x-hidden`}>
       <header className="legacy-header mobile-home-header fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
         <div className="mobile-home-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
           <Link href="/" className="mobile-home-brand flex flex-col items-start select-none shrink-0">
@@ -407,7 +410,7 @@ export default function HomePage() {
           </div>
         </div>
       </header>
-      <MobilePublicMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+      <MobilePublicMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} fontClassName={`${homeInter.variable} home-inter-menu`} />
 
       <div className="home-page-content pt-[70px]">
         <section className="home-hero bg-white border-b border-neutral-200/80">
