@@ -18,8 +18,10 @@ export default async function ContinueConsultationPage({
 }) {
   const { id } = await params;
   const query = await searchParams;
-  const { user } = await requireRole("patient");
   const supabase = await createClient();
+  const { data: { user: sessionUser } } = await supabase.auth.getUser();
+  if (!sessionUser) redirect(`/sign-in?next=${encodeURIComponent(`/consultation/${id}/edit`)}`);
+  const { user } = await requireRole("patient");
 
   const [{ data: consultation }, { data: profile }] = await Promise.all([
     supabase.from("consultations")
