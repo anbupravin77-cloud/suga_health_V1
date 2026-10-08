@@ -395,7 +395,7 @@ export default function HomePage() {
 
           <div className="mobile-home-header-actions flex items-center gap-2.5 sm:gap-3 shrink-0">
             <Link href="/sign-in" className="mobile-home-signin suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
-            <Link href="/sign-up" onClick={rememberReturnPosition} className="mobile-home-start suga-btn suga-btn-primary suga-btn-compact hidden sm:inline-flex">
+            <Link href="/sign-up?next=%2Fpatient%2Fconsultations%2Fnew" onClick={rememberReturnPosition} className="mobile-home-start suga-btn suga-btn-primary suga-btn-compact hidden sm:inline-flex">
               <span className="mobile-home-start-full">Start consultation</span>
               <span className="mobile-home-start-short">Start</span>
               <ArrowRight size={15} />
@@ -436,7 +436,7 @@ export default function HomePage() {
                 <Link href="/weight-loss" className="home-action-pill suga-btn suga-btn-secondary">Medical weight loss <ArrowUpRight size={16} /></Link>
                 <Link href="/hair-growth" className="home-action-pill suga-btn suga-btn-secondary">Hair growth <ArrowUpRight size={16} /></Link>
                 <Link href="/sexual-health" className="home-action-pill suga-btn suga-btn-secondary">Sexual health <ArrowUpRight size={16} /></Link>
-                <Link href="/sign-up" onClick={rememberReturnPosition} className="home-action-pill home-action-primary suga-btn suga-btn-primary"><span>Start consultation</span><ArrowRight size={16} /></Link>
+                <Link href="/sign-up?next=%2Fpatient%2Fconsultations%2Fnew" onClick={rememberReturnPosition} className="home-action-pill home-action-primary suga-btn suga-btn-primary"><span>Start consultation</span><ArrowRight size={16} /></Link>
               </div>
             </div>
 
@@ -482,7 +482,7 @@ export default function HomePage() {
                     </div>
                     <div className="pathway-actions">
                       <Link href={pillar.path} className="suga-btn suga-btn-secondary suga-btn-inline">View protocol <ArrowRight size={15} /></Link>
-                      <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline"><span>Start consultation</span><ArrowUpRight size={15} /></Link>
+                      <Link href="/sign-up?next=%2Fpatient%2Fconsultations%2Fnew" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline"><span>Start consultation</span><ArrowUpRight size={15} /></Link>
                     </div>
                   </div>
                 </article>
@@ -512,7 +512,7 @@ export default function HomePage() {
                 </article>
               ))}
             </div>
-            <div className="home-centered-action"><Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary">See if you qualify today <ArrowRight size={16} /></Link></div>
+            <div className="home-centered-action"><Link href="/sign-up?next=%2Fpatient%2Fconsultations%2Fnew" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary">See if you qualify today <ArrowRight size={16} /></Link></div>
           </div>
         </section>
 
@@ -604,7 +604,7 @@ export default function HomePage() {
                 <h3>Real doctors. Direct access. Care built around you.</h3>
                 <p>Your consultation is reviewed by a licensed clinician, with ongoing support throughout your care.</p>
               </div>
-              <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary">
+              <Link href="/sign-up?next=%2Fpatient%2Fconsultations%2Fnew" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary">
                 <span>Start consultation</span><ArrowRight size={16} />
               </Link>
             </div>
@@ -697,7 +697,7 @@ export default function HomePage() {
                       </div>
                       <div className="product-card-actions">
                         <button type="button" className="suga-btn suga-btn-secondary suga-btn-inline" onClick={() => setSelectedProduct(product)}>Details <Info size={15} /></button>
-                        <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline">Get started <ArrowRight size={15} /></Link>
+                        <Link href="/sign-up?next=%2Fpatient%2Fconsultations%2Fnew" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline">Get started <ArrowRight size={15} /></Link>
                       </div>
                     </div>
                   </div>
@@ -758,7 +758,7 @@ export default function HomePage() {
               <h2>Your personalized medical plan is&nbsp;5 minutes away.</h2>
               <p>Answer quick medical questions. A licensed clinician will review your file and tailor your prescription.</p>
             </div>
-            <Link href="/sign-up" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-large">Start Free Assessment <ArrowRight size={17} /></Link>
+            <Link href="/sign-up?next=%2Fpatient%2Fconsultations%2Fnew" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-large">Start Free Assessment <ArrowRight size={17} /></Link>
           </div>
         </section>
       </div>
@@ -767,8 +767,8 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 mb-10 sm:mb-12">
             <div className="md:col-span-6"><Link href="/" className="flex flex-col items-start mb-6"><span className="font-sans text-2xl tracking-tighter uppercase font-black text-white">SUGA<span className="text-neutral-500">.</span>HEALTH</span><span className="brand-tagline text-neutral-400 mt-0.5">live naturally</span></Link><p className="text-neutral-400 max-w-md text-sm leading-relaxed">Confidential, doctor-guided treatments for medical weight loss, hair restoration, and sexual vitality. Real treatments delivered with care and complete privacy.</p></div>
-            <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Clinical Treatments</h4><ul className="space-y-3 text-sm text-neutral-400"><li><Link href="/weight-loss">Medical Weight Loss (GLP-1)</Link></li><li><Link href="/hair-growth">Hair Regrowth & Density</Link></li><li><Link href="/sexual-health">Sexual Health & Performance</Link></li><li><Link href="/sign-up" onClick={rememberReturnPosition}>Start Online Consultation</Link></li></ul></div>
-            <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Medical Practice</h4><ul className="space-y-3 text-sm text-neutral-400"><li><a href="#doctors">Our Doctors & Medical Board</a></li><li><a href="#products">Our Products & Formulary</a></li><li><Link href="/about">About Our Clinical Mission</Link></li><li><Link href="/sign-up" onClick={rememberReturnPosition}>Patient Medical Intake</Link></li></ul></div>
+            <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Clinical Treatments</h4><ul className="space-y-3 text-sm text-neutral-400"><li><Link href="/weight-loss">Medical Weight Loss (GLP-1)</Link></li><li><Link href="/hair-growth">Hair Regrowth & Density</Link></li><li><Link href="/sexual-health">Sexual Health & Performance</Link></li><li><Link href="/sign-up?next=%2Fpatient%2Fconsultations%2Fnew" onClick={rememberReturnPosition}>Start Online Consultation</Link></li></ul></div>
+            <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Medical Practice</h4><ul className="space-y-3 text-sm text-neutral-400"><li><a href="#doctors">Our Doctors & Medical Board</a></li><li><a href="#products">Our Products & Formulary</a></li><li><Link href="/about">About Our Clinical Mission</Link></li><li><Link href="/sign-up?next=%2Fpatient%2Fconsultations%2Fnew" onClick={rememberReturnPosition}>Patient Medical Intake</Link></li></ul></div>
           </div>
           <div className="pt-6 border-t border-neutral-800 text-xs text-neutral-500 space-y-2"><p>Suga.Health facilitates telehealth consultations through licensed medical professionals. Prescription products require an online evaluation with a licensed healthcare provider.</p><p>For emergencies, contact local emergency services.</p><p>© {new Date().getFullYear()} Suga.Health. All rights reserved.</p></div>
         </div>
@@ -782,7 +782,7 @@ export default function HomePage() {
       {selectedProduct && <Modal label={selectedProduct.name} onClose={() => setSelectedProduct(null)}>
         <div className="p-5 sm:p-7 bg-neutral-950 text-white"><span className="text-[10px] uppercase tracking-widest text-neutral-400 font-bold">Prescription Specification</span><h3 className="font-sans text-2xl sm:text-3xl font-extrabold text-white">{selectedProduct.name}</h3><p className="text-xs text-neutral-300 font-mono mt-1">Active Ingredients: {selectedProduct.activeIngredients}</p></div>
         <div className="p-5 sm:p-7 space-y-5"><div><span className="legacy-label">Formulation Overview</span><p className="text-sm text-neutral-700">{selectedProduct.description}</p></div><div className="grid sm:grid-cols-2 gap-3"><div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200"><span className="legacy-label">Administration Method</span><p className="text-xs font-bold text-neutral-900">{selectedProduct.deliveryMethod}</p></div><div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200"><span className="legacy-label">Typical Dosage Range</span><p className="text-xs font-bold text-neutral-900">{selectedProduct.dosage}</p></div></div><div><span className="legacy-label">Mechanism of Action</span><p className="text-sm text-neutral-700">{selectedProduct.mechanismOfAction}</p></div><div><span className="legacy-label">Clinical Benefits & Outcomes</span><div className="grid sm:grid-cols-2 gap-2 mt-2">{selectedProduct.benefits.map((benefit) => <div key={benefit} className="flex gap-2 text-xs text-neutral-700"><Check size={13} className="shrink-0 mt-0.5" />{benefit}</div>)}</div></div></div>
-        <div className="p-5 sm:p-6 bg-neutral-50 border-t border-neutral-200 flex items-center justify-between"><div><span className="text-[11px] text-neutral-500">All-inclusive pricing</span><div className="font-sans text-2xl font-extrabold">{selectedProduct.startingPrice} <span className="text-xs font-medium text-neutral-500">{selectedProduct.billingCadence}</span></div></div><Link href="/sign-up" onClick={rememberReturnPosition} className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider">Check Eligibility <ArrowRight size={14} /></Link></div>
+        <div className="p-5 sm:p-6 bg-neutral-50 border-t border-neutral-200 flex items-center justify-between"><div><span className="text-[11px] text-neutral-500">All-inclusive pricing</span><div className="font-sans text-2xl font-extrabold">{selectedProduct.startingPrice} <span className="text-xs font-medium text-neutral-500">{selectedProduct.billingCadence}</span></div></div><Link href="/sign-up?next=%2Fpatient%2Fconsultations%2Fnew" onClick={rememberReturnPosition} className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider">Check Eligibility <ArrowRight size={14} /></Link></div>
       </Modal>}
     </main>
   );
