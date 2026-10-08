@@ -600,3 +600,31 @@
 @media(prefers-reduced-motion:reduce) {
   .standalone-intake .consultation-onepage * { scroll-behavior: auto !important; transition-duration:.01ms !important; }
 }
+
+
+/* Standalone layout fixes: remove dashboard grid inheritance and normalize checkbox size */
+.standalone-intake.patient-v2 {
+  display: block;
+  grid-template-columns: none;
+  width: 100%;
+}
+
+.standalone-intake > .standalone-intake-header {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.standalone-intake .patient-consent-card input[type="checkbox"] {
+  appearance: auto;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  max-width: 18px;
+  max-height: 18px;
+  flex: 0 0 18px;
+  margin: 3px 0 0;
+  padding: 0;
+  accent-color: #171717;
+  vertical-align: middle;
+}
