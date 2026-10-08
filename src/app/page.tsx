@@ -487,7 +487,7 @@ export default function HomePage() {
                     {pillar.id === "weight" && (
                       <video
                         className="home-uploaded-media home-uploaded-media-video"
-                        src="/videos/suga-floating-medicines.mp4"
+                        src="/images/suga-floating-medicines.mp4"
                         aria-label="Illustrative animation of floating medication devices"
                         autoPlay
                         muted
