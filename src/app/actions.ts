@@ -66,8 +66,11 @@ function buildConsultationRecord(formData: FormData, patientId: string) {
       sex,
       conditions: formData.getAll("conditions").map(String).filter(Boolean),
       current_medications: value(formData, "current_medications"),
+      current_medications_choice: value(formData, "current_medications_choice"),
       allergies: value(formData, "allergies"),
+      allergies_choice: value(formData, "allergies_choice"),
       medical_history: value(formData, "medical_history"),
+      medical_history_choice: value(formData, "medical_history_choice"),
       care_goal: value(formData, "care_goal"),
       treatment_answers:
         primaryConcern === "weight"
