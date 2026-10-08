@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getTrustedAppOrigin } from "@/lib/auth-redirect";
 import { createClient } from "@/lib/supabase/server";
-import { isAppRole, roleHome, roleOwnsPath } from "@/lib/roles";
+import { isAppRole, roleHome, roleCanReturnTo } from "@/lib/roles";
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
@@ -40,7 +40,7 @@ export async function GET(request: Request) {
         requestedNext &&
         requestedNext.startsWith("/") &&
         !requestedNext.startsWith("//") &&
-        roleOwnsPath(role, requestedNext)
+        roleCanReturnTo(role, requestedNext)
           ? requestedNext
           : rolePath;
 
