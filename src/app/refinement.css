@@ -2594,3 +2594,25 @@ main.refined-home .faq-number {
     flex-basis: 48px;
   }
 }
+
+
+/* Homepage Inter typography only */
+main.refined-home {
+  --font-sans: var(--font-home);
+  --font-headline: var(--font-home);
+  --font-brand: var(--font-home);
+  font-family: var(--font-home), Arial, sans-serif !important;
+}
+
+main.refined-home :is(h1, h2, h3, h4, h5, h6, p, span, strong, small, b, em, i, a, button, input, select, textarea, label, div, li, blockquote, dt, dd) {
+  font-family: var(--font-home), Arial, sans-serif !important;
+}
+
+/* The mobile navigation is rendered in a body-level portal. */
+dialog.home-inter-menu,
+dialog.home-inter-menu * {
+  --font-sans: var(--font-home);
+  --font-headline: var(--font-home);
+  --font-brand: var(--font-home);
+  font-family: var(--font-home), Arial, sans-serif !important;
+}
