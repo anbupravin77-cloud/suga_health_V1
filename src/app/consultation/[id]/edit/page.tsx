@@ -46,7 +46,7 @@ export default async function ContinueConsultationPage({
         </Link>
         <span className="standalone-intake-private"><LockKeyhole size={15} /> Private consultation</span>
         <Link href="/patient/consultations" className="standalone-intake-exit">
-          <ArrowLeft size={15} /> Save and exit
+          <ArrowLeft size={15} /> Exit
         </Link>
       </header>
       <div className="standalone-intake-content">
