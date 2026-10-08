@@ -19,3 +19,9 @@ export function roleOwnsPath(role: AppRole, path: string) {
   const home = roleHome(role);
   return path === home || path.startsWith(`${home}/`);
 }
+
+/** Keep return destinations within the authenticated role's routes. */
+export function roleCanReturnTo(role: AppRole, path: string) {
+  if (!path.startsWith("/") || path.startsWith("//")) return false;
+  return roleOwnsPath(role, path) || (role === "patient" && path === "/consultation/start");
+}
