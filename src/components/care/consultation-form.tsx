@@ -41,6 +41,14 @@ type FormState = {
   allergies: string;
   medicalHistory: string;
   careGoal: string;
+  weightPreviousGlp1: string;
+  weightDigestiveHistory: string;
+  hairPattern: string;
+  hairDuration: string;
+  hairPreviousTreatment: string;
+  sexualConcern: string;
+  sexualFrequency: string;
+  sexualNitrates: string;
   consentTruth: boolean;
   consentTelehealth: boolean;
   consentPrivacy: boolean;
@@ -73,7 +81,7 @@ const careAreas = [
   },
 ];
 
-const steps = ["Reason", "Your details", "Medical history", "Review"];
+const steps = ["Care area", "Medical history", "Medications", "Treatment questions", "Review"];
 
 function readString(value: unknown, fallback = "") {
   return typeof value === "string" ? value : fallback;
@@ -83,14 +91,22 @@ function readNumberString(value: unknown, fallback = "") {
   return typeof value === "number" && Number.isFinite(value) ? String(value) : fallback;
 }
 
+function readTreatmentAnswers(responses: Record<string, unknown>) {
+  const raw = responses.treatment_answers;
+  return raw && typeof raw === "object" && !Array.isArray(raw)
+    ? (raw as Record<string, unknown>)
+    : {};
+}
+
 function initialState(draft?: Draft, defaults?: IntakeDefaults): FormState {
   const r = draft?.responses ?? {};
+  const treatment = readTreatmentAnswers(r);
   const conditions = Array.isArray(r.conditions)
     ? r.conditions.filter((item): item is string => typeof item === "string")
     : [];
 
   return {
-    primaryConcern: draft?.primary_concern || readString(r.primary_concern, "weight"),
+    primaryConcern: draft?.primary_concern || readString(r.primary_concern),
     heightUnit: readString(r.height_unit) === "ftin" ? "ftin" : "cm",
     heightCm: readNumberString(r.height_cm_input, defaults?.height_cm ? String(defaults.height_cm) : ""),
     heightFeet: readNumberString(r.height_feet),
@@ -104,6 +120,14 @@ function initialState(draft?: Draft, defaults?: IntakeDefaults): FormState {
     allergies: readString(r.allergies),
     medicalHistory: readString(r.medical_history),
     careGoal: readString(r.care_goal),
+    weightPreviousGlp1: readString(treatment.previous_glp1),
+    weightDigestiveHistory: readString(treatment.digestive_history),
+    hairPattern: readString(treatment.pattern),
+    hairDuration: readString(treatment.duration),
+    hairPreviousTreatment: readString(treatment.previous_treatment),
+    sexualConcern: readString(treatment.concern),
+    sexualFrequency: readString(treatment.frequency),
+    sexualNitrates: readString(treatment.nitrates_or_activity_restriction),
     consentTruth: r.consent_truth === true,
     consentTelehealth: r.consent_telehealth === true,
     consentPrivacy: r.consent_privacy === true,
@@ -173,6 +197,14 @@ export function ConsultationForm({
     data.set("allergies", form.allergies);
     data.set("medical_history", form.medicalHistory);
     data.set("care_goal", form.careGoal);
+    data.set("weight_previous_glp1", form.weightPreviousGlp1);
+    data.set("weight_digestive_history", form.weightDigestiveHistory);
+    data.set("hair_pattern", form.hairPattern);
+    data.set("hair_duration", form.hairDuration);
+    data.set("hair_previous_treatment", form.hairPreviousTreatment);
+    data.set("sexual_concern", form.sexualConcern);
+    data.set("sexual_frequency", form.sexualFrequency);
+    data.set("sexual_nitrates", form.sexualNitrates);
     data.set("consent_truth", String(form.consentTruth));
     data.set("consent_telehealth", String(form.consentTelehealth));
     data.set("consent_privacy", String(form.consentPrivacy));
@@ -180,7 +212,9 @@ export function ConsultationForm({
   }
 
   function validate(currentStep: number) {
-    if (currentStep === 1 && !form.primaryConcern) return "Choose what you would like help with.";
+    if (currentStep === 1 && !form.primaryConcern) {
+      return "Choose what you would like help with.";
+    }
 
     if (currentStep === 2) {
       if (form.heightUnit === "cm" && !form.heightCm) return "Enter your height.";
@@ -188,19 +222,39 @@ export function ConsultationForm({
       if (!form.weightValue) return "Enter your weight.";
       if (!form.age) return "Enter your age.";
       if (!form.sex) return "Select the option that applies to you.";
-      if (!form.careGoal.trim()) return "Briefly describe what you want help with.";
-    }
-
-    if (currentStep === 3) {
       if (form.conditions.length === 0) {
         return 'Select any applicable conditions or choose "None of the above".';
       }
+    }
+
+    if (currentStep === 3) {
       if (!form.currentMedications.trim()) return 'List current medications or enter "None".';
       if (!form.allergies.trim()) return 'List known drug allergies or enter "None".';
     }
 
+    if (currentStep === 4) {
+      if (!form.careGoal.trim()) return "Briefly describe what you want help with.";
+
+      if (form.primaryConcern === "weight") {
+        if (!form.weightPreviousGlp1) return "Tell us whether you have used a GLP-1 medicine before.";
+        if (!form.weightDigestiveHistory) return "Answer the digestive-health screening question.";
+      }
+
+      if (form.primaryConcern === "hair") {
+        if (!form.hairPattern) return "Select where the hair loss is most noticeable.";
+        if (!form.hairDuration) return "Tell us how long the hair loss has been happening.";
+        if (!form.hairPreviousTreatment) return "Tell us whether you have tried hair-loss treatment before.";
+      }
+
+      if (form.primaryConcern === "sex") {
+        if (!form.sexualConcern) return "Choose the main concern you want help with.";
+        if (!form.sexualFrequency) return "Tell us how often the problem happens.";
+        if (!form.sexualNitrates) return "Answer the medication and heart-safety question.";
+      }
+    }
+
     if (
-      currentStep === 4 &&
+      currentStep === 5 &&
       (!form.consentTruth || !form.consentTelehealth || !form.consentPrivacy)
     ) {
       return "All three consent statements are required before submission.";
@@ -210,7 +264,7 @@ export function ConsultationForm({
   }
 
   async function saveProgress(silent = false) {
-    if (saveState === "saving" || isSubmitting) return true;
+    if (saveState === "saving" || isSubmitting || !form.primaryConcern) return true;
     setSaveState("saving");
     const result = await saveConsultationDraft(toFormData());
 
@@ -247,7 +301,7 @@ export function ConsultationForm({
   }
 
   async function handleSubmit() {
-    const validationError = validate(4);
+    const validationError = validate(5);
     if (validationError) {
       setError(validationError);
       return;
@@ -263,8 +317,18 @@ export function ConsultationForm({
       return;
     }
 
-    router.replace(`/patient/consultations/${result.id}?notice=submitted`);
+    router.replace("/patient?notice=submitted");
     router.refresh();
+  }
+
+  function treatmentSummary() {
+    if (form.primaryConcern === "weight") {
+      return `Previous GLP-1: ${form.weightPreviousGlp1 || "—"} · digestive screening: ${form.weightDigestiveHistory || "—"}`;
+    }
+    if (form.primaryConcern === "hair") {
+      return `${form.hairPattern || "—"} · ${form.hairDuration || "—"} · previous treatment: ${form.hairPreviousTreatment || "—"}`;
+    }
+    return `${form.sexualConcern || "—"} · frequency: ${form.sexualFrequency || "—"} · nitrate/heart restriction: ${form.sexualNitrates || "—"}`;
   }
 
   if (isSubmitting) {
@@ -299,7 +363,7 @@ export function ConsultationForm({
           className="patient-save-draft"
           type="button"
           onClick={() => void saveProgress(false)}
-          disabled={saveState === "saving"}
+          disabled={saveState === "saving" || !form.primaryConcern}
         >
           {saveState === "saving" ? <LoaderCircle size={15} className="action-spinner" /> : <Save size={15} />}
           {saveState === "saving" ? "Saving…" : saveState === "saved" ? "Saved" : "Save draft"}
@@ -312,9 +376,9 @@ export function ConsultationForm({
         {step === 1 && (
           <>
             <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 1 OF 4</span>
+              <span className="patient-kicker">STEP 1 OF 5</span>
               <h2>What would you like help with?</h2>
-              <p>Select the care area for this consultation.</p>
+              <p>Choose the care area for this consultation.</p>
             </div>
 
             <div className="patient-care-choice-grid">
@@ -340,9 +404,9 @@ export function ConsultationForm({
         {step === 2 && (
           <>
             <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 2 OF 4</span>
-              <h2>Tell us what is going on.</h2>
-              <p>Share the basic information your clinician needs to understand this consultation.</p>
+              <span className="patient-kicker">STEP 2 OF 5</span>
+              <h2>Medical history</h2>
+              <p>We use saved profile details when available. Check them and answer only what is needed for this review.</p>
             </div>
 
             <div className="patient-form-grid">
@@ -390,27 +454,6 @@ export function ConsultationForm({
                   <option value="prefer-not-to-say">Prefer not to say</option>
                 </select>
               </label>
-
-              <label className="patient-form-field patient-wide-field">
-                <span>What are you experiencing, and what would you like help with?</span>
-                <textarea
-                  rows={6}
-                  value={form.careGoal}
-                  onChange={(e) => patch("careGoal", e.target.value)}
-                  placeholder="Describe your symptoms, when they started, and the outcome you are hoping for."
-                  maxLength={3000}
-                />
-              </label>
-            </div>
-          </>
-        )}
-
-        {step === 3 && (
-          <>
-            <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 3 OF 4</span>
-              <h2>Medical history</h2>
-              <p>Answer what applies to you. This information helps the clinician review your consultation safely.</p>
             </div>
 
             <fieldset className="patient-history-fieldset">
@@ -431,11 +474,31 @@ export function ConsultationForm({
               </div>
             </fieldset>
 
+            <label className="patient-form-field patient-wide-field">
+              <span>Relevant medical history <small>Optional</small></span>
+              <textarea
+                rows={4}
+                value={form.medicalHistory}
+                onChange={(e) => patch("medicalHistory", e.target.value)}
+                placeholder="Previous diagnoses, surgery, treatment or anything else your clinician should know."
+              />
+            </label>
+          </>
+        )}
+
+        {step === 3 && (
+          <>
+            <div className="patient-intake-copy">
+              <span className="patient-kicker">STEP 3 OF 5</span>
+              <h2>Medications and allergies</h2>
+              <p>Keep it simple. If there are none, enter “None”.</p>
+            </div>
+
             <div className="patient-form-grid">
               <label className="patient-form-field">
                 <span>Current medications</span>
                 <textarea
-                  rows={4}
+                  rows={5}
                   value={form.currentMedications}
                   onChange={(e) => patch("currentMedications", e.target.value)}
                   placeholder='List medications, or enter "None".'
@@ -445,20 +508,10 @@ export function ConsultationForm({
               <label className="patient-form-field">
                 <span>Known drug allergies</span>
                 <textarea
-                  rows={4}
+                  rows={5}
                   value={form.allergies}
                   onChange={(e) => patch("allergies", e.target.value)}
                   placeholder='List allergies, or enter "None".'
-                />
-              </label>
-
-              <label className="patient-form-field patient-wide-field">
-                <span>Relevant medical history <small>Optional</small></span>
-                <textarea
-                  rows={5}
-                  value={form.medicalHistory}
-                  onChange={(e) => patch("medicalHistory", e.target.value)}
-                  placeholder="Previous treatment, surgery, diagnoses or anything else your clinician should know."
                 />
               </label>
             </div>
@@ -468,9 +521,124 @@ export function ConsultationForm({
         {step === 4 && (
           <>
             <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 4 OF 4</span>
-              <h2>Review your information</h2>
-              <p>Check the details below before sending them to the clinical team.</p>
+              <span className="patient-kicker">STEP 4 OF 5</span>
+              <h2>{careTitle(form.primaryConcern)} questions</h2>
+              <p>Only questions relevant to the care area you selected are shown here.</p>
+            </div>
+
+            <div className="patient-form-grid">
+              <label className="patient-form-field patient-wide-field">
+                <span>What are you experiencing, and what would you like help with?</span>
+                <textarea
+                  rows={5}
+                  value={form.careGoal}
+                  onChange={(e) => patch("careGoal", e.target.value)}
+                  placeholder="Describe the main concern, when it started, and what you are hoping to improve."
+                  maxLength={3000}
+                />
+              </label>
+
+              {form.primaryConcern === "weight" && (
+                <>
+                  <label className="patient-form-field">
+                    <span>Have you used a GLP-1 medicine before?</span>
+                    <select value={form.weightPreviousGlp1} onChange={(e) => patch("weightPreviousGlp1", e.target.value)}>
+                      <option value="">Select</option>
+                      <option value="never">No</option>
+                      <option value="semaglutide">Yes, semaglutide</option>
+                      <option value="tirzepatide">Yes, tirzepatide</option>
+                      <option value="other">Yes, another GLP-1 medicine</option>
+                    </select>
+                  </label>
+                  <label className="patient-form-field">
+                    <span>History of pancreatitis, gallbladder disease or severe digestive problems?</span>
+                    <select value={form.weightDigestiveHistory} onChange={(e) => patch("weightDigestiveHistory", e.target.value)}>
+                      <option value="">Select</option>
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                      <option value="unsure">Not sure</option>
+                    </select>
+                  </label>
+                </>
+              )}
+
+              {form.primaryConcern === "hair" && (
+                <>
+                  <label className="patient-form-field">
+                    <span>Where is thinning most noticeable?</span>
+                    <select value={form.hairPattern} onChange={(e) => patch("hairPattern", e.target.value)}>
+                      <option value="">Select</option>
+                      <option value="hairline">Hairline / temples</option>
+                      <option value="crown">Crown</option>
+                      <option value="diffuse">Diffuse thinning</option>
+                      <option value="patchy">Patchy loss</option>
+                    </select>
+                  </label>
+                  <label className="patient-form-field">
+                    <span>How long has this been happening?</span>
+                    <select value={form.hairDuration} onChange={(e) => patch("hairDuration", e.target.value)}>
+                      <option value="">Select</option>
+                      <option value="under-6-months">Under 6 months</option>
+                      <option value="6-12-months">6–12 months</option>
+                      <option value="1-3-years">1–3 years</option>
+                      <option value="over-3-years">More than 3 years</option>
+                    </select>
+                  </label>
+                  <label className="patient-form-field patient-wide-field">
+                    <span>Have you tried finasteride or minoxidil before?</span>
+                    <select value={form.hairPreviousTreatment} onChange={(e) => patch("hairPreviousTreatment", e.target.value)}>
+                      <option value="">Select</option>
+                      <option value="none">Neither</option>
+                      <option value="minoxidil">Minoxidil</option>
+                      <option value="finasteride">Finasteride</option>
+                      <option value="both">Both</option>
+                    </select>
+                  </label>
+                </>
+              )}
+
+              {form.primaryConcern === "sex" && (
+                <>
+                  <label className="patient-form-field">
+                    <span>Main concern</span>
+                    <select value={form.sexualConcern} onChange={(e) => patch("sexualConcern", e.target.value)}>
+                      <option value="">Select</option>
+                      <option value="erectile-dysfunction">Erectile dysfunction</option>
+                      <option value="premature-ejaculation">Premature ejaculation</option>
+                      <option value="low-desire">Low sexual desire</option>
+                      <option value="other">Another concern</option>
+                    </select>
+                  </label>
+                  <label className="patient-form-field">
+                    <span>How often does the problem happen?</span>
+                    <select value={form.sexualFrequency} onChange={(e) => patch("sexualFrequency", e.target.value)}>
+                      <option value="">Select</option>
+                      <option value="occasionally">Occasionally</option>
+                      <option value="often">Often</option>
+                      <option value="most-times">Most times</option>
+                    </select>
+                  </label>
+                  <label className="patient-form-field patient-wide-field">
+                    <span>Do you take nitrate medicines, or has a clinician told you to avoid sexual activity for heart reasons?</span>
+                    <select value={form.sexualNitrates} onChange={(e) => patch("sexualNitrates", e.target.value)}>
+                      <option value="">Select</option>
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                      <option value="unsure">Not sure</option>
+                    </select>
+                  </label>
+                </>
+              )}
+            </div>
+          </>
+        )}
+
+        {step === 5 && (
+          <>
+            <div className="patient-intake-copy">
+              <span className="patient-kicker">STEP 5 OF 5</span>
+              <h2>Review and submit</h2>
+              <p>Check the key details before sending them to the clinical team.</p>
             </div>
 
             <div className="patient-review-list">
@@ -478,11 +646,6 @@ export function ConsultationForm({
                 <span>Consultation</span>
                 <strong>{careTitle(form.primaryConcern)}</strong>
                 <button type="button" onClick={() => setStep(1)}>Edit</button>
-              </div>
-              <div>
-                <span>Your concern</span>
-                <strong>{form.careGoal}</strong>
-                <button type="button" onClick={() => setStep(2)}>Edit</button>
               </div>
               <div>
                 <span>Measurements</span>
@@ -498,17 +661,22 @@ export function ConsultationForm({
               <div>
                 <span>Medical screening</span>
                 <strong>{form.conditions.join(", ")}</strong>
+                <button type="button" onClick={() => setStep(2)}>Edit</button>
+              </div>
+              <div>
+                <span>Medications and allergies</span>
+                <strong>{form.currentMedications} · {form.allergies}</strong>
                 <button type="button" onClick={() => setStep(3)}>Edit</button>
               </div>
               <div>
-                <span>Current medications</span>
-                <strong>{form.currentMedications}</strong>
-                <button type="button" onClick={() => setStep(3)}>Edit</button>
+                <span>Your concern</span>
+                <strong>{form.careGoal}</strong>
+                <button type="button" onClick={() => setStep(4)}>Edit</button>
               </div>
               <div>
-                <span>Allergies</span>
-                <strong>{form.allergies}</strong>
-                <button type="button" onClick={() => setStep(3)}>Edit</button>
+                <span>Treatment questions</span>
+                <strong>{treatmentSummary()}</strong>
+                <button type="button" onClick={() => setStep(4)}>Edit</button>
               </div>
             </div>
 
@@ -535,14 +703,14 @@ export function ConsultationForm({
 
         <footer className="patient-intake-actions">
           {step > 1 ? (
-            <button className="patient-secondary-button" type="button" onClick={previousStep}>
-              <ArrowLeft size={16} /> Back
+            <button className="patient-flow-arrow patient-flow-arrow-back" type="button" onClick={previousStep} aria-label="Previous step">
+              <ArrowLeft size={20} />
             </button>
           ) : <span />}
 
           {step < steps.length ? (
-            <button className="patient-primary-button" type="button" onClick={() => void nextStep()}>
-              Continue <ArrowRight size={16} />
+            <button className="patient-flow-arrow patient-flow-arrow-next" type="button" onClick={() => void nextStep()} aria-label="Continue to next step">
+              <ArrowRight size={20} />
             </button>
           ) : (
             <button className="patient-primary-button" type="button" onClick={() => void handleSubmit()}>
