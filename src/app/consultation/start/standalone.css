@@ -614,17 +614,87 @@
   box-sizing: border-box;
 }
 
+/* A filled checkbox with no native border or outline. */
 .standalone-intake .patient-consent-card input[type="checkbox"] {
-  appearance: auto;
-  width: 18px;
-  height: 18px;
-  min-width: 18px;
-  min-height: 18px;
-  max-width: 18px;
-  max-height: 18px;
-  flex: 0 0 18px;
-  margin: 3px 0 0;
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  max-width: 20px;
+  max-height: 20px;
+  flex: 0 0 20px;
+  margin: 2px 0 0;
   padding: 0;
-  accent-color: #171717;
+  border: 0 !important;
+  border-radius: 5px;
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: #e9e9e9;
+  background-image: none;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 15px 15px;
+  cursor: pointer;
   vertical-align: middle;
+}
+.standalone-intake .patient-consent-card input[type="checkbox"]:checked {
+  background-color: #161616;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M4 10.1l3.8 3.8L16 5.9' stroke='white' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.standalone-intake .patient-consent-card label:has(input[type="checkbox"]:focus-visible) span {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.standalone-intake .patient-consent-card {
+  border: 0;
+  border-radius: 0;
+  padding: 16px 0;
+  background: transparent;
+  box-shadow: none;
+}
+.standalone-intake-header {
+  grid-template-columns: 1fr auto;
+}
+.standalone-intake .patient-unit-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 12px;
+  background: #f0f0f0;
+}
+.standalone-intake .patient-unit-switch button {
+  min-width: 66px;
+  width: auto;
+  height: 44px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 9px;
+  color: #565656;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1;
+}
+.standalone-intake .patient-unit-switch button.is-active {
+  color: #161616;
+  background: #fff;
+  box-shadow: 0 1px 4px rgb(0 0 0 / .07);
+}
+.standalone-intake .patient-unit-switch button:focus-visible {
+  outline: 2px solid #161616;
+  outline-offset: 2px;
+}
+@media (max-width: 700px) {
+  .standalone-intake .patient-unit-switch button {
+    min-width: 58px;
+    height: 44px;
+    min-height: 44px;
+    padding: 0 10px;
+    font-size: 14px;
+  }
 }
