@@ -116,6 +116,51 @@ async function persistConsultation(formData: FormData, patientId: string) {
   return { ok: true as const, id: result.data.id, record };
 }
 
+/** Save the basic profile details within the standalone intake, without a second onboarding form. */
+export async function saveConsultationBasics(formData: FormData) {
+  const { user } = await requireActionRole("patient");
+  const firstName = value(formData, "first_name");
+  const lastName = value(formData, "last_name");
+  const dateOfBirth = value(formData, "date_of_birth");
+
+  if (!firstName || !lastName) {
+    return { ok: false as const, error: "Enter your first and last name." };
+  }
+
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateOfBirth)) {
+    return { ok: false as const, error: "Enter your date of birth." };
+  }
+
+  const birth = new Date(`${dateOfBirth}T00:00:00Z`);
+  const today = new Date();
+  const age = today.getUTCFullYear() - birth.getUTCFullYear()
+    - (today.getUTCMonth() < birth.getUTCMonth()
+      || (today.getUTCMonth() === birth.getUTCMonth() && today.getUTCDate() < birth.getUTCDate()) ? 1 : 0);
+
+  if (
+    Number.isNaN(birth.getTime()) ||
+    birth.toISOString().slice(0, 10) !== dateOfBirth ||
+    age < 18 || age > 120
+  ) {
+    return { ok: false as const, error: "Enter a valid date of birth. Consultations are for adults aged 18 and over." };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("profiles").update({
+    first_name: firstName,
+    last_name: lastName,
+    display_name: `${firstName} ${lastName}`,
+    date_of_birth: dateOfBirth,
+  }).eq("id", user.id);
+
+  if (error) {
+    return { ok: false as const, error: "Could not save your details. Please try again." };
+  }
+
+  revalidatePath("/patient/profile");
+  return { ok: true as const };
+}
+
 export async function saveConsultationDraft(formData: FormData) {
   const { user } = await requireActionRole("patient");
 
