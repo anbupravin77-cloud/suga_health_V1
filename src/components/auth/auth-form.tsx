@@ -32,6 +32,8 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
   const isSignIn = mode === "sign-in";
   const isSignUp = mode === "sign-up";
+  const requestedNext = searchParams.get("next");
+  const authSuffix = requestedNext ? `?next=${encodeURIComponent(requestedNext)}` : "";
 
   useEffect(() => {
     if (resendSeconds <= 0) return;
@@ -67,12 +69,6 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
     const profileRole = profile.role;
     const role = isAppRole(profileRole) ? profileRole : "patient";
-
-    if (role === "patient" && profile.requires_onboarding) {
-      router.replace("/onboarding");
-      router.refresh();
-      return;
-    }
 
     const fallback = searchParams.get("next");
     router.replace(fallback && roleOwnsPath(role, fallback) ? fallback : roleHome(role));
@@ -115,7 +111,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
         email,
         password,
         options: {
-          emailRedirectTo: getAuthCallbackUrl(window.location.origin),
+          emailRedirectTo: getAuthCallbackUrl(window.location.origin, searchParams.get("next")),
         },
       });
 
@@ -243,10 +239,10 @@ export function AuthForm({ mode }: { mode: Mode }) {
       {mode !== "forgot-password" && !otpSent && (
         <>
           <nav className="auth-route-tabs" aria-label="Account access">
-            <Link href="/sign-in" className={isSignIn ? "is-active" : ""} aria-current={isSignIn ? "page" : undefined}>
+            <Link href={`/sign-in${authSuffix}`} className={isSignIn ? "is-active" : ""} aria-current={isSignIn ? "page" : undefined}>
               Sign In
             </Link>
-            <Link href="/sign-up" className={isSignUp ? "is-active" : ""} aria-current={isSignUp ? "page" : undefined}>
+            <Link href={`/sign-up${authSuffix}`} className={isSignUp ? "is-active" : ""} aria-current={isSignUp ? "page" : undefined}>
               Sign Up
             </Link>
           </nav>
