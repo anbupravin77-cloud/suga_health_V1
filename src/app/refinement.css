@@ -2551,3 +2551,46 @@ main.refined-home .faq-number {
     font-size: .68rem !important;
   }
 }
+
+
+/* Simple consultation arrow navigation */
+.patient-v2 .patient-intake-actions {
+  align-items: center;
+}
+
+.patient-v2 .patient-flow-arrow {
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 50px;
+  padding: 0;
+  border: 1px solid #111;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.patient-v2 .patient-flow-arrow:hover {
+  transform: translateY(-1px);
+  background: #2b2b2b;
+}
+
+.patient-v2 .patient-flow-arrow:active {
+  transform: translateY(0);
+}
+
+.patient-v2 .patient-flow-arrow:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+  .patient-v2 .patient-flow-arrow {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+  }
+}
