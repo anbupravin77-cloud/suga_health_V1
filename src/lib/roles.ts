@@ -23,5 +23,5 @@ export function roleOwnsPath(role: AppRole, path: string) {
 /** Keep return destinations within the authenticated role's routes. */
 export function roleCanReturnTo(role: AppRole, path: string) {
   if (!path.startsWith("/") || path.startsWith("//")) return false;
-  return roleOwnsPath(role, path) || (role === "patient" && path === "/consultation/start");
+  return roleOwnsPath(role, path) || (role === "patient" && (path === "/consultation/start" || /^\/consultation\/[0-9a-f-]{36}\/edit$/i.test(path)));
 }
