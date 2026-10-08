@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowLeft, LockKeyhole } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { ConsultationForm } from "@/components/care/consultation-form";
 import { requireRole } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -38,7 +38,6 @@ export default async function StartConsultationPage({
         <Link href="/" className="standalone-intake-logo" aria-label="Suga.Health home">
           SUGA.HEALTH
         </Link>
-        <span className="standalone-intake-private"><LockKeyhole size={15} /> Private consultation</span>
         <Link href="/patient" className="standalone-intake-exit">
           <ArrowLeft size={15} /> Exit
         </Link>
