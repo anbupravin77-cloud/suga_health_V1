@@ -21,7 +21,7 @@ import { ActionButton } from "@/components/ui/action-button";
 
 const navItems = [
   { label: "Home", href: "/patient", icon: Home },
-  { label: "New Consultation", href: "/patient/consultations/new", icon: Plus },
+  { label: "New Consultation", href: "/consultation/start", icon: Plus },
   { label: "My Consultations", href: "/patient/consultations", icon: ClipboardList },
   { label: "Medications", href: "/patient/medications", icon: Pill },
   { label: "Messages", href: "/patient/messages", icon: MessageSquare },
