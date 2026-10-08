@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  ArrowLeft,
-  ArrowRight,
   Check,
   CheckCircle2,
   LoaderCircle,
@@ -10,7 +8,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { saveConsultationBasics, saveConsultationDraft, submitConsultation } from "@/app/actions";
 
 type IntakeDefaults = {
@@ -86,8 +84,6 @@ const careAreas = [
     description: "Private clinician-led care for sexual health concerns.",
   },
 ];
-
-const steps = ["Care area", "About you", "Medical history", "Medications", "Treatment questions", "Review"];
 
 function readString(value: unknown, fallback = "") {
   return typeof value === "string" ? value : fallback;
@@ -167,17 +163,17 @@ export function ConsultationForm({
 }) {
   const router = useRouter();
   const [draftId, setDraftId] = useState(draft?.id ?? "");
-  const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormState>(() => initialState(draft, defaults));
   const [error, setError] = useState("");
+  const [invalidSection, setInvalidSection] = useState<string | null>(null);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const progress = useMemo(() => Math.round((step / steps.length) * 100), [step]);
 
   function patch<K extends keyof FormState>(key: K, next: FormState[K]) {
     setForm((current) => ({ ...current, [key]: next }));
     setError("");
+    setInvalidSection(null);
   }
 
   function toggleCondition(condition: string) {
@@ -198,6 +194,7 @@ export function ConsultationForm({
       };
     });
     setError("");
+    setInvalidSection(null);
   }
 
   function toFormData() {
@@ -292,93 +289,66 @@ export function ConsultationForm({
     return "";
   }
 
-  async function saveProgress(silent = false) {
-    if (saveState === "saving" || isSubmitting || !form.primaryConcern) return true;
+  async function saveProgress() {
+    if (saveState === "saving" || isSubmitting || !form.primaryConcern) return;
     setSaveState("saving");
-    const result = await saveConsultationDraft(toFormData());
-
-    if (result.ok && result.id) {
-      setDraftId(result.id);
-      setSaveState("saved");
-      if (!silent) setError("");
-      window.setTimeout(() => setSaveState("idle"), 1400);
-      return true;
-    }
-
-    setSaveState("idle");
-    if (!silent) setError(result.error || "We couldn’t save your draft.");
-    return false;
-  }
-
-  async function nextStep() {
-    const validationError = validate(step);
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-
+    setInvalidSection(null);
     setError("");
-    if (step === 2) {
-      const basics = await saveConsultationBasics(toFormData());
-      if (!basics.ok) {
-        setError(basics.error || "Could not save your details.");
-        return;
+    try {
+      const result = await saveConsultationDraft(toFormData());
+      if (result.ok && result.id) {
+        setDraftId(result.id);
+        setSaveState("saved");
+      } else {
+        setSaveState("idle");
+        setError(result.error || "We couldn’t save your draft.");
       }
+    } catch {
+      setSaveState("idle");
+      setError("We couldn’t save your draft. Please try again.");
     }
-    const saved = await saveProgress(true);
-    if (!saved) {
-      setError("Could not save your progress. Please try again.");
-      return;
-    }
-    setStep((current) => Math.min(steps.length, current + 1));
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function previousStep() {
-    setError("");
-    setStep((current) => Math.max(1, current - 1));
-    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   async function handleSubmit() {
-    for (let current = 1; current <= steps.length; current++) {
+    if (isSubmitting) return;
+    const sectionIds = ["care-area", "about-you", "medical-history", "medications", "treatment-questions", "consent"];
+    for (let current = 1; current <= sectionIds.length; current++) {
       const validationError = validate(current);
       if (validationError) {
-        setStep(current);
+        setInvalidSection(sectionIds[current - 1]);
         setError(validationError);
+        document.getElementById(sectionIds[current - 1])?.scrollIntoView({ behavior: "smooth", block: "center" });
         return;
       }
     }
 
-    setIsSubmitting(true);
-    const basics = await saveConsultationBasics(toFormData());
-    if (!basics.ok) {
-      setIsSubmitting(false);
-      setStep(2);
-      setError(basics.error || "Could not save your details.");
-      return;
-    }
     setError("");
-    const result = await submitConsultation(toFormData());
+    setInvalidSection(null);
+    setIsSubmitting(true);
 
-    if (!result.ok || !result.id) {
+    try {
+      const basics = await saveConsultationBasics(toFormData());
+      if (!basics.ok) {
+        setIsSubmitting(false);
+        setInvalidSection("about-you");
+        setError(basics.error || "Could not save your details.");
+        document.getElementById("about-you")?.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+
+      const result = await submitConsultation(toFormData());
+      if (!result.ok || !result.id) {
+        setIsSubmitting(false);
+        setError(result.error || "We couldn’t submit the consultation.");
+        return;
+      }
+
+      router.replace("/patient?notice=submitted");
+      router.refresh();
+    } catch {
       setIsSubmitting(false);
-      setError(result.error || "We couldn’t submit the consultation.");
-      return;
+      setError("We couldn’t submit the consultation. Please try again.");
     }
-
-    router.replace("/patient?notice=submitted");
-    router.refresh();
-  }
-
-  function treatmentSummary() {
-    if (form.primaryConcern === "weight") {
-      return `Previous GLP-1: ${form.weightPreviousGlp1 || "—"} · digestive screening: ${form.weightDigestiveHistory || "—"}`;
-    }
-    if (form.primaryConcern === "hair") {
-      return `${form.hairPattern || "—"} · ${form.hairDuration || "—"} · previous treatment: ${form.hairPreviousTreatment || "—"}`;
-    }
-    return `${form.sexualConcern || "—"} · frequency: ${form.sexualFrequency || "—"} · nitrate/heart restriction: ${form.sexualNitrates || "—"}`;
   }
 
   if (isSubmitting) {
@@ -393,40 +363,22 @@ export function ConsultationForm({
   }
 
   return (
-    <section className="patient-intake">
-      <header className="patient-intake-header">
-        <div className="patient-intake-stepper" aria-label="Consultation steps">
-          {steps.map((name, index) => {
-            const number = index + 1;
-            const complete = step > number;
-            const current = step === number;
-            return (
-              <div className={current ? "is-current" : complete ? "is-complete" : ""} key={name}>
-                <span>{complete ? <Check size={14} /> : number}</span>
-                <small>{name}</small>
-              </div>
-            );
-          })}
-        </div>
-        <div className="patient-intake-progress"><span style={{ width: `${progress}%` }} /></div>
+    <form className="patient-intake consultation-onepage" onSubmit={(event) => { event.preventDefault(); void handleSubmit(); }} noValidate>
+      <div className="consultation-onepage-toolbar">
+        <span>Private health consultation</span>
         <button
-          className="patient-save-draft"
           type="button"
-          onClick={() => void saveProgress(false)}
-          disabled={saveState === "saving" || !form.primaryConcern}
+          className="patient-save-draft"
+          onClick={() => void saveProgress()}
+          disabled={saveState === "saving" || isSubmitting || !form.primaryConcern}
         >
-          {saveState === "saving" ? <LoaderCircle size={15} className="action-spinner" /> : <Save size={15} />}
-          {saveState === "saving" ? "Saving…" : saveState === "saved" ? "Saved" : "Save draft"}
+          {saveState === "saving" ? <LoaderCircle size={16} className="action-spinner" /> : <Save size={16} />}
+          {saveState === "saving" ? "Saving…" : saveState === "saved" ? "Draft saved" : "Save draft"}
         </button>
-      </header>
+      </div>
 
-      {error && <p className="page-error patient-intake-error" role="alert">{error}</p>}
-
-      <div className="patient-intake-card">
-        {step === 1 && (
-          <>
+      <section className="consultation-onepage-section" id="care-area">
             <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 1 OF 6</span>
               <h2>What would you like help with?</h2>
               <p>Choose the care area for this consultation.</p>
             </div>
@@ -448,13 +400,11 @@ export function ConsultationForm({
                 </button>
               ))}
             </div>
-          </>
-        )}
+        {invalidSection === "care-area" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
+      </section>
 
-        {step === 2 && (
-          <>
+      <section className="consultation-onepage-section" id="about-you">
             <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 2 OF 6</span>
               <h2>About you</h2>
               <p>Confirm your basic details once. We use them with your consultation, without a separate profile setup.</p>
             </div>
@@ -514,13 +464,11 @@ export function ConsultationForm({
               </label>
             </div>
 
-          </>
-        )}
+        {invalidSection === "about-you" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
+      </section>
 
-        {step === 3 && (
-          <>
+      <section className="consultation-onepage-section" id="medical-history">
             <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 3 OF 6</span>
               <h2>Medical history</h2>
               <p>Select any conditions that apply and add other relevant history if needed.</p>
             </div>
@@ -552,13 +500,11 @@ export function ConsultationForm({
                 placeholder="Previous diagnoses, surgery, treatment or anything else your clinician should know."
               />
             </label>
-          </>
-        )}
+        {invalidSection === "medical-history" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
+      </section>
 
-        {step === 4 && (
-          <>
+      <section className="consultation-onepage-section" id="medications">
             <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 4 OF 6</span>
               <h2>Medications and allergies</h2>
               <p>Keep it simple. If there are none, enter “None”.</p>
             </div>
@@ -584,15 +530,13 @@ export function ConsultationForm({
                 />
               </label>
             </div>
-          </>
-        )}
+        {invalidSection === "medications" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
+      </section>
 
-        {step === 5 && (
-          <>
+      <section className="consultation-onepage-section" id="treatment-questions">
             <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 5 OF 6</span>
-              <h2>{careTitle(form.primaryConcern)} questions</h2>
-              <p>Only questions relevant to the care area you selected are shown here.</p>
+              <h2>{form.primaryConcern ? `${careTitle(form.primaryConcern)} questions` : "Treatment-specific questions"}</h2>
+              <p>Answer the questions related to the care area you choose above.</p>
             </div>
 
             <div className="patient-form-grid">
@@ -699,61 +643,14 @@ export function ConsultationForm({
                 </>
               )}
             </div>
-          </>
-        )}
+        {invalidSection === "treatment-questions" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
+      </section>
 
-        {step === 6 && (
-          <>
-            <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 6 OF 6</span>
-              <h2>Review and submit</h2>
-              <p>Check the key details before sending them to the clinical team.</p>
-            </div>
-
-            <div className="patient-review-list">
-              <div>
-                <span>Consultation</span>
-                <strong>{careTitle(form.primaryConcern)}</strong>
-                <button type="button" onClick={() => setStep(1)}>Edit</button>
-              </div>
-              <div>
-                <span>Patient</span>
-                <strong>{form.firstName} {form.lastName} · {form.dateOfBirth}</strong>
-                <button type="button" onClick={() => setStep(2)}>Edit</button>
-              </div>
-              <div>
-                <span>Measurements</span>
-                <strong>
-                  {form.heightUnit === "cm" ? `${form.heightCm} cm` : `${form.heightFeet} ft ${form.heightInches || 0} in`}
-                  {" · "}
-                  {form.weightValue} {form.weightUnit}
-                  {" · "}
-                  age {ageFromDateOfBirth(form.dateOfBirth)}
-                </strong>
-                <button type="button" onClick={() => setStep(2)}>Edit</button>
-              </div>
-              <div>
-                <span>Medical screening</span>
-                <strong>{form.conditions.join(", ")}</strong>
-                <button type="button" onClick={() => setStep(3)}>Edit</button>
-              </div>
-              <div>
-                <span>Medications and allergies</span>
-                <strong>{form.currentMedications} · {form.allergies}</strong>
-                <button type="button" onClick={() => setStep(4)}>Edit</button>
-              </div>
-              <div>
-                <span>Your concern</span>
-                <strong>{form.careGoal}</strong>
-                <button type="button" onClick={() => setStep(5)}>Edit</button>
-              </div>
-              <div>
-                <span>Treatment questions</span>
-                <strong>{treatmentSummary()}</strong>
-                <button type="button" onClick={() => setStep(5)}>Edit</button>
-              </div>
-            </div>
-
+      <section className="consultation-onepage-section consultation-consent-section" id="consent">
+        <div className="patient-intake-copy">
+          <h2>Consent &amp; submit</h2>
+          <p>Check your answers above and confirm before sending them to your clinician.</p>
+        </div>
             <div className="patient-consent-card">
               <ShieldCheck size={24} />
               <div>
@@ -772,27 +669,17 @@ export function ConsultationForm({
                 </label>
               </div>
             </div>
-          </>
-        )}
+        {invalidSection === "consent" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
+      </section>
 
-        <footer className="patient-intake-actions">
-          {step > 1 ? (
-            <button className="patient-flow-arrow patient-flow-arrow-back" type="button" onClick={previousStep} aria-label="Previous step">
-              <ArrowLeft size={20} />
-            </button>
-          ) : <span />}
+      {error && !invalidSection && <p className="consultation-inline-error" role="alert">{error}</p>}
 
-          {step < steps.length ? (
-            <button className="patient-flow-arrow patient-flow-arrow-next" type="button" onClick={() => void nextStep()} aria-label="Continue to next step">
-              <ArrowRight size={20} />
-            </button>
-          ) : (
-            <button className="patient-primary-button" type="button" onClick={() => void handleSubmit()}>
-              <CheckCircle2 size={17} /> Submit Consultation
-            </button>
-          )}
-        </footer>
-      </div>
-    </section>
+      <footer className="consultation-onepage-actions">
+        <p>Submitting sends your answers for clinical review. A prescription is not guaranteed.</p>
+        <button type="submit" className="patient-primary-button" disabled={isSubmitting}>
+          <CheckCircle2 size={18} /> Submit consultation
+        </button>
+      </footer>
+    </form>
   );
 }
