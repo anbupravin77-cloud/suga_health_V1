@@ -35,10 +35,6 @@ export async function GET(request: Request) {
       const profileRole = profile.role;
       const role = isAppRole(profileRole) ? profileRole : "patient";
 
-      if (role === "patient" && profile.requires_onboarding) {
-        return NextResponse.redirect(new URL("/onboarding", appOrigin));
-      }
-
       const rolePath = roleHome(role);
       const safeNext =
         requestedNext &&
