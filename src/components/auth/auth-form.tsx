@@ -6,7 +6,7 @@ import { ArrowRight, Eye, EyeOff, Loader2, Mail, Phone, RefreshCw, ShieldCheck }
 import { useEffect, useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { getAuthCallbackUrl } from "@/lib/auth-redirect";
-import { isAppRole, roleHome, roleOwnsPath } from "@/lib/roles";
+import { isAppRole, roleHome, roleCanReturnTo } from "@/lib/roles";
 
 type Mode = "sign-in" | "sign-up" | "forgot-password";
 type AuthMethod = "email" | "phone";
@@ -72,7 +72,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
     const role = isAppRole(profileRole) ? profileRole : "patient";
 
     const fallback = searchParams.get("next");
-    router.replace(fallback && roleOwnsPath(role, fallback) ? fallback : roleHome(role));
+    router.replace(fallback && roleCanReturnTo(role, fallback) ? fallback : roleHome(role));
     router.refresh();
   }
 
