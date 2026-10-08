@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getTrustedAppOrigin } from "@/lib/auth-redirect";
 import { createClient } from "@/lib/supabase/server";
 import { isAppRole, roleHome, roleCanReturnTo } from "@/lib/roles";
+import { isQaPatient, QA_FRESH_INTAKE_PATH } from "@/lib/qa-patient";
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
@@ -34,6 +35,11 @@ export async function GET(request: Request) {
 
       const profileRole = profile.role;
       const role = isAppRole(profileRole) ? profileRole : "patient";
+
+      // Google sign-in and confirmed email sign-up should replay the same QA flow.
+      if (role === "patient" && isQaPatient(user.id)) {
+        return NextResponse.redirect(new URL(QA_FRESH_INTAKE_PATH, appOrigin));
+      }
 
       const rolePath = roleHome(role);
       const safeNext =
