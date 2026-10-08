@@ -26,7 +26,7 @@ export default async function NewConsultationPage() {
       <section className="patient-page-heading">
         <div>
           <h1>New Consultation</h1>
-          <p>Four clear steps. Your answers stay private until you submit them to the clinical team.</p>
+          <p>Five short steps. Saved profile details are reused when available, and only the questions needed for this consultation are shown.</p>
         </div>
       </section>
       <ConsultationForm
