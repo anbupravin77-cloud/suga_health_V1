@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ArrowLeft, LockKeyhole } from "lucide-react";
 import { ConsultationForm } from "@/components/care/consultation-form";
 import { requireRole } from "@/lib/auth";
@@ -9,8 +10,10 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Start consultation | Suga.Health" };
 
 export default async function StartConsultationPage() {
-  const { user } = await requireRole("patient");
   const supabase = await createClient();
+  const { data: { user: sessionUser } } = await supabase.auth.getUser();
+  if (!sessionUser) redirect("/sign-in?next=%2Fconsultation%2Fstart");
+  const { user } = await requireRole("patient");
   const { data: profile } = await supabase
     .from("profiles")
     .select("first_name, last_name, date_of_birth, sex, height_cm, weight_kg")
