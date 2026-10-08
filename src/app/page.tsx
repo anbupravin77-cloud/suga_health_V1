@@ -448,7 +448,7 @@ export default function HomePage() {
                 <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
                 {pillars[heroSlide].id === "weight" && (
                   <img
-                    src="/images/suga-orange-vial-model.jpg"
+                    src="/images/wmremove-transformed.jpeg"
                     alt="Woman holding a small medicine vial against an orange studio background"
                     width={2048}
                     height={1529}
@@ -487,7 +487,7 @@ export default function HomePage() {
                     {pillar.id === "weight" && (
                       <video
                         className="home-uploaded-media home-uploaded-media-video"
-                        src="/images/suga-floating-medicines.mp4"
+                        src="/images/floating_medicines.mp4"
                         aria-label="Illustrative animation of floating medication devices"
                         autoPlay
                         muted
