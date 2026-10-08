@@ -698,3 +698,91 @@
     font-size: 14px;
   }
 }
+
+
+/* Conditional None / Yes answers */
+.standalone-intake .consultation-answer-question {
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+}
+.standalone-intake .consultation-answer-question > span {
+  color: #272727;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+.standalone-intake .consultation-binary-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.standalone-intake .consultation-binary-options button {
+  min-width: 110px;
+  min-height: 46px;
+  padding: 10px 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d7d7d7;
+  border-radius: 10px;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+.standalone-intake .consultation-binary-options button.is-selected {
+  background: #171717;
+  border-color: #171717;
+  color: #fff;
+}
+.standalone-intake .consultation-binary-options button:hover:not(.is-selected) {
+  background: #f4f4f4;
+  border-color: #b4b4b4;
+}
+.standalone-intake .consultation-binary-options button:focus-visible {
+  outline: 2px solid #171717;
+  outline-offset: 3px;
+}
+.standalone-intake .consultation-reveal-field {
+  display: grid;
+  gap: 8px;
+  margin-top: 4px;
+  min-width: 0;
+}
+.standalone-intake .consultation-reveal-field > span {
+  color: #424242;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.standalone-intake .consultation-reveal-field textarea {
+  width: 100%;
+  min-height: 114px;
+  padding: 13px 15px;
+  border: 1px solid #d7d7d7;
+  border-radius: 10px;
+  color: #191919;
+  background: #fff;
+  font-size: 15px;
+  line-height: 1.6;
+  resize: vertical;
+}
+.standalone-intake .consultation-reveal-field textarea:focus {
+  border-color: #171717;
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(0 0 0 / .07);
+}
+@media (max-width: 700px) {
+  .standalone-intake .consultation-binary-options button {
+    min-width: 104px;
+    min-height: 48px;
+    font-size: 15px;
+  }
+  .standalone-intake .consultation-reveal-field textarea {
+    font-size: 16px;
+  }
+}
