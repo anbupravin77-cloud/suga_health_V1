@@ -255,3 +255,348 @@
     flex: 0 1 auto;
   }
 }
+
+
+/* Single-page consultation design (Inter) */
+.standalone-intake,
+.standalone-intake :is(h1,h2,h3,h4,p,span,small,strong,label,legend,button,input,select,textarea,a,summary) {
+  font-family: var(--font-consultation), Inter, Arial, sans-serif !important;
+}
+
+.standalone-intake {
+  background: #fff !important;
+  color: #171717 !important;
+}
+
+.standalone-intake-header {
+  background: #fff;
+  border-color: #e7e7e7;
+  min-height: 72px;
+}
+
+.standalone-intake-content {
+  width: min(900px, calc(100% - 40px));
+  padding-top: clamp(36px, 6vw, 68px);
+}
+
+.standalone-intake-intro {
+  max-width: 820px;
+  margin-bottom: 30px;
+}
+
+.standalone-intake-intro h1 {
+  font-family: var(--font-consultation), Inter, Arial, sans-serif !important;
+  font-size: clamp(32px, 4.2vw, 49px);
+  font-weight: 650;
+  letter-spacing: -.045em;
+  line-height: 1.12;
+}
+
+.standalone-intake-intro > p {
+  margin: 12px 0 0;
+  max-width: 72ch;
+  color: #626262;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.standalone-intake-qa-note {
+  width: fit-content;
+  padding: 9px 13px;
+  border-radius: 8px;
+  background: #f5f5f3;
+  color: #505050 !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+}
+
+.standalone-intake .consultation-onepage {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #161616;
+  border-radius: 0;
+  background: #fff;
+}
+
+.standalone-intake .consultation-onepage-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+}
+
+.standalone-intake .consultation-onepage-toolbar > span {
+  color: #696969;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.standalone-intake .consultation-onepage-toolbar .patient-save-draft {
+  position: static;
+  top: auto;
+  right: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 43px;
+  padding: 0 15px;
+  border: 1px solid #dddddd;
+  border-radius: 999px;
+  background: #fff;
+  color: #191919;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.standalone-intake .consultation-onepage-toolbar .patient-save-draft:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.standalone-intake .consultation-onepage-section {
+  scroll-margin-top: 28px;
+  padding: clamp(30px, 5vw, 50px) 0;
+  border-top: 1px solid #e2e2e2;
+  background: #fff;
+}
+
+.standalone-intake .patient-intake-copy {
+  margin-bottom: 22px;
+}
+
+.standalone-intake .patient-intake-copy h2 {
+  color: #161616;
+  font-size: clamp(22px, 3vw, 29px);
+  font-weight: 650;
+  letter-spacing: -.032em;
+  line-height: 1.18;
+}
+
+.standalone-intake .patient-intake-copy p {
+  max-width: 70ch;
+  margin-top: 8px;
+  color: #686868;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.standalone-intake .patient-care-choice-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.standalone-intake .patient-care-choice-grid button {
+  min-height: 120px;
+  padding: 20px 16px;
+  border: 1px solid #dedede;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.standalone-intake .patient-care-choice-grid button.is-selected {
+  border: 1.5px solid #171717;
+  background: #f7f7f7;
+}
+
+.standalone-intake .patient-care-choice-grid button:focus-visible,
+.standalone-intake .patient-condition-grid button:focus-visible {
+  outline: 2px solid #171717;
+  outline-offset: 3px;
+}
+
+.standalone-intake .patient-choice-check {
+  border-color: #cacaca;
+}
+
+.standalone-intake .patient-care-choice-grid button.is-selected .patient-choice-check {
+  background: #171717;
+  border-color: #171717;
+}
+
+.standalone-intake .patient-care-choice-grid strong {
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.standalone-intake .patient-care-choice-grid small {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #666;
+}
+
+.standalone-intake .patient-form-grid {
+  gap: 19px 18px;
+}
+
+.standalone-intake .patient-form-field > span,
+.standalone-intake .patient-field-heading label,
+.standalone-intake .patient-history-fieldset legend {
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.standalone-intake .patient-form-field input,
+.standalone-intake .patient-form-field select,
+.standalone-intake .patient-form-field textarea {
+  width: 100%;
+  background: #fff;
+  color: #191919;
+  border-color: #d7d7d7;
+  border-radius: 9px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.standalone-intake .patient-form-field input,
+.standalone-intake .patient-form-field select {
+  min-height: 51px;
+}
+
+.standalone-intake .patient-form-field textarea {
+  padding: 13px 15px;
+}
+
+.standalone-intake .patient-form-field input:focus,
+.standalone-intake .patient-form-field textarea:focus,
+.standalone-intake .patient-form-field select:focus {
+  border-color: #1c1c1c;
+  box-shadow: 0 0 0 2px rgb(0 0 0 / .07);
+}
+
+.standalone-intake .patient-unit-switch {
+  background: #f0f0f0;
+}
+
+.standalone-intake .patient-unit-switch button.is-active {
+  color: #171717;
+  background: #fff;
+}
+
+.standalone-intake .patient-condition-grid button {
+  min-height: 49px;
+  padding: 10px 13px;
+  border-radius: 9px;
+  border-color: #dddddd;
+  background: #fff;
+  color: #292929;
+  font-size: 13px;
+}
+
+.standalone-intake .patient-condition-grid button.is-selected {
+  background: #f7f7f7;
+  border-color: #1c1c1c;
+}
+
+.standalone-intake .patient-condition-grid button.is-selected > span {
+  background: #1c1c1c;
+  border-color: #1c1c1c;
+}
+
+.standalone-intake .patient-history-fieldset {
+  margin-bottom: 22px;
+}
+
+.standalone-intake .patient-consent-card {
+  margin-top: 0;
+  padding: 18px;
+  border: 1px solid #ececec;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.standalone-intake .patient-consent-card h3 {
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.standalone-intake .patient-consent-card label {
+  gap: 11px;
+  align-items: flex-start;
+  color: #444;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.standalone-intake .patient-consent-card input {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  margin-top: 3px;
+  accent-color: #171717;
+}
+
+.standalone-intake .consultation-inline-error {
+  padding: 12px 14px;
+  margin: 14px 0;
+  border-radius: 9px;
+  background: #fff2f1;
+  border: 1px solid #f0c7c3;
+  color: #8f2420;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.standalone-intake .consultation-onepage-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 28px;
+  border-top: 1px solid #171717;
+}
+
+.standalone-intake .consultation-onepage-actions p {
+  max-width: 430px;
+  margin: 0;
+  color: #656565;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.standalone-intake .consultation-onepage-actions .patient-primary-button {
+  display: inline-flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 25px;
+  border: 1px solid #171717;
+  border-radius: 999px;
+  background: #171717;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.standalone-intake .consultation-onepage-actions .patient-primary-button:hover {
+  background: #333;
+}
+
+@media(max-width:700px){
+  .standalone-intake-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 16px;
+  }
+  .standalone-intake-content { width: calc(100% - 32px); padding: 30px 0 55px; }
+  .standalone-intake-intro { margin-bottom: 24px; }
+  .standalone-intake-intro h1 { font-size: 34px; }
+  .standalone-intake .consultation-onepage-toolbar { min-height: 69px; }
+  .standalone-intake .consultation-onepage-section { padding: 29px 0; }
+  .standalone-intake .patient-care-choice-grid { grid-template-columns: 1fr; }
+  .standalone-intake .patient-care-choice-grid button { min-height: 91px; padding: 14px 17px; }
+  .standalone-intake .patient-form-grid,
+  .standalone-intake .patient-condition-grid { grid-template-columns: 1fr; }
+  .standalone-intake .patient-form-field input,
+  .standalone-intake .patient-form-field select,
+  .standalone-intake .patient-form-field textarea { font-size: 16px; }
+  .standalone-intake .consultation-onepage-actions { align-items: stretch; flex-direction: column; gap: 16px; }
+  .standalone-intake .consultation-onepage-actions .patient-primary-button { width: 100%; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .standalone-intake .consultation-onepage * { scroll-behavior: auto !important; transition-duration:.01ms !important; }
+}
