@@ -11,9 +11,12 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { saveConsultationDraft, submitConsultation } from "@/app/actions";
+import { saveConsultationBasics, saveConsultationDraft, submitConsultation } from "@/app/actions";
 
 type IntakeDefaults = {
+  firstName?: string;
+  lastName?: string;
+  dateOfBirth?: string;
   height_cm?: number | null;
   weight_kg?: number | null;
   age?: number | null;
@@ -28,6 +31,9 @@ type Draft = {
 
 type FormState = {
   primaryConcern: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
   heightUnit: "cm" | "ftin";
   heightCm: string;
   heightFeet: string;
@@ -81,7 +87,7 @@ const careAreas = [
   },
 ];
 
-const steps = ["Care area", "Medical history", "Medications", "Treatment questions", "Review"];
+const steps = ["Care area", "About you", "Medical history", "Medications", "Treatment questions", "Review"];
 
 function readString(value: unknown, fallback = "") {
   return typeof value === "string" ? value : fallback;
@@ -89,6 +95,17 @@ function readString(value: unknown, fallback = "") {
 
 function readNumberString(value: unknown, fallback = "") {
   return typeof value === "number" && Number.isFinite(value) ? String(value) : fallback;
+}
+
+function ageFromDateOfBirth(dateOfBirth: string): string {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateOfBirth)) return "";
+  const dob = new Date(`${dateOfBirth}T00:00:00Z`);
+  if (Number.isNaN(dob.getTime()) || dob.toISOString().slice(0, 10) !== dateOfBirth) return "";
+  const now = new Date();
+  const age = now.getUTCFullYear() - dob.getUTCFullYear()
+    - (now.getUTCMonth() < dob.getUTCMonth() ||
+       (now.getUTCMonth() === dob.getUTCMonth() && now.getUTCDate() < dob.getUTCDate()) ? 1 : 0);
+  return age >= 0 && age <= 120 ? String(age) : "";
 }
 
 function readTreatmentAnswers(responses: Record<string, unknown>) {
@@ -107,6 +124,9 @@ function initialState(draft?: Draft, defaults?: IntakeDefaults): FormState {
 
   return {
     primaryConcern: draft?.primary_concern || readString(r.primary_concern),
+    firstName: defaults?.firstName ?? "",
+    lastName: defaults?.lastName ?? "",
+    dateOfBirth: defaults?.dateOfBirth ?? "",
     heightUnit: readString(r.height_unit) === "ftin" ? "ftin" : "cm",
     heightCm: readNumberString(r.height_cm_input, defaults?.height_cm ? String(defaults.height_cm) : ""),
     heightFeet: readNumberString(r.height_feet),
@@ -184,13 +204,16 @@ export function ConsultationForm({
     const data = new FormData();
     if (draftId) data.set("id", draftId);
     data.set("primary_concern", form.primaryConcern);
+    data.set("first_name", form.firstName.trim());
+    data.set("last_name", form.lastName.trim());
+    data.set("date_of_birth", form.dateOfBirth);
     data.set("height_unit", form.heightUnit);
     data.set("height_cm", form.heightCm);
     data.set("height_feet", form.heightFeet);
     data.set("height_inches", form.heightInches);
     data.set("weight_unit", form.weightUnit);
     data.set("weight_value", form.weightValue);
-    data.set("age", form.age);
+    data.set("age", ageFromDateOfBirth(form.dateOfBirth));
     data.set("sex", form.sex);
     form.conditions.forEach((condition) => data.append("conditions", condition));
     data.set("current_medications", form.currentMedications);
@@ -217,22 +240,28 @@ export function ConsultationForm({
     }
 
     if (currentStep === 2) {
-      if (form.heightUnit === "cm" && !form.heightCm) return "Enter your height.";
-      if (form.heightUnit === "ftin" && !form.heightFeet) return "Enter your height.";
-      if (!form.weightValue) return "Enter your weight.";
-      if (!form.age) return "Enter your age.";
-      if (!form.sex) return "Select the option that applies to you.";
-      if (form.conditions.length === 0) {
-        return 'Select any applicable conditions or choose "None of the above".';
+      if (!form.firstName.trim() || !form.lastName.trim()) return "Enter your first and last name.";
+      const age = Number(ageFromDateOfBirth(form.dateOfBirth));
+      if (!form.dateOfBirth || !Number.isFinite(age) || age < 18 || age > 120) {
+        return "Enter a valid date of birth. Consultations are for adults aged 18 and over.";
       }
+      if (form.heightUnit === "cm" && !(Number(form.heightCm) > 0 && Number(form.heightCm) <= 300)) return "Enter a valid height.";
+      if (form.heightUnit === "ftin" && !(Number(form.heightFeet) >= 1 && Number(form.heightFeet) <= 9 && Number(form.heightInches || "0") >= 0 && Number(form.heightInches || "0") < 12)) return "Enter a valid height.";
+      const weightKg = Number(form.weightValue) * (form.weightUnit === "lb" ? 0.45359237 : 1);
+      if (!(weightKg > 0 && weightKg <= 500)) return "Enter a valid weight.";
+      if (!form.sex) return "Select the option that applies to you.";
     }
 
-    if (currentStep === 3) {
+    if (currentStep === 3 && form.conditions.length === 0) {
+      return 'Select any applicable conditions or choose "None of the above".';
+    }
+
+    if (currentStep === 4) {
       if (!form.currentMedications.trim()) return 'List current medications or enter "None".';
       if (!form.allergies.trim()) return 'List known drug allergies or enter "None".';
     }
 
-    if (currentStep === 4) {
+    if (currentStep === 5) {
       if (!form.careGoal.trim()) return "Briefly describe what you want help with.";
 
       if (form.primaryConcern === "weight") {
@@ -254,7 +283,7 @@ export function ConsultationForm({
     }
 
     if (
-      currentStep === 5 &&
+      currentStep === 6 &&
       (!form.consentTruth || !form.consentTelehealth || !form.consentPrivacy)
     ) {
       return "All three consent statements are required before submission.";
@@ -289,7 +318,18 @@ export function ConsultationForm({
     }
 
     setError("");
-    await saveProgress(true);
+    if (step === 2) {
+      const basics = await saveConsultationBasics(toFormData());
+      if (!basics.ok) {
+        setError(basics.error || "Could not save your details.");
+        return;
+      }
+    }
+    const saved = await saveProgress(true);
+    if (!saved) {
+      setError("Could not save your progress. Please try again.");
+      return;
+    }
     setStep((current) => Math.min(steps.length, current + 1));
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -301,13 +341,23 @@ export function ConsultationForm({
   }
 
   async function handleSubmit() {
-    const validationError = validate(5);
-    if (validationError) {
-      setError(validationError);
-      return;
+    for (let current = 1; current <= steps.length; current++) {
+      const validationError = validate(current);
+      if (validationError) {
+        setStep(current);
+        setError(validationError);
+        return;
+      }
     }
 
     setIsSubmitting(true);
+    const basics = await saveConsultationBasics(toFormData());
+    if (!basics.ok) {
+      setIsSubmitting(false);
+      setStep(2);
+      setError(basics.error || "Could not save your details.");
+      return;
+    }
     setError("");
     const result = await submitConsultation(toFormData());
 
@@ -376,7 +426,7 @@ export function ConsultationForm({
         {step === 1 && (
           <>
             <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 1 OF 5</span>
+              <span className="patient-kicker">STEP 1 OF 6</span>
               <h2>What would you like help with?</h2>
               <p>Choose the care area for this consultation.</p>
             </div>
@@ -404,12 +454,20 @@ export function ConsultationForm({
         {step === 2 && (
           <>
             <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 2 OF 5</span>
-              <h2>Medical history</h2>
-              <p>We use saved profile details when available. Check them and answer only what is needed for this review.</p>
+              <span className="patient-kicker">STEP 2 OF 6</span>
+              <h2>About you</h2>
+              <p>Confirm your basic details once. We use them with your consultation, without a separate profile setup.</p>
             </div>
 
             <div className="patient-form-grid">
+              <label className="patient-form-field">
+                <span>First name</span>
+                <input type="text" value={form.firstName} onChange={(e) => patch("firstName", e.target.value)} autoComplete="given-name" maxLength={100} required />
+              </label>
+              <label className="patient-form-field">
+                <span>Last name</span>
+                <input type="text" value={form.lastName} onChange={(e) => patch("lastName", e.target.value)} autoComplete="family-name" maxLength={100} required />
+              </label>
               <div className="patient-form-field">
                 <div className="patient-field-heading">
                   <label>Height</label>
@@ -440,8 +498,8 @@ export function ConsultationForm({
               </div>
 
               <label className="patient-form-field">
-                <span>Age</span>
-                <input type="number" min="18" max="120" value={form.age} onChange={(e) => patch("age", e.target.value)} placeholder="Age" />
+                <span>Date of birth</span>
+                <input type="date" max={new Date().toISOString().slice(0, 10)} value={form.dateOfBirth} onChange={(e) => patch("dateOfBirth", e.target.value)} autoComplete="bday" required />
               </label>
 
               <label className="patient-form-field">
@@ -454,6 +512,17 @@ export function ConsultationForm({
                   <option value="prefer-not-to-say">Prefer not to say</option>
                 </select>
               </label>
+            </div>
+
+          </>
+        )}
+
+        {step === 3 && (
+          <>
+            <div className="patient-intake-copy">
+              <span className="patient-kicker">STEP 3 OF 6</span>
+              <h2>Medical history</h2>
+              <p>Select any conditions that apply and add other relevant history if needed.</p>
             </div>
 
             <fieldset className="patient-history-fieldset">
@@ -486,10 +555,10 @@ export function ConsultationForm({
           </>
         )}
 
-        {step === 3 && (
+        {step === 4 && (
           <>
             <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 3 OF 5</span>
+              <span className="patient-kicker">STEP 4 OF 6</span>
               <h2>Medications and allergies</h2>
               <p>Keep it simple. If there are none, enter “None”.</p>
             </div>
@@ -518,10 +587,10 @@ export function ConsultationForm({
           </>
         )}
 
-        {step === 4 && (
+        {step === 5 && (
           <>
             <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 4 OF 5</span>
+              <span className="patient-kicker">STEP 5 OF 6</span>
               <h2>{careTitle(form.primaryConcern)} questions</h2>
               <p>Only questions relevant to the care area you selected are shown here.</p>
             </div>
@@ -633,10 +702,10 @@ export function ConsultationForm({
           </>
         )}
 
-        {step === 5 && (
+        {step === 6 && (
           <>
             <div className="patient-intake-copy">
-              <span className="patient-kicker">STEP 5 OF 5</span>
+              <span className="patient-kicker">STEP 6 OF 6</span>
               <h2>Review and submit</h2>
               <p>Check the key details before sending them to the clinical team.</p>
             </div>
@@ -648,35 +717,40 @@ export function ConsultationForm({
                 <button type="button" onClick={() => setStep(1)}>Edit</button>
               </div>
               <div>
+                <span>Patient</span>
+                <strong>{form.firstName} {form.lastName} · {form.dateOfBirth}</strong>
+                <button type="button" onClick={() => setStep(2)}>Edit</button>
+              </div>
+              <div>
                 <span>Measurements</span>
                 <strong>
                   {form.heightUnit === "cm" ? `${form.heightCm} cm` : `${form.heightFeet} ft ${form.heightInches || 0} in`}
                   {" · "}
                   {form.weightValue} {form.weightUnit}
                   {" · "}
-                  age {form.age}
+                  age {ageFromDateOfBirth(form.dateOfBirth)}
                 </strong>
                 <button type="button" onClick={() => setStep(2)}>Edit</button>
               </div>
               <div>
                 <span>Medical screening</span>
                 <strong>{form.conditions.join(", ")}</strong>
-                <button type="button" onClick={() => setStep(2)}>Edit</button>
+                <button type="button" onClick={() => setStep(3)}>Edit</button>
               </div>
               <div>
                 <span>Medications and allergies</span>
                 <strong>{form.currentMedications} · {form.allergies}</strong>
-                <button type="button" onClick={() => setStep(3)}>Edit</button>
+                <button type="button" onClick={() => setStep(4)}>Edit</button>
               </div>
               <div>
                 <span>Your concern</span>
                 <strong>{form.careGoal}</strong>
-                <button type="button" onClick={() => setStep(4)}>Edit</button>
+                <button type="button" onClick={() => setStep(5)}>Edit</button>
               </div>
               <div>
                 <span>Treatment questions</span>
                 <strong>{treatmentSummary()}</strong>
-                <button type="button" onClick={() => setStep(4)}>Edit</button>
+                <button type="button" onClick={() => setStep(5)}>Edit</button>
               </div>
             </div>
 
