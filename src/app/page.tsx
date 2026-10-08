@@ -444,8 +444,21 @@ export default function HomePage() {
             </div>
 
             <div className="hero-bento hero-bento-ro" aria-label="Suga Health care and treatment imagery">
-              <div className={`hero-bento-primary editorial-media editorial-media-large editorial-media-${pillars[heroSlide].id}`}>
+              <div className={`hero-bento-primary editorial-media editorial-media-large editorial-media-${pillars[heroSlide].id} ${pillars[heroSlide].id === "weight" ? "home-uploaded-media-frame" : ""}`}>
                 <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
+                {pillars[heroSlide].id === "weight" && (
+                  <img
+                    src="/images/suga-orange-vial-model.jpg"
+                    alt="Woman holding a small medicine vial against an orange studio background"
+                    width={2048}
+                    height={1529}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                    className="home-uploaded-media home-uploaded-media-photo"
+                    onError={(event) => { event.currentTarget.style.display = "none"; }}
+                  />
+                )}
               </div>
 
               <button type="button" className="hero-bento-support editorial-media editorial-media-doctor editorial-media-clickable" onClick={() => setSelectedDoctor(doctors[0])} aria-label={"View credentials for " + doctors[0].name}>
@@ -469,8 +482,21 @@ export default function HomePage() {
             <div className="pathway-editorial-list">
               {pillars.map((pillar, idx) => (
                 <article key={pillar.id} className="pathway-editorial-row">
-                  <div className={`pathway-editorial-image editorial-media editorial-media-large editorial-media-${pillar.id}`}>
+                  <div className={`pathway-editorial-image editorial-media editorial-media-large editorial-media-${pillar.id} ${pillar.id === "weight" ? "home-uploaded-media-frame" : ""}`}>
                     <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
+                    {pillar.id === "weight" && (
+                      <video
+                        className="home-uploaded-media home-uploaded-media-video"
+                        src="/videos/suga-floating-medicines.mp4"
+                        aria-label="Illustrative animation of floating medication devices"
+                        autoPlay
+                        muted
+                        playsInline
+                        loop
+                        preload="metadata"
+                        onError={(event) => { event.currentTarget.style.display = "none"; }}
+                      />
+                    )}
                   </div>
                   <div className="pathway-editorial-copy">
                     <span className="home-kicker">{pillar.subtitle}</span>
