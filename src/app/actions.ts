@@ -69,6 +69,23 @@ function buildConsultationRecord(formData: FormData, patientId: string) {
       allergies: value(formData, "allergies"),
       medical_history: value(formData, "medical_history"),
       care_goal: value(formData, "care_goal"),
+      treatment_answers:
+        primaryConcern === "weight"
+          ? {
+              previous_glp1: value(formData, "weight_previous_glp1"),
+              digestive_history: value(formData, "weight_digestive_history"),
+            }
+          : primaryConcern === "hair"
+            ? {
+                pattern: value(formData, "hair_pattern"),
+                duration: value(formData, "hair_duration"),
+                previous_treatment: value(formData, "hair_previous_treatment"),
+              }
+            : {
+                concern: value(formData, "sexual_concern"),
+                frequency: value(formData, "sexual_frequency"),
+                nitrates_or_activity_restriction: value(formData, "sexual_nitrates"),
+              },
       consent_truth: checked(formData, "consent_truth"),
       consent_telehealth: checked(formData, "consent_telehealth"),
       consent_privacy: checked(formData, "consent_privacy"),
