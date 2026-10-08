@@ -3,6 +3,7 @@ import { ArrowLeft, LockKeyhole } from "lucide-react";
 import { ConsultationForm } from "@/components/care/consultation-form";
 import { requireRole } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import "./standalone.css";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Start consultation | Suga.Health" };
