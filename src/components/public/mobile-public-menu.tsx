@@ -59,7 +59,7 @@ export function MobilePublicMenu({ open, onClose }: { open: boolean; onClose: ()
             Sign In
           </Link>
           <Link
-            href="/sign-up"
+            href="/sign-up?next=%2Fpatient%2Fconsultations%2Fnew"
             onClick={() => {
               rememberReturnPosition();
               onClose();
