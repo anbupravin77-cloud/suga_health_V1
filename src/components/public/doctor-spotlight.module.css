@@ -2,18 +2,18 @@
    The container remains a fixed height while cards move horizontally. */
 .root {
   width: 100%;
-  max-width: 1220px;
+  max-width: 1280px;
   min-width: 0;
   margin: 0 auto;
 }
 
 .rail {
-  --near-offset: clamp(215px, 22.8vw, 285px);
-  --far-offset: clamp(390px, 40vw, 500px);
+  --near-offset: clamp(232px, 22.8vw, 292px);
+  --far-offset: clamp(410px, 39.8vw, 500px);
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  height: 614px;
+  height: 660px;
   width: 100%;
   border-radius: 22px;
   background: #101214;
@@ -34,8 +34,8 @@
   top: 50%;
   left: 50%;
   display: block;
-  width: 318px;
-  height: 470px;
+  width: 354px;
+  height: 520px;
   min-width: 0;
   padding: 0;
   margin: 0;
@@ -305,25 +305,25 @@
 
 @media (max-width: 1000px) {
   .rail {
-    --near-offset: clamp(164px, 21vw, 218px);
-    --far-offset: clamp(310px, 36vw, 399px);
-    height: 534px;
+    --near-offset: clamp(180px, 21vw, 238px);
+    --far-offset: clamp(312px, 37vw, 395px);
+    height: 566px;
   }
   .card {
-    width: 272px;
-    height: 400px;
+    width: 300px;
+    height: 442px;
   }
 }
 
 @media (max-width: 760px) {
   .rail {
-    --near-offset: 166px;
-    height: 442px;
+    --near-offset: 172px;
+    height: 474px;
     border-radius: 17px;
   }
   .card {
-    width: 252px;
-    height: 372px;
+    width: 274px;
+    height: 404px;
   }
   .farLeft,
   .farRight {
@@ -361,12 +361,12 @@
 
 @media (max-width: 480px) {
   .rail {
-    --near-offset: 151px;
-    height: 396px;
+    --near-offset: 156px;
+    height: 422px;
   }
   .card {
-    width: 222px;
-    height: 330px;
+    width: 246px;
+    height: 364px;
   }
   .cardContents {
     bottom: 17px;
@@ -422,4 +422,28 @@
 .rail.isResetting .card,
 .rail.isResetting .glow {
   transition: none !important;
+}
+
+/* Scope the homepage's existing Inter font to this section only.
+   Global editorial heading rules otherwise select Source Sans 3. */
+.doctorSection,
+.doctorSection :global(.editorial-section-heading),
+.doctorSection :global(.editorial-section-heading h2),
+.doctorSection :global(.editorial-section-heading p),
+.doctorSection :global(.doctor-trust-band),
+.doctorSection :global(.doctor-trust-band h3),
+.doctorSection :global(.doctor-trust-band p),
+.doctorSection :global(.doctor-trust-band a) {
+  font-family: var(--font-home), Arial, sans-serif !important;
+}
+
+.doctorSection :global(.editorial-section-heading h2) {
+  color: #111111 !important;
+}
+.doctorSection :global(.editorial-section-heading p) {
+  color: #505050 !important;
+}
+.doctorModal,
+.doctorModal :global(*) {
+  font-family: var(--font-home), Arial, sans-serif !important;
 }

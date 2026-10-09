@@ -113,43 +113,55 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
     if (restoreFrameRef.current !== null) window.cancelAnimationFrame(restoreFrameRef.current);
   }, []);
 
+  // Each stable, keyed card animates its transform to the next physical slot.
+  // Transition completion (rather than a guessed 980ms state switch) controls
+  // the featured copy and the invisible rebase between identical cloned sets.
+  const finishMove = useCallback(() => {
+    if (!movingRef.current) return;
+    if (moveDoneRef.current !== null) {
+      window.clearTimeout(moveDoneRef.current);
+      moveDoneRef.current = null;
+    }
+
+    const current = positionRef.current;
+    setDisplayedIndex(indexFor(current, count));
+    const rewind = current >= 2 * count ? count
+      : current < count ? 2 * count - 1 : null;
+
+    if (rewind === null) {
+      movingRef.current = false;
+      setIsMoving(false);
+      return;
+    }
+
+    // Cloned cards at these two positions have identical screen coordinates.
+    // Suppress transitions ONLY while rebasing, between painted frames.
+    setIsResetting(true);
+    positionRef.current = rewind;
+    setPosition(rewind);
+    resetFrameRef.current = window.requestAnimationFrame(() => {
+      resetFrameRef.current = null;
+      restoreFrameRef.current = window.requestAnimationFrame(() => {
+        setIsResetting(false);
+        setIsMoving(false);
+        movingRef.current = false;
+        restoreFrameRef.current = null;
+      });
+    });
+  }, [count]);
+
   const advance = useCallback((direction: -1 | 1) => {
     if (movingRef.current || count < 2) return;
     movingRef.current = true;
     setIsMoving(true);
-
     const next = positionRef.current + direction;
     positionRef.current = next;
     setPosition(next);
 
-    const delay = reducedMotion ? 0 : 980;
-    if (moveDoneRef.current !== null) window.clearTimeout(moveDoneRef.current);
-    moveDoneRef.current = window.setTimeout(() => {
-      setDisplayedIndex(indexFor(next, count));
-      setIsMoving(false);
-      moveDoneRef.current = null;
-
-      // Both positions show identical visible cards. The invisible reposition
-      // takes place without CSS transitions, then ordinary motion resumes.
-      const rewind = next >= 2 * count ? count
-        : next < count ? 2 * count - 1 : null;
-      if (rewind !== null) {
-        setIsResetting(true);
-        positionRef.current = rewind;
-        setPosition(rewind);
-        resetFrameRef.current = window.requestAnimationFrame(() => {
-          restoreFrameRef.current = window.requestAnimationFrame(() => {
-            setIsResetting(false);
-            movingRef.current = false;
-            restoreFrameRef.current = null;
-          });
-          resetFrameRef.current = null;
-        });
-      } else {
-        movingRef.current = false;
-      }
-    }, delay);
-  }, [count, reducedMotion]);
+    // A safety fallback for hidden tabs or interrupted CSS transitions.
+    // Normal movement completes on the incoming center card's transitionend.
+    moveDoneRef.current = window.setTimeout(finishMove, reducedMotion ? 0 : 1250);
+  }, [count, finishMove, reducedMotion]);
 
   // An ordinary one-card move every 4.6 seconds. Hover, focus, touch, hidden
   // sections, inactive tabs and the modal suspend automatic navigation.
@@ -253,6 +265,11 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
               tabIndex={offscreen ? -1 : 0}
               aria-hidden={offscreen ? true : undefined}
               aria-label={isCenter ? (isPlaceholder ? "Continue to the next clinician" : `View credentials for ${doctor.name}`) : `Feature ${doctor.name}`}
+              onTransitionEnd={(event) => {
+                if (event.target === event.currentTarget && event.propertyName === "transform" && isCenter && !isResetting) {
+                  finishMove();
+                }
+              }}
               onClick={() => chooseSlot(offset, doctor.id)}
             >
               <span className={styles.portrait} aria-hidden="true">

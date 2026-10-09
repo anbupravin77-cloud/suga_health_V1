@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Inter } from "next/font/google";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -26,6 +26,7 @@ import { rememberReturnPosition, useRestoreReturnPosition } from "@/components/p
 import { MobilePublicMenu } from "@/components/public/mobile-public-menu";
 import { LivingMetrics } from "@/components/public/living-metrics";
 import { DoctorSpotlight } from "@/components/public/doctor-spotlight";
+import doctorStyles from "@/components/public/doctor-spotlight.module.css";
 
 const homeInter = Inter({ subsets: ["latin"], variable: "--font-home", display: "swap" });
 
@@ -759,7 +760,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="doctors" className="home-doctors home-editorial-section">
+        <section id="doctors" className={`home-doctors home-editorial-section ${doctorStyles.doctorSection}`}>
           <div className="home-section-shell">
             <SectionHeader centered hideEyebrow eyebrow="Medical Leadership & Care Team" title={<><span className="section-title-line">Board-certified doctors</span><span className="section-title-line">behind every prescription.</span></>} subtitle="No bots, no algorithmic shortcuts. Licensed US physicians personally evaluate every intake, design individualized treatment plans, and support you throughout your care." />
 
@@ -969,7 +970,59 @@ function SectionHeader({ eyebrow, title, subtitle, children, dark = false, cente
 function Modal({ children, label, onClose, stableScroll = false }: { children: React.ReactNode; label: string; onClose: () => void; stableScroll?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null);
 
+  // The doctor profile uses a layout effect so the lock and restoration both
+  // happen before paint. A normal effect caused a one-frame jump to the top.
+  useLayoutEffect(() => {
+    if (!stableScroll) return;
+
+    const dialog = ref.current;
+    const html = document.documentElement;
+    const body = document.body;
+    const x = window.scrollX;
+    const y = window.scrollY;
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previous = {
+      htmlOverflow: html.style.overflow,
+      htmlScrollBehavior: html.style.scrollBehavior,
+      htmlScrollbarGutter: html.style.scrollbarGutter,
+      bodyOverflow: body.style.overflow,
+      bodyPosition: body.style.position,
+      bodyTop: body.style.top,
+      bodyLeft: body.style.left,
+      bodyWidth: body.style.width,
+    };
+
+    // A fixed body retains the exact visual viewport, including on mobile
+    // Safari. Disable smooth scrolling before any focus or scroll work.
+    html.style.scrollBehavior = "auto";
+    html.style.scrollbarGutter = "stable";
+    body.style.position = "fixed";
+    body.style.top = `-${y}px`;
+    body.style.left = `-${x}px`;
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
+    html.style.overflow = "hidden";
+    dialog?.showModal();
+    dialog?.querySelector<HTMLElement>(".clinical-dialog-close")?.focus({ preventScroll: true });
+
+    return () => {
+      dialog?.close();
+      body.style.overflow = previous.bodyOverflow;
+      body.style.position = previous.bodyPosition;
+      body.style.top = previous.bodyTop;
+      body.style.left = previous.bodyLeft;
+      body.style.width = previous.bodyWidth;
+      html.style.overflow = previous.htmlOverflow;
+      window.scrollTo(x, y);
+      opener?.focus({ preventScroll: true });
+      html.style.scrollbarGutter = previous.htmlScrollbarGutter;
+      html.style.scrollBehavior = previous.htmlScrollBehavior;
+    };
+  }, [stableScroll]);
+
+  // Product modals keep their existing behaviour and are not part of this fix.
   useEffect(() => {
+    if (stableScroll) return;
     const dialog = ref.current;
     const scrollY = window.scrollY;
     const body = document.body;
@@ -983,34 +1036,6 @@ function Modal({ children, label, onClose, stableScroll = false }: { children: R
     };
 
     dialog?.showModal();
-
-    // Keep the doctor modal fully in-place: restore focus without browser
-    // auto-scrolling, and explicitly preserve the exact viewport on close.
-    if (stableScroll) {
-      const scrollX = window.scrollX;
-      const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      const earlierScrollBehavior = html.style.scrollBehavior;
-      const earlierScrollbarGutter = html.style.scrollbarGutter;
-      html.style.scrollbarGutter = "stable";
-      html.style.overflow = "hidden";
-      body.style.overflow = "hidden";
-      dialog?.querySelector<HTMLElement>("button")?.focus({ preventScroll: true });
-      return () => {
-        dialog?.close();
-        opener?.focus({ preventScroll: true });
-        html.style.overflow = previous.htmlOverflow;
-        body.style.overflow = previous.bodyOverflow;
-        html.style.scrollBehavior = "auto";
-        window.scrollTo(scrollX, scrollY);
-        requestAnimationFrame(() => {
-          window.scrollTo(scrollX, scrollY);
-          html.style.scrollBehavior = earlierScrollBehavior;
-          html.style.scrollbarGutter = earlierScrollbarGutter;
-        });
-      };
-    }
-
-    // Preserve the existing lock for other (unrelated) modal flows.
     html.style.overflow = "hidden";
     body.style.overflow = "hidden";
     body.style.position = "fixed";
@@ -1028,7 +1053,7 @@ function Modal({ children, label, onClose, stableScroll = false }: { children: R
     };
   }, [stableScroll]);
 
-  return <dialog ref={ref} className="clinical-dialog" aria-label={label} onCancel={onClose} onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}><div className="clinical-dialog-content"><button type="button" onClick={onClose} aria-label="Close modal" className="clinical-dialog-close"><X size={20} /></button>{children}</div></dialog>;
+  return <dialog ref={ref} className={stableScroll ? `clinical-dialog ${doctorStyles.doctorModal}` : "clinical-dialog"} aria-label={label} onCancel={onClose} onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}><div className="clinical-dialog-content"><button type="button" onClick={onClose} aria-label="Close modal" className="clinical-dialog-close"><X size={20} /></button>{children}</div></dialog>;
 }
 
 function imageSources(source: string) {
