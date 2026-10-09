@@ -160,7 +160,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
 
     // A safety fallback for hidden tabs or interrupted CSS transitions.
     // Normal movement completes on the incoming center card's transitionend.
-    moveDoneRef.current = window.setTimeout(finishMove, reducedMotion ? 0 : 1250);
+    moveDoneRef.current = window.setTimeout(finishMove, reducedMotion ? 0 : 1650);
   }, [count, finishMove, reducedMotion]);
 
   // An ordinary one-card move every 4.6 seconds. Hover, focus, touch, hidden
