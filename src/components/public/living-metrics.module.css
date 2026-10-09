@@ -1,0 +1,342 @@
+/* Isolated, fixed-size interactive metric display. All classes are scoped by CSS Modules. */
+.root {
+  --metrics-ink: #141414;
+  --metrics-muted: #626262;
+  --metrics-rule: #dededc;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 48px) 0;
+  color: var(--metrics-ink);
+  background: #fff;
+}
+
+.heading {
+  margin: 0 0 clamp(28px, 4vw, 54px);
+}
+
+.heading h2 {
+  margin: 0;
+  color: var(--metrics-ink);
+  font-size: clamp(36px, 4.8vw, 64px);
+  font-weight: 640;
+  letter-spacing: -.035em;
+  line-height: 1.08;
+}
+
+.heading p {
+  margin: 12px 0 0;
+  color: var(--metrics-muted);
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.5;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: clamp(24px, 5.5vw, 76px);
+  height: 330px;
+  min-width: 0;
+  border-top: 1px solid var(--metrics-rule);
+  border-bottom: 1px solid var(--metrics-rule);
+}
+
+.stage {
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+  padding: 19px 0 18px;
+}
+
+.index {
+  display: block;
+  color: #737373;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .035em;
+  white-space: nowrap;
+}
+
+.counterWindow {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 210px;
+  min-height: 210px;
+  overflow: hidden;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.figure,
+.figureOutgoing {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: max-content;
+  max-width: 100%;
+  height: 210px;
+  display: flex;
+  align-items: center;
+  color: #111;
+  font-size: clamp(100px, 12.8vw, 168px);
+  font-weight: 660;
+  letter-spacing: -.055em;
+  line-height: .95;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
+.figureEntering {
+  animation: metric-number-enter 540ms cubic-bezier(.22,.72,.22,1) both;
+}
+
+.figureOutgoing {
+  animation: metric-number-exit 540ms cubic-bezier(.22,.72,.22,1) both;
+  pointer-events: none;
+}
+
+.unit {
+  display: block;
+  color: #333;
+  font-size: clamp(13px, 1.5vw, 16px);
+  font-weight: 650;
+  letter-spacing: .035em;
+  white-space: nowrap;
+}
+
+.selection {
+  position: relative;
+  height: 288px;
+  align-self: center;
+  display: grid;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  border-left: 1px solid var(--metrics-rule);
+  min-width: 0;
+}
+
+.movingBar {
+  position: absolute;
+  left: -2px;
+  top: 0;
+  height: calc(100% / 3);
+  width: 3px;
+  background: #171717;
+  z-index: 1;
+  transition: transform 520ms cubic-bezier(.22,.75,.22,1);
+}
+
+.selector {
+  position: relative;
+  min-height: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px 12px 27px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--metrics-rule);
+  color: #656565;
+  cursor: pointer;
+  transition: color 240ms ease, background-color 240ms ease;
+}
+
+.selector:last-child {
+  border-bottom: 0;
+}
+
+.selector:hover,
+.selectorActive {
+  color: #171717;
+}
+
+.selector:focus-visible {
+  outline: 2px solid #222;
+  outline-offset: -3px;
+}
+
+.selectorNumber {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: inherit;
+}
+
+.selectorTitle {
+  min-width: 0;
+  font-size: clamp(15px, 1.65vw, 20px);
+  font-weight: 570;
+  letter-spacing: -.012em;
+  line-height: 1.3;
+  color: inherit;
+}
+
+.selectorActive .selectorTitle {
+  font-weight: 700;
+}
+
+.selectorArrow {
+  opacity: 0;
+  transform: translate(-3px,3px);
+  color: #191919;
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+
+.selectorActive .selectorArrow,
+.selector:hover .selectorArrow,
+.selector:focus-visible .selectorArrow {
+  opacity: 1;
+  transform: translate(0,0);
+}
+
+.foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .52fr);
+  align-items: start;
+  gap: 24px;
+  padding: 22px 0 0;
+  min-height: 110px;
+}
+
+.description {
+  margin: 0;
+  max-width: 63ch;
+  color: #252525;
+  font-size: clamp(15px, 1.4vw, 17px);
+  font-weight: 450;
+  line-height: 1.6;
+}
+
+.disclaimer {
+  margin: 0;
+  color: #6c6c6c;
+  font-size: 12px;
+  line-height: 1.55;
+  max-width: 42ch;
+}
+
+@keyframes metric-number-enter {
+  from { transform: translateY(90%); opacity: .2; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes metric-number-exit {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-90%); opacity: .2; }
+}
+
+@media (max-width: 980px) {
+  .content {
+    gap: clamp(12px,3vw,36px);
+  }
+  .selector {
+    grid-template-columns: 26px minmax(0,1fr) 20px;
+    padding-left: 18px;
+    gap: 8px;
+  }
+  .counterWindow,
+  .figure,
+  .figureOutgoing {
+    height: 184px;
+    min-height: 184px;
+  }
+  .figure,
+  .figureOutgoing {
+    font-size: clamp(86px,12vw,140px);
+  }
+}
+
+@media (max-width: 700px) {
+  .root {
+    padding: 26px 0 34px;
+  }
+  .heading {
+    margin-bottom: 26px;
+  }
+  .heading h2 {
+    font-size: clamp(34px, 8.5vw, 46px);
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    height: auto;
+    min-height: 0;
+  }
+  .stage {
+    height: 242px;
+    min-height: 242px;
+    flex: 0 0 242px;
+    padding: 20px 0 14px;
+  }
+  .counterWindow {
+    height: 158px;
+    min-height: 158px;
+  }
+  .figure,
+  .figureOutgoing {
+    height: 158px;
+    min-height: 158px;
+    font-size: clamp(86px, 20vw, 136px);
+  }
+  .selection {
+    height: 216px;
+    min-height: 216px;
+    width: 100%;
+    align-self: stretch;
+    margin: 0 0 20px;
+  }
+  .selector {
+    min-height: 72px;
+    padding: 10px 14px 10px 22px;
+  }
+  .selectorTitle {
+    font-size: 16px;
+  }
+  .foot {
+    min-height: 154px;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 18px 0 0;
+  }
+  .description {
+    min-height: 52px;
+    font-size: 15px;
+    line-height: 1.52;
+  }
+  .disclaimer {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 380px) {
+  .figure,
+  .figureOutgoing {
+    font-size: 80px;
+  }
+  .selectorTitle {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figureEntering,
+  .figureOutgoing {
+    animation: none !important;
+  }
+  .figureOutgoing {
+    display: none;
+  }
+  .movingBar,
+  .selector,
+  .selectorArrow {
+    transition: none !important;
+  }
+}
