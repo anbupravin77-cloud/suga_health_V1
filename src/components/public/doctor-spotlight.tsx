@@ -28,8 +28,12 @@ const additionalProfile: DoctorPreview = {
   specialty: "Additional clinician profiles will appear here once verified.",
 };
 
-const offsets = [-3, -2, -1, 0, 1, 2, 3] as const;
+// Keep two invisible buffers on either end. Existing logical keys stay mounted
+// as they move between positions, so the sequence genuinely travels across the
+// rail rather than swapping one cover for another.
+const offsets = [-4, -3, -2, -1, 0, 1, 2, 3, 4] as const;
 const positions = [
+  styles.offscreenFarLeft,
   styles.offscreenLeft,
   styles.farLeft,
   styles.nearLeft,
@@ -37,6 +41,7 @@ const positions = [
   styles.nearRight,
   styles.farRight,
   styles.offscreenRight,
+  styles.offscreenFarRight,
 ];
 
 function indexFor(value: number, count: number) {
@@ -93,7 +98,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
   useEffect(() => {
     if (doctors.length < 2 || paused || !inView || !pageVisible || reducedMotion ||
       hoverPaused || focusPaused || touchPaused) return;
-    const timer = window.setTimeout(() => setStep((current) => current + 1), 4500);
+    const timer = window.setTimeout(() => setStep((current) => current + 1), 4800);
     return () => window.clearTimeout(timer);
   }, [doctors.length, paused, inView, pageVisible, reducedMotion,
     hoverPaused, focusPaused, touchPaused, step]);
@@ -178,7 +183,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
           const doctor = cards[indexFor(logicalIndex, count)];
           const isPlaceholder = doctor.id === additionalProfile.id;
           const isCenter = offset === 0;
-          const offscreen = Math.abs(offset) === 3;
+          const offscreen = Math.abs(offset) >= 3;
 
           return (
             <button
