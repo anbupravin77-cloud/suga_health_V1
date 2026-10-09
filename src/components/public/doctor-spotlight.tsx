@@ -20,13 +20,22 @@ type DoctorSpotlightProps = {
 
 // Five distinct positions without fabricating a fifth doctor. Replace this
 // placeholder when a verified fifth clinician profile becomes available.
-const additionalProfile: DoctorPreview = {
-  id: "care-team-profile-placeholder",
-  name: "More profiles soon",
-  credentials: "",
-  role: "CARE TEAM",
-  specialty: "Additional clinician profiles will appear here once verified.",
-};
+const additionalProfiles: DoctorPreview[] = [
+  {
+    id: "care-team-profile-placeholder",
+    name: "More profiles soon",
+    credentials: "",
+    role: "CARE TEAM",
+    specialty: "Additional clinician profiles will appear here once verified.",
+  },
+  {
+    id: "care-team-second-placeholder",
+    name: "Meet the care team",
+    credentials: "",
+    role: "PROFILE PENDING",
+    specialty: "A verified clinician profile will be added here.",
+  },
+];
 
 // Keep two invisible buffers on either end. Existing logical keys stay mounted
 // as they move between positions, so the sequence genuinely travels across the
@@ -49,7 +58,7 @@ function indexFor(value: number, count: number) {
 }
 
 export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: DoctorSpotlightProps) {
-  const cards = [...doctors, additionalProfile];
+  const cards = [...doctors, ...additionalProfiles];
   const count = cards.length;
   const [step, setStep] = useState(0);
   const [displayedStep, setDisplayedStep] = useState(0);
@@ -159,7 +168,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
     holdForTouch();
     if (slot !== 0) {
       setStep((current) => current + slot);
-    } else if (doctorId === additionalProfile.id) {
+    } else if (additionalProfiles.some((profile) => profile.id === doctorId)) {
       setStep((current) => current + 1);
     } else {
       onViewProfile(doctorId);
@@ -168,7 +177,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
 
   if (!doctors.length) return null;
   const featured = cards[indexFor(displayedStep, count)];
-  const placeholderFeatured = featured.id === additionalProfile.id;
+  const placeholderFeatured = additionalProfiles.some((profile) => profile.id === featured.id);
 
   return (
     <div className={styles.root}>
@@ -206,7 +215,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
         {offsets.map((offset, index) => {
           const logicalIndex = step + offset;
           const doctor = cards[indexFor(logicalIndex, count)];
-          const isPlaceholder = doctor.id === additionalProfile.id;
+          const isPlaceholder = additionalProfiles.some((profile) => profile.id === doctor.id);
           const isCenter = offset === 0;
           const offscreen = Math.abs(offset) >= 3;
 
