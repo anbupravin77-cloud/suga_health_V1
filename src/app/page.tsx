@@ -347,7 +347,9 @@ export default function HomePage() {
   const [activeCareStep, setActiveCareStep] = useState<number | null>(null);
   const [careInView, setCareInView] = useState(false);
   const [carePageVisible, setCarePageVisible] = useState(true);
-  const [careReducedMotion, setCareReducedMotion] = useState(false);
+  const [careReducedMotion, setCareReducedMotion] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
   const [careHoverPaused, setCareHoverPaused] = useState(false);
   const [careFocusPaused, setCareFocusPaused] = useState(false);
   const [careTouchPaused, setCareTouchPaused] = useState(false);
@@ -388,8 +390,6 @@ export default function HomePage() {
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const updateMotion = () => setCareReducedMotion(motionQuery.matches);
     const updateVisibility = () => setCarePageVisible(!document.hidden);
-    updateMotion();
-    updateVisibility();
     const observer = new IntersectionObserver(
       ([entry]) => setCareInView(entry.isIntersecting && entry.intersectionRatio >= 0.25),
       { threshold: [0, 0.25, 0.5] },
@@ -414,8 +414,8 @@ export default function HomePage() {
         careHoverPaused || careFocusPaused || careTouchPaused) return;
 
     if (activeCareStep === null) {
-      setActiveCareStep(0);
-      return;
+      const initialTimer = window.setTimeout(() => setActiveCareStep(0), 450);
+      return () => window.clearTimeout(initialTimer);
     }
     const timer = window.setTimeout(() => {
       setActiveCareStep((current) => ((current ?? -1) + 1) % howItWorks.length);
