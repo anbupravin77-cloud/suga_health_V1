@@ -32,6 +32,7 @@ const metrics = [
 export function LivingMetrics() {
   const [selected, setSelected] = useState(0);
   const [previous, setPrevious] = useState<number | null>(null);
+  const [counted, setCounted] = useState({ index: 0, value: 5 });
   const [entered, setEntered] = useState(false);
   const [inView, setInView] = useState(false);
   const [pageVisible, setPageVisible] = useState(true);
@@ -130,6 +131,29 @@ export function LivingMetrics() {
     return () => window.clearTimeout(timer);
   }, [previous, selected]);
 
+  // Count the numeric portion from zero to the new target while the existing
+  // split-flap transition plays. Keep "<" and "%" untouched, and cancel stale
+  // frames whenever hover, tap, or autoplay changes the selected metric.
+  useEffect(() => {
+    if (!entered || !inView || !pageVisible || reducedMotion) return;
+
+    const target = Number(metrics[selected].figure.match(/\\d+/)?.[0] ?? 0);
+    let frame = 0;
+    let startTime: number | null = null;
+
+    const tick = (now: number) => {
+      if (startTime === null) startTime = now;
+      const progress = Math.min((now - startTime) / 1150, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCounted({ index: selected, value: Math.round(target * eased) });
+
+      if (progress < 1) frame = window.requestAnimationFrame(tick);
+    };
+
+    frame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frame);
+  }, [selected, entered, inView, pageVisible, reducedMotion]);
+
   function chooseMetric(index: number) {
     if (index === selected) return;
     setPrevious(selected);
@@ -137,6 +161,10 @@ export function LivingMetrics() {
   }
 
   const metric = metrics[selected];
+  const currentValue = counted.index === selected ? counted.value : 0;
+  const animatedFigure = reducedMotion || !entered || !inView || !pageVisible
+    ? metric.figure
+    : metric.figure.replace(/\d+/, String(currentValue));
 
   return (
     <section ref={sectionRef} className={styles.root} aria-labelledby="living-metrics-title">
@@ -148,14 +176,14 @@ export function LivingMetrics() {
       <div className={styles.content}>
         <div className={styles.stage} aria-live="off">
           <span className={styles.index}>{metric.index}</span>
-          <div className={styles.counterWindow} aria-hidden="true">
+          <div className={styles.counterWindow} role="img" aria-label={`${metric.figure} ${metric.unit.toLowerCase()} — ${metric.label}`}>
             {previous !== null && (
-              <span key={`exit-${previous}-${selected}`} className={styles.figureOutgoing}>
+              <span key={`exit-${previous}-${selected}`} className={styles.figureOutgoing} aria-hidden="true">
                 {metrics[previous].figure}
               </span>
             )}
-            <span key={`enter-${selected}`} className={`${styles.figure} ${entered ? styles.figureEntering : ""}`}>
-              {metric.figure}
+            <span key={`enter-${selected}`} className={`${styles.figure} ${entered ? styles.figureEntering : ""}`} aria-hidden="true">
+              {animatedFigure}
             </span>
           </div>
           <span className={styles.unit}>{metric.unit}</span>
