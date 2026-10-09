@@ -25,6 +25,7 @@ import {
 import { rememberReturnPosition, useRestoreReturnPosition } from "@/components/public/return-position";
 import { MobilePublicMenu } from "@/components/public/mobile-public-menu";
 import { LivingMetrics } from "@/components/public/living-metrics";
+import { DoctorSpotlight } from "@/components/public/doctor-spotlight";
 
 const homeInter = Inter({ subsets: ["latin"], variable: "--font-home", display: "swap" });
 
@@ -762,32 +763,13 @@ export default function HomePage() {
           <div className="home-section-shell">
             <SectionHeader centered hideEyebrow eyebrow="Medical Leadership & Care Team" title={<><span className="section-title-line">Board-certified doctors</span><span className="section-title-line">behind every prescription.</span></>} subtitle="No bots, no algorithmic shortcuts. Licensed US physicians personally evaluate every intake, design individualized treatment plans, and support you throughout your care." />
 
-            <div className="doctor-card-grid">
-              {doctors.map((doctor) => (
-                <article key={doctor.id} className="doctor-card">
-                  <div className="doctor-card-image editorial-media editorial-media-doctor">
-                    <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
-                    <span className="doctor-verified"><ShieldCheck size={13} /> Verified MD/DO</span>
-                  </div>
-
-                  <div className="doctor-card-body">
-                    <span className="doctor-role">{doctor.role}</span>
-                    <h3>{doctor.name}, {doctor.credentials}</h3>
-                    <p className="doctor-specialty">{doctor.specialty}</p>
-                    <p className="doctor-quote">“{doctor.quote}”</p>
-
-                    <div className="doctor-card-facts">
-                      <span><GraduationCap size={15} />{doctor.education}</span>
-                      <span><MapPin size={15} />Licensed in {doctor.licensedStatesCount} States</span>
-                    </div>
-
-                    <button type="button" className="doctor-credentials-button suga-btn suga-btn-secondary suga-btn-inline" onClick={() => setSelectedDoctor(doctor)}>
-                      View credentials <ArrowRight size={15} />
-                    </button>
-                  </div>
-                </article>
-              ))}
-            </div>
+            <DoctorSpotlight
+              doctors={doctors}
+              onViewProfile={(doctorId) => {
+                const doctor = doctors.find((item) => item.id === doctorId);
+                if (doctor) setSelectedDoctor(doctor);
+              }}
+            />
 
             <div className="doctor-trust-band">
               <div>
