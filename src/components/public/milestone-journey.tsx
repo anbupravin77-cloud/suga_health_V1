@@ -65,8 +65,8 @@ export function MilestoneJourney() {
   const previousActive = useRef<TimelineKey>("weight");
   const departingRef = useRef<TimelineKey | null>(null);
 
-  function selectCategory(key: TimelineKey, replay = false) {
-    if (active === key && !replay) return;
+  function selectCategory(key: TimelineKey) {
+    if (active === key) return;
     hasInteracted.current = true;
     departingRef.current = active === key ? null : active;
     setDeparting(departingRef.current);
@@ -90,7 +90,7 @@ export function MilestoneJourney() {
     const animations: Animation[] = [];
 
     const translateToTitle = (rect: DOMRect, title: DOMRect) => ({
-      x: title.left + title.width * 0.54 - (rect.left + rect.width / 2),
+      x: title.left + title.width * .64 - (rect.left + rect.width / 2),
       y: title.top + title.height / 2 - (rect.top + rect.height / 2),
     });
 
@@ -99,11 +99,10 @@ export function MilestoneJourney() {
       const delta = translateToTitle(card.getBoundingClientRect(), source);
       const animation = card.animate(
         [
-          { transform: `translate3d(${delta.x}px, ${delta.y}px, 0) scale(.14)`, opacity: 0, filter: "blur(5px)" },
-          { transform: `translate3d(${delta.x * .13}px, ${delta.y * .13}px, 0) scale(.92)`, opacity: 1, filter: "blur(0px)", offset: .76 },
-          { transform: "translate3d(0, 0, 0) scale(1)", opacity: 1, filter: "blur(0px)" },
+          { transform: `translate3d(${delta.x}px, ${delta.y}px, 0) scale(.28)`, opacity: 0 },
+          { transform: "translate3d(0, 0, 0) scale(1)", opacity: 1 },
         ],
-        { duration: 820, delay: index * 100, easing: "cubic-bezier(.22, 1, .36, 1)", fill: "both" },
+        { duration: 780, delay: index * 65, easing: "cubic-bezier(.16, 1, .3, 1)", fill: "both" },
       );
       animations.push(animation);
     });
@@ -116,17 +115,20 @@ export function MilestoneJourney() {
           const delta = translateToTitle(card.getBoundingClientRect(), oldSource);
           const animation = card.animate(
             [
-              { transform: "translate3d(0, 0, 0) scale(1)", opacity: 1, filter: "blur(0px)" },
-              { transform: `translate3d(${delta.x}px, ${delta.y}px, 0) scale(.14)`, opacity: 0, filter: "blur(4px)" },
+              { transform: "translate3d(0, 0, 0) scale(1)", opacity: 1 },
+              { transform: `translate3d(${delta.x}px, ${delta.y}px, 0) scale(.28)`, opacity: 0 },
             ],
-            { duration: 500, delay: index * 45, easing: "cubic-bezier(.55, .06, .68, .19)", fill: "both" },
+            { duration: 480, delay: index * 40, easing: "cubic-bezier(.45, 0, .55, 1)", fill: "both" },
           );
           animations.push(animation);
         });
       }
     }
 
-    const cleanup = window.setTimeout(() => setDeparting(null), 1150);
+    const cleanup = window.setTimeout(() => {
+      departingRef.current = null;
+      setDeparting(null);
+    }, 690);
     return () => {
       window.clearTimeout(cleanup);
       animations.forEach((animation) => animation.cancel());
@@ -136,16 +138,13 @@ export function MilestoneJourney() {
   return (
     <section className={`home-progression home-editorial-section ${styles.section}`} aria-labelledby="milestones-title">
       <div className={`home-section-shell ${styles.shell}`}>
+        <header className={styles.topline}>
+          <span className={styles.eyebrow}>Clinical progression</span>
+          <h2 className={styles.heading} id="milestones-title">Clear Milestones from Day 1.</h2>
+          <p className={styles.description}>Expect real, measurable physiological changes with continuous medical guidance.</p>
+        </header>
         <div className={styles.layout}>
           <div className={styles.intro}>
-            <span className={styles.eyebrow}>Clinical progression</span>
-            <h2 className={styles.heading} id="milestones-title">
-              <span>Clear</span>
-              <span>Milestones</span>
-              <span>from Day 1.</span>
-            </h2>
-            <p className={styles.description}>Expect real, measurable physiological changes with continuous medical guidance.</p>
-
             <div className={styles.categoryGroup} role="group" aria-label="Choose a treatment to explore milestones">
               {categories.map((item) => (
                 <button
@@ -156,7 +155,7 @@ export function MilestoneJourney() {
                   aria-pressed={active === item.key}
                   onPointerEnter={(event) => { if (event.pointerType === "mouse") selectCategory(item.key); }}
                   onFocus={(event) => { if (event.currentTarget.matches(":focus-visible")) selectCategory(item.key); }}
-                  onClick={() => selectCategory(item.key, true)}
+                  onClick={() => selectCategory(item.key)}
                 >
                   <span className={styles.categoryText}>{item.title}{item.suffix && <span className={styles.suffix}> ({item.suffix})</span>}</span>
                   <ArrowUpRight size={22} strokeWidth={1.5} aria-hidden="true" />
@@ -176,7 +175,7 @@ export function MilestoneJourney() {
           <div className={styles.stage} aria-live="polite" aria-atomic="false">
             <div className={styles.stageHeader}>
               <span>Treatment timeline</span>
-              <span className={styles.stageCount}>01 / 03</span>
+              <span className={styles.stageCount}>03 MILESTONES</span>
             </div>
             <div className={styles.cardsArea}>
               {departing && (
