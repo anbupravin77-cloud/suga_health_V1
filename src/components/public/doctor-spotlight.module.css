@@ -1,0 +1,370 @@
+/* Five-position doctor coverflow. Scoped and sized so no neighboring section shifts. */
+.root {
+  width: 100%;
+  max-width: 1220px;
+  min-width: 0;
+  margin: 0 auto;
+}
+
+.rail {
+  --near-offset: clamp(170px, 19.5vw, 224px);
+  --far-offset: clamp(312px, 35.8vw, 405px);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  height: 468px;
+  width: 100%;
+  border-radius: 22px;
+  background: #101214;
+  touch-action: pan-y;
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(ellipse 48% 48% at 50% 52%, rgba(106, 113, 126, .38) 0%, rgba(73, 75, 84, .19) 38%, rgba(16, 18, 20, 0) 85%);
+}
+
+.card {
+  --portrait-color: #b6bcb8;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: 244px;
+  height: 352px;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  background: var(--portrait-color);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 13px;
+  overflow: hidden;
+  text-align: left;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, .22);
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  transition:
+    transform 920ms cubic-bezier(.22,.8,.19,1),
+    opacity 920ms ease,
+    filter 920ms ease,
+    box-shadow 920ms ease;
+}
+
+.card:focus-visible {
+  outline: 3px solid #e8e8e8;
+  outline-offset: 5px;
+}
+
+.portrait {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background-color: var(--portrait-color);
+}
+
+.portraitLabel {
+  position: absolute;
+  top: 16px;
+  left: 15px;
+  font-size: 8px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: .1em;
+  color: rgba(24,27,29,.43);
+}
+
+.cardShade {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: linear-gradient(to top, rgba(6,8,10,.88) 0%, rgba(9,10,12,.42) 34%, rgba(0,0,0,0) 69%);
+}
+
+.cardContents {
+  position: absolute;
+  left: 17px;
+  right: 17px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.cardRole {
+  color: rgba(255,255,255,.8);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .045em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.cardName {
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.18;
+  font-weight: 650;
+  letter-spacing: -.025em;
+  overflow-wrap: break-word;
+}
+
+.cardCredentials {
+  color: rgba(255,255,255,.82);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.centerArrow {
+  position: absolute;
+  z-index: 2;
+  right: 13px;
+  top: 13px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.94);
+  color: #111;
+}
+
+.offscreenLeft,
+.offscreenRight {
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  filter: brightness(.6);
+}
+.offscreenLeft {
+  transform: translate3d(calc(-50% - var(--far-offset) - 142px),-50%,0) scale(.53);
+}
+.offscreenRight {
+  transform: translate3d(calc(-50% + var(--far-offset) + 142px),-50%,0) scale(.53);
+}
+.farLeft,
+.farRight {
+  z-index: 1;
+  opacity: .42;
+  filter: brightness(.72) saturate(.65);
+}
+.farLeft {
+  transform: translate3d(calc(-50% - var(--far-offset)),-50%,0) scale(.64);
+}
+.farRight {
+  transform: translate3d(calc(-50% + var(--far-offset)),-50%,0) scale(.64);
+}
+.nearLeft,
+.nearRight {
+  z-index: 2;
+  opacity: .72;
+  filter: brightness(.87) saturate(.78);
+}
+.nearLeft {
+  transform: translate3d(calc(-50% - var(--near-offset)),-50%,0) scale(.80);
+}
+.nearRight {
+  transform: translate3d(calc(-50% + var(--near-offset)),-50%,0) scale(.80);
+}
+.center {
+  z-index: 3;
+  opacity: 1;
+  filter: brightness(1) saturate(1);
+  transform: translate3d(-50%,-50%,0) scale(1);
+  box-shadow: 0 24px 54px rgba(0,0,0,.45);
+}
+
+.underRail {
+  width: 100%;
+  height: 130px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 19px 4px 12px;
+  border-bottom: 1px solid #dededb;
+}
+
+.featuredCopy {
+  flex: 1;
+  min-width: 0;
+}
+
+.featuredKicker {
+  display: block;
+  color: #6f6f6b;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: .075em;
+}
+
+.featuredCopy h3 {
+  color: #141414;
+  margin: 8px 0 5px;
+  font-size: clamp(19px, 2.1vw, 27px);
+  font-weight: 650;
+  letter-spacing: -.03em;
+  line-height: 1.15;
+}
+
+.featuredCopy p {
+  color: #60605c;
+  font-size: clamp(12px, 1.1vw, 14px);
+  line-height: 1.45;
+  margin: 0;
+  max-width: 46ch;
+}
+
+.actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navButton {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid #d7d7d1;
+  border-radius: 50%;
+  background: #fff;
+  color: #151515;
+  cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.navButton:hover {
+  background: #f1f1ee;
+  border-color: #a8a8a3;
+}
+
+.profileButton {
+  height: 44px;
+  min-height: 44px;
+  margin-left: 10px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  border: 1px solid #1b1b1b;
+  border-radius: 999px;
+  background: #161616;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.navButton:focus-visible,
+.profileButton:focus-visible {
+  outline: 2px solid #191919;
+  outline-offset: 4px;
+}
+
+.note {
+  margin: 13px 4px 0;
+  color: #73736f;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+@media (max-width: 1000px) {
+  .rail {
+    --near-offset: clamp(152px, 19vw, 188px);
+    --far-offset: clamp(300px, 35vw, 353px);
+    height: 414px;
+  }
+  .card {
+    width: 218px;
+    height: 318px;
+  }
+}
+
+@media (max-width: 760px) {
+  .rail {
+    --near-offset: 156px;
+    height: 368px;
+    border-radius: 17px;
+  }
+  .card {
+    width: 211px;
+    height: 302px;
+  }
+  .farLeft,
+  .farRight {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .nearLeft,
+  .nearRight {
+    opacity: .53;
+    filter: brightness(.76);
+    transform-origin: center;
+  }
+  .underRail {
+    height: 165px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 14px;
+    padding: 15px 1px;
+  }
+  .featuredCopy h3 {
+    margin: 5px 0 3px;
+    font-size: 20px;
+  }
+  .featuredCopy p {
+    font-size: 12px;
+  }
+  .actions {
+    justify-content: flex-start;
+  }
+  .profileButton {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .rail {
+    --near-offset: 140px;
+    height: 332px;
+  }
+  .card {
+    width: 188px;
+    height: 278px;
+  }
+  .cardContents {
+    bottom: 17px;
+    left: 13px;
+    right: 13px;
+  }
+  .cardName { font-size: 17px; }
+  .cardRole { font-size: 8px; }
+  .centerArrow { width: 31px; height: 31px; }
+  .underRail { height: 174px; }
+  .profileButton {
+    height: 42px;
+    min-height: 42px;
+    padding: 0 12px;
+    font-size: 11px;
+    gap: 6px;
+  }
+  .navButton { width: 40px; height: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .navButton {
+    transition: none !important;
+  }
+}
