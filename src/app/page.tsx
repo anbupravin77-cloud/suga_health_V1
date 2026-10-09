@@ -970,53 +970,32 @@ function SectionHeader({ eyebrow, title, subtitle, children, dark = false, cente
 function Modal({ children, label, onClose, stableScroll = false }: { children: React.ReactNode; label: string; onClose: () => void; stableScroll?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null);
 
-  // The doctor profile uses a layout effect so the lock and restoration both
-  // happen before paint. A normal effect caused a one-frame jump to the top.
+  // Keep the document in normal flow while the doctor dialog is open.
+  // Fixing the entire body caused the viewport to jump to its top.
   useLayoutEffect(() => {
     if (!stableScroll) return;
-
     const dialog = ref.current;
     const html = document.documentElement;
     const body = document.body;
-    const x = window.scrollX;
-    const y = window.scrollY;
     const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const previous = {
       htmlOverflow: html.style.overflow,
-      htmlScrollBehavior: html.style.scrollBehavior,
       htmlScrollbarGutter: html.style.scrollbarGutter,
       bodyOverflow: body.style.overflow,
-      bodyPosition: body.style.position,
-      bodyTop: body.style.top,
-      bodyLeft: body.style.left,
-      bodyWidth: body.style.width,
     };
 
-    // A fixed body retains the exact visual viewport, including on mobile
-    // Safari. Disable smooth scrolling before any focus or scroll work.
-    html.style.scrollBehavior = "auto";
     html.style.scrollbarGutter = "stable";
-    body.style.position = "fixed";
-    body.style.top = `-${y}px`;
-    body.style.left = `-${x}px`;
-    body.style.width = "100%";
-    body.style.overflow = "hidden";
     html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
     dialog?.showModal();
     dialog?.querySelector<HTMLElement>(".clinical-dialog-close")?.focus({ preventScroll: true });
 
     return () => {
       dialog?.close();
-      body.style.overflow = previous.bodyOverflow;
-      body.style.position = previous.bodyPosition;
-      body.style.top = previous.bodyTop;
-      body.style.left = previous.bodyLeft;
-      body.style.width = previous.bodyWidth;
       html.style.overflow = previous.htmlOverflow;
-      window.scrollTo(x, y);
-      opener?.focus({ preventScroll: true });
+      body.style.overflow = previous.bodyOverflow;
       html.style.scrollbarGutter = previous.htmlScrollbarGutter;
-      html.style.scrollBehavior = previous.htmlScrollBehavior;
+      opener?.focus({ preventScroll: true });
     };
   }, [stableScroll]);
 
