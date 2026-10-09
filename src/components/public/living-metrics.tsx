@@ -40,6 +40,7 @@ export function LivingMetrics() {
   const [hoverPaused, setHoverPaused] = useState(false);
   const [focusPaused, setFocusPaused] = useState(false);
   const [touchPaused, setTouchPaused] = useState(false);
+  const [compact, setCompact] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const hoverResumeRef = useRef<number | null>(null);
   const touchResumeRef = useRef<number | null>(null);
@@ -86,17 +87,25 @@ export function LivingMetrics() {
     if (touchResumeRef.current !== null) window.clearTimeout(touchResumeRef.current);
   }, []);
 
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 700px)");
+    const update = () => setCompact(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
   // Timeout, not interval: every metric gets a full reading window and a
   // manual selection resets the clock. Hover, touch and focus always win.
   useEffect(() => {
-    if (!inView || !pageVisible || reducedMotion || hoverPaused || focusPaused || touchPaused) return;
+    if (!inView || !pageVisible || reducedMotion || compact || hoverPaused || focusPaused || touchPaused) return;
 
     const timer = window.setTimeout(() => {
       setPrevious(selected);
       setSelected((selected + 1) % metrics.length);
     }, 4700);
     return () => window.clearTimeout(timer);
-  }, [inView, pageVisible, reducedMotion, hoverPaused, focusPaused, touchPaused, selected]);
+  }, [inView, pageVisible, reducedMotion, compact, hoverPaused, focusPaused, touchPaused, selected]);
 
   function pauseHover() {
     if (hoverResumeRef.current !== null) {
@@ -140,19 +149,24 @@ export function LivingMetrics() {
     const target = Number(metrics[selected].figure.match(/\d+/)?.[0] ?? 0);
     let frame = 0;
     let startTime: number | null = null;
+    let lastPaint = 0;
+    const duration = compact ? 680 : 1150;
 
     const tick = (now: number) => {
       if (startTime === null) startTime = now;
-      const progress = Math.min((now - startTime) / 1150, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCounted({ index: selected, value: Math.round(target * eased) });
-
+      const progress = Math.min((now - startTime) / duration, 1);
+      // ~30 Hz on phones: fewer React renders while remaining visually smooth.
+      if (!compact || now - lastPaint >= 30 || progress >= 1) {
+        lastPaint = now;
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setCounted({ index: selected, value: Math.round(target * eased) });
+      }
       if (progress < 1) frame = window.requestAnimationFrame(tick);
     };
 
     frame = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(frame);
-  }, [selected, entered, inView, pageVisible, reducedMotion]);
+  }, [selected, entered, inView, pageVisible, reducedMotion, compact]);
 
   function chooseMetric(index: number) {
     if (index === selected) return;

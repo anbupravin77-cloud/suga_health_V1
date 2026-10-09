@@ -486,3 +486,65 @@
 @media (prefers-reduced-motion: reduce) {
   .rail .card { transition: none !important; }
 }
+
+/* Phone-specific coverflow. Desktop cinema is deliberately unchanged. */
+@media (max-width: 760px) {
+  .doctorSection :global(.editorial-section-heading) { margin-bottom: 22px !important; }
+  .doctorSection :global(.editorial-section-heading h2) {
+    max-width: 100% !important;
+    font-size: clamp(25px, 5.9vw, 36px) !important;
+    line-height: 1.06 !important;
+  }
+  .doctorSection :global(.section-title-line) {
+    white-space: normal !important;
+    text-wrap: balance;
+  }
+  .doctorSection :global(.editorial-section-heading p) {
+    font-size: 13px !important;
+    line-height: 1.55;
+    margin-top: 10px !important;
+  }
+  .rail {
+    --near-offset: clamp(112px, 32vw, 154px);
+    --far-offset: 270px;
+    height: clamp(345px, 93vw, 420px);
+    border-radius: 13px;
+  }
+  .rail .card {
+    width: clamp(224px, 73vw, 295px);
+    height: clamp(308px, 82vw, 375px);
+    transition:
+      transform 700ms cubic-bezier(.2,.74,.24,1),
+      opacity 700ms cubic-bezier(.2,.74,.24,1) !important;
+    filter: none !important;
+    box-shadow: 0 14px 34px rgba(0,0,0,.22);
+  }
+  .rail .farLeft, .rail .farRight { opacity: 0 !important; pointer-events: none; }
+  .rail .nearLeft, .rail .nearRight { opacity: .72; filter: none !important; }
+  .rail .cardContents { left: 14px; right: 14px; bottom: 17px; }
+  .rail .cardName { font-size: clamp(17px, 4.6vw, 20px); }
+  .rail .cardRole { font-size: 9px; }
+  .rail.isResetting .card { transition: none !important; }
+  .underRail { height: auto; min-height: 148px; padding: 14px 2px; gap: 12px; }
+  .featuredCopy h3 { font-size: 19px; line-height: 1.18; }
+  .featuredCopy p { font-size: 12px; line-height: 1.5; }
+  .actions { display: flex; align-items: center; gap: 9px; width: 100%; }
+  .navButton { width: 44px; height: 44px; flex: 0 0 44px; }
+  .profileButton {
+    min-width: 0; flex: 1; max-width: 250px; height: 44px;
+    min-height: 44px; margin-left: auto; padding-inline: 12px;
+    font-size: 11px; gap: 6px; white-space: nowrap;
+  }
+  .note { font-size: 10px; line-height: 1.45; margin-top: 8px; }
+  .doctorModal { width: calc(100% - 20px); max-height: calc(100dvh - 24px); }
+  .doctorModal :global(.clinical-dialog-content > div:first-of-type) { padding-right: 3.5rem; }
+}
+@media (max-width: 360px) {
+  .rail { --near-offset: 111px; height: 347px; }
+  .rail .card { width: 225px; height: 310px; }
+  .profileButton { font-size: 10px; padding-inline: 9px; }
+  .navButton { width: 42px; height: 42px; flex-basis: 42px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rail .card, .rail.isResetting .card { transition: none !important; }
+}

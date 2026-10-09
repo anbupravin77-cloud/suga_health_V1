@@ -77,7 +77,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
   const positionRef = useRef(count);
   const hoverResumeRef = useRef<number | null>(null);
   const touchResumeRef = useRef<number | null>(null);
-  const pointerStartRef = useRef<number | null>(null);
+  const pointerStartRef = useRef<{ x: number; y: number } | null>(null);
   const swipeHandledRef = useRef(false);
 
   useEffect(() => {
@@ -160,7 +160,8 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
 
     // A safety fallback for hidden tabs or interrupted CSS transitions.
     // Normal movement completes on the incoming center card's transitionend.
-    moveDoneRef.current = window.setTimeout(finishMove, reducedMotion ? 0 : 1650);
+    const compact = window.matchMedia("(max-width: 760px)").matches;
+    moveDoneRef.current = window.setTimeout(finishMove, reducedMotion ? 0 : compact ? 960 : 1650);
   }, [count, finishMove, reducedMotion]);
 
   // An ordinary one-card move every 4.6 seconds. Hover, focus, touch, hidden
@@ -168,7 +169,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
   useEffect(() => {
     if (doctors.length < 2 || paused || !inView || !pageVisible || reducedMotion ||
       hoverPaused || focusPaused || touchPaused) return;
-    const timer = window.setTimeout(() => advance(1), 4600);
+    const timer = window.setTimeout(() => advance(1), window.matchMedia("(max-width: 760px)").matches ? 6500 : 4600);
     return () => window.clearTimeout(timer);
   }, [doctors.length, paused, inView, pageVisible, reducedMotion,
     hoverPaused, focusPaused, touchPaused, position, advance]);
@@ -235,16 +236,23 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
         }}
         onTouchStart={(event) => {
           swipeHandledRef.current = false;
-          pointerStartRef.current = event.touches[0]?.clientX ?? null;
+          const touch = event.touches[0];
+          pointerStartRef.current = touch ? { x: touch.clientX, y: touch.clientY } : null;
         }}
         onTouchEnd={(event) => {
-          if (pointerStartRef.current === null) return;
-          const diff = (event.changedTouches[0]?.clientX ?? pointerStartRef.current) - pointerStartRef.current;
+          const origin = pointerStartRef.current;
           pointerStartRef.current = null;
-          if (Math.abs(diff) < 45) return;
+          if (!origin) return;
+          const touch = event.changedTouches[0];
+          if (!touch) return;
+          const dx = touch.clientX - origin.x;
+          const dy = touch.clientY - origin.y;
+          // Vertical page scrolling must not accidentally rotate the carousel.
+          if (Math.abs(dx) < 44 || Math.abs(dx) < Math.abs(dy) * 1.3) return;
           swipeHandledRef.current = true;
+          window.setTimeout(() => { swipeHandledRef.current = false; }, 450);
           holdForTouch();
-          advance(diff < 0 ? 1 : -1);
+          advance(dx < 0 ? 1 : -1);
         }}
       >
         <div className={styles.glow} aria-hidden="true" />

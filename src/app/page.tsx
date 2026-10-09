@@ -331,6 +331,7 @@ export default function HomePage() {
   const [careHoverPaused, setCareHoverPaused] = useState(false);
   const [careFocusPaused, setCareFocusPaused] = useState(false);
   const [careTouchPaused, setCareTouchPaused] = useState(false);
+  const [careCompact, setCareCompact] = useState(false);
   const careExpanderRef = useRef<HTMLDivElement>(null);
   const careHoverResumeRef = useRef<number | null>(null);
   const careTouchResumeRef = useRef<number | null>(null);
@@ -361,6 +362,15 @@ export default function HomePage() {
     return () => window.clearInterval(timer);
   }, []);
 
+  // Touch layouts are user-controlled: never rotate a card while somebody reads.
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 900px)");
+    const update = () => setCareCompact(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
   // The cards cycle only while visible and while the visitor is not interacting.
   useEffect(() => {
     const root = careExpanderRef.current;
@@ -388,7 +398,7 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (!careInView || !carePageVisible || careReducedMotion ||
+    if (!careInView || !carePageVisible || careReducedMotion || careCompact ||
         careHoverPaused || careFocusPaused || careTouchPaused) return;
 
     if (activeCareStep === null) {
@@ -399,7 +409,7 @@ export default function HomePage() {
       setActiveCareStep((current) => ((current ?? -1) + 1) % howItWorks.length);
     }, 4700);
     return () => window.clearTimeout(timer);
-  }, [careInView, carePageVisible, careReducedMotion,
+  }, [careInView, carePageVisible, careReducedMotion, careCompact,
       careHoverPaused, careFocusPaused, careTouchPaused, activeCareStep]);
 
   function holdCareOnHover(index: number) {

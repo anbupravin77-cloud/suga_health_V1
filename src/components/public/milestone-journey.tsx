@@ -78,9 +78,16 @@ export function MilestoneJourney() {
   useLayoutEffect(() => {
     if (!hasInteracted.current) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const compact = window.matchMedia("(max-width: 760px)").matches;
     if (reduced) {
+      departingRef.current = null;
       setDeparting(null);
       return;
+    }
+    if (compact) {
+      // Avoid animating the departing layer beneath the reader's finger.
+      departingRef.current = null;
+      setDeparting(null);
     }
 
     // Geometry is measured on every selection. Each card actually originates
@@ -96,18 +103,20 @@ export function MilestoneJourney() {
 
     incomingRefs.current.forEach((card, index) => {
       if (!card) return;
-      const delta = translateToTitle(card.getBoundingClientRect(), source);
+      const rect = card.getBoundingClientRect();
+      if (compact && (rect.top >= window.innerHeight || rect.bottom <= 0)) return;
+      const delta = compact ? { x: -16, y: 8 } : translateToTitle(rect, source);
       const animation = card.animate(
         [
-          { transform: `translate3d(${delta.x}px, ${delta.y}px, 0) scale(.28)`, opacity: 0 },
+          { transform: compact ? "translate3d(-16px, 8px, 0) scale(.985)" : `translate3d(${delta.x}px, ${delta.y}px, 0) scale(.28)`, opacity: 0 },
           { transform: "translate3d(0, 0, 0) scale(1)", opacity: 1 },
         ],
-        { duration: 780, delay: index * 65, easing: "cubic-bezier(.16, 1, .3, 1)", fill: "both" },
+        { duration: compact ? 365 : 780, delay: index * (compact ? 35 : 65), easing: "cubic-bezier(.16, 1, .3, 1)", fill: "both" },
       );
       animations.push(animation);
     });
 
-    if (departingRef.current) {
+    if (departingRef.current && !compact) {
       const oldSource = titleRefs.current[previousActive.current]?.getBoundingClientRect();
       if (oldSource) {
         outgoingRefs.current.forEach((card, index) => {

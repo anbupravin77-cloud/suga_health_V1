@@ -2942,3 +2942,68 @@ main.refined-home .home-doctors button[class*="profileButton"] > svg {
   color: #fff !important;
   stroke: #fff;
 }
+
+/* Mobile-only How It Works: a natural-height tap accordion.
+   Avoid clipping content or causing the following Metrics section to jump. */
+@media (max-width: 900px) {
+  main.refined-home .home-process .care-expander {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    gap: 10px !important;
+  }
+  main.refined-home .home-process .care-expander-card,
+  main.refined-home .home-process .care-expander-card:first-child,
+  main.refined-home .home-process .care-expander-card:last-child,
+  main.refined-home .home-process .care-expander-card.is-expanded {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 112px !important;
+    flex: none !important;
+    contain: none !important;
+    overflow: visible !important;
+    padding: 16px 18px !important;
+    border-radius: 15px !important;
+    transition: background-color 220ms ease, border-color 220ms ease !important;
+  }
+  main.refined-home .home-process .care-expander-trigger {
+    min-height: 35px !important;
+    margin: 0 0 8px !important;
+    align-items: center;
+  }
+  main.refined-home .home-process .care-expander-layout,
+  main.refined-home .home-process .care-expander-card.is-expanded .care-expander-layout {
+    display: block !important;
+    width: 100%;
+    min-height: 0;
+  }
+  main.refined-home .home-process .care-expander-copy h3 { margin-bottom: 6px !important; }
+  main.refined-home .home-process .care-expander-brief { max-width: none; }
+  main.refined-home .home-process .care-expander-card.is-expanded .care-expander-media {
+    display: none !important; /* Existing media are colored placeholders, not doctor imagery. */
+  }
+  main.refined-home .care-expander-detail:not([hidden]) {
+    margin-top: 11px !important;
+    padding-top: 11px !important;
+    animation: care-detail-reveal 260ms ease-out both !important;
+  }
+  main.refined-home .care-expander-hint { display: none !important; }
+  main.refined-home .care-expander-arrow { transition-duration: 250ms; }
+}
+@media (max-width: 480px) {
+  main.refined-home .home-process .care-expander-card,
+  main.refined-home .home-process .care-expander-card:first-child,
+  main.refined-home .home-process .care-expander-card:last-child,
+  main.refined-home .home-process .care-expander-card.is-expanded {
+    padding: 15px !important;
+    min-height: 108px !important;
+  }
+  main.refined-home .home-process .care-expander-heading { margin-bottom: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  main.refined-home .home-process .care-expander-detail:not([hidden]) {
+    animation: none !important;
+  }
+}

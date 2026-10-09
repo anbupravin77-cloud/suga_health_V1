@@ -340,3 +340,37 @@
     transition: none !important;
   }
 }
+
+/* Touch-screen scale: show the number and all three controls without excess scroll. */
+@media (max-width: 700px) {
+  .root { padding: 18px 0 25px; }
+  .heading { margin-bottom: 18px; }
+  .heading h2 { font-size: clamp(28px, 7.4vw, 38px); line-height: 1.1; }
+  .heading p { font-size: 14px; margin-top: 8px; }
+  .stage { height: 170px; min-height: 170px; flex-basis: 170px; padding: 13px 0 9px; }
+  .index { font-size: 11px; }
+  .counterWindow { height: 112px; min-height: 112px; }
+  .figure, .figureOutgoing {
+    height: 112px; min-height: 112px;
+    font-size: clamp(76px, 20vw, 104px);
+    will-change: auto;
+  }
+  .figureEntering { animation-duration: 350ms; }
+  .figureOutgoing { animation-duration: 350ms; }
+  .unit { font-size: 12px; }
+  .selection { height: 174px; min-height: 174px; margin: 0 0 9px; }
+  .selector { min-height: 58px; padding: 8px 9px 8px 17px; gap: 8px; }
+  .selectorTitle { font-size: clamp(13px, 3.8vw, 16px); }
+  .selectorNumber { font-size: 11px; }
+  .movingBar { transition-duration: 300ms; }
+  .foot { min-height: 0; padding: 12px 0 0; gap: 8px; }
+  .description { min-height: 0; font-size: 14px; }
+  .disclaimer { font-size: 11px; line-height: 1.45; }
+}
+@media (max-width: 360px) {
+  .figure, .figureOutgoing { font-size: 76px; }
+  .selectorTitle { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .figureEntering, .figureOutgoing { animation: none !important; }
+}
