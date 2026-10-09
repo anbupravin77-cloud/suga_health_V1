@@ -25,6 +25,7 @@ import {
 import { rememberReturnPosition, useRestoreReturnPosition } from "@/components/public/return-position";
 import { MobilePublicMenu } from "@/components/public/mobile-public-menu";
 import { LivingMetrics } from "@/components/public/living-metrics";
+import { MilestoneJourney } from "@/components/public/milestone-journey";
 import { DoctorSpotlight } from "@/components/public/doctor-spotlight";
 import doctorStyles from "@/components/public/doctor-spotlight.module.css";
 
@@ -78,24 +79,6 @@ const heroSlides = pillars.map((pillar) => ({
   label: pillar.title,
   caption: pillar.subtitle,
 }));
-
-const timelines = {
-  weight: [
-    { phase: "Month 1", label: "Metabolic Reset", description: "Initial micro-dose titration minimizes side effects while dampening constant food cravings and biological 'food noise'." },
-    { phase: "Months 2–3", label: "Consistent Loss", description: "Steady 1–2 lbs weekly reduction. Improved insulin sensitivity, increased daytime energy, and reduced visceral fat." },
-    { phase: "Months 4–6+", label: "Target Stability", description: "Reach your personal target weight. Physician evaluates maintenance dosing to lock in sustainable metabolic health." },
-  ],
-  hair: [
-    { phase: "Months 1–2", label: "Follicle Stabilization", description: "DHT inhibition begins. Normal initial shedding of weak hairs as miniaturized follicles enter the active anagen growth phase." },
-    { phase: "Months 3–4", label: "Initial Regrowth", description: "Early signs of thickening along the crown and hairline. Faint vellus hairs transition into stronger terminal strands." },
-    { phase: "Months 6+", label: "Peak Density", description: "Noticeably denser coverage, reduced scalp visibility, and strengthened hair shafts with permanent daily routine." },
-  ],
-  sexual: [
-    { phase: "Day 1", label: "Immediate Efficacy", description: "On-demand or daily protocol delivers reliable blood flow within 30 to 60 minutes of ingestion." },
-    { phase: "Weeks 2–4", label: "Confidence Restored", description: "Elimination of performance anxiety. Daily micro-dosing allows completely spontaneous, natural intimacy." },
-    { phase: "Ongoing", label: "Continuous Optimization", description: "Regular check-ins with your Suga physician to fine-tune dosage, refill automatically, and monitor total vascular health." },
-  ],
-};
 
 const howItWorks = [
   {
@@ -330,12 +313,10 @@ const faqs = [
   { q: "Can I message my physician if I have questions or side effects?", a: "Yes. Ongoing clinician communication is part of the care experience." },
 ];
 
-type TimelineKey = keyof typeof timelines;
 type Product = (typeof products)[number];
 type Doctor = (typeof doctors)[number];
 
 export default function HomePage() {
-  const [timelineCategory, setTimelineCategory] = useState<TimelineKey>("weight");
   const [productCategory, setProductCategory] = useState("all");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
@@ -455,7 +436,7 @@ export default function HomePage() {
       "h1, h2, h3, p, .home-kicker, .pathway-highlight-list > span, .process-step-copy, .metric-ledger > article, .comparison-row, .doctor-card-body, .doctor-trust-band > div, .voice-testimonial, .product-card-body, .formulary-assurance, .faq-question, .faq-answer"
     ));
 
-    const revealTargets = targets.filter((element) => !element.closest(".home-process, .home-metrics"));
+    const revealTargets = targets.filter((element) => !element.closest(".home-process, .home-metrics, .home-progression"));
     revealTargets.forEach((element, index) => {
       element.classList.add("premium-text-reveal");
       element.style.setProperty("--reveal-delay", `${(index % 4) * 55}ms`);
@@ -622,30 +603,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="home-progression home-editorial-section bg-white">
-          <div className="home-section-shell">
-            <SectionHeader centered hideEyebrow eyebrow="Clinical Progression" title="Clear Milestones from Day 1" subtitle="Expect real, measurable physiological changes with continuous medical guidance.">
-              <div className="home-toggle-rail">
-                {([["weight","Weight Loss (GLP-1)"],["hair","Hair Regrowth"],["sexual","Sexual Vitality"]] as const).map(([key,label]) => (
-                  <button key={key} type="button" aria-pressed={timelineCategory === key} onClick={() => setTimelineCategory(key)} className={timelineCategory === key ? "legacy-toggle legacy-toggle-active" : "legacy-toggle"}>{label}</button>
-                ))}
-              </div>
-            </SectionHeader>
-            <div className="progression-line">
-              {timelines[timelineCategory].map((step, idx) => (
-                <article key={step.phase} className="progression-step">
-                  <div className="progression-step-head">
-                    <span className="progression-phase">{step.phase}</span>
-                    <span className="progression-index">Step 0{idx + 1}</span>
-                  </div>
-                  <h3>{step.label}</h3>
-                  <p>{step.description}</p>
-                </article>
-              ))}
-            </div>
-            <div className="home-centered-action"><Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary">See if you qualify today <ArrowRight size={16} /></Link></div>
-          </div>
-        </section>
+        <MilestoneJourney />
 
         <section className="home-process home-editorial-section" aria-labelledby="care-expander-title">
           <div className="home-section-shell">
