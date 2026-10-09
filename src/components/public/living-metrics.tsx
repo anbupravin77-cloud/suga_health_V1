@@ -137,7 +137,7 @@ export function LivingMetrics() {
   useEffect(() => {
     if (!entered || !inView || !pageVisible || reducedMotion) return;
 
-    const target = Number(metrics[selected].figure.match(/\\d+/)?.[0] ?? 0);
+    const target = Number(metrics[selected].figure.match(/\d+/)?.[0] ?? 0);
     let frame = 0;
     let startTime: number | null = null;
 
