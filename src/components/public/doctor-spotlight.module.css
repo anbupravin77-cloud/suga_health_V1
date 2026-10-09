@@ -1,4 +1,5 @@
-/* Five-position doctor coverflow. Scoped and sized so no neighboring section shifts. */
+/* Five visible cards and two invisible buffer positions per side.
+   The container remains a fixed height while cards move horizontally. */
 .root {
   width: 100%;
   max-width: 1220px;
@@ -7,12 +8,12 @@
 }
 
 .rail {
-  --near-offset: clamp(170px, 19.5vw, 224px);
-  --far-offset: clamp(312px, 35.8vw, 405px);
+  --near-offset: clamp(192px, 21.5vw, 250px);
+  --far-offset: clamp(354px, 38.2vw, 452px);
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  height: 468px;
+  height: 544px;
   width: 100%;
   border-radius: 22px;
   background: #101214;
@@ -33,8 +34,8 @@
   top: 50%;
   left: 50%;
   display: block;
-  width: 244px;
-  height: 352px;
+  width: 282px;
+  height: 416px;
   min-width: 0;
   padding: 0;
   margin: 0;
@@ -49,10 +50,11 @@
   transform-origin: 50% 50%;
   will-change: transform, opacity;
   transition:
-    transform 920ms cubic-bezier(.22,.8,.19,1),
-    opacity 920ms ease,
-    filter 920ms ease,
-    box-shadow 920ms ease;
+    transform 1370ms cubic-bezier(.23,.72,.2,1),
+    opacity 1240ms cubic-bezier(.23,.72,.2,1),
+    filter 1240ms ease,
+    box-shadow 1240ms ease;
+  backface-visibility: hidden;
 }
 
 .card:focus-visible {
@@ -97,7 +99,7 @@
   position: absolute;
   inset: 0;
   display: block;
-  background: linear-gradient(to top, rgba(6,8,10,.88) 0%, rgba(9,10,12,.42) 34%, rgba(0,0,0,0) 69%);
+  background: linear-gradient(to top, rgba(255,255,255,.95) 0%, rgba(255,255,255,.56) 27%, rgba(255,255,255,0) 63%);
 }
 
 .cardContents {
@@ -112,7 +114,7 @@
 }
 
 .cardRole {
-  color: rgba(255,255,255,.8);
+  color: #434948;
   font-size: 9px;
   font-weight: 600;
   letter-spacing: .045em;
@@ -121,7 +123,7 @@
 }
 
 .cardName {
-  color: #fff;
+  color: #121616;
   font-size: 20px;
   line-height: 1.18;
   font-weight: 650;
@@ -130,7 +132,7 @@
 }
 
 .cardCredentials {
-  color: rgba(255,255,255,.82);
+  color: #444947;
   font-size: 11px;
   font-weight: 500;
 }
@@ -149,6 +151,8 @@
   color: #111;
 }
 
+.offscreenFarLeft,
+.offscreenFarRight,
 .offscreenLeft,
 .offscreenRight {
   z-index: 0;
@@ -156,35 +160,41 @@
   pointer-events: none;
   filter: brightness(.6);
 }
+.offscreenFarLeft {
+  transform: translate3d(calc(-50% - var(--far-offset) - 500px),-50%,0) scale(.49);
+}
+.offscreenFarRight {
+  transform: translate3d(calc(-50% + var(--far-offset) + 500px),-50%,0) scale(.49);
+}
 .offscreenLeft {
-  transform: translate3d(calc(-50% - var(--far-offset) - 142px),-50%,0) scale(.53);
+  transform: translate3d(calc(-50% - var(--far-offset) - 260px),-50%,0) scale(.53);
 }
 .offscreenRight {
-  transform: translate3d(calc(-50% + var(--far-offset) + 142px),-50%,0) scale(.53);
+  transform: translate3d(calc(-50% + var(--far-offset) + 260px),-50%,0) scale(.53);
 }
 .farLeft,
 .farRight {
   z-index: 1;
-  opacity: .42;
-  filter: brightness(.72) saturate(.65);
+  opacity: .55;
+  filter: brightness(.9) saturate(.8);
 }
 .farLeft {
-  transform: translate3d(calc(-50% - var(--far-offset)),-50%,0) scale(.64);
+  transform: translate3d(calc(-50% - var(--far-offset)),-50%,0) scale(.72);
 }
 .farRight {
-  transform: translate3d(calc(-50% + var(--far-offset)),-50%,0) scale(.64);
+  transform: translate3d(calc(-50% + var(--far-offset)),-50%,0) scale(.72);
 }
 .nearLeft,
 .nearRight {
   z-index: 2;
-  opacity: .72;
-  filter: brightness(.87) saturate(.78);
+  opacity: .83;
+  filter: brightness(.96) saturate(.88);
 }
 .nearLeft {
-  transform: translate3d(calc(-50% - var(--near-offset)),-50%,0) scale(.80);
+  transform: translate3d(calc(-50% - var(--near-offset)),-50%,0) scale(.86);
 }
 .nearRight {
-  transform: translate3d(calc(-50% + var(--near-offset)),-50%,0) scale(.80);
+  transform: translate3d(calc(-50% + var(--near-offset)),-50%,0) scale(.86);
 }
 .center {
   z-index: 3;
@@ -273,7 +283,7 @@
   border: 1px solid #1b1b1b;
   border-radius: 999px;
   background: #161616;
-  color: #fff;
+  color: #fff !important;
   font-size: 12px;
   font-weight: 650;
   cursor: pointer;
@@ -295,25 +305,25 @@
 
 @media (max-width: 1000px) {
   .rail {
-    --near-offset: clamp(152px, 19vw, 188px);
-    --far-offset: clamp(300px, 35vw, 353px);
-    height: 414px;
+    --near-offset: clamp(158px, 20vw, 205px);
+    --far-offset: clamp(290px, 35vw, 385px);
+    height: 482px;
   }
   .card {
-    width: 218px;
-    height: 318px;
+    width: 252px;
+    height: 368px;
   }
 }
 
 @media (max-width: 760px) {
   .rail {
-    --near-offset: 156px;
-    height: 368px;
+    --near-offset: 166px;
+    height: 416px;
     border-radius: 17px;
   }
   .card {
-    width: 211px;
-    height: 302px;
+    width: 236px;
+    height: 348px;
   }
   .farLeft,
   .farRight {
@@ -351,12 +361,12 @@
 
 @media (max-width: 480px) {
   .rail {
-    --near-offset: 140px;
-    height: 332px;
+    --near-offset: 151px;
+    height: 374px;
   }
   .card {
-    width: 188px;
-    height: 278px;
+    width: 212px;
+    height: 312px;
   }
   .cardContents {
     bottom: 17px;
