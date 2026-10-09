@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import styles from "./doctor-spotlight.module.css";
 
@@ -37,10 +37,8 @@ const additionalProfiles: DoctorPreview[] = [
   },
 ];
 
-// Keep two invisible buffers on either end. Existing logical keys stay mounted
-// as they move between positions, so the sequence genuinely travels across the
-// rail rather than swapping one cover for another.
-const offsets = [-4, -3, -2, -1, 0, 1, 2, 3, 4] as const;
+// Five visible slots with two offscreen buffers each side.
+// Three repeated copies provide a physical wrap with no last-to-first jump.
 const positions = [
   styles.offscreenFarLeft,
   styles.offscreenLeft,
@@ -60,9 +58,10 @@ function indexFor(value: number, count: number) {
 export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: DoctorSpotlightProps) {
   const cards = [...doctors, ...additionalProfiles];
   const count = cards.length;
-  const [step, setStep] = useState(0);
-  const [displayedStep, setDisplayedStep] = useState(0);
+  const [position, setPosition] = useState(count);
+  const [displayedIndex, setDisplayedIndex] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   const [inView, setInView] = useState(false);
   const [pageVisible, setPageVisible] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -72,6 +71,10 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
 
   const railRef = useRef<HTMLDivElement>(null);
   const moveDoneRef = useRef<number | null>(null);
+  const resetFrameRef = useRef<number | null>(null);
+  const restoreFrameRef = useRef<number | null>(null);
+  const movingRef = useRef(false);
+  const positionRef = useRef(count);
   const hoverResumeRef = useRef<number | null>(null);
   const touchResumeRef = useRef<number | null>(null);
   const pointerStartRef = useRef<number | null>(null);
@@ -106,36 +109,57 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
     if (hoverResumeRef.current !== null) window.clearTimeout(hoverResumeRef.current);
     if (touchResumeRef.current !== null) window.clearTimeout(touchResumeRef.current);
     if (moveDoneRef.current !== null) window.clearTimeout(moveDoneRef.current);
+    if (resetFrameRef.current !== null) window.cancelAnimationFrame(resetFrameRef.current);
+    if (restoreFrameRef.current !== null) window.cancelAnimationFrame(restoreFrameRef.current);
   }, []);
 
+  const advance = useCallback((direction: -1 | 1) => {
+    if (movingRef.current || count < 2) return;
+    movingRef.current = true;
+    setIsMoving(true);
+
+    const next = positionRef.current + direction;
+    positionRef.current = next;
+    setPosition(next);
+
+    const delay = reducedMotion ? 0 : 980;
+    if (moveDoneRef.current !== null) window.clearTimeout(moveDoneRef.current);
+    moveDoneRef.current = window.setTimeout(() => {
+      setDisplayedIndex(indexFor(next, count));
+      setIsMoving(false);
+      moveDoneRef.current = null;
+
+      // Both positions show identical visible cards. The invisible reposition
+      // takes place without CSS transitions, then ordinary motion resumes.
+      const rewind = next >= 2 * count ? count
+        : next < count ? 2 * count - 1 : null;
+      if (rewind !== null) {
+        setIsResetting(true);
+        positionRef.current = rewind;
+        setPosition(rewind);
+        resetFrameRef.current = window.requestAnimationFrame(() => {
+          restoreFrameRef.current = window.requestAnimationFrame(() => {
+            setIsResetting(false);
+            movingRef.current = false;
+            restoreFrameRef.current = null;
+          });
+          resetFrameRef.current = null;
+        });
+      } else {
+        movingRef.current = false;
+      }
+    }, delay);
+  }, [count, reducedMotion]);
+
+  // An ordinary one-card move every 4.6 seconds. Hover, focus, touch, hidden
+  // sections, inactive tabs and the modal suspend automatic navigation.
   useEffect(() => {
     if (doctors.length < 2 || paused || !inView || !pageVisible || reducedMotion ||
       hoverPaused || focusPaused || touchPaused) return;
-    const timer = window.setTimeout(() => setStep((current) => current + 1), 4600);
+    const timer = window.setTimeout(() => advance(1), 4600);
     return () => window.clearTimeout(timer);
   }, [doctors.length, paused, inView, pageVisible, reducedMotion,
-    hoverPaused, focusPaused, touchPaused, step]);
-
-  // Cards stay mounted under stable logical keys and travel between offset
-  // positions. Delay the featured copy until the physical slide is complete
-  // so the doctor details don't abruptly switch during the motion.
-  useEffect(() => {
-    if (moveDoneRef.current !== null) window.clearTimeout(moveDoneRef.current);
-    if (step === displayedStep) return;
-
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const delay = reduced ? 0 : 980;
-    const start = window.setTimeout(() => setIsMoving(true), 0);
-    moveDoneRef.current = window.setTimeout(() => {
-      setDisplayedStep(step);
-      setIsMoving(false);
-      moveDoneRef.current = null;
-    }, delay);
-    return () => {
-      window.clearTimeout(start);
-      if (moveDoneRef.current !== null) window.clearTimeout(moveDoneRef.current);
-    };
-  }, [step, displayedStep]);
+    hoverPaused, focusPaused, touchPaused, position, advance]);
 
   function pauseForPointer() {
     if (hoverResumeRef.current !== null) window.clearTimeout(hoverResumeRef.current);
@@ -167,23 +191,23 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
     }
     holdForTouch();
     if (slot !== 0) {
-      setStep((current) => current + slot);
+      advance(slot < 0 ? -1 : 1);
     } else if (additionalProfiles.some((profile) => profile.id === doctorId)) {
-      setStep((current) => current + 1);
+      advance(1);
     } else {
       onViewProfile(doctorId);
     }
   }
 
   if (!doctors.length) return null;
-  const featured = cards[indexFor(displayedStep, count)];
+  const featured = cards[indexFor(displayedIndex, count)];
   const placeholderFeatured = additionalProfiles.some((profile) => profile.id === featured.id);
 
   return (
     <div className={styles.root}>
       <div
         ref={railRef}
-        className={`${styles.rail} ${isMoving ? styles.isMoving : ""}`}
+        className={`${styles.rail} ${isMoving ? styles.isMoving : ""} ${isResetting ? styles.isResetting : ""}`}
         aria-label="Featured clinicians carousel"
         onPointerEnter={(event) => {
           if (event.pointerType === "mouse") pauseForPointer();
@@ -208,23 +232,24 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
           if (Math.abs(diff) < 45) return;
           swipeHandledRef.current = true;
           holdForTouch();
-          setStep((current) => current + (diff < 0 ? 1 : -1));
+          advance(diff < 0 ? 1 : -1);
         }}
       >
         <div className={styles.glow} aria-hidden="true" />
-        {offsets.map((offset, index) => {
-          const logicalIndex = step + offset;
-          const doctor = cards[indexFor(logicalIndex, count)];
+        {Array.from({ length: count * 3 }, (_, absoluteIndex) => {
+          const offset = absoluteIndex - position;
+          const doctor = cards[indexFor(absoluteIndex, count)];
           const isPlaceholder = additionalProfiles.some((profile) => profile.id === doctor.id);
           const isCenter = offset === 0;
           const offscreen = Math.abs(offset) >= 3;
+          const positionClass = positions[Math.max(0, Math.min(8, offset + 4))];
 
           return (
             <button
-              key={logicalIndex}
+              key={absoluteIndex}
               type="button"
-              className={`${styles.card} ${positions[index]} ${isCenter ? styles.isCenter : ""} ${isPlaceholder ? styles.placeholderCard : ""}`}
-              style={{ ["--portrait-color" as string]: ["#c3c8c5", "#afb9bf", "#c4bebb", "#b6c1b5", "#919da0"][indexFor(logicalIndex, count)] }}
+              className={`${styles.card} ${positionClass} ${isCenter ? styles.isCenter : ""} ${isPlaceholder ? styles.placeholderCard : ""}`}
+              style={{ ["--portrait-color" as string]: ["#c3c8c5", "#afb9bf", "#c4bebb", "#b6c1b5", "#919da0"][indexFor(absoluteIndex, count)] }}
               tabIndex={offscreen ? -1 : 0}
               aria-hidden={offscreen ? true : undefined}
               aria-label={isCenter ? (isPlaceholder ? "Continue to the next clinician" : `View credentials for ${doctor.name}`) : `Feature ${doctor.name}`}
@@ -259,7 +284,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
             type="button"
             className={styles.navButton}
             aria-label="Previous clinician"
-            onClick={() => { holdForTouch(); setStep((current) => current - 1); }}
+            onClick={() => { holdForTouch(); advance(-1); }}
           >
             <ArrowLeft size={19} />
           </button>
@@ -267,7 +292,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
             type="button"
             className={styles.navButton}
             aria-label="Next clinician"
-            onClick={() => { holdForTouch(); setStep((current) => current + 1); }}
+            onClick={() => { holdForTouch(); advance(1); }}
           >
             <ArrowRight size={19} />
           </button>
@@ -277,7 +302,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
             onClick={() => {
               holdForTouch();
               if (placeholderFeatured) {
-                setStep((current) => current + 1);
+                advance(1);
               } else {
                 onViewProfile(featured.id);
               }
