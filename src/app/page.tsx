@@ -984,16 +984,29 @@ function Modal({ children, label, onClose, stableScroll = false }: { children: R
 
     dialog?.showModal();
 
-    // Native top-layer dialog + overflow lock keeps the document at its
-    // current scroll position. The old fixed-body lock reset the viewport to
-    // the top, and its scrollTo restoration animated back to the doctors.
+    // Keep the doctor modal fully in-place: restore focus without browser
+    // auto-scrolling, and explicitly preserve the exact viewport on close.
     if (stableScroll) {
+      const scrollX = window.scrollX;
+      const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      const earlierScrollBehavior = html.style.scrollBehavior;
+      const earlierScrollbarGutter = html.style.scrollbarGutter;
+      html.style.scrollbarGutter = "stable";
       html.style.overflow = "hidden";
       body.style.overflow = "hidden";
+      dialog?.querySelector<HTMLElement>("button")?.focus({ preventScroll: true });
       return () => {
         dialog?.close();
+        opener?.focus({ preventScroll: true });
         html.style.overflow = previous.htmlOverflow;
         body.style.overflow = previous.bodyOverflow;
+        html.style.scrollBehavior = "auto";
+        window.scrollTo(scrollX, scrollY);
+        requestAnimationFrame(() => {
+          window.scrollTo(scrollX, scrollY);
+          html.style.scrollBehavior = earlierScrollBehavior;
+          html.style.scrollbarGutter = earlierScrollbarGutter;
+        });
       };
     }
 
