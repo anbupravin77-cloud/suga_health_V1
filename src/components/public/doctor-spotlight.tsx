@@ -52,6 +52,8 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
   const cards = [...doctors, additionalProfile];
   const count = cards.length;
   const [step, setStep] = useState(0);
+  const [displayedStep, setDisplayedStep] = useState(0);
+  const [isMoving, setIsMoving] = useState(false);
   const [inView, setInView] = useState(false);
   const [pageVisible, setPageVisible] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -60,6 +62,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
   const [touchPaused, setTouchPaused] = useState(false);
 
   const railRef = useRef<HTMLDivElement>(null);
+  const moveDoneRef = useRef<number | null>(null);
   const hoverResumeRef = useRef<number | null>(null);
   const touchResumeRef = useRef<number | null>(null);
   const pointerStartRef = useRef<number | null>(null);
@@ -93,15 +96,37 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
   useEffect(() => () => {
     if (hoverResumeRef.current !== null) window.clearTimeout(hoverResumeRef.current);
     if (touchResumeRef.current !== null) window.clearTimeout(touchResumeRef.current);
+    if (moveDoneRef.current !== null) window.clearTimeout(moveDoneRef.current);
   }, []);
 
   useEffect(() => {
     if (doctors.length < 2 || paused || !inView || !pageVisible || reducedMotion ||
       hoverPaused || focusPaused || touchPaused) return;
-    const timer = window.setTimeout(() => setStep((current) => current + 1), 4800);
+    const timer = window.setTimeout(() => setStep((current) => current + 1), 4600);
     return () => window.clearTimeout(timer);
   }, [doctors.length, paused, inView, pageVisible, reducedMotion,
     hoverPaused, focusPaused, touchPaused, step]);
+
+  // Cards stay mounted under stable logical keys and travel between offset
+  // positions. Delay the featured copy until the physical slide is complete
+  // so the doctor details don't abruptly switch during the motion.
+  useEffect(() => {
+    if (moveDoneRef.current !== null) window.clearTimeout(moveDoneRef.current);
+    if (step === displayedStep) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const delay = reduced ? 0 : 980;
+    const start = window.setTimeout(() => setIsMoving(true), 0);
+    moveDoneRef.current = window.setTimeout(() => {
+      setDisplayedStep(step);
+      setIsMoving(false);
+      moveDoneRef.current = null;
+    }, delay);
+    return () => {
+      window.clearTimeout(start);
+      if (moveDoneRef.current !== null) window.clearTimeout(moveDoneRef.current);
+    };
+  }, [step, displayedStep]);
 
   function pauseForPointer() {
     if (hoverResumeRef.current !== null) window.clearTimeout(hoverResumeRef.current);
@@ -142,14 +167,14 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
   }
 
   if (!doctors.length) return null;
-  const featured = cards[indexFor(step, count)];
+  const featured = cards[indexFor(displayedStep, count)];
   const placeholderFeatured = featured.id === additionalProfile.id;
 
   return (
     <div className={styles.root}>
       <div
         ref={railRef}
-        className={styles.rail}
+        className={`${styles.rail} ${isMoving ? styles.isMoving : ""}`}
         aria-label="Featured clinicians carousel"
         onPointerEnter={(event) => {
           if (event.pointerType === "mouse") pauseForPointer();
