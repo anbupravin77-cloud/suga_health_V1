@@ -458,9 +458,9 @@
   width: 386px;
   height: 570px;
   transition:
-    transform 1320ms cubic-bezier(.36,.02,.2,1) !important,
-    opacity 1320ms cubic-bezier(.36,.02,.2,1) !important,
-    filter 1320ms cubic-bezier(.36,.02,.2,1) !important,
+    transform 1320ms cubic-bezier(.36,.02,.2,1),
+    opacity 1320ms cubic-bezier(.36,.02,.2,1),
+    filter 1320ms cubic-bezier(.36,.02,.2,1),
     box-shadow 1320ms cubic-bezier(.36,.02,.2,1) !important;
 }
 .rail.isResetting .card,
