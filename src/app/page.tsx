@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Inter } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
 import {
-  Activity,
   ArrowRight,
   ArrowUpRight,
   Award,
@@ -96,9 +95,36 @@ const timelines = {
 };
 
 const howItWorks = [
-  { step: "01", title: "Online Health Intake", time: "5 Minutes", desc: "Complete a private health evaluation from any smartphone or computer. Share your health goals, medical history, and symptoms." },
-  { step: "02", title: "Physician Evaluation", time: "Under 24 Hours", desc: "A licensed US physician reviews your chart to verify clinical suitability and prescribes the optimal custom medication dose." },
-  { step: "03", title: "Discrete Delivery", time: "2-Day Doorstep", desc: "Medications ship free from a licensed US pharmacy in unbranded packaging, with continuous access to your care team for refills." },
+  {
+    step: "01",
+    title: "Share your details",
+    brief: "Tell us what you need help with.",
+    detail: [
+      "Choose a care area and describe your symptoms.",
+      "Add relevant medical history, medicines and allergies.",
+    ],
+    mediaClass: "care-expander-media-intake",
+  },
+  {
+    step: "02",
+    title: "Clinician review",
+    brief: "A clinician checks your information.",
+    detail: [
+      "Your history is reviewed for treatment suitability.",
+      "The clinician may ask for more details before deciding.",
+    ],
+    mediaClass: "care-expander-media-review",
+  },
+  {
+    step: "03",
+    title: "Treatment & delivery",
+    brief: "See the decision and next steps.",
+    detail: [
+      "If prescribed, your treatment details appear in your account.",
+      "Delivery options and timing depend on the treatment.",
+    ],
+    mediaClass: "care-expander-media-treatment",
+  },
 ];
 
 const metrics = [
@@ -318,6 +344,7 @@ export default function HomePage() {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [heroSlide, setHeroSlide] = useState(0);
+  const [activeCareStep, setActiveCareStep] = useState<number | null>(null);
   const [voiceIndex, setVoiceIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   useRestoreReturnPosition();
@@ -545,23 +572,62 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="home-process home-editorial-section">
+        <section className="home-process home-editorial-section" aria-labelledby="care-expander-title">
           <div className="home-section-shell">
-            <SectionHeader centered hideEyebrow eyebrow="Intake Protocol" title="Clear. Fast. Confidential." subtitle="A frictionless medical pathway designed for immediate evaluation and discrete doorstep delivery." />
-            <div className="process-track">
-              {howItWorks.map((item, idx) => (
-                <article key={item.step} className="process-step">
-                  <div className="process-card-head">
-                    <div className="process-step-icon">{idx === 0 ? <Activity size={21} /> : idx === 1 ? <ShieldCheck size={21} /> : <Truck size={21} />}</div>
-                    <span className="process-time">{item.time}</span>
-                  </div>
-                  <div className="process-step-copy">
-                    <span>Step {item.step}</span>
-                    <h3>{item.title}</h3>
-                    <p>{item.desc}</p>
-                  </div>
-                </article>
-              ))}
+            <div className="care-expander-heading">
+              <h2 id="care-expander-title">What happens after you start?</h2>
+              <p>One consultation. A clear next step, based on your health information.</p>
+            </div>
+            <div
+              className={`care-expander ${activeCareStep !== null ? "has-active-card" : ""}`}
+              onPointerLeave={(event) => {
+                if (event.pointerType === "mouse") setActiveCareStep(null);
+              }}
+            >
+              {howItWorks.map((item, index) => {
+                const expanded = activeCareStep === index;
+                return (
+                  <article
+                    key={item.step}
+                    className={`care-expander-card ${expanded ? "is-expanded" : ""}`}
+                    onPointerEnter={(event) => {
+                      if (event.pointerType === "mouse") setActiveCareStep(index);
+                    }}
+                  >
+                    <button
+                      type="button"
+                      className="care-expander-trigger"
+                      aria-expanded={expanded}
+                      aria-controls={`care-expander-detail-${index}`}
+                      aria-label={`${expanded ? "Hide" : "Show"} details for ${item.title}`}
+                      onFocus={() => setActiveCareStep(index)}
+                      onClick={() => setActiveCareStep((current) => current === index ? null : index)}
+                    >
+                      <span className="care-expander-number">{item.step}</span>
+                      <span className="care-expander-arrow"><ArrowUpRight size={19} aria-hidden="true" /></span>
+                    </button>
+                    <div className="care-expander-layout">
+                      <div className="care-expander-copy">
+                        <h3>{item.title}</h3>
+                        <p className="care-expander-brief">{item.brief}</p>
+                        <div
+                          className="care-expander-detail"
+                          id={`care-expander-detail-${index}`}
+                          hidden={!expanded}
+                        >
+                          {item.detail.map((line) => <p key={line}>{line}</p>)}
+                        </div>
+                      </div>
+                      {expanded && (
+                        <div className={`care-expander-media ${item.mediaClass}`} aria-hidden="true" />
+                      )}
+                    </div>
+                    <span className="care-expander-hint" aria-hidden="true">
+                      {expanded ? "Viewing details" : "Explore step"}
+                    </span>
+                  </article>
+                );
+              })}
             </div>
           </div>
         </section>
