@@ -765,6 +765,7 @@ export default function HomePage() {
 
             <DoctorSpotlight
               doctors={doctors}
+              paused={selectedDoctor !== null}
               onViewProfile={(doctorId) => {
                 const doctor = doctors.find((item) => item.id === doctorId);
                 if (doctor) setSelectedDoctor(doctor);
