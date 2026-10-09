@@ -600,7 +600,6 @@ export default function HomePage() {
                       aria-expanded={expanded}
                       aria-controls={`care-expander-detail-${index}`}
                       aria-label={`${expanded ? "Hide" : "Show"} details for ${item.title}`}
-                      onFocus={() => setActiveCareStep(index)}
                       onClick={() => setActiveCareStep((current) => current === index ? null : index)}
                     >
                       <span className="care-expander-number">{item.step}</span>
