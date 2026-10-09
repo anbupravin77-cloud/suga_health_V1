@@ -419,7 +419,7 @@ export default function HomePage() {
     }
     const timer = window.setTimeout(() => {
       setActiveCareStep((current) => ((current ?? -1) + 1) % howItWorks.length);
-    }, 6000);
+    }, 4700);
     return () => window.clearTimeout(timer);
   }, [careInView, carePageVisible, careReducedMotion,
       careHoverPaused, careFocusPaused, careTouchPaused, activeCareStep]);
@@ -435,7 +435,7 @@ export default function HomePage() {
     careHoverResumeRef.current = window.setTimeout(() => {
       setCareHoverPaused(false);
       careHoverResumeRef.current = null;
-    }, 2200);
+    }, 1100);
   }
 
   function selectCareOnTouch(index: number) {
@@ -478,7 +478,7 @@ export default function HomePage() {
       { threshold: 0.12, rootMargin: "0px 0px -7% 0px" },
     );
 
-    targets.forEach((element) => observer.observe(element));
+    revealTargets.forEach((element) => observer.observe(element));
     return () => observer.disconnect();
   }, []);
 
