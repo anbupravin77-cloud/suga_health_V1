@@ -2927,3 +2927,18 @@ main.refined-home .care-expander-card.is-expanded .care-expander-hint {
     animation: none !important;
   }
 }
+
+
+/* Doctor spotlight typography and credentials contrast */
+main.refined-home .home-doctors .editorial-section-heading-centered h2,
+main.refined-home .home-doctors .editorial-section-heading-centered .section-title-line {
+  color: #121212 !important;
+}
+main.refined-home .home-doctors .editorial-section-heading-centered p {
+  color: #393939 !important;
+}
+main.refined-home .home-doctors button[class*="profileButton"],
+main.refined-home .home-doctors button[class*="profileButton"] > svg {
+  color: #fff !important;
+  stroke: #fff;
+}
