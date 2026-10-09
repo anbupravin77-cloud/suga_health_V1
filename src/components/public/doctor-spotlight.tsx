@@ -15,6 +15,17 @@ type DoctorPreview = {
 type DoctorSpotlightProps = {
   doctors: readonly DoctorPreview[];
   onViewProfile: (doctorId: string) => void;
+  paused?: boolean;
+};
+
+// Five distinct positions without fabricating a fifth doctor. Replace this
+// placeholder when a verified fifth clinician profile becomes available.
+const additionalProfile: DoctorPreview = {
+  id: "care-team-profile-placeholder",
+  name: "More profiles soon",
+  credentials: "",
+  role: "CARE TEAM",
+  specialty: "Additional clinician profiles will appear here once verified.",
 };
 
 const offsets = [-3, -2, -1, 0, 1, 2, 3] as const;
@@ -32,7 +43,9 @@ function indexFor(value: number, count: number) {
   return ((value % count) + count) % count;
 }
 
-export function DoctorSpotlight({ doctors, onViewProfile }: DoctorSpotlightProps) {
+export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: DoctorSpotlightProps) {
+  const cards = [...doctors, additionalProfile];
+  const count = cards.length;
   const [step, setStep] = useState(0);
   const [inView, setInView] = useState(false);
   const [pageVisible, setPageVisible] = useState(true);
@@ -45,6 +58,7 @@ export function DoctorSpotlight({ doctors, onViewProfile }: DoctorSpotlightProps
   const hoverResumeRef = useRef<number | null>(null);
   const touchResumeRef = useRef<number | null>(null);
   const pointerStartRef = useRef<number | null>(null);
+  const swipeHandledRef = useRef(false);
 
   useEffect(() => {
     const node = railRef.current;
@@ -77,11 +91,11 @@ export function DoctorSpotlight({ doctors, onViewProfile }: DoctorSpotlightProps
   }, []);
 
   useEffect(() => {
-    if (doctors.length < 2 || !inView || !pageVisible || reducedMotion ||
+    if (doctors.length < 2 || paused || !inView || !pageVisible || reducedMotion ||
       hoverPaused || focusPaused || touchPaused) return;
     const timer = window.setTimeout(() => setStep((current) => current + 1), 4500);
     return () => window.clearTimeout(timer);
-  }, [doctors.length, inView, pageVisible, reducedMotion,
+  }, [doctors.length, paused, inView, pageVisible, reducedMotion,
     hoverPaused, focusPaused, touchPaused, step]);
 
   function pauseForPointer() {
@@ -108,16 +122,23 @@ export function DoctorSpotlight({ doctors, onViewProfile }: DoctorSpotlightProps
   }
 
   function chooseSlot(slot: number, doctorId: string) {
-    holdForTouch();
-    if (slot === 0) {
-      onViewProfile(doctorId);
+    if (swipeHandledRef.current) {
+      swipeHandledRef.current = false;
       return;
     }
-    setStep((current) => current + slot);
+    holdForTouch();
+    if (slot !== 0) {
+      setStep((current) => current + slot);
+    } else if (doctorId === additionalProfile.id) {
+      setStep((current) => current + 1);
+    } else {
+      onViewProfile(doctorId);
+    }
   }
 
   if (!doctors.length) return null;
-  const featured = doctors[indexFor(step, doctors.length)];
+  const featured = cards[indexFor(step, count)];
+  const placeholderFeatured = featured.id === additionalProfile.id;
 
   return (
     <div className={styles.root}>
@@ -138,6 +159,7 @@ export function DoctorSpotlight({ doctors, onViewProfile }: DoctorSpotlightProps
           if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocusPaused(false);
         }}
         onTouchStart={(event) => {
+          swipeHandledRef.current = false;
           pointerStartRef.current = event.touches[0]?.clientX ?? null;
         }}
         onTouchEnd={(event) => {
@@ -145,6 +167,7 @@ export function DoctorSpotlight({ doctors, onViewProfile }: DoctorSpotlightProps
           const diff = (event.changedTouches[0]?.clientX ?? pointerStartRef.current) - pointerStartRef.current;
           pointerStartRef.current = null;
           if (Math.abs(diff) < 45) return;
+          swipeHandledRef.current = true;
           holdForTouch();
           setStep((current) => current + (diff < 0 ? 1 : -1));
         }}
@@ -152,7 +175,8 @@ export function DoctorSpotlight({ doctors, onViewProfile }: DoctorSpotlightProps
         <div className={styles.glow} aria-hidden="true" />
         {offsets.map((offset, index) => {
           const logicalIndex = step + offset;
-          const doctor = doctors[indexFor(logicalIndex, doctors.length)];
+          const doctor = cards[indexFor(logicalIndex, count)];
+          const isPlaceholder = doctor.id === additionalProfile.id;
           const isCenter = offset === 0;
           const offscreen = Math.abs(offset) === 3;
 
@@ -160,21 +184,21 @@ export function DoctorSpotlight({ doctors, onViewProfile }: DoctorSpotlightProps
             <button
               key={logicalIndex}
               type="button"
-              className={`${styles.card} ${positions[index]} ${isCenter ? styles.isCenter : ""}`}
-              style={{ ["--portrait-color" as string]: ["#c3c8c5", "#afb9bf", "#c4bebb", "#b6c1b5"][indexFor(logicalIndex, doctors.length)] }}
+              className={`${styles.card} ${positions[index]} ${isCenter ? styles.isCenter : ""} ${isPlaceholder ? styles.placeholderCard : ""}`}
+              style={{ ["--portrait-color" as string]: ["#c3c8c5", "#afb9bf", "#c4bebb", "#b6c1b5", "#919da0"][indexFor(logicalIndex, count)] }}
               tabIndex={offscreen ? -1 : 0}
               aria-hidden={offscreen ? true : undefined}
-              aria-label={isCenter ? `View credentials for ${doctor.name}` : `Feature ${doctor.name}`}
+              aria-label={isCenter ? (isPlaceholder ? "Continue to the next clinician" : `View credentials for ${doctor.name}`) : `Feature ${doctor.name}`}
               onClick={() => chooseSlot(offset, doctor.id)}
             >
               <span className={styles.portrait} aria-hidden="true">
-                <span className={styles.portraitLabel}>PORTRAIT PLACEHOLDER</span>
+                <span className={styles.portraitLabel}>{isPlaceholder ? "ADDITIONAL PROFILE / PENDING VERIFICATION" : "PORTRAIT PLACEHOLDER"}</span>
               </span>
               <span className={styles.cardShade} aria-hidden="true" />
               <span className={styles.cardContents}>
                 <span className={styles.cardRole}>{doctor.role}</span>
                 <span className={styles.cardName}>{doctor.name}</span>
-                <span className={styles.cardCredentials}>{doctor.credentials}</span>
+                {doctor.credentials && <span className={styles.cardCredentials}>{doctor.credentials}</span>}
               </span>
               {isCenter && (
                 <span className={styles.centerArrow} aria-hidden="true">
@@ -188,7 +212,7 @@ export function DoctorSpotlight({ doctors, onViewProfile }: DoctorSpotlightProps
       <div className={styles.underRail}>
         <div className={styles.featuredCopy} aria-live="off">
           <span className={styles.featuredKicker}>FEATURED CLINICIAN</span>
-          <h3>{featured.name}, {featured.credentials}</h3>
+          <h3>{featured.name}{featured.credentials ? `, ${featured.credentials}` : ""}</h3>
           <p>{featured.specialty}</p>
         </div>
         <div className={styles.actions}>
@@ -211,9 +235,16 @@ export function DoctorSpotlight({ doctors, onViewProfile }: DoctorSpotlightProps
           <button
             type="button"
             className={styles.profileButton}
-            onClick={() => onViewProfile(featured.id)}
+            onClick={() => {
+              holdForTouch();
+              if (placeholderFeatured) {
+                setStep((current) => current + 1);
+              } else {
+                onViewProfile(featured.id);
+              }
+            }}
           >
-            View credentials <ArrowUpRight size={17} />
+            {placeholderFeatured ? "Next clinician" : "View credentials"} <ArrowUpRight size={17} />
           </button>
         </div>
       </div>
