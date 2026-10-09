@@ -948,7 +948,7 @@ export default function HomePage() {
         </div>
       </footer>
 
-      {selectedDoctor && <Modal label={selectedDoctor.name} onClose={() => setSelectedDoctor(null)}>
+      {selectedDoctor && <Modal label={selectedDoctor.name} stableScroll onClose={() => setSelectedDoctor(null)}>
         <div className="p-5 sm:p-7 bg-neutral-950 text-white flex items-center gap-4"><div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} /><div><span className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Board-Certified Clinician</span><h3 className="font-sans text-2xl font-extrabold text-white">{selectedDoctor.name}, {selectedDoctor.credentials}</h3><p className="text-xs text-neutral-300">{selectedDoctor.role}</p></div></div>
         <div className="p-5 sm:p-7 space-y-5"><div><span className="legacy-label">Clinical Specialty</span><p className="text-sm text-neutral-700">{selectedDoctor.specialty}</p></div><div><span className="legacy-label">Board Certification</span><p className="text-sm text-neutral-700">{selectedDoctor.boardCertification}</p></div><div><span className="legacy-label">Education</span><p className="text-sm text-neutral-700">{selectedDoctor.education}</p></div><div><span className="legacy-label">About</span><p className="text-sm text-neutral-700">{selectedDoctor.bio}</p></div><div className="text-xs font-bold uppercase tracking-wider text-neutral-500">{selectedDoctor.yearsOfExperience} years clinical practice</div></div>
       </Modal>}
@@ -966,7 +966,7 @@ function SectionHeader({ eyebrow, title, subtitle, children, dark = false, cente
   return <div className={`editorial-section-heading text-center max-w-3xl mx-auto mb-10 sm:mb-12 flex flex-col items-center ${centered ? "editorial-section-heading-centered" : ""}`}>{!hideEyebrow && <span className={"text-xs font-bold tracking-widest uppercase block mb-2.5 " + (dark ? "text-neutral-400" : "text-neutral-500")}>{eyebrow}</span>}<h2 className={"font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.15] text-balance " + (dark ? "text-white" : "text-neutral-950")}>{title}</h2>{subtitle && <p className={"mt-3.5 sm:mt-4 text-sm sm:text-base max-w-2xl leading-relaxed " + (dark ? "text-neutral-400" : "text-neutral-600")}>{subtitle}</p>}{children}</div>;
 }
 
-function Modal({ children, label, onClose }: { children: React.ReactNode; label: string; onClose: () => void }) {
+function Modal({ children, label, onClose, stableScroll = false }: { children: React.ReactNode; label: string; onClose: () => void; stableScroll?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -983,6 +983,21 @@ function Modal({ children, label, onClose }: { children: React.ReactNode; label:
     };
 
     dialog?.showModal();
+
+    // Native top-layer dialog + overflow lock keeps the document at its
+    // current scroll position. The old fixed-body lock reset the viewport to
+    // the top, and its scrollTo restoration animated back to the doctors.
+    if (stableScroll) {
+      html.style.overflow = "hidden";
+      body.style.overflow = "hidden";
+      return () => {
+        dialog?.close();
+        html.style.overflow = previous.htmlOverflow;
+        body.style.overflow = previous.bodyOverflow;
+      };
+    }
+
+    // Preserve the existing lock for other (unrelated) modal flows.
     html.style.overflow = "hidden";
     body.style.overflow = "hidden";
     body.style.position = "fixed";
@@ -998,7 +1013,7 @@ function Modal({ children, label, onClose }: { children: React.ReactNode; label:
       body.style.width = previous.bodyWidth;
       window.scrollTo(0, scrollY);
     };
-  }, []);
+  }, [stableScroll]);
 
   return <dialog ref={ref} className="clinical-dialog" aria-label={label} onCancel={onClose} onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}><div className="clinical-dialog-content"><button type="button" onClick={onClose} aria-label="Close modal" className="clinical-dialog-close"><X size={20} /></button>{children}</div></dialog>;
 }
