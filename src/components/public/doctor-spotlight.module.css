@@ -416,3 +416,10 @@
 .root :is(button, span, h3, p) {
   font-family: inherit;
 }
+
+/* Invisible rewind between identical sets, after the last profile has
+   already passed the center. Suppress the internal reset animation only. */
+.rail.isResetting .card,
+.rail.isResetting .glow {
+  transition: none !important;
+}
