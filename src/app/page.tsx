@@ -354,8 +354,8 @@ export default function HomePage() {
   const [careFocusPaused, setCareFocusPaused] = useState(false);
   const [careTouchPaused, setCareTouchPaused] = useState(false);
   const careExpanderRef = useRef<HTMLDivElement>(null);
-  const careHoverResumeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const careTouchResumeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const careHoverResumeRef = useRef<number | null>(null);
+  const careTouchResumeRef = useRef<number | null>(null);
   const careLastPointerTypeRef = useRef("mouse");
   const [voiceIndex, setVoiceIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
