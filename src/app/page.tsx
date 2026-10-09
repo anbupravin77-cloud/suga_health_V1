@@ -345,6 +345,15 @@ export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [heroSlide, setHeroSlide] = useState(0);
   const [activeCareStep, setActiveCareStep] = useState<number | null>(null);
+  const [careInView, setCareInView] = useState(false);
+  const [carePageVisible, setCarePageVisible] = useState(true);
+  const [careReducedMotion, setCareReducedMotion] = useState(false);
+  const [careHoverPaused, setCareHoverPaused] = useState(false);
+  const [careFocusPaused, setCareFocusPaused] = useState(false);
+  const [careTouchPaused, setCareTouchPaused] = useState(false);
+  const careExpanderRef = useRef<HTMLDivElement>(null);
+  const careHoverResumeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const careTouchResumeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [voiceIndex, setVoiceIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   useRestoreReturnPosition();
@@ -371,6 +380,73 @@ export default function HomePage() {
     return () => window.clearInterval(timer);
   }, []);
 
+  // The cards cycle only while visible and while the visitor is not interacting.
+  useEffect(() => {
+    const root = careExpanderRef.current;
+    if (!root) return;
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updateMotion = () => setCareReducedMotion(motionQuery.matches);
+    const updateVisibility = () => setCarePageVisible(!document.hidden);
+    updateMotion();
+    updateVisibility();
+    const observer = new IntersectionObserver(
+      ([entry]) => setCareInView(entry.isIntersecting && entry.intersectionRatio >= 0.25),
+      { threshold: [0, 0.25, 0.5] },
+    );
+    observer.observe(root);
+    motionQuery.addEventListener("change", updateMotion);
+    document.addEventListener("visibilitychange", updateVisibility);
+    return () => {
+      observer.disconnect();
+      motionQuery.removeEventListener("change", updateMotion);
+      document.removeEventListener("visibilitychange", updateVisibility);
+    };
+  }, []);
+
+  useEffect(() => () => {
+    if (careHoverResumeRef.current) window.clearTimeout(careHoverResumeRef.current);
+    if (careTouchResumeRef.current) window.clearTimeout(careTouchResumeRef.current);
+  }, []);
+
+  useEffect(() => {
+    if (!careInView || !carePageVisible || careReducedMotion ||
+        careHoverPaused || careFocusPaused || careTouchPaused) return;
+
+    if (activeCareStep === null) {
+      setActiveCareStep(0);
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      setActiveCareStep((current) => ((current ?? -1) + 1) % howItWorks.length);
+    }, 6000);
+    return () => window.clearTimeout(timer);
+  }, [careInView, carePageVisible, careReducedMotion,
+      careHoverPaused, careFocusPaused, careTouchPaused, activeCareStep]);
+
+  function holdCareOnHover(index: number) {
+    if (careHoverResumeRef.current) window.clearTimeout(careHoverResumeRef.current);
+    setCareHoverPaused(true);
+    setActiveCareStep(index);
+  }
+
+  function releaseCareHover() {
+    if (careHoverResumeRef.current) window.clearTimeout(careHoverResumeRef.current);
+    careHoverResumeRef.current = window.setTimeout(() => {
+      setCareHoverPaused(false);
+      careHoverResumeRef.current = null;
+    }, 2200);
+  }
+
+  function selectCareOnTouch(index: number) {
+    if (careTouchResumeRef.current) window.clearTimeout(careTouchResumeRef.current);
+    setCareTouchPaused(true);
+    setActiveCareStep((current) => current === index ? null : index);
+    careTouchResumeRef.current = window.setTimeout(() => {
+      setCareTouchPaused(false);
+      careTouchResumeRef.current = null;
+    }, 9000);
+  }
+
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -381,7 +457,8 @@ export default function HomePage() {
       "h1, h2, h3, p, .home-kicker, .pathway-highlight-list > span, .process-step-copy, .metric-ledger > article, .comparison-row, .doctor-card-body, .doctor-trust-band > div, .voice-testimonial, .product-card-body, .formulary-assurance, .faq-question, .faq-answer"
     ));
 
-    targets.forEach((element, index) => {
+    const revealTargets = targets.filter((element) => !element.closest(".home-process"));
+    revealTargets.forEach((element, index) => {
       element.classList.add("premium-text-reveal");
       element.style.setProperty("--reveal-delay", `${(index % 4) * 55}ms`);
     });
@@ -579,9 +656,22 @@ export default function HomePage() {
               <p>One consultation. A clear next step, based on your health information.</p>
             </div>
             <div
+              ref={careExpanderRef}
               className={`care-expander ${activeCareStep !== null ? "has-active-card" : ""}`}
+              onPointerEnter={(event) => {
+                if (event.pointerType === "mouse") {
+                  if (careHoverResumeRef.current) window.clearTimeout(careHoverResumeRef.current);
+                  setCareHoverPaused(true);
+                }
+              }}
               onPointerLeave={(event) => {
-                if (event.pointerType === "mouse") setActiveCareStep(null);
+                if (event.pointerType === "mouse") releaseCareHover();
+              }}
+              onFocusCapture={() => setCareFocusPaused(true)}
+              onBlurCapture={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                  setCareFocusPaused(false);
+                }
               }}
             >
               {howItWorks.map((item, index) => {
@@ -591,7 +681,7 @@ export default function HomePage() {
                     key={item.step}
                     className={`care-expander-card ${expanded ? "is-expanded" : ""}`}
                     onPointerEnter={(event) => {
-                      if (event.pointerType === "mouse") setActiveCareStep(index);
+                      if (event.pointerType === "mouse") holdCareOnHover(index);
                     }}
                   >
                     <button
@@ -600,7 +690,19 @@ export default function HomePage() {
                       aria-expanded={expanded}
                       aria-controls={`care-expander-detail-${index}`}
                       aria-label={`${expanded ? "Hide" : "Show"} details for ${item.title}`}
-                      onClick={() => setActiveCareStep((current) => current === index ? null : index)}
+                      onFocus={() => {
+                        setCareFocusPaused(true);
+                        setActiveCareStep(index);
+                      }}
+                      onClick={(event) => {
+                        // Hover owns pointer-fine interaction; touch or keyboard
+                        // selection takes priority and pauses autoplay.
+                        if (event.detail !== 0 && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+                          setActiveCareStep(index);
+                          return;
+                        }
+                        selectCareOnTouch(index);
+                      }}
                     >
                       <span className="care-expander-number">{item.step}</span>
                       <span className="care-expander-arrow"><ArrowUpRight size={19} aria-hidden="true" /></span>
