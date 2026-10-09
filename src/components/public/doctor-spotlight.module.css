@@ -447,3 +447,42 @@
 .doctorModal :global(*) {
   font-family: var(--font-home), Arial, sans-serif !important;
 }
+
+/* Coverflow refinement: give each real card time and distance to travel. */
+.rail {
+  --near-offset: clamp(250px, 24vw, 320px);
+  --far-offset: clamp(450px, 42vw, 565px);
+  height: 712px;
+}
+.rail .card {
+  width: 386px;
+  height: 570px;
+  transition:
+    transform 1320ms cubic-bezier(.36,.02,.2,1) !important,
+    opacity 1320ms cubic-bezier(.36,.02,.2,1) !important,
+    filter 1320ms cubic-bezier(.36,.02,.2,1) !important,
+    box-shadow 1320ms cubic-bezier(.36,.02,.2,1) !important;
+}
+.rail.isResetting .card,
+.rail.isResetting .glow {
+  transition: none !important;
+}
+.profileButton, .profileButton span, .profileButton svg {
+  color: #fff !important;
+  stroke: #fff !important;
+}
+@media (max-width: 1000px) {
+  .rail { --near-offset: 235px; --far-offset: 410px; height: 620px; }
+  .rail .card { width: 330px; height: 486px; }
+}
+@media (max-width: 760px) {
+  .rail { --near-offset: 186px; --far-offset: 330px; height: 520px; }
+  .rail .card { width: 294px; height: 434px; }
+}
+@media (max-width: 480px) {
+  .rail { --near-offset: 160px; --far-offset: 292px; height: 468px; }
+  .rail .card { width: 265px; height: 394px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rail .card { transition: none !important; }
+}
