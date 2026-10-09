@@ -354,6 +354,7 @@ export default function HomePage() {
   const careExpanderRef = useRef<HTMLDivElement>(null);
   const careHoverResumeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const careTouchResumeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const careLastPointerTypeRef = useRef("mouse");
   const [voiceIndex, setVoiceIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   useRestoreReturnPosition();
@@ -667,7 +668,9 @@ export default function HomePage() {
               onPointerLeave={(event) => {
                 if (event.pointerType === "mouse") releaseCareHover();
               }}
-              onFocusCapture={() => setCareFocusPaused(true)}
+              onFocusCapture={(event) => {
+                if ((event.target as HTMLElement).matches(":focus-visible")) setCareFocusPaused(true);
+              }}
               onBlurCapture={(event) => {
                 if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
                   setCareFocusPaused(false);
@@ -690,14 +693,19 @@ export default function HomePage() {
                       aria-expanded={expanded}
                       aria-controls={`care-expander-detail-${index}`}
                       aria-label={`${expanded ? "Hide" : "Show"} details for ${item.title}`}
-                      onFocus={() => {
-                        setCareFocusPaused(true);
-                        setActiveCareStep(index);
+                      onFocus={(event) => {
+                        if (event.currentTarget.matches(":focus-visible")) {
+                          setCareFocusPaused(true);
+                          setActiveCareStep(index);
+                        }
+                      }}
+                      onPointerDown={(event) => {
+                        careLastPointerTypeRef.current = event.pointerType;
                       }}
                       onClick={(event) => {
-                        // Hover owns pointer-fine interaction; touch or keyboard
-                        // selection takes priority and pauses autoplay.
-                        if (event.detail !== 0 && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+                        // Mouse hover has already selected the card; don't let
+                        // click focus suspend the loop forever after pointer exit.
+                        if (event.detail !== 0 && careLastPointerTypeRef.current === "mouse") {
                           setActiveCareStep(index);
                           return;
                         }
