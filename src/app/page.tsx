@@ -332,6 +332,7 @@ type Doctor = (typeof doctors)[number];
 
 export default function HomePage() {
   const [productCategory, setProductCategory] = useState("all");
+  const productGalleryRef = useRef<HTMLDivElement>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -810,40 +811,66 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="products" className="home-formulary home-editorial-section bg-white">
+        <section id="products" className={`home-formulary home-editorial-section bg-white ${productStyles.productSection}`}>
           <div className="home-section-shell">
-            <SectionHeader centered hideEyebrow eyebrow="India treatment reference" title="Explore treatment options." subtitle="A reference gallery of real medicine brands marketed in India. Availability, suitability and prescribing are determined by a qualified clinician.">
-              <div className="product-filter-bar" role="group" aria-label="Filter medicines by treatment">
-                {([["all","All Medicines"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Vitality"]] as const).map(([key,label]) => (
-                  <button key={key} type="button" aria-pressed={productCategory === key} onClick={() => setProductCategory(key)} className={productCategory === key ? "product-filter active" : "product-filter"}>{label}</button>
-                ))}
-              </div>
-            </SectionHeader>
-            <div className="product-card-grid">
+            <div className={productStyles.headingArea}>
+              <SectionHeader centered hideEyebrow eyebrow="India treatment reference" title="Explore treatment options." subtitle="A reference gallery of real medicine brands marketed in India. Availability, suitability and prescribing are determined by a qualified clinician.">
+                <div className={`product-filter-bar ${productStyles.filterBar}`} role="group" aria-label="Filter medicines by treatment">
+                  {([["all","All Medicines"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Vitality"]] as const).map(([key,label]) => (
+                    <button
+                      key={key}
+                      type="button"
+                      aria-pressed={productCategory === key}
+                      onClick={() => {
+                        productGalleryRef.current?.scrollTo({ left: 0, behavior: "auto" });
+                        setProductCategory(key);
+                      }}
+                      className={productCategory === key ? "product-filter active" : "product-filter"}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </SectionHeader>
+            </div>
+
+            <p className={productStyles.swipeHint} id="product-swipe-hint">
+              Swipe to explore medicines <ArrowRight size={14} aria-hidden="true" />
+            </p>
+            <div ref={productGalleryRef} className={productStyles.gallery} role="region" aria-label="Medicine reference gallery" aria-describedby="product-swipe-hint" tabIndex={0}>
               {visibleProducts.map((product) => (
-                <article key={product.id} className="product-card">
-                  <div className={`product-card-image editorial-media editorial-media-product ${productStyles.photoFrame}`}>
-                    <Image src={product.image} alt={product.imageAlt} fill sizes="(max-width: 640px) 92vw, (max-width: 1180px) 48vw, 31vw" className={productStyles.photo} />
+                <article key={product.id} className={productStyles.compactCard}>
+                  <div className={productStyles.photoFrame}>
+                    <Image
+                      src={product.image}
+                      alt={product.imageAlt}
+                      fill
+                      sizes="(max-width: 700px) 38vw, (max-width: 1000px) 24vw, 14vw"
+                      className={productStyles.photo}
+                    />
                     <span className={productStyles.imageDisclosure}>Illustrative image</span>
                   </div>
-                  <div className="product-card-body">
-                    <span className="product-category">{product.category === "weight" ? "Weight management" : product.category === "hair" ? "Hair restoration" : "Sexual health"}</span>
-                    <h3>{product.name}</h3>
-                    <p className="product-ingredients">{product.activeIngredients}</p>
-                    <div className={productStyles.formDetails}>
-                      <span>{product.form}</span>
-                      <span>{product.manufacturer}</span>
-                    </div>
-                    <div className="product-clinical-reference">
-                      <span>Clinical considerations</span>
-                      <p>{product.clinicalNote}</p>
-                    </div>
-                    <div className="product-card-bottom">
-                      <div className={productStyles.actionNote}>Prescription and availability subject to clinical review.</div>
-                      <div className="product-card-actions">
-                        <button type="button" className="suga-btn suga-btn-secondary suga-btn-inline" onClick={() => setSelectedProduct(product)}>Learn more <Info size={15} /></button>
-                        <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline">Consult a clinician <ArrowRight size={15} /></Link>
-                      </div>
+
+                  <div className={productStyles.cardInfo}>
+                    <span className={productStyles.category}>
+                      {product.category === "weight" ? "Weight management" : product.category === "hair" ? "Hair restoration" : "Sexual health"}
+                    </span>
+                    <h3 className={productStyles.name}>{product.name}</h3>
+                    <p className={productStyles.ingredients}>{product.activeIngredients}</p>
+                  </div>
+
+                  <div className={productStyles.footer}>
+                    <div className={productStyles.actions}>
+                      <Link
+                        href="/sign-up?next=%2Fconsultation%2Fstart"
+                        onClick={rememberReturnPosition}
+                        className={productStyles.startButton}
+                      >
+                        Get Started <ArrowRight size={15} aria-hidden="true" />
+                      </Link>
+                      <button type="button" className={productStyles.detailsButton} onClick={() => setSelectedProduct(product)}>
+                        Learn More
+                      </button>
                     </div>
                   </div>
                 </article>
