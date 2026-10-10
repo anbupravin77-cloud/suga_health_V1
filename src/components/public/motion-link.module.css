@@ -1,0 +1,236 @@
+/* Scoped, dependency-free motion system for the public homepage.
+   Keep original Next.js links and dimensions intact. */
+:global(main.refined-home) .motion {
+  --mag-x: 0px;
+  --mag-y: 0px;
+  position: relative !important;
+  isolation: isolate;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 999px !important;
+  background: #111 !important;
+  background-image: none !important;
+  border-color: #111 !important;
+  color: #fff !important;
+  -webkit-text-fill-color: currentColor;
+  font-family: var(--font-home), Inter, Arial, sans-serif !important;
+  font-weight: 650;
+  text-decoration: none !important;
+  white-space: nowrap;
+  transform-origin: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 370ms cubic-bezier(.16,1,.3,1), box-shadow 280ms ease !important;
+}
+.dark { --motion-foreground: #fff; }
+:global(main.refined-home) .motion.light {
+  background: #f6f6f4 !important;
+  background-image: none !important;
+  border-color: #d2d2ce !important;
+  color: #111 !important;
+}
+:global(main.refined-home) .motion:focus-visible {
+  outline: 2px solid #6b6b67 !important;
+  outline-offset: 4px;
+}
+.surface {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  background: #111;
+}
+.light .surface { background: #f6f6f4; }
+.label,
+.icon,
+.swapWindow {
+  position: relative;
+  z-index: 2;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+.light .label, .light .icon, .light .swapWindow {
+  color: #111 !important;
+  -webkit-text-fill-color: #111 !important;
+}
+.label { line-height: 1.2; }
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  transition: transform 400ms cubic-bezier(.16,1,.3,1), color 280ms ease;
+}
+.icon svg { stroke: currentColor !important; color: inherit !important; }
+.swapWindow {
+  display: block;
+  height: 18px;
+  min-height: 18px;
+  overflow: hidden;
+  line-height: 18px;
+}
+.swapTrack {
+  display: flex;
+  flex-direction: column;
+  transition: transform 520ms cubic-bezier(.16,1,.3,1);
+}
+.swapText {
+  display: block;
+  height: 18px;
+  line-height: 18px;
+  color: inherit !important;
+  -webkit-text-fill-color: inherit !important;
+  font-size: inherit;
+}
+.orbit {
+  display: block;
+  position: absolute;
+  z-index: 0;
+  width: 260%;
+  aspect-ratio: 1;
+  top: 50%;
+  left: 50%;
+  background: conic-gradient(from 0deg,
+    #dededa 0deg, #dededa 215deg,
+    #767673 250deg, #070707 285deg,
+    #070707 311deg, #767673 334deg,
+    #dededa 360deg);
+  transform: translate(-50%,-50%) rotate(0deg);
+  animation: motion-orbit 2.8s linear infinite;
+  animation-play-state: paused;
+  pointer-events: none;
+}
+.liquid .surface { inset: 2px; }
+.light.liquid .surface { background: #f5f5f2; }
+.liquidFill {
+  position: absolute;
+  inset: 0;
+  background: #111;
+  transform: translateX(-103%);
+  transition: transform 640ms cubic-bezier(.16,1,.3,1);
+}
+@keyframes motion-orbit {
+  to { transform: translate(-50%,-50%) rotate(360deg); }
+}
+.radar, .particle {
+  overflow: visible !important;
+}
+.rings {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #333;
+  border-radius: inherit;
+  opacity: 0;
+}
+.ring:nth-child(2) { animation-delay: 290ms !important; }
+.particles {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  top: 50%;
+  right: 16px;
+  height: 1px;
+  width: 1px;
+}
+.particleDot {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #111;
+  opacity: 0;
+}
+.particleDot:nth-child(1) { --px: 8px; --py: -20px; }
+.particleDot:nth-child(2) { --px: 16px; --py: 15px; }
+.particleDot:nth-child(3) { --px: 24px; --py: -8px; }
+.particleDot:nth-child(4) { --px: 3px; --py: 20px; }
+.particleDot:nth-child(5) { --px: 29px; --py: 4px; }
+.particleDot:nth-child(6) { --px: 13px; --py: -14px; }
+
+@media (hover: hover) and (pointer: fine) {
+  .motion:hover .icon { transform: translateX(4px); }
+  .morph:hover .swapTrack { transform: translateY(-18px); }
+  .liquid:hover .orbit { animation-play-state: running; }
+  .light.liquid:hover .liquidFill { transform: translateX(0); }
+  .light.liquid:hover .label,
+  .light.liquid:hover .icon {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+  .radar:hover .ring {
+    animation: motion-radar 1100ms ease-out 2 both;
+  }
+  .particle:hover .particleDot {
+    animation: motion-particle 740ms cubic-bezier(.2,.7,.3,1) both;
+  }
+  .particle:hover .particleDot:nth-child(2) { animation-delay: 35ms; }
+  .particle:hover .particleDot:nth-child(3) { animation-delay: 70ms; }
+  .particle:hover .particleDot:nth-child(4) { animation-delay: 95ms; }
+  .particle:hover .particleDot:nth-child(5) { animation-delay: 125ms; }
+  .particle:hover .particleDot:nth-child(6) { animation-delay: 150ms; }
+  .magnetic:hover {
+    transform: translate3d(var(--mag-x), var(--mag-y), 0) !important;
+    box-shadow: 0 12px 23px rgba(0,0,0,.16) !important;
+  }
+}
+.morph:focus-visible .swapTrack { transform: translateY(-18px); }
+.liquid:focus-visible .orbit { animation-play-state: running; }
+.light.liquid:focus-visible .liquidFill { transform: translateX(0); }
+.light.liquid:focus-visible .label,
+.light.liquid:focus-visible .icon {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+.radar:focus-visible .ring { animation: motion-radar 1100ms ease-out 2 both; }
+.particle:focus-visible .particleDot { animation: motion-particle 740ms ease-out both; }
+:global(main.refined-home) .motion:active {
+  transform: scale(.97) !important;
+}
+@keyframes motion-radar {
+  0% { transform: scale(1); opacity: .45; }
+  100% { transform: scale(1.13,1.48); opacity: 0; }
+}
+@keyframes motion-particle {
+  0% { transform: translate(0,0) scale(.65); opacity: 0; }
+  22% { opacity: .8; }
+  100% { transform: translate(var(--px),var(--py)) scale(.15); opacity: 0; }
+}
+@media (max-width: 700px), (hover: none) {
+  .magnetic { --mag-x:0px; --mag-y:0px; }
+  .particleDot { display: none; }
+  .liquid .orbit { animation-duration: 5s; }
+  .motion:active .icon { transform: translateX(3px); }
+  .morph:active .swapTrack { transform: translateY(-18px); }
+  .light.liquid:active .liquidFill { transform: translateX(0); }
+  .light.liquid:active .label,
+  .light.liquid:active .icon {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :global(main.refined-home) .motion,
+  .motion *,
+  .motion::before,
+  .motion::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  .orbit { display: none !important; }
+  .liquid { border: 1px solid #999 !important; }
+  .liquidFill { display: none; }
+  .ring, .particleDot { display: none !important; }
+  .magnetic:hover { transform: none !important; box-shadow: none !important; }
+}

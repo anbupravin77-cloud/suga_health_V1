@@ -29,6 +29,7 @@ import { MobilePublicMenu } from "@/components/public/mobile-public-menu";
 import { LivingMetrics } from "@/components/public/living-metrics";
 import { MilestoneJourney } from "@/components/public/milestone-journey";
 import { DoctorSpotlight } from "@/components/public/doctor-spotlight";
+import { MotionLink } from "@/components/public/motion-link";
 import doctorStyles from "@/components/public/doctor-spotlight.module.css";
 
 const homeInter = Inter({ subsets: ["latin"], variable: "--font-home", display: "swap" });
@@ -547,7 +548,7 @@ export default function HomePage() {
                 <Link href="/weight-loss" className="home-action-pill suga-btn suga-btn-secondary">Medical weight loss <ArrowUpRight size={16} /></Link>
                 <Link href="/hair-growth" className="home-action-pill suga-btn suga-btn-secondary">Hair growth <ArrowUpRight size={16} /></Link>
                 <Link href="/sexual-health" className="home-action-pill suga-btn suga-btn-secondary">Sexual health <ArrowUpRight size={16} /></Link>
-                <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="home-action-pill home-action-primary suga-btn suga-btn-primary"><span>Start consultation</span><ArrowRight size={16} /></Link>
+                <MotionLink href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} variant="magnetic" className="home-action-pill home-action-primary suga-btn suga-btn-primary">Start consultation</MotionLink>
               </div>
             </div>
 
@@ -618,7 +619,7 @@ export default function HomePage() {
                       {pillar.highlights.map((item) => <span key={item}><Check size={14} />{item}</span>)}
                     </div>
                     <div className="pathway-actions">
-                      <Link href={pillar.path} className="suga-btn suga-btn-secondary suga-btn-inline">View protocol <ArrowRight size={15} /></Link>
+                      <MotionLink href={pillar.path} variant="particle" tone="light" className="suga-btn suga-btn-secondary suga-btn-inline">View protocol</MotionLink>
                       <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline"><span>Start consultation</span><ArrowUpRight size={15} /></Link>
                     </div>
                   </div>
@@ -861,13 +862,15 @@ export default function HomePage() {
 
                   <div className={productStyles.footer}>
                     <div className={productStyles.actions}>
-                      <Link
+                      <MotionLink
                         href="/sign-up?next=%2Fconsultation%2Fstart"
                         onClick={rememberReturnPosition}
+                        variant="morph"
+                        alternateLabel="Begin Your Care"
                         className={productStyles.startButton}
                       >
-                        Get Started <ArrowRight size={15} aria-hidden="true" />
-                      </Link>
+                        Get Started
+                      </MotionLink>
                       <button type="button" className={productStyles.detailsButton} onClick={() => setSelectedProduct(product)}>
                         Learn More
                       </button>
@@ -929,7 +932,7 @@ export default function HomePage() {
               <h2>Your personalized medical plan is&nbsp;5 minutes away.</h2>
               <p>Answer quick medical questions. A licensed clinician will review your file and tailor your prescription.</p>
             </div>
-            <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-large">Start Free Assessment <ArrowRight size={17} /></Link>
+            <MotionLink href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} variant="liquid" tone="light" className="suga-btn suga-btn-large">Start Free Assessment</MotionLink>
           </div>
         </section>
       </div>

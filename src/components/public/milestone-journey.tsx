@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { rememberReturnPosition } from "./return-position";
+import { MotionLink } from "./motion-link";
 import styles from "./milestone-journey.module.css";
 
 // Keep the existing treatment milestones and claims unchanged.
@@ -200,13 +200,14 @@ export function MilestoneJourney() {
               ))}
             </div>
 
-            <Link
+            <MotionLink
               href="/sign-up?next=%2Fconsultation%2Fstart"
               onClick={rememberReturnPosition}
+              variant="radar"
               className={styles.cta}
             >
-              See if you qualify today <ArrowRight size={18} aria-hidden="true" />
-            </Link>
+              See if you qualify today
+            </MotionLink>
           </div>
 
           <div ref={stageRef} className={styles.stage} data-glow-visible={glowVisible} aria-live="polite" aria-atomic="false">
