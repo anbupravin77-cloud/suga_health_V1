@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ConsultationForm } from "@/components/care/consultation-form";
 import { requireRole } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -21,6 +21,11 @@ export default async function StartConsultationPage({
   const { user } = await requireRole("patient");
   const { fresh } = await searchParams;
   const replayFirstTime = fresh === "1" && isQaPatient(user.id);
+  // Test-only navigation shortcut. Must never render in a production deployment,
+  // even when a QA identity signs in there. It does not save or submit data.
+  const showQaSkip =
+    (process.env.VERCEL_ENV === "preview" || process.env.NODE_ENV === "development") &&
+    isQaPatient(user.id);
 
   // Only the verified QA patient receives blank onboarding fields. No database
   // profile or consultation records are erased when replaying the experience.
@@ -52,6 +57,16 @@ export default async function StartConsultationPage({
             </p>
           )}
         </div>
+        {showQaSkip && (
+          <div className="mb-5 flex justify-end">
+            <Link
+              href="/patient"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-neutral-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+            >
+              Skip for Testing <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </div>
+        )}
         <ConsultationForm
           defaults={{
             firstName: profile?.first_name ?? "",
