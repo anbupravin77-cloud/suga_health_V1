@@ -878,7 +878,7 @@ export default function HomePage() {
             </div>
             <div className="formulary-assurance">
               <span><ShieldCheck size={16} />Illustrative AI-generated images. Device shapes, pill imprints and packaging may differ from real products.</span>
-              <div><b>Reference catalogue only</b><b>No stock or pricing claims</b><b>Prescription subject to review</b></div>
+              
             </div>
           </div>
         </section>
