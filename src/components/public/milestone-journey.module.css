@@ -279,3 +279,79 @@
   .categoryText { font-size: 21px; }
   .heading { font-size: 23px; }
 }
+
+/* Monochrome moving perimeter. Kept separate from the content and from
+   the heading-to-card WAAPI transform: the outer frame moves as one unit. */
+.cardGlowFrame {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  isolation: isolate;
+  min-width: 0;
+  padding: 2px;
+  overflow: hidden;
+  border-radius: 15px;
+  background: #dcdcd9;
+  box-shadow: 0 2px 9px rgba(0, 0, 0, .025);
+  transform-origin: center;
+}
+
+.cardGlowFrame::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: 210%;
+  aspect-ratio: 1;
+  background: conic-gradient(
+    from 0deg,
+    #e2e2df 0deg,
+    #e2e2df 210deg,
+    #a5a5a2 244deg,
+    #111 278deg,
+    #111 293deg,
+    #a5a5a2 323deg,
+    #e2e2df 356deg,
+    #e2e2df 360deg
+  );
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation: milestone-border-orbit 6.5s linear infinite;
+  animation-play-state: paused;
+  pointer-events: none;
+}
+
+.stage[data-glow-visible="true"] .cardsLayer:not(.outgoing) .cardGlowFrame::before {
+  animation-play-state: running;
+}
+
+.cardsLayer .cardGlowFrame:nth-child(2)::before { animation-delay: -2.15s; }
+.cardsLayer .cardGlowFrame:nth-child(3)::before { animation-delay: -4.3s; }
+
+/* Inner surface always hides the conic fill; only the 2px rim is visible. */
+.section .stage .cardsLayer .cardGlowFrame > .card {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border: 0 !important;
+  border-radius: 13px !important;
+  background: #fafaf9 !important;
+  box-shadow: none !important;
+}
+
+@keyframes milestone-border-orbit {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@media (max-width: 760px) {
+  .cardGlowFrame { border-radius: 14px; padding: 1.5px; }
+  .section .stage .cardsLayer .cardGlowFrame > .card { border-radius: 12.5px !important; }
+  .cardGlowFrame::before { animation-duration: 9s; }
+  .cardsLayer .cardGlowFrame:nth-child(2)::before { animation-delay: -3s; }
+  .cardsLayer .cardGlowFrame:nth-child(3)::before { animation-delay: -6s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardGlowFrame { background: #d8d8d5; }
+  .cardGlowFrame::before { display: none !important; animation: none !important; }
+}

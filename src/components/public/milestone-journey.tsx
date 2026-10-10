@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { rememberReturnPosition } from "./return-position";
 import styles from "./milestone-journey.module.css";
@@ -40,7 +40,8 @@ function MilestoneCard({ step, index, forwardedRef }: {
   forwardedRef?: (node: HTMLElement | null) => void;
 }) {
   return (
-    <article className={styles.card} ref={forwardedRef}>
+    <div className={styles.cardGlowFrame} ref={forwardedRef}>
+      <article className={styles.card}>
       <div className={styles.cardMeta}>
         <span className={styles.phase}>{step.phase}</span>
         <span className={styles.stepNumber}>STEP 0{index + 1}</span>
@@ -49,8 +50,9 @@ function MilestoneCard({ step, index, forwardedRef }: {
         <h3 className={styles.cardTitle}>{step.label}</h3>
         <p className={styles.cardDescription}>{step.description}</p>
       </div>
-      <span className={styles.cardRule} aria-hidden="true" />
-    </article>
+        <span className={styles.cardRule} aria-hidden="true" />
+      </article>
+    </div>
   );
 }
 
@@ -64,6 +66,32 @@ export function MilestoneJourney() {
   const outgoingRefs = useRef<(HTMLElement | null)[]>([]);
   const previousActive = useRef<TimelineKey>("weight");
   const departingRef = useRef<TimelineKey | null>(null);
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const [glowVisible, setGlowVisible] = useState(false);
+
+  // Keep the decorative border animation off the GPU while this section is
+  // outside the viewport or the tab is in the background.
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    let intersecting = false;
+    const sync = () => setGlowVisible(intersecting && !document.hidden);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        intersecting = entry.isIntersecting;
+        sync();
+      },
+      { threshold: 0.08 }
+    );
+    observer.observe(stage);
+    document.addEventListener("visibilitychange", sync);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", sync);
+    };
+  }, []);
+
 
   function selectCategory(key: TimelineKey) {
     if (active === key) return;
@@ -181,7 +209,7 @@ export function MilestoneJourney() {
             </Link>
           </div>
 
-          <div className={styles.stage} aria-live="polite" aria-atomic="false">
+          <div ref={stageRef} className={styles.stage} data-glow-visible={glowVisible} aria-live="polite" aria-atomic="false">
             <div className={styles.stageHeader}>
               <span>Treatment timeline</span>
               <span className={styles.stageCount}>03 MILESTONES</span>
