@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import productStyles from "@/components/public/product-gallery.module.css";
 import { Inter } from "next/font/google";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
@@ -188,101 +190,113 @@ const doctors = [
 
 const products = [
   {
-    id: "semaglutide-b12",
-    name: "Compounded Semaglutide + B12",
-    category: "weight",
-    activeIngredients: "Semaglutide + Cyanocobalamin (Vitamin B12)",
-    deliveryMethod: "Once-Weekly Subcutaneous Micro-Injection",
-    dosage: "Starting at 0.25mg titrated up to 2.5mg",
-    clinicalProof: "Avg. 15% body weight reduction in landmark clinical trials",
-    startingPrice: "$199",
-    billingCadence: "per month, all-inclusive",
-    image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=900&auto=format&fit=crop",
-    isPopular: true,
-    description: "A customized formulation combining pharmaceutical-grade Semaglutide with Vitamin B12 to support metabolic energy while suppressing chronic appetite cravings.",
-    benefits: ["Targets central nervous system hunger signals", "Slows gastric emptying for prolonged post-meal satiety"],
-    mechanismOfAction: "Mimics natural glucagon-like peptide-1 (GLP-1), binding to satiety centers in the hypothalamus and optimizing postprandial insulin secretion.",
+    "id": "mounjaro",
+    "name": "Mounjaro",
+    "category": "weight",
+    "activeIngredients": "Tirzepatide",
+    "form": "Prescription injection · KwikPen / vial",
+    "manufacturer": "Eli Lilly",
+    "image": "/images/products/mounjaro.webp",
+    "imageAlt": "Illustration of a treatment pen near a person's thigh",
+    "description": "Tirzepatide is a prescription medicine used for type 2 diabetes and weight management in eligible patients. A clinician determines suitability and the appropriate presentation.",
+    "clinicalNote": "Prescription required. Not suitable for everyone; use only under medical supervision."
   },
   {
-    id: "tirzepatide-dual",
-    name: "Compounded Tirzepatide (Dual Incretin)",
-    category: "weight",
-    activeIngredients: "Tirzepatide + Pyridoxine (Vitamin B6)",
-    deliveryMethod: "Once-Weekly Subcutaneous Injection",
-    dosage: "Starting at 2.5mg titrated up to 15mg",
-    clinicalProof: "Up to 20.9% average body weight loss in SURMOUNT trials",
-    startingPrice: "$299",
-    billingCadence: "per month, all-inclusive",
-    image: "https://images.unsplash.com/photo-1471864190281-a93a3070b6de?q=80&w=900&auto=format&fit=crop",
-    isPopular: false,
-    description: "The premier next-generation dual incretin agonist targeting both GIP and GLP-1 receptors simultaneously for heightened metabolic response and fat oxidation.",
-    benefits: ["Dual hormone pathway for deeper metabolic synergy", "Enhanced glycemic control and insulin sensitivity"],
-    mechanismOfAction: "Simultaneously co-activates GIP and GLP-1 receptors, coordinating metabolic hormone pathways.",
+    "id": "yurpeak",
+    "name": "Yurpeak",
+    "category": "weight",
+    "activeIngredients": "Tirzepatide",
+    "form": "Prescription multi-dose KwikPen",
+    "manufacturer": "Eli Lilly · distributed by Cipla",
+    "image": "/images/products/yurpeak.webp",
+    "imageAlt": "Concept photograph of a hand holding a pen-style injection device",
+    "description": "Yurpeak is Lilly's tirzepatide marketed in India through Cipla. The medicine is supplied in a multi-dose KwikPen presentation.",
+    "clinicalNote": "Prescription required. Medical assessment and follow-up are essential."
   },
   {
-    id: "dual-topical-hair",
-    name: "Dual Topical Finasteride & Minoxidil",
-    category: "hair",
-    activeIngredients: "Finasteride 0.3% + Minoxidil 6% + Caffeine USP",
-    deliveryMethod: "Direct Follicular Precision Dropper / Spray",
-    dosage: "1 mL applied twice daily directly to thinning areas",
-    clinicalProof: "88% stoppage of crown loss with negligible systemic absorption",
-    startingPrice: "$45",
-    billingCadence: "per month",
-    image: "https://images.unsplash.com/photo-1608248597359-009587424683?q=80&w=900&auto=format&fit=crop",
-    isPopular: true,
-    description: "A targeted topical compounding that delivers clinical Finasteride directly to miniaturizing hair follicles while avoiding systemic serum DHT reduction.",
-    benefits: ["Locally blocks DHT enzyme right at the dermal papilla", "Minoxidil dilates micro-capillaries to flood follicles with nutrients"],
-    mechanismOfAction: "Inhibits type II 5-alpha reductase locally in the scalp while opening potassium channels to extend follicular anagen phase.",
+    "id": "obelit-120",
+    "name": "Obelit 120",
+    "category": "weight",
+    "activeIngredients": "Orlistat 120 mg",
+    "form": "Oral capsules",
+    "manufacturer": "Intas Pharmaceuticals",
+    "image": "/images/products/obelit-120.webp",
+    "imageAlt": "Concept photograph of capsules being picked up by fingertips",
+    "description": "Orlistat is an oral medicine that reduces the absorption of dietary fat. Its use should be guided by an appropriate clinical assessment.",
+    "clinicalNote": "A clinician or pharmacist should review suitability, interactions and dietary requirements."
   },
   {
-    id: "oral-hair-capsule",
-    name: "Oral Multi-Pathway Hair Density Formula",
-    category: "hair",
-    activeIngredients: "Oral Minoxidil 2.5mg + Biotin 5000mcg + Saw Palmetto",
-    deliveryMethod: "Single Daily Oral Capsule",
-    dosage: "1 capsule daily with water",
-    clinicalProof: "94% user-reported improvement in overall hairline thickness",
-    startingPrice: "$39",
-    billingCadence: "per month",
-    image: "https://images.unsplash.com/photo-1550572017-ed200f5e6343?q=80&w=900&auto=format&fit=crop",
-    isPopular: false,
-    description: "Convenient oral prescription combining low-dose micro-Minoxidil with botanical DHT regulators for individuals seeking complete coverage without topical application.",
-    benefits: ["Effortless 5-second daily routine", "Provides uniform follicular stimulation across entire scalp & crown"],
-    mechanismOfAction: "Systemically increases vascular perfusion to micro-follicles, revitalizing resting telogen hairs into active anagen growth cycles.",
+    "id": "mintop-5",
+    "name": "Mintop Forte 5%",
+    "category": "hair",
+    "activeIngredients": "Minoxidil 5% topical solution",
+    "form": "Topical solution",
+    "manufacturer": "Dr. Reddy's Laboratories",
+    "image": "/images/products/mintop-5.webp",
+    "imageAlt": "Illustration of a minoxidil-style hair treatment bottle",
+    "description": "Minoxidil topical solution is used for certain forms of pattern hair loss. The Mintop range includes 5% prescription topical formulations marketed in India.",
+    "clinicalNote": "Treatment choice varies by hair-loss diagnosis and patient factors."
   },
   {
-    id: "tadalafil-odt",
-    name: "Compounded Tadalafil Rapid-Dissolve (ODT)",
-    category: "sexual",
-    activeIngredients: "Tadalafil (5mg Daily or 20mg On-Demand) + L-Citrulline",
-    deliveryMethod: "Sublingual Oral Disintegrating Tablet",
-    dosage: "5mg once daily or 20mg 30 minutes before activity",
-    clinicalProof: "Up to 36-hour clinical efficacy window with rapid sublingual onset",
-    startingPrice: "$48",
-    billingCadence: "per month (30-day supply)",
-    image: "https://images.unsplash.com/photo-1585435557343-3b092031a831?q=80&w=900&auto=format&fit=crop",
-    isPopular: true,
-    description: "Fast-absorbing sublingual formulation that bypasses first-pass liver metabolism for rapid bioavailability and reliable performance.",
-    benefits: ["Rapid absorption in 15–25 minutes", "Flexible 36-hour window allows natural, unpressured spontaneity"],
-    mechanismOfAction: "Selective PDE-5 inhibitor preserving cyclic GMP levels, promoting smooth muscle relaxation and sustained arterial inflow.",
+    "id": "morr-f-5",
+    "name": "Morr-F 5%",
+    "category": "hair",
+    "activeIngredients": "Minoxidil 5% + Finasteride 0.1%",
+    "form": "Topical solution",
+    "manufacturer": "Intas Pharmaceuticals",
+    "image": "/images/products/morr-f-5.webp",
+    "imageAlt": "Illustration of a topical dropper being applied near a scalp parting",
+    "description": "A prescription topical combination of minoxidil and finasteride used in selected patients with androgenetic hair loss.",
+    "clinicalNote": "Requires a prescriber's review, including pregnancy-related precautions where relevant."
   },
   {
-    id: "sildenafil-troche",
-    name: "Compounded Sildenafil Quick-Action Troche",
-    category: "sexual",
-    activeIngredients: "Sildenafil Citrate 50mg or 100mg",
-    deliveryMethod: "Dissolvable Sublingual Troche",
-    dosage: "1 troche 15–30 minutes prior to intimacy",
-    clinicalProof: "95% clinical response rate with faster onset than standard tablets",
-    startingPrice: "$35",
-    billingCadence: "per month (pack of 8–12)",
-    image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=900&auto=format&fit=crop",
-    isPopular: false,
-    description: "High-potency, on-demand compound engineered for immediate confidence and firm vascular responsiveness when peak timing matters most.",
-    benefits: ["Rapid onset in as little as 15–30 minutes", "Sublingual delivery avoids delay caused by recent meals"],
-    mechanismOfAction: "Potent competitive inhibitor of phosphodiesterase type 5 (PDE5), accelerating vascular nitric oxide signaling pathways.",
+    "id": "lonitab",
+    "name": "Lonitab",
+    "category": "hair",
+    "activeIngredients": "Oral minoxidil",
+    "form": "Oral tablets",
+    "manufacturer": "Intas Pharmaceuticals",
+    "image": "/images/products/lonitab.webp",
+    "imageAlt": "Concept photograph of tablets and a blister strip",
+    "description": "Lonitab contains oral minoxidil, a medicine originally used to manage high blood pressure. Use for hair growth is off-label.",
+    "clinicalNote": "Off-label hair-loss use requires careful clinician supervision due to possible cardiovascular effects."
   },
+  {
+    "id": "suhagra-100",
+    "name": "Suhagra 100",
+    "category": "sexual",
+    "activeIngredients": "Sildenafil 100 mg",
+    "form": "Oral tablets",
+    "manufacturer": "Cipla",
+    "image": "/images/products/suhagra-100.webp",
+    "imageAlt": "Illustration of a blue tablet resting in an open palm",
+    "description": "Sildenafil is a prescription treatment for erectile dysfunction. A clinician assesses whether it is appropriate, including possible interactions.",
+    "clinicalNote": "Must not be combined with nitrate medicines; suitability and dosing require medical review."
+  },
+  {
+    "id": "tadacip-20",
+    "name": "Tadacip 20",
+    "category": "sexual",
+    "activeIngredients": "Tadalafil 20 mg",
+    "form": "Oral tablets",
+    "manufacturer": "Cipla",
+    "image": "/images/products/tadacip-20.webp",
+    "imageAlt": "Concept macro photograph of a tablet between fingertips",
+    "description": "Tadalafil is a prescription treatment used for erectile dysfunction. The 20 mg strength is one presentation; prescribing decisions are individualized.",
+    "clinicalNote": "Must not be combined with nitrate medicines; medical evaluation is required."
+  },
+  {
+    "id": "duralast-30",
+    "name": "Duralast 30",
+    "category": "sexual",
+    "activeIngredients": "Dapoxetine 30 mg",
+    "form": "Oral tablets",
+    "manufacturer": "Sun Pharma",
+    "image": "/images/products/duralast-30.webp",
+    "imageAlt": "Concept photograph of a blister strip, tablets and fingertips",
+    "description": "Dapoxetine is used for premature ejaculation in selected adult patients. It is not a general-purpose sexual performance supplement.",
+    "clinicalNote": "Prescription-only use; a clinician must review interactions and precautions."
+  }
 ];
 
 const customerVoices = [
@@ -562,7 +576,7 @@ export default function HomePage() {
                 <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
               </button>
 
-              <button type="button" className="hero-bento-small hero-bento-small-two editorial-media editorial-media-product editorial-media-sexual editorial-media-clickable" onClick={() => setSelectedProduct(products[4])} aria-label={"View " + products[4].name}>
+              <button type="button" className="hero-bento-small hero-bento-small-two editorial-media editorial-media-product editorial-media-sexual editorial-media-clickable" onClick={() => setSelectedProduct(products[6])} aria-label={"View " + products[6].name}>
                 <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
               </button>
             </div>
@@ -798,59 +812,46 @@ export default function HomePage() {
 
         <section id="products" className="home-formulary home-editorial-section bg-white">
           <div className="home-section-shell">
-            <SectionHeader centered hideEyebrow eyebrow="Prescription Formulary" title="Targeted therapies compounded for maximum bioavailability." subtitle="Doctor-formulated treatments with pure active pharmaceutical ingredients, prepared exclusively in state-licensed 503A/503B pharmacies.">
-              <div className="product-filter-bar" role="group" aria-label="Filter prescription formulary">
-                {([["all","All Formulations"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Health"]] as const).map(([key,label]) => (
-                  <button
-                    key={key}
-                    type="button"
-                    aria-pressed={productCategory === key}
-                    onClick={() => setProductCategory(key)}
-                    className={productCategory === key ? "product-filter active" : "product-filter"}
-                  >
-                    {label}
-                  </button>
+            <SectionHeader centered hideEyebrow eyebrow="India treatment reference" title="Explore treatment options." subtitle="A reference gallery of real medicine brands marketed in India. Availability, suitability and prescribing are determined by a qualified clinician.">
+              <div className="product-filter-bar" role="group" aria-label="Filter medicines by treatment">
+                {([["all","All Medicines"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Vitality"]] as const).map(([key,label]) => (
+                  <button key={key} type="button" aria-pressed={productCategory === key} onClick={() => setProductCategory(key)} className={productCategory === key ? "product-filter active" : "product-filter"}>{label}</button>
                 ))}
               </div>
             </SectionHeader>
-
             <div className="product-card-grid">
               {visibleProducts.map((product) => (
                 <article key={product.id} className="product-card">
-                  <div className={`product-card-image editorial-media editorial-media-product editorial-media-${product.category}`}>
-                    <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
-                    {product.isPopular && <span className="product-popular"><Sparkles size={11} />Most prescribed</span>}
+                  <div className={`product-card-image editorial-media editorial-media-product ${productStyles.photoFrame}`}>
+                    <Image src={product.image} alt={product.imageAlt} fill sizes="(max-width: 640px) 92vw, (max-width: 1180px) 48vw, 31vw" className={productStyles.photo} />
+                    <span className={productStyles.imageDisclosure}>Illustrative image</span>
                   </div>
-
                   <div className="product-card-body">
-                    <span className="product-category">{product.category === "weight" ? "Metabolic GLP-1" : product.category === "hair" ? "Trichology Formula" : "Endocrine / Vascular"}</span>
+                    <span className="product-category">{product.category === "weight" ? "Weight management" : product.category === "hair" ? "Hair restoration" : "Sexual health"}</span>
                     <h3>{product.name}</h3>
                     <p className="product-ingredients">{product.activeIngredients}</p>
-
-                    <div className="product-clinical-reference">
-                      <span>Clinical reference</span>
-                      <p>{product.clinicalProof}</p>
+                    <div className={productStyles.formDetails}>
+                      <span>{product.form}</span>
+                      <span>{product.manufacturer}</span>
                     </div>
-
+                    <div className="product-clinical-reference">
+                      <span>Clinical considerations</span>
+                      <p>{product.clinicalNote}</p>
+                    </div>
                     <div className="product-card-bottom">
-                      <div className="product-card-price">
-                        <span>From</span>
-                        <strong>{product.startingPrice}<small>/mo</small></strong>
-                        <em><Truck size={13} />Free 2-Day Ship</em>
-                      </div>
+                      <div className={productStyles.actionNote}>Prescription and availability subject to clinical review.</div>
                       <div className="product-card-actions">
-                        <button type="button" className="suga-btn suga-btn-secondary suga-btn-inline" onClick={() => setSelectedProduct(product)}>Details <Info size={15} /></button>
-                        <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline">Get started <ArrowRight size={15} /></Link>
+                        <button type="button" className="suga-btn suga-btn-secondary suga-btn-inline" onClick={() => setSelectedProduct(product)}>Learn more <Info size={15} /></button>
+                        <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline">Consult a clinician <ArrowRight size={15} /></Link>
                       </div>
                     </div>
                   </div>
                 </article>
               ))}
             </div>
-
             <div className="formulary-assurance">
-              <span><ShieldCheck size={16} />All prescription treatments require online clinical evaluation and doctor approval.</span>
-              <div><b>100% US Licensed Pharmacies</b><b>Authentic Ingredients</b><b>Discrete Packaging</b></div>
+              <span><ShieldCheck size={16} />Illustrative AI-generated images. Device shapes, pill imprints and packaging may differ from real products.</span>
+              <div><b>Reference catalogue only</b><b>No stock or pricing claims</b><b>Prescription subject to review</b></div>
             </div>
           </div>
         </section>
@@ -923,9 +924,24 @@ export default function HomePage() {
       </Modal>}
 
       {selectedProduct && <Modal label={selectedProduct.name} onClose={() => setSelectedProduct(null)}>
-        <div className="p-5 sm:p-7 bg-neutral-950 text-white"><span className="text-[10px] uppercase tracking-widest text-neutral-400 font-bold">Prescription Specification</span><h3 className="font-sans text-2xl sm:text-3xl font-extrabold text-white">{selectedProduct.name}</h3><p className="text-xs text-neutral-300 font-mono mt-1">Active Ingredients: {selectedProduct.activeIngredients}</p></div>
-        <div className="p-5 sm:p-7 space-y-5"><div><span className="legacy-label">Formulation Overview</span><p className="text-sm text-neutral-700">{selectedProduct.description}</p></div><div className="grid sm:grid-cols-2 gap-3"><div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200"><span className="legacy-label">Administration Method</span><p className="text-xs font-bold text-neutral-900">{selectedProduct.deliveryMethod}</p></div><div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200"><span className="legacy-label">Typical Dosage Range</span><p className="text-xs font-bold text-neutral-900">{selectedProduct.dosage}</p></div></div><div><span className="legacy-label">Mechanism of Action</span><p className="text-sm text-neutral-700">{selectedProduct.mechanismOfAction}</p></div><div><span className="legacy-label">Clinical Benefits & Outcomes</span><div className="grid sm:grid-cols-2 gap-2 mt-2">{selectedProduct.benefits.map((benefit) => <div key={benefit} className="flex gap-2 text-xs text-neutral-700"><Check size={13} className="shrink-0 mt-0.5" />{benefit}</div>)}</div></div></div>
-        <div className="p-5 sm:p-6 bg-neutral-50 border-t border-neutral-200 flex items-center justify-between"><div><span className="text-[11px] text-neutral-500">All-inclusive pricing</span><div className="font-sans text-2xl font-extrabold">{selectedProduct.startingPrice} <span className="text-xs font-medium text-neutral-500">{selectedProduct.billingCadence}</span></div></div><Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider">Check Eligibility <ArrowRight size={14} /></Link></div>
+        <div className="p-5 sm:p-7 bg-neutral-950 text-white">
+          <span className="text-[10px] uppercase tracking-widest text-neutral-400 font-bold">Medicine information</span>
+          <h3 className="font-sans text-2xl sm:text-3xl font-extrabold text-white">{selectedProduct.name}</h3>
+          <p className="text-xs text-neutral-300 mt-1">{selectedProduct.activeIngredients}</p>
+        </div>
+        <div className="p-5 sm:p-7 space-y-5">
+          <div><span className="legacy-label">Overview</span><p className="text-sm text-neutral-700">{selectedProduct.description}</p></div>
+          <div className="grid sm:grid-cols-2 gap-3">
+            <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200"><span className="legacy-label">Presentation</span><p className="text-xs font-bold text-neutral-900">{selectedProduct.form}</p></div>
+            <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200"><span className="legacy-label">Manufacturer / marketer</span><p className="text-xs font-bold text-neutral-900">{selectedProduct.manufacturer}</p></div>
+          </div>
+          <div><span className="legacy-label">Important considerations</span><p className="text-sm text-neutral-700">{selectedProduct.clinicalNote}</p></div>
+          <p className="text-xs text-neutral-500">Medicine names are for information only. This is not a confirmation that Suga.Health stocks or dispenses this product. Prescribing decisions are made by licensed clinicians.</p>
+        </div>
+        <div className="p-5 sm:p-6 bg-neutral-50 border-t border-neutral-200 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
+          <span className="text-xs text-neutral-600">Ask a clinician about treatment suitability.</span>
+          <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="inline-flex items-center justify-center gap-1.5 px-6 py-3 rounded-full bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider">Start consultation <ArrowRight size={14} /></Link>
+        </div>
       </Modal>}
     </main>
   );
