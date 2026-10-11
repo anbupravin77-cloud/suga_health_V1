@@ -8,7 +8,14 @@ import styles from "./empty-auth-card.module.css";
 export function EmptyAuthCard() {
   return (
     <main className={styles.page}>
-      <section className={styles.card} aria-label="Authentication design card" />
+      <section className={styles.card} aria-label="Authentication design card">
+        <div className={styles.logo} role="img" aria-label="Suga.Health, live naturally">
+          <span className={styles.wordmark} aria-hidden="true">
+            SUGA<span className={styles.dot}>.</span>HEALTH
+          </span>
+          <span className={styles.tagline} aria-hidden="true">live naturally</span>
+        </div>
+      </section>
     </main>
   );
 }

@@ -1,4 +1,4 @@
-/* Empty auth canvas. Deliberately contains no text, links or form controls. */
+/* Step-by-step auth design canvas: brand lockup only, no controls yet. */
 .page {
   box-sizing: border-box;
   min-height: 100svh;
@@ -27,4 +27,42 @@
     min-height: min(640px, calc(100svh - 32px));
     border-radius: 21px;
   }
+}
+
+/* Original Suga.Health wordmark rebuilt as crisp responsive text, not a
+   low-resolution screenshot. The card remains otherwise deliberately empty. */
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  max-width: 100%;
+  margin: clamp(32px, 5vw, 43px) auto 0;
+  text-align: center;
+  user-select: none;
+}
+.wordmark {
+  color: #11110f;
+  font-family: var(--font-sans), Arial, sans-serif;
+  font-size: clamp(1.65rem, 3vw, 1.86rem);
+  font-weight: 800;
+  letter-spacing: -.058em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.dot { color: #9a968e; }
+.tagline {
+  margin-top: 7px;
+  color: #67635d;
+  font-family: var(--font-auth), Arial, sans-serif;
+  font-size: .68rem;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: .29em;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .logo { margin-top: 33px; }
+  .wordmark { font-size: clamp(1.58rem, 7.2vw, 1.84rem); }
+  .tagline { font-size: .64rem; letter-spacing: .28em; }
 }
