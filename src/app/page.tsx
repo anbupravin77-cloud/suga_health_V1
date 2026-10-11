@@ -746,7 +746,7 @@ export default function HomePage() {
 
         <section id="doctors" className={`home-doctors home-editorial-section ${doctorStyles.doctorSection}`}>
           <div className="home-section-shell">
-            <SectionHeader centered hideEyebrow eyebrow="Medical Leadership & Care Team" title={<><span className="section-title-line">Board-certified doctors</span><span className="section-title-line">behind every prescription.</span></>} subtitle="No bots, no algorithmic shortcuts. Licensed US physicians personally evaluate every intake, design individualized treatment plans, and support you throughout your care." />
+            <SectionHeader centered hideEyebrow eyebrow="Medical Leadership & Care Team" title={<><span className="section-title-line">Experienced clinicians</span><span className="section-title-line">behind every prescription</span></>} subtitle="No bots, no algorithmic shortcuts. Licensed US physicians personally evaluate every intake, design individualized treatment plans, and support you throughout your care." />
 
             <DoctorSpotlight
               doctors={doctors}
