@@ -195,6 +195,7 @@ export function PhoneSignupForm() {
           date_of_birth: birthDate,
           sex: gender,
           phone_number: phone,
+          email: email.trim() ? email.trim().toLowerCase() : null,
         })
         .eq("id", verifiedUserId)
         .select("id")
@@ -203,17 +204,6 @@ export function PhoneSignupForm() {
       if (saveError || !savedProfile) {
         setError("Your phone is verified, but we could not save your details. Please retry.");
         return;
-      }
-
-      if (email.trim()) {
-        const { error: emailError } = await supabase.auth.updateUser({
-          email: email.trim().toLowerCase(),
-        });
-        if (emailError) {
-          // An optional email must never block a verified, password-secured
-          // patient identity. The patient can add it later from their account.
-          setNotice("Account created. Optional email could not be added.");
-        }
       }
 
       const next = new URLSearchParams(window.location.search).get("next");
@@ -283,7 +273,7 @@ export function PhoneSignupForm() {
       </div>
 
       <div className={styles.field}>
-        <label htmlFor="signup-email">Email <span className={styles.optional}>(optional)</span></label>
+        <label htmlFor="signup-email">Email for notifications <span className={styles.optional}>(optional)</span></label>
         <input
           id="signup-email" type="email" inputMode="email" autoComplete="email"
           value={email} onChange={(event) => setEmail(event.target.value)}

@@ -11,7 +11,6 @@
 
 .form { display: grid; gap: 19px; width: 100%; }
 .field { display: grid; gap: 8px; min-width: 0; }
-.fieldHeading { display: flex; justify-content: space-between; gap: 9px; align-items: baseline; }
 .field label {
   color: #272727;
   font-size: .87rem;
@@ -63,20 +62,6 @@
   font-weight: 650;
   color: #2a2a27;
 }
-.switchMethod {
-  padding: 2px 0;
-  border: 0;
-  background: transparent;
-  color: #66635e;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  font-family: inherit;
-  font-size: .76rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.switchMethod:is(:hover,:focus-visible) { color: #111; }
 .passwordWrap input { padding: 0 8px 0 14px; }
 .passwordToggle {
   flex: 0 0 47px;
@@ -114,7 +99,7 @@
   font-size: .84rem;
   line-height: 1.5;
 }
-.submit, .google {
+.submit {
   display: flex;
   width: 100%;
   min-height: 52px;
@@ -142,32 +127,11 @@
   cursor: not-allowed;
   transform: none;
 }
-.submit:focus-visible, .google:focus-visible, .switchMethod:focus-visible,
+.submit:focus-visible,
 .register a:focus-visible, .recovery a:focus-visible {
   outline: 2px solid #171717;
   outline-offset: 3px;
 }
-.separator {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  font-size: .74rem;
-  font-weight: 550;
-  color: #7c7b74;
-}
-.separator::before, .separator::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: #eae8e4;
-}
-.google {
-  background: #fff;
-  color: #171717;
-  border: 1px solid #dfdcd6;
-}
-.google:hover:not(:disabled) { background: #f6f5f2; border-color: #c0bdb6; }
-.google:disabled { opacity: .65; cursor: not-allowed; }
 .register {
   text-align: center;
   margin: 6px 0 0;
@@ -189,9 +153,7 @@
 }
 @media (max-width: 375px) {
   .formArea { padding-inline: 14px; }
-  .fieldHeading { gap: 6px; }
-  .switchMethod { font-size: .73rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .submit, .google { transition: none; }
+  .submit { transition: none; }
 }
