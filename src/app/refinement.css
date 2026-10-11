@@ -3007,3 +3007,29 @@ main.refined-home .home-doctors button[class*="profileButton"] > svg {
     animation: none !important;
   }
 }
+
+
+/* Client feedback: loosen hero reading rhythm and increase CTA readability.
+   The layout, grid columns and navigation are intentionally unchanged. */
+main.refined-home .home-hero .legacy-hero-title {
+  line-height: 1.17 !important;
+  letter-spacing: -.022em !important;
+}
+main.refined-home .home-hero .hero-action-grid .home-action-pill.suga-btn {
+  font-size: clamp(1.08rem, 1.02rem + .36vw, 1.28rem) !important;
+  line-height: 1.18 !important;
+}
+@media (max-width: 720px) {
+  main.refined-home .home-hero .legacy-hero-title {
+    line-height: 1.18 !important;
+    letter-spacing: -.02em !important;
+  }
+  main.refined-home .home-hero .hero-action-grid .home-action-pill.suga-btn {
+    font-size: 1.08rem !important;
+  }
+}
+@media (max-width: 360px) {
+  main.refined-home .home-hero .hero-action-grid .home-action-pill.suga-btn {
+    font-size: 1.03rem !important;
+  }
+}

@@ -8,7 +8,7 @@ import styles from "./motion-link.module.css";
 type MotionVariant = "liquid" | "morph" | "radar" | "particle" | "magnetic";
 type MotionLinkProps = Omit<ComponentProps<typeof Link>, "children" | "className"> & {
   variant: MotionVariant;
-  tone?: "dark" | "light";
+  tone?: "dark" | "light" | "hospital";
   alternateLabel?: string;
   className?: string;
   children: ReactNode;

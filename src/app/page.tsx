@@ -540,7 +540,7 @@ export default function HomePage() {
             <div className="hero-intro-grid">
               <div className="hero-intro-copy">
                 <h1 className="legacy-hero-title">
-                  Clinically proven, FDA (USA) approved, treatment prescribed by experts.
+                  Clinically proven, FDA (USA) approved, treatments prescribed by experts.
                 </h1>
               </div>
 
@@ -548,7 +548,7 @@ export default function HomePage() {
                 <Link href="/weight-loss" className="home-action-pill suga-btn suga-btn-secondary">Medical weight loss <ArrowUpRight size={16} /></Link>
                 <Link href="/hair-growth" className="home-action-pill suga-btn suga-btn-secondary">Hair growth <ArrowUpRight size={16} /></Link>
                 <Link href="/sexual-health" className="home-action-pill suga-btn suga-btn-secondary">Sexual health <ArrowUpRight size={16} /></Link>
-                <MotionLink href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} variant="magnetic" className="home-action-pill home-action-primary suga-btn suga-btn-primary">Start consultation</MotionLink>
+                <MotionLink href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} variant="magnetic" tone="hospital" className="home-action-pill home-action-primary suga-btn suga-btn-primary">Start consultation</MotionLink>
               </div>
             </div>
 

@@ -234,3 +234,36 @@
   .ring, .particleDot { display: none !important; }
   .magnetic:hover { transform: none !important; box-shadow: none !important; }
 }
+
+
+/* Hero CTA only: white-filled hospital-red consultation button.
+   Overrides the legacy black primary-button cascade without changing the
+   Magnetic Flux transform, routing, or other primary CTAs. */
+:global(main.refined-home .hero-action-grid) .motion.hospital {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid #d32f2f !important;
+  color: #d32f2f !important;
+  -webkit-text-fill-color: #d32f2f !important;
+}
+:global(main.refined-home .hero-action-grid) .motion.hospital .surface {
+  background: #ffffff !important;
+}
+:global(main.refined-home .hero-action-grid) .motion.hospital .label,
+:global(main.refined-home .hero-action-grid) .motion.hospital .icon,
+:global(main.refined-home .hero-action-grid) .motion.hospital .icon svg {
+  color: #d32f2f !important;
+  -webkit-text-fill-color: #d32f2f !important;
+  stroke: #d32f2f !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  :global(main.refined-home .hero-action-grid) .motion.hospital:hover {
+    background: #ffffff !important;
+    border-color: #bc2626 !important;
+    box-shadow: 0 12px 24px rgba(211, 47, 47, .13) !important;
+  }
+}
+:global(main.refined-home .hero-action-grid) .motion.hospital:focus-visible {
+  outline-color: #d32f2f !important;
+}
