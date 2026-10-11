@@ -29,7 +29,7 @@ import { LivingMetrics } from "@/components/public/living-metrics";
 import { MilestoneJourney } from "@/components/public/milestone-journey";
 import { DoctorSpotlight } from "@/components/public/doctor-spotlight";
 import { MotionLink } from "@/components/public/motion-link";
-import { ProductDesignReview } from "@/components/public/product-design-review";
+import { ProductShowcase } from "@/components/public/product-design-review";
 import doctorStyles from "@/components/public/doctor-spotlight.module.css";
 
 const homeInter = Inter({ subsets: ["latin"], variable: "--font-home", display: "swap" });
@@ -814,7 +814,7 @@ export default function HomePage() {
               <SectionHeader centered hideEyebrow eyebrow="India treatment reference" title="Explore treatment options." subtitle="A reference gallery of real medicine brands marketed in India. Availability, suitability and prescribing are determined by a qualified clinician." />
             </div>
 
-            <ProductDesignReview products={products} onLearnMore={setSelectedProduct} />
+            <ProductShowcase products={products} onLearnMore={setSelectedProduct} />
             <div className="formulary-assurance">
               <span><ShieldCheck size={16} />Illustrative AI-generated images. Device shapes, pill imprints and packaging may differ from real products.</span>
               
