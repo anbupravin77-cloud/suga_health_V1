@@ -445,3 +445,18 @@ main.refined-home .home-doctors .doctor-trust-band > a {
     justify-self: stretch;
   }
 }
+
+
+/* Shared semantic typography used by the product gallery and milestones.
+   One responsive scale for mobile, tablet and desktop. */
+main.refined-home {
+  --care-type-eyebrow: clamp(.69rem, .66rem + .13vw, .77rem);
+  --care-type-meta: clamp(.78rem, .74rem + .19vw, .9rem);
+  --care-type-body: clamp(.94rem, .92rem + .16vw, 1.02rem);
+  --care-type-lead: clamp(1rem, .96rem + .25vw, 1.16rem);
+  --care-type-action: clamp(.85rem, .8rem + .2vw, .96rem);
+  --care-type-action-compact: .76rem;
+  --care-type-card-title: clamp(1.27rem, 1.1rem + .7vw, 1.6rem);
+  --care-type-section-title: clamp(1.8rem, 1.5rem + 1.2vw, 2.45rem);
+  --care-type-category-title: clamp(1.63rem, 1.35rem + 1.1vw, 2.3rem);
+}

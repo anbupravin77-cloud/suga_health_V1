@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { MotionLink } from "./motion-link";
 import { rememberReturnPosition } from "./return-position";
@@ -41,7 +42,7 @@ function MedicineCard<T extends Medicine>({
           alt={product.imageAlt}
           fill
           loading="lazy"
-          sizes="(max-width: 700px) 84vw, (max-width: 1050px) 44vw, 29vw"
+          sizes="(max-width: 700px) 64vw, (max-width: 1050px) 44vw, 29vw"
           className={styles.image}
         />
         <span className={styles.illustrative}>Illustrative image</span>
@@ -56,7 +57,7 @@ function MedicineCard<T extends Medicine>({
           href="/sign-up?next=%2Fconsultation%2Fstart"
           onClick={rememberReturnPosition}
           variant="morph"
-          alternateLabel="Begin Your Care"
+          alternateLabel="Start Care"
           className={styles.primary}
         >
           Get Started
@@ -71,6 +72,98 @@ function MedicineCard<T extends Medicine>({
         </button>
       </div>
     </article>
+  );
+}
+
+
+// Each treatment group owns its scroll position and arrow visibility.
+// Swipe, trackpad, mouse-wheel horizontal scrolling, and arrow taps all
+// synchronize the same navigation state.
+function ProductRail<T extends Medicine>({
+  title,
+  products,
+  onLearnMore,
+}: {
+  title: string;
+  products: readonly T[];
+  onLearnMore: (product: T) => void;
+}) {
+  const railRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const syncArrows = useCallback(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const maxScroll = Math.max(0, rail.scrollWidth - rail.clientWidth);
+    setCanScrollLeft(rail.scrollLeft > 3);
+    setCanScrollRight(maxScroll > 3 && rail.scrollLeft < maxScroll - 3);
+  }, []);
+
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    syncArrows();
+    const observer = new ResizeObserver(syncArrows);
+    observer.observe(rail);
+    if (rail.firstElementChild) observer.observe(rail.firstElementChild);
+    window.addEventListener("resize", syncArrows);
+    const frame = window.requestAnimationFrame(syncArrows);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("resize", syncArrows);
+    };
+  }, [syncArrows, products.length]);
+
+  const navigate = (direction: -1 | 1) => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const first = rail.firstElementChild as HTMLElement | null;
+    if (!first) return;
+    const gap = Number.parseFloat(window.getComputedStyle(rail).columnGap) || 0;
+    const distance = first.getBoundingClientRect().width + gap;
+    rail.scrollBy({
+      left: direction * distance,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    });
+  };
+
+  return (
+    <div className={styles.railFrame}>
+      <div
+        ref={railRef}
+        className={styles.cards}
+        role="region"
+        tabIndex={0}
+        aria-label={`${title} medicines. Swipe or use the carousel arrows.`}
+        onScroll={syncArrows}
+      >
+        {products.map((product) => (
+          <MedicineCard key={product.id} product={product} onLearnMore={onLearnMore} />
+        ))}
+      </div>
+      {canScrollLeft && (
+        <button
+          type="button"
+          className={`${styles.railArrow} ${styles.railPrevious}`}
+          aria-label={`Previous ${title} medicine`}
+          onClick={() => navigate(-1)}
+        >
+          <ArrowRight size={19} strokeWidth={2} aria-hidden="true" />
+        </button>
+      )}
+      {canScrollRight && (
+        <button
+          type="button"
+          className={`${styles.railArrow} ${styles.railNext}`}
+          aria-label={`Next ${title} medicine`}
+          onClick={() => navigate(1)}
+        >
+          <ArrowRight size={19} strokeWidth={2} aria-hidden="true" />
+        </button>
+      )}
+    </div>
   );
 }
 
@@ -96,16 +189,11 @@ export function ProductShowcase<T extends Medicine>({
                 Swipe to explore <ArrowRight size={14} />
               </span>
             </div>
-            <div
-              className={styles.cards}
-              role="region"
-              tabIndex={0}
-              aria-label={`${group.name} medicines`}
-            >
-              {products.filter((product) => product.category === group.id).map((product) => (
-                <MedicineCard key={product.id} product={product} onLearnMore={onLearnMore} />
-              ))}
-            </div>
+            <ProductRail
+              title={group.name}
+              products={products.filter((product) => product.category === group.id)}
+              onLearnMore={onLearnMore}
+            />
           </section>
         ))}
       </div>

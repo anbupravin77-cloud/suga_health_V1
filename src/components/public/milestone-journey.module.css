@@ -378,3 +378,109 @@
     line-height: 1.55 !important;
   }
 }
+
+
+/* Milestones spacing and typography, aligned to the shared site type scale.
+   On phones, give each treatment choice and chronology card room to breathe. */
+.section .eyebrow {
+  font-size: var(--care-type-eyebrow) !important;
+  line-height: 1.45 !important;
+}
+.section .heading {
+  font-size: var(--care-type-section-title) !important;
+  line-height: 1.16 !important;
+  letter-spacing: -.042em !important;
+}
+.section .description {
+  font-size: var(--care-type-lead) !important;
+  line-height: 1.72 !important;
+}
+.section .categoryText {
+  font-size: var(--care-type-category-title) !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.042em !important;
+}
+.section .stage .stageHeader {
+  font-size: var(--care-type-eyebrow) !important;
+}
+.section .stage .cardTitle {
+  font-size: var(--care-type-card-title) !important;
+  line-height: 1.3 !important;
+}
+.section .stage .cardDescription {
+  font-size: var(--care-type-body) !important;
+  line-height: 1.7 !important;
+}
+.section .phase, .section .stepNumber {
+  font-size: var(--care-type-eyebrow) !important;
+}
+.section .cta {
+  font-size: var(--care-type-action) !important;
+  min-height: 49px;
+}
+@media (max-width: 760px) {
+  .section {
+    padding-block: 42px 52px !important;
+  }
+  .section .shell {
+    width: min(620px, calc(100% - 2.25rem)) !important;
+  }
+  .topline {
+    margin-bottom: 27px !important;
+  }
+  .eyebrow { margin-bottom: 10px; }
+  .section .heading {
+    max-width: 24ch;
+    white-space: normal;
+    line-height: 1.17 !important;
+  }
+  .section .description {
+    margin-top: 13px !important;
+  }
+  .layout {
+    gap: 24px !important;
+  }
+  .categoryGroup { margin-bottom: 0 !important; }
+  .section .category {
+    min-height: 70px !important;
+    padding: 16px 7px !important;
+    gap: 15px;
+  }
+  .section .category.selected { padding-left: 14px !important; }
+  .category.selected::before {
+    top: 14px;
+    bottom: 14px;
+    width: 3px;
+  }
+  .category svg {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+  }
+  .stageHeader {
+    height: auto !important;
+    min-height: 20px;
+    margin: 0 2px 14px !important;
+  }
+  .cardsLayer {
+    gap: 14px !important;
+  }
+  .section .stage .cardsLayer .card,
+  .section .stage .cardsLayer .card:first-child,
+  .section .stage .cardsLayer .card:last-child {
+    min-height: 148px !important;
+    padding: 18px !important;
+    gap: 11px;
+  }
+  .cardBody { display: grid; gap: 7px; }
+  .section .stage .cardTitle { margin: 0 !important; }
+  .section .stage .cardDescription {
+    font-size: var(--care-type-body) !important;
+    line-height: 1.66 !important;
+  }
+  .section .cta {
+    min-height: 50px !important;
+    font-size: var(--care-type-action) !important;
+    padding: 12px 19px;
+  }
+}

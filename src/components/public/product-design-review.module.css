@@ -321,3 +321,133 @@
   .card:hover .image { transform: none !important; }
   .cards { scroll-behavior: auto; }
 }
+
+
+/* Shared Suga.Health type scale: use semantic sizes, not independent pixel
+   guesses per section or breakpoint. Values inherit from readability.css. */
+:global(main.refined-home .home-formulary) .groupHeading h3 {
+  font-size: var(--care-type-section-title) !important;
+}
+:global(main.refined-home .home-formulary) .card .category {
+  font-size: var(--care-type-eyebrow) !important;
+  line-height: 1.42 !important;
+}
+:global(main.refined-home .home-formulary) .card .name {
+  font-size: var(--care-type-card-title) !important;
+  line-height: 1.23 !important;
+  overflow-wrap: break-word;
+}
+:global(main.refined-home .home-formulary) .card .ingredients {
+  font-size: var(--care-type-body) !important;
+  line-height: 1.6 !important;
+}
+:global(main.refined-home .home-formulary) .footer > :is(a,button) {
+  font-size: var(--care-type-action) !important;
+}
+
+.railFrame {
+  position: relative;
+  min-width: 0;
+}
+
+/* Desktop retains three complete cards and no carousel arrows. */
+.railArrow { display: none; }
+
+@media (max-width: 700px) {
+  /* Older global product grid rules are intentionally superseded. Use flex
+     so only one card and roughly half of the next are visible. */
+  .showcase .categorySection .railFrame .cards {
+    display: flex !important;
+    flex-flow: row nowrap !important;
+    grid-template-columns: none !important;
+    grid-auto-flow: initial !important;
+    width: 100%;
+    min-width: 0;
+    gap: 12px !important;
+    align-items: stretch;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    touch-action: pan-x pan-y;
+    overscroll-behavior-x: contain;
+    padding: 0 0 12px !important;
+    margin: 0 !important;
+  }
+  .showcase .categorySection .railFrame .cards::-webkit-scrollbar { display: none; }
+  :global(main.refined-home .home-formulary) .showcase .categorySection .railFrame .cards > .card {
+    flex: 0 0 66% !important;
+    width: 66% !important;
+    max-width: 66% !important;
+    min-width: 0 !important;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  :global(main.refined-home .home-formulary) .card .name {
+    font-size: var(--care-type-card-title) !important;
+  }
+  :global(main.refined-home .home-formulary) .card .ingredients {
+    font-size: var(--care-type-body) !important;
+  }
+  :global(main.refined-home .home-formulary) .card > .info {
+    padding: 16px 14px 14px !important;
+    gap: 7px;
+  }
+  :global(main.refined-home .home-formulary) .card > .footer {
+    padding: 12px 10px 14px !important;
+    gap: 6px !important;
+  }
+  :global(main.refined-home .home-formulary) .footer > :is(a,button) {
+    font-size: var(--care-type-action-compact) !important;
+    min-height: 44px !important;
+    padding-inline: 5px !important;
+  }
+  .railArrow {
+    position: absolute;
+    z-index: 5;
+    top: clamp(78px, 27vw, 135px);
+    width: 43px;
+    height: 43px;
+    border: 1px solid #d8d8d3;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #171717 !important;
+    background: #ffffff !important;
+    box-shadow: 0 3px 15px rgba(0,0,0,.15);
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+  .railArrow:active { transform: scale(.94); }
+  .railArrow:focus-visible {
+    outline: 2px solid #111;
+    outline-offset: 3px;
+  }
+  .railPrevious { left: 5px; }
+  .railPrevious svg { transform: rotate(180deg); }
+  .railNext { right: 5px; }
+}
+@media (max-width: 365px) {
+  :global(main.refined-home .home-formulary) .footer > :is(a,button) {
+    font-size: var(--care-type-action-compact) !important;
+    padding-inline: 3px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .showcase .categorySection .railFrame .cards { scroll-behavior: auto; }
+  .railArrow { transition: none; }
+}
+
+/* A narrow half-visible carousel cannot fit a full CTA label plus an icon in
+   each button. Keep both genuine actions readable instead of clipping text. */
+@media (max-width: 700px) {
+  :global(main.refined-home .home-formulary) .footer > .primary > span:last-child {
+    display: none !important;
+  }
+  :global(main.refined-home .home-formulary) .footer > :is(a,button) {
+    overflow: hidden;
+    text-overflow: clip;
+    white-space: nowrap;
+  }
+}
