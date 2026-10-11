@@ -786,3 +786,15 @@
     font-size: 16px;
   }
 }
+
+/* QA-only navigation: keep the label and arrow visibly white over the black
+   pill regardless of patient/global link color or WebKit text-fill overrides. */
+main.standalone-intake .standalone-intake-qa-skip,
+main.standalone-intake .standalone-intake-qa-skip span,
+main.standalone-intake .standalone-intake-qa-skip svg {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+main.standalone-intake .standalone-intake-qa-skip svg {
+  stroke: #ffffff !important;
+}

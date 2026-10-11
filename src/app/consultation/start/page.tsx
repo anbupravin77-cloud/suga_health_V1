@@ -59,9 +59,9 @@ export default async function StartConsultationPage({
           <div className="mb-5 flex justify-end">
             <Link
               href="/patient"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-neutral-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+              className="standalone-intake-qa-skip inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-neutral-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
             >
-              Skip for Testing <ArrowRight size={16} aria-hidden="true" />
+              <span>Skip for Testing</span> <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </div>
         )}
