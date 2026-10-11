@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans, Open_Sans, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import "./refinement.css";
+import "./readability.css";
 
 const brand = Cormorant_Garamond({
   subsets: ["latin"],

@@ -548,3 +548,25 @@
 @media (prefers-reduced-motion: reduce) {
   .rail .card, .rail.isResetting .card { transition: none !important; }
 }
+
+/* Readability pass: slightly larger clinician copy and credentials. */
+.featuredCopy p {
+  font-size: clamp(14px, 1.15vw, 16px) !important;
+  line-height: 1.58 !important;
+}
+.note {
+  font-size: 13px !important;
+  line-height: 1.58 !important;
+}
+.doctorSection :global(.editorial-section-heading p) {
+  font-size: clamp(16px, 1.2vw, 19px) !important;
+  line-height: 1.67 !important;
+}
+@media (max-width: 760px) {
+  .featuredCopy p { font-size: 14px !important; }
+  .note { font-size: 12px !important; }
+  .doctorSection :global(.editorial-section-heading p) {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+  }
+}

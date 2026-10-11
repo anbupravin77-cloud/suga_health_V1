@@ -355,3 +355,26 @@
   .cardGlowFrame { background: #d8d8d5; }
   .cardGlowFrame::before { display: none !important; animation: none !important; }
 }
+
+/* Readability pass for all three animated timeline cards. */
+.description {
+  font-size: 15px !important;
+  line-height: 1.66 !important;
+}
+.section .stage .cardTitle {
+  font-size: clamp(19px, 1.75vw, 23px) !important;
+  line-height: 1.24 !important;
+}
+.section .stage .cardDescription {
+  font-size: 14px !important;
+  line-height: 1.56 !important;
+}
+.phase, .stepNumber { font-size: 10px !important; }
+@media (max-width: 760px) {
+  .description { font-size: 14px !important; }
+  .section .stage .cardTitle { font-size: 19px !important; }
+  .section .stage .cardDescription {
+    font-size: 13.5px !important;
+    line-height: 1.55 !important;
+  }
+}

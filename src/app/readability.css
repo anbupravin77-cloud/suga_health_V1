@@ -1,0 +1,233 @@
+/*
+ * Suga.Health readability pass
+ * Increase supporting copy and subheadings without changing display headlines,
+ * compact UI labels, navigation, or the consultation form's input dimensions.
+ * Scoped by page so dashboard controls and text-heavy marketing sections remain
+ * responsive rather than inheriting a site-wide font-size multiplier.
+ */
+
+/* Shared public pages: natural reading size, never tiny body copy. */
+main.refined-home .editorial-section-heading p,
+main.refined-home .home-pathways .editorial-section-heading p,
+main.refined-home .home-comparison .editorial-section-heading p {
+  font-size: clamp(1.045rem, 1.04vw + .55rem, 1.18rem) !important;
+  line-height: 1.66 !important;
+}
+main.refined-home .home-pathways .pathway-editorial-copy > .home-kicker {
+  font-size: .78rem !important;
+  line-height: 1.4;
+  letter-spacing: .09em;
+}
+main.refined-home .home-pathways .pathway-editorial-copy > p {
+  font-size: clamp(1.035rem, .94vw + .57rem, 1.16rem) !important;
+  line-height: 1.75 !important;
+  max-width: 62ch;
+}
+main.refined-home .home-pathways .pathway-proof-row span {
+  font-size: .72rem !important;
+  line-height: 1.45 !important;
+}
+main.refined-home .home-pathways .pathway-proof-row strong {
+  font-size: .99rem !important;
+  line-height: 1.45 !important;
+}
+main.refined-home .home-pathways .pathway-proof-row > div {
+  padding-block: 1.05rem !important;
+}
+main.refined-home .home-pathways .pathway-highlight-list {
+  gap: .72rem !important;
+}
+main.refined-home .home-pathways .pathway-highlight-list span {
+  font-size: .985rem !important;
+  line-height: 1.52 !important;
+  align-items: flex-start;
+}
+main.refined-home .home-pathways .pathway-highlight-list svg {
+  flex-shrink: 0;
+  margin-top: .2em;
+}
+
+/* Process, numbers, comparisons and FAQ. */
+main.refined-home .care-expander-heading > p,
+main.refined-home .faq-heading > p,
+main.refined-home .voices-heading > p {
+  font-size: 1.07rem !important;
+  line-height: 1.68 !important;
+}
+main.refined-home .home-process .care-expander-copy h3 {
+  font-size: clamp(1.3rem, 1.8vw, 1.68rem) !important;
+  line-height: 1.23 !important;
+}
+main.refined-home .home-process .care-expander-brief {
+  font-size: 1rem !important;
+  line-height: 1.65 !important;
+  max-width: 36ch;
+}
+main.refined-home .home-process .care-expander-detail p {
+  font-size: .975rem !important;
+  line-height: 1.65 !important;
+}
+main.refined-home .home-process .care-expander-hint {
+  font-size: .79rem !important;
+}
+main.refined-home .home-metrics .metric-ledger p,
+main.refined-home .home-metrics .metric-ledger article > div > p {
+  font-size: 1rem !important;
+  line-height: 1.58 !important;
+}
+main.refined-home .home-metrics .metric-ledger article > div > span:not(.metric-count) {
+  font-size: .8rem !important;
+}
+main.refined-home .home-comparison .comparison-row p {
+  font-size: 1rem !important;
+  line-height: 1.58 !important;
+}
+main.refined-home .home-faq .faq-question strong {
+  font-size: clamp(1.12rem, 1.5vw, 1.3rem) !important;
+  line-height: 1.42 !important;
+}
+main.refined-home .home-faq .faq-answer p {
+  font-size: 1.04rem !important;
+  line-height: 1.77 !important;
+}
+main.refined-home .doctor-trust-band p,
+main.refined-home .home-final-cta p {
+  font-size: 1.06rem !important;
+  line-height: 1.7 !important;
+}
+main.refined-home .voices-demo-note {
+  font-size: .76rem !important;
+  line-height: 1.55 !important;
+}
+main.refined-home .voice-testimonial-person strong {
+  font-size: .94rem !important;
+}
+main.refined-home .voice-testimonial-person span {
+  font-size: .8rem !important;
+}
+
+/* Detailed public treatment pages: all long-form copy, benefits and clinical notes. */
+main.refined-treatment .treatment-page-hero p {
+  font-size: clamp(1.08rem, 1.5vw, 1.23rem) !important;
+  line-height: 1.72 !important;
+}
+main.refined-treatment .treatment-page-section p {
+  font-size: clamp(1.005rem, 1.12vw, 1.16rem) !important;
+  line-height: 1.72 !important;
+}
+main.refined-treatment .treatment-page-section article h3 {
+  line-height: 1.24 !important;
+}
+main.refined-treatment .treatment-page-section article .text-xs:not(.uppercase) {
+  font-size: .95rem !important;
+  line-height: 1.6 !important;
+}
+main.refined-treatment .treatment-page-section .text-xs.text-neutral-600:not(.uppercase) {
+  font-size: .96rem !important;
+  line-height: 1.65 !important;
+}
+
+/* Public-page footer text should be readable, not microscopic. */
+main:is(.refined-home, .refined-treatment) footer p,
+main:is(.refined-home, .refined-treatment) footer li {
+  font-size: .94rem !important;
+  line-height: 1.64 !important;
+}
+main:is(.refined-home, .refined-treatment) footer h4 {
+  font-size: .83rem !important;
+}
+
+/* Patient dashboard: increase content without changing sidebar or status pills. */
+.patient-v2 .patient-page-heading p,
+.patient-v2 .patient-start-card p,
+.patient-v2 .patient-muted-copy,
+.patient-v2 .patient-active-care > p {
+  font-size: .98rem !important;
+  line-height: 1.65 !important;
+}
+.patient-v2 .patient-section-title h2 {
+  font-size: 1.17rem !important;
+  line-height: 1.3 !important;
+}
+.patient-v2 .patient-record-copy strong,
+.patient-v2 .patient-empty-simple strong {
+  font-size: .96rem !important;
+}
+.patient-v2 .patient-record-copy > span,
+.patient-v2 .patient-empty-simple span {
+  font-size: .85rem !important;
+  line-height: 1.55 !important;
+}
+.patient-v2 .patient-mini-list strong,
+.patient-v2 .patient-message-preview-list strong {
+  font-size: .89rem !important;
+}
+.patient-v2 .patient-mini-list small,
+.patient-v2 .patient-message-preview-list small {
+  font-size: .79rem !important;
+}
+.patient-v2 .patient-section-title a {
+  font-size: .84rem !important;
+}
+
+/* Doctor, admin, pharmacist workspaces: readably-sized explanatory copy. */
+.app-layout .app-content :is(.dashboard-heading, .page-heading) > p,
+.app-layout .app-content :is(.queue-empty, .empty-state) > p,
+.app-layout .app-content .section-row > p,
+.app-layout .app-content .page-description {
+  font-size: 1rem !important;
+  line-height: 1.65 !important;
+}
+
+/* Authentication and onboarding helper copy. Forms retain their current fields. */
+.auth-surface .auth-card-premium p:not(.auth-error),
+.standalone-intake .standalone-intake-intro > p {
+  font-size: 1rem !important;
+  line-height: 1.65 !important;
+}
+
+@media (max-width: 760px) {
+  main.refined-home .editorial-section-heading p,
+  main.refined-home .home-pathways .pathway-editorial-copy > p,
+  main.refined-home .care-expander-heading > p,
+  main.refined-home .faq-heading > p,
+  main.refined-home .voices-heading > p {
+    font-size: 1rem !important;
+    line-height: 1.68 !important;
+  }
+  main.refined-home .home-pathways .pathway-highlight-list span {
+    font-size: .96rem !important;
+  }
+  main.refined-home .home-pathways .pathway-proof-row strong {
+    font-size: .94rem !important;
+  }
+  main.refined-home .home-pathways .pathway-proof-row span {
+    font-size: .7rem !important;
+  }
+  main.refined-home .home-process .care-expander-copy h3 {
+    font-size: 1.26rem !important;
+  }
+  main.refined-home .home-process .care-expander-brief,
+  main.refined-home .home-process .care-expander-detail p {
+    font-size: .95rem !important;
+  }
+  main.refined-home .home-faq .faq-answer p {
+    font-size: .99rem !important;
+  }
+  main.refined-home .home-comparison .comparison-row p,
+  main.refined-home .home-metrics .metric-ledger p,
+  main.refined-home .doctor-trust-band p,
+  main.refined-home .home-final-cta p {
+    font-size: .99rem !important;
+  }
+  main.refined-treatment .treatment-page-section p {
+    font-size: 1rem !important;
+  }
+  main.refined-treatment .treatment-page-hero p {
+    font-size: 1.05rem !important;
+  }
+  main:is(.refined-home,.refined-treatment) footer p,
+  main:is(.refined-home,.refined-treatment) footer li {
+    font-size: .9rem !important;
+  }
+}
