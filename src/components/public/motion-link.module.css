@@ -236,53 +236,54 @@
 }
 
 
-/* Hero consultation CTA: dark signature capsule + hospital-red arrow medallion.
-   Magnetic Flux cursor motion, Next Link routing and focus behavior are preserved. */
+/* Consultation CTA: exact two-color hospital-red and white.
+   Retains existing magnetic pointer interaction and accessible real-link semantics. */
 :global(main.refined-home .hero-action-grid) .motion.hospital {
-  background: #171717 !important;
-  background-color: #171717 !important;
+  background: #d32f2f !important;
+  background-color: #d32f2f !important;
   background-image: none !important;
-  border: 1px solid #171717 !important;
-  color: #fff !important;
-  -webkit-text-fill-color: #fff !important;
-  padding: 6px 7px 6px 17px !important;
-  gap: clamp(10px, 1.65vw, 20px) !important;
-  justify-content: center !important;
+  border: 1px solid #d32f2f !important;
   border-radius: 999px !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  padding: 6px 7px 6px 21px !important;
+  gap: 13px !important;
+  justify-content: center !important;
+  box-shadow: none !important;
 }
 :global(main.refined-home .hero-action-grid) .motion.hospital .surface {
-  background: #171717 !important;
+  background: #d32f2f !important;
+  background-image: none !important;
 }
 :global(main.refined-home .hero-action-grid) .motion.hospital .label {
-  color: #fff !important;
-  -webkit-text-fill-color: #fff !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
   font-weight: 650 !important;
 }
 :global(main.refined-home .hero-action-grid) .motion.hospital .icon {
-  width: 39px;
-  height: 39px;
-  flex: 0 0 39px;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
   border-radius: 50%;
-  background: #d32f2f;
-  color: #fff !important;
-  -webkit-text-fill-color: #fff !important;
-  box-shadow: 0 0 0 1px rgba(255,255,255,.1);
+  background: #ffffff !important;
+  color: #d32f2f !important;
+  -webkit-text-fill-color: #d32f2f !important;
+  box-shadow: none !important;
 }
 :global(main.refined-home .hero-action-grid) .motion.hospital .icon svg {
-  color: #fff !important;
-  stroke: #fff !important;
+  color: #d32f2f !important;
+  stroke: #d32f2f !important;
   width: 17px;
   height: 17px;
 }
 @media (hover: hover) and (pointer: fine) {
   :global(main.refined-home .hero-action-grid) .motion.hospital:hover {
-    background: #171717 !important;
-    border-color: #171717 !important;
-    box-shadow: 0 12px 27px rgba(0,0,0,.16) !important;
+    background: #d32f2f !important;
+    border-color: #d32f2f !important;
+    box-shadow: 0 10px 24px rgba(211,47,47,.19) !important;
   }
   :global(main.refined-home .hero-action-grid) .motion.hospital:hover .icon {
-    background: #b71c1c;
-    box-shadow: 0 0 0 5px rgba(211,47,47,.15);
+    background: #ffffff !important;
     transform: translateX(3px);
   }
 }
@@ -292,13 +293,13 @@
 }
 @media (max-width: 720px) {
   :global(main.refined-home .hero-action-grid) .motion.hospital {
-    padding: 5px 6px 5px 12px !important;
-    gap: 9px !important;
+    padding: 5px 7px 5px 16px !important;
+    gap: 10px !important;
   }
   :global(main.refined-home .hero-action-grid) .motion.hospital .icon {
-    width: 34px;
-    height: 34px;
-    flex-basis: 34px;
+    width: 35px;
+    height: 35px;
+    flex-basis: 35px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -307,4 +308,3 @@
     transform: none !important;
   }
 }
-

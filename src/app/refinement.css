@@ -3059,3 +3059,45 @@ main.refined-home .home-hero .hero-action-grid .home-action-pill.suga-btn {
     font-size: 1.03rem !important;
   }
 }
+
+
+/* Mobile hero copy spacing refinement: safe side gutters and calmer line breaks. */
+@media (max-width: 560px) {
+  main.refined-home .home-hero .hero-intro-copy {
+    box-sizing: border-box;
+    width: min(calc(100vw - 58px), 410px) !important;
+    max-width: 100% !important;
+    margin-inline: auto !important;
+  }
+  main.refined-home .home-hero .legacy-hero-title {
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline: auto !important;
+    font-size: clamp(1.95rem, 7.6vw, 2.6rem) !important;
+    line-height: 1.18 !important;
+    letter-spacing: -.024em !important;
+    text-wrap: balance;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+}
+@media (max-width: 430px) {
+  main.refined-home .home-hero .hero-intro-copy {
+    width: calc(100vw - 64px) !important;
+    max-width: 360px !important;
+  }
+  main.refined-home .home-hero .legacy-hero-title {
+    font-size: clamp(1.82rem, 7.9vw, 2.3rem) !important;
+    line-height: 1.19 !important;
+  }
+}
+@media (max-width: 360px) {
+  main.refined-home .home-hero .hero-intro-copy {
+    width: calc(100vw - 54px) !important;
+  }
+  main.refined-home .home-hero .legacy-hero-title {
+    font-size: clamp(1.78rem, 8vw, 2rem) !important;
+    line-height: 1.2 !important;
+  }
+}
