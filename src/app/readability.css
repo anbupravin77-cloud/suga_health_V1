@@ -373,3 +373,75 @@ main.refined-home .home-final-cta .home-final-cta-inner > a {
     font-size: 2rem !important;
   }
 }
+
+/* Doctor trust-panel contrast and excess whitespace fix. */
+/*
+ * Legacy homepage CSS forces the panel background to white while the original
+ * trust-band heading remains white. Keep the bright editorial direction,
+ * restore legible hierarchy, and stop the invisible heading occupying a
+ * disproportionately tall block.
+ */
+main.refined-home .home-doctors .doctor-trust-band {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: clamp(1.2rem, 3vw, 2rem) !important;
+  margin-top: clamp(1.4rem, 2.8vw, 2.2rem) !important;
+  padding: clamp(1.45rem, 3vw, 2.25rem) !important;
+  background: #f8f8f6 !important;
+  color: #171717 !important;
+  border: 1px solid #e4e4e0;
+  border-radius: 20px !important;
+}
+main.refined-home .home-doctors .doctor-trust-band > div {
+  min-width: 0;
+}
+main.refined-home .home-doctors .doctor-trust-band > div > span,
+main.refined-home .home-doctors .doctor-trust-band > div > span svg {
+  color: #64645f !important;
+  -webkit-text-fill-color: #64645f !important;
+  stroke: #64645f;
+}
+main.refined-home .home-doctors .doctor-trust-band h3 {
+  max-width: 27ch !important;
+  margin: .65rem 0 .65rem !important;
+  color: #171717 !important;
+  -webkit-text-fill-color: #171717 !important;
+  font-size: clamp(1.8rem, 3vw, 2.9rem) !important;
+  font-weight: 550 !important;
+  line-height: 1.13 !important;
+  letter-spacing: -.042em !important;
+  text-wrap: balance;
+}
+main.refined-home .home-doctors .doctor-trust-band p {
+  max-width: 58ch;
+  margin: 0 !important;
+  color: #565651 !important;
+  -webkit-text-fill-color: #565651 !important;
+  font-size: 1.06rem !important;
+  line-height: 1.64 !important;
+}
+main.refined-home .home-doctors .doctor-trust-band > a {
+  align-self: center;
+  justify-self: end;
+  white-space: nowrap;
+}
+@media (max-width: 780px) {
+  main.refined-home .home-doctors .doctor-trust-band {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 1.3rem !important;
+    padding: 1.45rem !important;
+    border-radius: 17px !important;
+  }
+  main.refined-home .home-doctors .doctor-trust-band h3 {
+    font-size: clamp(1.62rem, 6vw, 2.25rem) !important;
+    line-height: 1.17 !important;
+  }
+  main.refined-home .home-doctors .doctor-trust-band p {
+    font-size: .98rem !important;
+  }
+  main.refined-home .home-doctors .doctor-trust-band > a {
+    width: 100% !important;
+    justify-self: stretch;
+  }
+}
