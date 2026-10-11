@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, CheckCircle2, Loader2, ShieldCheck } from "lucide-react";
+import { ArrowRight, CheckCircle2, Eye, EyeOff, Loader2, ShieldCheck } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { roleCanReturnTo } from "@/lib/roles";
@@ -44,6 +44,8 @@ export function PhoneSignupForm() {
   const [verifiedUserId, setVerifiedUserId] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [busy, setBusy] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const [error, setError] = useState("");
@@ -290,6 +292,50 @@ export function PhoneSignupForm() {
       </div>
 
       <div className={styles.field}>
+        <label htmlFor="signup-password">Enter new password</label>
+        <div className={styles.passwordWrap}>
+          <input
+            id="signup-password" type={showPassword ? "text" : "password"} autoComplete="new-password"
+            value={password} onChange={(event) => setPassword(event.target.value)}
+            placeholder="At least 8 characters" minLength={8} required
+          />
+          <button
+            type="button"
+            className={styles.passwordToggle}
+            onClick={() => setShowPassword((visible) => !visible)}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-pressed={showPassword}
+            aria-controls="signup-password"
+          >
+            {showPassword ? <EyeOff size={19} aria-hidden="true" /> : <Eye size={19} aria-hidden="true" />}
+          </button>
+        </div>
+      </div>
+      <div className={styles.field}>
+        <label htmlFor="signup-confirm">Confirm password</label>
+        <div className={styles.passwordWrap}>
+          <input
+            id="signup-confirm" type={showConfirmPassword ? "text" : "password"} autoComplete="new-password"
+            value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)}
+            placeholder="Re-enter your password" minLength={8} required
+          />
+          <button
+            type="button"
+            className={styles.passwordToggle}
+            onClick={() => setShowConfirmPassword((visible) => !visible)}
+            aria-label={showConfirmPassword ? "Hide confirmation password" : "Show confirmation password"}
+            aria-pressed={showConfirmPassword}
+            aria-controls="signup-confirm"
+          >
+            {showConfirmPassword ? <EyeOff size={19} aria-hidden="true" /> : <Eye size={19} aria-hidden="true" />}
+          </button>
+        </div>
+        {confirmPassword.length > 0 && password !== confirmPassword && (
+          <span className={styles.validation}>Passwords do not match.</span>
+        )}
+      </div>
+
+      <div className={styles.field}>
         <label htmlFor="signup-phone">Phone number</label>
         <div className={styles.phoneInput}>
           <span className={styles.prefix} aria-label="India country code">+91</span>
@@ -332,26 +378,6 @@ export function PhoneSignupForm() {
           <p className={styles.verified}><CheckCircle2 size={18} aria-hidden="true" /> Phone verified</p>
         )}
         {phoneHint && otpStage !== "verified" && <p className={styles.hint}>{phoneHint}</p>}
-      </div>
-
-      <div className={styles.field}>
-        <label htmlFor="signup-password">Enter new password</label>
-        <input
-          id="signup-password" type="password" autoComplete="new-password"
-          value={password} onChange={(event) => setPassword(event.target.value)}
-          placeholder="At least 8 characters" minLength={8} required
-        />
-      </div>
-      <div className={styles.field}>
-        <label htmlFor="signup-confirm">Confirm password</label>
-        <input
-          id="signup-confirm" type="password" autoComplete="new-password"
-          value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)}
-          placeholder="Re-enter your password" minLength={8} required
-        />
-        {confirmPassword.length > 0 && password !== confirmPassword && (
-          <span className={styles.validation}>Passwords do not match.</span>
-        )}
       </div>
 
       {error && <p className={styles.error} role="alert">{error}</p>}
