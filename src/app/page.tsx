@@ -46,7 +46,7 @@ const pillars = [
     id: "weight",
     title: "Medical Weight Loss",
     subtitle: "GLP-1 Metabolic Health Protocol",
-    desc: "Target the biological roots of appetite and insulin response with FDA-approved Semaglutide and Tirzepatide.",
+    desc: "The revolutionary GLP 1 peptide helps re-balance the appetite and satiety cycle and help you reach an ideal body weight naturally.",
     stats: "Avg. 15% weight reduction",
     timeline: "Noticeable in 4–8 weeks",
     highlights: ["Doctor-prescribed GLP-1 medications", "Regulates hunger and metabolic signals", "Ongoing dose titration & clinician support"],
