@@ -23,7 +23,7 @@ const metrics = [
   {
     figure: "100%",
     unit: "CLINICIAN-LED CARE",
-    label: "Human clinical oversight",
+    label: "Clinical oversight",
     index: "03 / CLINICAL CARE",
     description: "Clinical decisions belong to qualified clinicians. Treatment is offered only when considered appropriate.",
   },

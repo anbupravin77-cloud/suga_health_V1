@@ -31,7 +31,7 @@ type TimelineStep = { phase: string; label: string; description: string };
 const categories: { key: TimelineKey; title: string; suffix?: string }[] = [
   { key: "weight", title: "Weight Loss", suffix: "GLP-1" },
   { key: "hair", title: "Hair Regrowth" },
-  { key: "sexual", title: "Sexual Vitality" },
+  { key: "sexual", title: "Sexual Health" },
 ];
 
 function MilestoneCard({ step, index, forwardedRef }: {

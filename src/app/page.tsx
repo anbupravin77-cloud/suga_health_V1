@@ -68,7 +68,7 @@ const pillars = [
     id: "sexual",
     title: "Sexual Health",
     subtitle: "Performance & Endocrine Care",
-    desc: "Confidential, judgment-free clinical treatments for ED and vitality with compounded and brand Sildenafil & Tadalafil.",
+    desc: "Confidential, discreet, clinically proven medications to enhance your vitality and improve your sexual health.",
     stats: "95% clinical response rate",
     timeline: "Works in 30–60 minutes",
     highlights: ["On-demand or daily micro-dosing", "100% online & 100% confidential", "Delivered in unbranded discreet boxes"],
@@ -86,7 +86,7 @@ const heroSlides = pillars.map((pillar) => ({
 const howItWorks = [
   {
     step: "01",
-    title: "Share your details",
+    title: "Consultation",
     brief: "Tell us what you need help with.",
     detail: [
       "Choose a care area and describe your symptoms.",
@@ -164,7 +164,7 @@ const doctors = [
     name: "Dr. Julian Rivera",
     credentials: "MD",
     role: "Lead Urologist & Men’s Health Director",
-    specialty: "Endocrine Health & Sexual Vitality",
+    specialty: "Endocrine Health & Sexual Health",
     education: "Columbia University Vagelos College of Physicians",
     licensedStatesCount: 28,
     quote: "Restoring vitality through exact, evidence-based therapeutic dosing.",
@@ -547,7 +547,7 @@ export default function HomePage() {
               <div className="hero-action-grid" aria-label="Explore Suga Health care">
                 <Link href="/weight-loss" className="home-action-pill suga-btn suga-btn-secondary">Medical weight loss <ArrowUpRight size={16} /></Link>
                 <Link href="/hair-growth" className="home-action-pill suga-btn suga-btn-secondary">Hair growth <ArrowUpRight size={16} /></Link>
-                <Link href="/sexual-health" className="home-action-pill suga-btn suga-btn-secondary">Sexual health <ArrowUpRight size={16} /></Link>
+                <Link href="/sexual-health" className="home-action-pill suga-btn suga-btn-secondary">Sexual Health <ArrowUpRight size={16} /></Link>
                 <MotionLink href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} variant="magnetic" tone="hospital" className="home-action-pill home-action-primary suga-btn suga-btn-primary">Start consultation</MotionLink>
               </div>
             </div>
@@ -817,7 +817,7 @@ export default function HomePage() {
             <div className={productStyles.headingArea}>
               <SectionHeader centered hideEyebrow eyebrow="India treatment reference" title="Explore treatment options." subtitle="A reference gallery of real medicine brands marketed in India. Availability, suitability and prescribing are determined by a qualified clinician.">
                 <div className={`product-filter-bar ${productStyles.filterBar}`} role="group" aria-label="Filter medicines by treatment">
-                  {([["all","All Medicines"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Vitality"]] as const).map(([key,label]) => (
+                  {([["all","All Medicines"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Health"]] as const).map(([key,label]) => (
                     <button
                       key={key}
                       type="button"
@@ -940,8 +940,8 @@ export default function HomePage() {
       <footer className="bg-neutral-950 text-neutral-300 py-12 md:py-16 border-t border-neutral-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 mb-10 sm:mb-12">
-            <div className="md:col-span-6"><Link href="/" className="flex flex-col items-start mb-6"><span className="font-sans text-2xl tracking-tighter uppercase font-black text-white">SUGA<span className="text-neutral-500">.</span>HEALTH</span><span className="brand-tagline text-neutral-400 mt-0.5">live naturally</span></Link><p className="text-neutral-400 max-w-md text-sm leading-relaxed">Confidential, doctor-guided treatments for medical weight loss, hair restoration, and sexual vitality. Real treatments delivered with care and complete privacy.</p></div>
-            <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Clinical Treatments</h4><ul className="space-y-3 text-sm text-neutral-400"><li><Link href="/weight-loss">Medical Weight Loss (GLP-1)</Link></li><li><Link href="/hair-growth">Hair Regrowth & Density</Link></li><li><Link href="/sexual-health">Sexual Health & Performance</Link></li><li><Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition}>Start Online Consultation</Link></li></ul></div>
+            <div className="md:col-span-6"><Link href="/" className="flex flex-col items-start mb-6"><span className="font-sans text-2xl tracking-tighter uppercase font-black text-white">SUGA<span className="text-neutral-500">.</span>HEALTH</span><span className="brand-tagline text-neutral-400 mt-0.5">live naturally</span></Link><p className="text-neutral-400 max-w-md text-sm leading-relaxed">Confidential, doctor-guided treatments for medical weight loss, hair restoration, and sexual health. Real treatments delivered with care and complete privacy.</p></div>
+            <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Clinical Treatments</h4><ul className="space-y-3 text-sm text-neutral-400"><li><Link href="/weight-loss">Medical Weight Loss (GLP-1)</Link></li><li><Link href="/hair-growth">Hair Regrowth & Density</Link></li><li><Link href="/sexual-health">Sexual Health</Link></li><li><Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition}>Start Online Consultation</Link></li></ul></div>
             <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Medical Practice</h4><ul className="space-y-3 text-sm text-neutral-400"><li><a href="#doctors">Our Doctors & Medical Board</a></li><li><a href="#products">Our Products & Formulary</a></li><li><Link href="/about">About Our Clinical Mission</Link></li><li><Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition}>Patient Medical Intake</Link></li></ul></div>
           </div>
           <div className="pt-6 border-t border-neutral-800 text-xs text-neutral-500 space-y-2"><p>Suga.Health facilitates telehealth consultations through licensed medical professionals. Prescription products require an online evaluation with a licensed healthcare provider.</p><p>For emergencies, contact local emergency services.</p><p>© {new Date().getFullYear()} Suga.Health. All rights reserved.</p></div>
