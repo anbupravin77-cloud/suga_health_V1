@@ -211,7 +211,7 @@ const products = [
     "manufacturer": "Eli Lilly · distributed by Cipla",
     "image": "/images/products/yurpeak.webp",
     "imageAlt": "Concept photograph of a hand holding a pen-style injection device",
-    "description": "Yurpeak is Lilly's tirzepatide marketed in India through Cipla. The medicine is supplied in a multi-dose KwikPen presentation.",
+    "description": "Tirzepatide is a prescription injectable medicine. A clinician determines the appropriate indication, presentation, dosage and follow-up.",
     "clinicalNote": "Prescription required. Medical assessment and follow-up are essential."
   },
   {
@@ -235,7 +235,7 @@ const products = [
     "manufacturer": "Dr. Reddy's Laboratories",
     "image": "/images/products/mintop-5.webp",
     "imageAlt": "Illustration of a minoxidil-style hair treatment bottle",
-    "description": "Minoxidil topical solution is used for certain forms of pattern hair loss. The Mintop range includes 5% prescription topical formulations marketed in India.",
+    "description": "Topical minoxidil 5% is used for certain forms of pattern hair loss. A clinician can assess the cause of hair loss and the suitability of this treatment.",
     "clinicalNote": "Treatment choice varies by hair-loss diagnosis and patient factors."
   },
   {
@@ -259,7 +259,7 @@ const products = [
     "manufacturer": "Intas Pharmaceuticals",
     "image": "/images/products/lonitab.webp",
     "imageAlt": "Concept photograph of tablets and a blister strip",
-    "description": "Lonitab contains oral minoxidil, a medicine originally used to manage high blood pressure. Use for hair growth is off-label.",
+    "description": "Oral minoxidil was originally used to manage high blood pressure. Its use for hair growth is off-label and requires appropriate clinical supervision.",
     "clinicalNote": "Off-label hair-loss use requires careful clinician supervision due to possible cardiovascular effects."
   },
   {
@@ -889,18 +889,15 @@ export default function HomePage() {
         <div className="p-5 sm:p-7 space-y-5"><div><span className="legacy-label">Clinical Specialty</span><p className="text-sm text-neutral-700">{selectedDoctor.specialty}</p></div><div><span className="legacy-label">Board Certification</span><p className="text-sm text-neutral-700">{selectedDoctor.boardCertification}</p></div><div><span className="legacy-label">Education</span><p className="text-sm text-neutral-700">{selectedDoctor.education}</p></div><div><span className="legacy-label">About</span><p className="text-sm text-neutral-700">{selectedDoctor.bio}</p></div><div className="text-xs font-bold uppercase tracking-wider text-neutral-500">{selectedDoctor.yearsOfExperience} years clinical practice</div></div>
       </Modal>}
 
-      {selectedProduct && <Modal label={selectedProduct.name} onClose={() => setSelectedProduct(null)}>
+      {selectedProduct && <Modal label={selectedProduct.activeIngredients} onClose={() => setSelectedProduct(null)}>
         <div className="p-5 sm:p-7 bg-neutral-950 text-white">
           <span className="text-[10px] uppercase tracking-widest text-neutral-400 font-bold">Medicine information</span>
-          <h3 className="font-sans text-2xl sm:text-3xl font-extrabold text-white">{selectedProduct.name}</h3>
-          <p className="text-xs text-neutral-300 mt-1">{selectedProduct.activeIngredients}</p>
+          <h3 className="font-sans text-2xl sm:text-3xl font-extrabold text-white">{selectedProduct.activeIngredients}</h3>
+          <p className="text-xs text-neutral-300 mt-1">{selectedProduct.form}</p>
         </div>
         <div className="p-5 sm:p-7 space-y-5">
           <div><span className="legacy-label">Overview</span><p className="text-sm text-neutral-700">{selectedProduct.description}</p></div>
-          <div className="grid sm:grid-cols-2 gap-3">
-            <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200"><span className="legacy-label">Presentation</span><p className="text-xs font-bold text-neutral-900">{selectedProduct.form}</p></div>
-            <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200"><span className="legacy-label">Manufacturer / marketer</span><p className="text-xs font-bold text-neutral-900">{selectedProduct.manufacturer}</p></div>
-          </div>
+          <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200"><span className="legacy-label">Presentation</span><p className="text-xs font-bold text-neutral-900">{selectedProduct.form}</p></div>
           <div><span className="legacy-label">Important considerations</span><p className="text-sm text-neutral-700">{selectedProduct.clinicalNote}</p></div>
           <p className="text-xs text-neutral-500">Medicine names are for information only. This is not a confirmation that Suga.Health stocks or dispenses this product. Prescribing decisions are made by licensed clinicians.</p>
         </div>

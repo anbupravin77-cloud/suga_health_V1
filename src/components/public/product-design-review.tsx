@@ -11,14 +11,15 @@ type Medicine = {
   name: string;
   category: string;
   activeIngredients: string;
+  form: string;
   image: string;
   imageAlt: string;
 };
 
 const groups = [
-  { id: "weight", name: "Weight Loss", sequence: "01" },
-  { id: "hair", name: "Hair Growth", sequence: "02" },
-  { id: "sexual", name: "Sexual Health", sequence: "03" },
+  { id: "weight", name: "Weight Loss" },
+  { id: "hair", name: "Hair Growth" },
+  { id: "sexual", name: "Sexual Health" },
 ] as const;
 
 function MedicineCard<T extends Medicine>({
@@ -47,8 +48,8 @@ function MedicineCard<T extends Medicine>({
       </div>
       <div className={styles.info}>
         <span className={styles.category}>{treatment}</span>
-        <h4 className={styles.name}>{product.name}</h4>
-        <p className={styles.ingredients}>{product.activeIngredients}</p>
+        <h4 className={styles.name}>{product.activeIngredients}</h4>
+        <p className={styles.ingredients}>{product.form}</p>
       </div>
       <div className={styles.footer}>
         <MotionLink
@@ -64,7 +65,7 @@ function MedicineCard<T extends Medicine>({
           type="button"
           className={styles.secondary}
           onClick={() => onLearnMore(product)}
-          aria-label={`Learn more about ${product.name}`}
+          aria-label={`Learn more about ${product.activeIngredients}`}
         >
           Learn More
         </button>
@@ -88,7 +89,6 @@ export function ProductShowcase<T extends Medicine>({
             aria-labelledby={`showcase-${group.id}-title`}>
             <div className={styles.groupHeading}>
               <div className={styles.headingLabel}>
-                <span className={styles.categoryIndex}>{group.sequence} / TREATMENT AREA</span>
                 <h3 id={`showcase-${group.id}-title`}>{group.name}</h3>
               </div>
               <span className={styles.headingRule} aria-hidden="true" />

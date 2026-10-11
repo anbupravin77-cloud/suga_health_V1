@@ -26,16 +26,6 @@
 
 .headingLabel { flex: 0 0 auto; }
 
-.categoryIndex {
-  display: block;
-  color: #81817b !important;
-  font-size: 10px;
-  letter-spacing: .115em;
-  line-height: 1.5;
-  font-weight: 750;
-  margin-bottom: 6px;
-}
-
 :global(main.refined-home .home-formulary) .groupHeading h3 {
   margin: 0 !important;
   color: #151515 !important;
@@ -75,6 +65,7 @@
   grid-template-columns: minmax(0,1fr) !important;
   grid-template-rows: auto minmax(104px,1fr) auto !important;
   gap: 0 !important;
+  padding: 0 !important;
   overflow: hidden !important;
   border: 1px solid #e7e7e3 !important;
   border-radius: 24px !important;
@@ -265,7 +256,6 @@
   :global(main.refined-home .home-formulary) .groupHeading h3 {
     font-size: clamp(22px, 5.8vw, 27px) !important;
   }
-  .categoryIndex { font-size: 9px; margin-bottom: 3px; }
   .headingRule { margin: 0; }
   .swipeHint {
     display: inline-flex;
