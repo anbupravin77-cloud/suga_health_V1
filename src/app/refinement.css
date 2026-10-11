@@ -2224,6 +2224,32 @@ main.refined-home .voice-testimonial blockquote {
   margin: 0; color: #262622; font-family: var(--font-headline), Arial, sans-serif;
   font-size: clamp(1.32rem, 2.1vw, 1.9rem); font-weight: 500; line-height: 1.2; letter-spacing: -.027em;
 }
+
+/* Reserve the tallest testimonial at each viewport width to prevent carousel layout shift.
+   All text flows through the same grid cell; hidden copies determine its intrinsic height,
+   while only the active quote is visible and announced. */
+main.refined-home .voice-testimonial-quote-frame,
+main.refined-home .voice-testimonial-quote-sizer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+main.refined-home .voice-testimonial-quote-frame > *,
+main.refined-home .voice-testimonial-quote-sizer > blockquote {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+}
+main.refined-home .voice-testimonial-quote-frame {
+  align-items: center;
+}
+main.refined-home .voice-testimonial-quote-sizer {
+  visibility: hidden;
+  pointer-events: none;
+}
+main.refined-home .voice-testimonial-active-quote {
+  position: relative;
+}
 @keyframes voice-card-in { from { opacity: 0; transform: translate3d(0, 10px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
 
 @media (max-width: 900px) {

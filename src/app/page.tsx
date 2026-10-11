@@ -803,7 +803,14 @@ export default function HomePage() {
                   <span>Age {customerVoices[voiceIndex].age}</span>
                 </div>
               </div>
-              <blockquote>“{customerVoices[voiceIndex].quote}”</blockquote>
+              <div className="voice-testimonial-quote-frame">
+                <div className="voice-testimonial-quote-sizer" aria-hidden="true">
+                  {customerVoices.map((customer) => (
+                    <blockquote key={customer.id}>“{customer.quote}”</blockquote>
+                  ))}
+                </div>
+                <blockquote className="voice-testimonial-active-quote">“{customerVoices[voiceIndex].quote}”</blockquote>
+              </div>
             </article>
           </div>
         </section>
