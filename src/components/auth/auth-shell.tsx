@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-export function AuthShell({ children }: { title: string; description: string; children: ReactNode }) {
+export function AuthShell({ title, description, children }: { title: string; description: string; children: ReactNode }) {
   return (
     <main className="auth-surface">
       <div className="auth-studio-shape auth-studio-shape-one" aria-hidden="true" />
@@ -15,6 +15,11 @@ export function AuthShell({ children }: { title: string; description: string; ch
             </span>
             <span className="brand-tagline auth-brand-tagline">live naturally</span>
           </Link>
+        </div>
+
+        <div className="auth-intro">
+          <h1>{title}</h1>
+          <p>{description}</p>
         </div>
 
         {children}

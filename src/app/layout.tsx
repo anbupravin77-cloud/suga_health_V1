@@ -3,6 +3,7 @@ import { Cormorant_Garamond, DM_Sans, Open_Sans, Source_Sans_3 } from "next/font
 import "./globals.css";
 import "./refinement.css";
 import "./readability.css";
+import "./auth-refinement.css";
 
 const brand = Cormorant_Garamond({
   subsets: ["latin"],
