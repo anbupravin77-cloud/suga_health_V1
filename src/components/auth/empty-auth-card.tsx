@@ -5,7 +5,7 @@ import styles from "./empty-auth-card.module.css";
  * Intentionally blank until each UI element is approved.
  * The previous AuthForm and AuthShell are preserved for later reuse.
  */
-export function EmptyAuthCard() {
+export function EmptyAuthCard({ heading }: { heading?: string }) {
   return (
     <main className={styles.page}>
       <section className={styles.card} aria-label="Authentication design card">
@@ -15,6 +15,7 @@ export function EmptyAuthCard() {
           </span>
           <span className={styles.tagline} aria-hidden="true">live naturally</span>
         </div>
+        {heading && <h1 className={styles.heading}>{heading}</h1>}
       </section>
     </main>
   );

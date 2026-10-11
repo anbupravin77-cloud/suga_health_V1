@@ -1,4 +1,4 @@
-/* Step-by-step auth design canvas: brand lockup only, no controls yet. */
+/* Step-by-step auth design canvas: brand lockup and optional page heading. */
 .page {
   box-sizing: border-box;
   min-height: 100svh;
@@ -65,4 +65,23 @@
   .logo { margin-top: 33px; }
   .wordmark { font-size: clamp(1.58rem, 7.2vw, 1.84rem); }
   .tagline { font-size: .64rem; letter-spacing: .28em; }
+}
+
+/* Signup heading uses Inter explicitly, separate from the existing brand lockup. */
+.heading {
+  margin: clamp(33px, 5vw, 45px) 18px 0;
+  color: #11110f;
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: clamp(1.52rem, 3vw, 1.78rem);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -.045em;
+  text-align: center;
+  text-wrap: balance;
+}
+@media (max-width: 640px) {
+  .heading {
+    font-size: clamp(1.42rem, 5.4vw, 1.65rem);
+    margin-top: 36px;
+  }
 }
