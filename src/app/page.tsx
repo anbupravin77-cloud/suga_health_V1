@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import productStyles from "@/components/public/product-gallery.module.css";
 import { Inter } from "next/font/google";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -30,6 +29,7 @@ import { LivingMetrics } from "@/components/public/living-metrics";
 import { MilestoneJourney } from "@/components/public/milestone-journey";
 import { DoctorSpotlight } from "@/components/public/doctor-spotlight";
 import { MotionLink } from "@/components/public/motion-link";
+import { ProductDesignReview } from "@/components/public/product-design-review";
 import doctorStyles from "@/components/public/doctor-spotlight.module.css";
 
 const homeInter = Inter({ subsets: ["latin"], variable: "--font-home", display: "swap" });
@@ -299,12 +299,6 @@ const products = [
     "clinicalNote": "Prescription-only use; a clinician must review interactions and precautions."
   }
 ];
-
-const productGroups = [
-  { key: "weight", title: "Weight Loss" },
-  { key: "hair", title: "Hair Growth" },
-  { key: "sexual", title: "Sexual Health" },
-] as const;
 
 const customerVoices = [
   { id: "sample-01", name: "Sample customer 01", age: 32, photo: "https://i.pravatar.cc/320?img=47", quote: "Sample copy: I felt heard, and the next steps were explained in a way I could actually follow." },
@@ -820,60 +814,7 @@ export default function HomePage() {
               <SectionHeader centered hideEyebrow eyebrow="India treatment reference" title="Explore treatment options." subtitle="A reference gallery of real medicine brands marketed in India. Availability, suitability and prescribing are determined by a qualified clinician." />
             </div>
 
-            <div className={productStyles.groupStack}>
-              {productGroups.map((group) => (
-                <section key={group.key} className={productStyles.productGroup} aria-labelledby={"product-heading-" + group.key}>
-                  <div className={productStyles.groupHeading}>
-                    <h3 id={"product-heading-" + group.key}>{group.title}</h3>
-                    <span className={productStyles.groupRule} aria-hidden="true" />
-                    <span className={productStyles.swipeHint} aria-hidden="true">
-                      Swipe to browse <ArrowRight size={14} />
-                    </span>
-                  </div>
-                  <div className={productStyles.gallery} role="region" aria-label={group.title + " medicine gallery"} tabIndex={0}>
-                    {products.filter((product) => product.category === group.key).map((product) => (
-                <article key={product.id} className={productStyles.compactCard}>
-                  <div className={productStyles.photoFrame}>
-                    <Image
-                      src={product.image}
-                      alt={product.imageAlt}
-                      fill
-                      sizes="(max-width: 700px) 38vw, (max-width: 1000px) 24vw, 14vw"
-                      className={productStyles.photo}
-                    />
-                    <span className={productStyles.imageDisclosure}>Illustrative image</span>
-                  </div>
-
-                  <div className={productStyles.cardInfo}>
-                    <span className={productStyles.category}>
-                      {product.category === "weight" ? "Weight management" : product.category === "hair" ? "Hair restoration" : "Sexual health"}
-                    </span>
-                    <h3 className={productStyles.name}>{product.name}</h3>
-                    <p className={productStyles.ingredients}>{product.activeIngredients}</p>
-                  </div>
-
-                  <div className={productStyles.footer}>
-                    <div className={productStyles.actions}>
-                      <MotionLink
-                        href="/sign-up?next=%2Fconsultation%2Fstart"
-                        onClick={rememberReturnPosition}
-                        variant="morph"
-                        alternateLabel="Begin Your Care"
-                        className={productStyles.startButton}
-                      >
-                        Get Started
-                      </MotionLink>
-                      <button type="button" className={productStyles.detailsButton} onClick={() => setSelectedProduct(product)}>
-                        Learn More
-                      </button>
-                    </div>
-                  </div>
-                </article>
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </div>
+            <ProductDesignReview products={products} onLearnMore={setSelectedProduct} />
             <div className="formulary-assurance">
               <span><ShieldCheck size={16} />Illustrative AI-generated images. Device shapes, pill imprints and packaging may differ from real products.</span>
               
