@@ -236,34 +236,75 @@
 }
 
 
-/* Hero CTA only: white-filled hospital-red consultation button.
-   Overrides the legacy black primary-button cascade without changing the
-   Magnetic Flux transform, routing, or other primary CTAs. */
+/* Hero consultation CTA: dark signature capsule + hospital-red arrow medallion.
+   Magnetic Flux cursor motion, Next Link routing and focus behavior are preserved. */
 :global(main.refined-home .hero-action-grid) .motion.hospital {
-  background: #ffffff !important;
-  background-color: #ffffff !important;
+  background: #171717 !important;
+  background-color: #171717 !important;
   background-image: none !important;
-  border: 1px solid #d32f2f !important;
-  color: #d32f2f !important;
-  -webkit-text-fill-color: #d32f2f !important;
+  border: 1px solid #171717 !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  padding: 6px 7px 6px 17px !important;
+  gap: clamp(10px, 1.65vw, 20px) !important;
+  justify-content: center !important;
+  border-radius: 999px !important;
 }
 :global(main.refined-home .hero-action-grid) .motion.hospital .surface {
-  background: #ffffff !important;
+  background: #171717 !important;
 }
-:global(main.refined-home .hero-action-grid) .motion.hospital .label,
-:global(main.refined-home .hero-action-grid) .motion.hospital .icon,
+:global(main.refined-home .hero-action-grid) .motion.hospital .label {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  font-weight: 650 !important;
+}
+:global(main.refined-home .hero-action-grid) .motion.hospital .icon {
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  border-radius: 50%;
+  background: #d32f2f;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.1);
+}
 :global(main.refined-home .hero-action-grid) .motion.hospital .icon svg {
-  color: #d32f2f !important;
-  -webkit-text-fill-color: #d32f2f !important;
-  stroke: #d32f2f !important;
+  color: #fff !important;
+  stroke: #fff !important;
+  width: 17px;
+  height: 17px;
 }
 @media (hover: hover) and (pointer: fine) {
   :global(main.refined-home .hero-action-grid) .motion.hospital:hover {
-    background: #ffffff !important;
-    border-color: #bc2626 !important;
-    box-shadow: 0 12px 24px rgba(211, 47, 47, .13) !important;
+    background: #171717 !important;
+    border-color: #171717 !important;
+    box-shadow: 0 12px 27px rgba(0,0,0,.16) !important;
+  }
+  :global(main.refined-home .hero-action-grid) .motion.hospital:hover .icon {
+    background: #b71c1c;
+    box-shadow: 0 0 0 5px rgba(211,47,47,.15);
+    transform: translateX(3px);
   }
 }
 :global(main.refined-home .hero-action-grid) .motion.hospital:focus-visible {
-  outline-color: #d32f2f !important;
+  outline: 2px solid #d32f2f !important;
+  outline-offset: 4px;
 }
+@media (max-width: 720px) {
+  :global(main.refined-home .hero-action-grid) .motion.hospital {
+    padding: 5px 6px 5px 12px !important;
+    gap: 9px !important;
+  }
+  :global(main.refined-home .hero-action-grid) .motion.hospital .icon {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :global(main.refined-home .hero-action-grid) .motion.hospital .icon {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+

@@ -300,6 +300,12 @@ const products = [
   }
 ];
 
+const productGroups = [
+  { key: "weight", title: "Weight Loss" },
+  { key: "hair", title: "Hair Growth" },
+  { key: "sexual", title: "Sexual Health" },
+] as const;
+
 const customerVoices = [
   { id: "sample-01", name: "Sample customer 01", age: 32, photo: "https://i.pravatar.cc/320?img=47", quote: "Sample copy: I felt heard, and the next steps were explained in a way I could actually follow." },
   { id: "sample-02", name: "Sample customer 02", age: 41, photo: "https://i.pravatar.cc/320?img=12", quote: "Sample copy: Having one clear place for my consultation and follow-up made care feel much simpler." },
@@ -332,8 +338,6 @@ type Product = (typeof products)[number];
 type Doctor = (typeof doctors)[number];
 
 export default function HomePage() {
-  const [productCategory, setProductCategory] = useState("all");
-  const productGalleryRef = useRef<HTMLDivElement>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -485,8 +489,6 @@ export default function HomePage() {
     revealTargets.forEach((element) => observer.observe(element));
     return () => observer.disconnect();
   }, []);
-
-  const visibleProducts = productCategory === "all" ? products : products.filter((product) => product.category === productCategory);
 
   return (
     <main className={`legacy-public refined-home ${homeInter.variable} min-h-screen bg-white text-black overflow-x-hidden`}>
@@ -815,31 +817,21 @@ export default function HomePage() {
         <section id="products" className={`home-formulary home-editorial-section bg-white ${productStyles.productSection}`}>
           <div className="home-section-shell">
             <div className={productStyles.headingArea}>
-              <SectionHeader centered hideEyebrow eyebrow="India treatment reference" title="Explore treatment options." subtitle="A reference gallery of real medicine brands marketed in India. Availability, suitability and prescribing are determined by a qualified clinician.">
-                <div className={`product-filter-bar ${productStyles.filterBar}`} role="group" aria-label="Filter medicines by treatment">
-                  {([["all","All Medicines"],["weight","Weight Loss"],["hair","Hair Growth"],["sexual","Sexual Health"]] as const).map(([key,label]) => (
-                    <button
-                      key={key}
-                      type="button"
-                      aria-pressed={productCategory === key}
-                      onClick={() => {
-                        productGalleryRef.current?.scrollTo({ left: 0, behavior: "auto" });
-                        setProductCategory(key);
-                      }}
-                      className={productCategory === key ? "product-filter active" : "product-filter"}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </SectionHeader>
+              <SectionHeader centered hideEyebrow eyebrow="India treatment reference" title="Explore treatment options." subtitle="A reference gallery of real medicine brands marketed in India. Availability, suitability and prescribing are determined by a qualified clinician." />
             </div>
 
-            <p className={productStyles.swipeHint} id="product-swipe-hint">
-              Swipe to explore medicines <ArrowRight size={14} aria-hidden="true" />
-            </p>
-            <div ref={productGalleryRef} className={productStyles.gallery} role="region" aria-label="Medicine reference gallery" aria-describedby="product-swipe-hint" tabIndex={0}>
-              {visibleProducts.map((product) => (
+            <div className={productStyles.groupStack}>
+              {productGroups.map((group) => (
+                <section key={group.key} className={productStyles.productGroup} aria-labelledby={"product-heading-" + group.key}>
+                  <div className={productStyles.groupHeading}>
+                    <h3 id={"product-heading-" + group.key}>{group.title}</h3>
+                    <span className={productStyles.groupRule} aria-hidden="true" />
+                    <span className={productStyles.swipeHint} aria-hidden="true">
+                      Swipe to browse <ArrowRight size={14} />
+                    </span>
+                  </div>
+                  <div className={productStyles.gallery} role="region" aria-label={group.title + " medicine gallery"} tabIndex={0}>
+                    {products.filter((product) => product.category === group.key).map((product) => (
                 <article key={product.id} className={productStyles.compactCard}>
                   <div className={productStyles.photoFrame}>
                     <Image
@@ -877,6 +869,9 @@ export default function HomePage() {
                     </div>
                   </div>
                 </article>
+                    ))}
+                  </div>
+                </section>
               ))}
             </div>
             <div className="formulary-assurance">
