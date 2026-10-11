@@ -231,3 +231,55 @@ main:is(.refined-home, .refined-treatment) footer h4 {
     font-size: .9rem !important;
   }
 }
+
+
+/*
+ * Dark-surface contrast restoration.
+ * The legacy homepage-wide monochrome selector in globals.css assigns black
+ * to paragraphs, links and spans even inside dark surfaces. Give those elements
+ * explicit foreground colors without affecting the new readability font sizes.
+ */
+main.refined-home .home-comparison .comparison-traditional .home-kicker {
+  color: #c8c8c3 !important;
+  -webkit-text-fill-color: #c8c8c3 !important;
+}
+main.refined-home .home-comparison .comparison-traditional .comparison-row p {
+  color: #eeeeda !important;
+  -webkit-text-fill-color: #eeeeda !important;
+}
+main.refined-home .home-comparison .comparison-traditional .comparison-row b {
+  color: #bcbcb5 !important;
+  -webkit-text-fill-color: #bcbcb5 !important;
+}
+main.refined-home .home-comparison .comparison-suga .comparison-row p,
+main.refined-home .home-comparison .comparison-suga .comparison-row b {
+  color: #171715 !important;
+  -webkit-text-fill-color: #171715 !important;
+}
+
+/* Homepage footer uses a dark canvas, so preserve its intended white/grey hierarchy. */
+main.refined-home > footer h4,
+main.refined-home > footer .font-black,
+main.refined-home > footer .font-black span:not(.text-neutral-500) {
+  color: #f7f7f5 !important;
+  -webkit-text-fill-color: #f7f7f5 !important;
+}
+main.refined-home > footer .font-black span.text-neutral-500,
+main.refined-home > footer .brand-tagline {
+  color: #aaa9a5 !important;
+  -webkit-text-fill-color: #aaa9a5 !important;
+}
+main.refined-home > footer p,
+main.refined-home > footer p span {
+  color: #b9b9b5 !important;
+  -webkit-text-fill-color: #b9b9b5 !important;
+}
+main.refined-home > footer li,
+main.refined-home > footer li a {
+  color: #d6d6d2 !important;
+  -webkit-text-fill-color: #d6d6d2 !important;
+}
+main.refined-home > footer li a:is(:hover, :focus-visible) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
