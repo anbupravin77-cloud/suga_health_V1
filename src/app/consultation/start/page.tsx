@@ -21,11 +21,9 @@ export default async function StartConsultationPage({
   const { user } = await requireRole("patient");
   const { fresh } = await searchParams;
   const replayFirstTime = fresh === "1" && isQaPatient(user.id);
-  // Test-only navigation shortcut. Must never render in a production deployment,
-  // even when a QA identity signs in there. It does not save or submit data.
-  const showQaSkip =
-    (process.env.VERCEL_ENV === "preview" || process.env.NODE_ENV === "development") &&
-    isQaPatient(user.id);
+  // Test-only shortcut for the authenticated QA patient account, including
+  // production. This only navigates to the dashboard; it never submits data.
+  const showQaSkip = isQaPatient(user.id);
 
   // Only the verified QA patient receives blank onboarding fields. No database
   // profile or consultation records are erased when replaying the experience.
