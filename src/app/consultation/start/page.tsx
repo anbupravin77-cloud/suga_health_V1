@@ -48,8 +48,7 @@ export default async function StartConsultationPage({
       </header>
       <div className="standalone-intake-content">
         <div className="standalone-intake-intro">
-          <h1>Your health consultation</h1>
-          <p>Complete the details below on one page. Your answers are sent for clinical review when you submit.</p>
+          <h1>Suga Health Consultation</h1>
           {replayFirstTime && (
             <p className="standalone-intake-qa-note" role="status">
               Test mode: your saved profile details are prefilled. Consultation answers start fresh, and past consultations are preserved.

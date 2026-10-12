@@ -6,6 +6,9 @@ import {
   LoaderCircle,
   Save,
   ShieldCheck,
+  Scale,
+  Waves,
+  HeartPulse,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -73,18 +76,18 @@ const conditionOptions = [
 const careAreas = [
   {
     id: "weight",
-    title: "Weight Loss",
-    description: "Discuss medically guided weight-management options.",
+    title: "Weight loss",
+    icon: Scale,
   },
   {
     id: "hair",
-    title: "Hair Growth",
-    description: "Explore treatment for thinning or pattern hair loss.",
+    title: "Hair growth",
+    icon: Waves,
   },
   {
     id: "sex",
-    title: "Sexual Health",
-    description: "Discuss sexual health concerns confidentially.",
+    title: "Sexual health",
+    icon: HeartPulse,
   },
 ];
 
@@ -571,7 +574,6 @@ export function ConsultationForm({
   return (
     <form className="patient-intake consultation-onepage" onSubmit={(event) => { event.preventDefault(); void handleSubmit(); }} noValidate>
       <div className="consultation-onepage-toolbar">
-        <span>Private health consultation</span>
         <button
           type="button"
           className="patient-save-draft"
@@ -584,27 +586,30 @@ export function ConsultationForm({
       </div>
 
       <section className="consultation-onepage-section" id="care-area">
-            <div className="patient-intake-copy">
-              <h2>What would you like help with?</h2>
-              <p>Choose the care you need. A clinician will review your answers before recommending next steps.</p>
+            <div className="patient-intake-copy consultation-care-heading">
+              <div className="consultation-care-title">
+                <span className="consultation-care-number" aria-hidden="true">01</span>
+                <h2>What brings you in today?</h2>
+              </div>
+              <p>Choose one. Your doctor will look at the whole picture.</p>
             </div>
 
-            <div className="patient-care-choice-grid">
-              {careAreas.map((area) => (
-                <button
-                  type="button"
-                  key={area.id}
-                  className={form.primaryConcern === area.id ? "is-selected" : ""}
-                  onClick={() => patch("primaryConcern", area.id)}
-                  aria-pressed={form.primaryConcern === area.id}
-                >
-                  <span className="patient-choice-check">
-                    {form.primaryConcern === area.id && <Check size={15} />}
-                  </span>
-                  <strong>{area.title}</strong>
-                  <small>{area.description}</small>
-                </button>
-              ))}
+            <div className="patient-care-choice-grid consultation-care-options" role="group" aria-label="Choose a care area">
+              {careAreas.map((area) => {
+                const Icon = area.icon;
+                return (
+                  <button
+                    type="button"
+                    key={area.id}
+                    className={form.primaryConcern === area.id ? "is-selected" : ""}
+                    onClick={() => patch("primaryConcern", area.id)}
+                    aria-pressed={form.primaryConcern === area.id}
+                  >
+                    <Icon className="consultation-care-icon" size={20} strokeWidth={1.8} aria-hidden="true" />
+                    <strong>{area.title}</strong>
+                  </button>
+                );
+              })}
             </div>
             {form.primaryConcern && (
               <div className="patient-form-grid">
