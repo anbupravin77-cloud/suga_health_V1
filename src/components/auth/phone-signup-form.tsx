@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, CheckCircle2, Eye, EyeOff, Loader2, ShieldCheck } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { roleCanReturnTo } from "@/lib/roles";
 import styles from "./phone-signup-form.module.css";
 
 type Gender = "" | "male" | "female" | "other" | "prefer-not-to-say";
@@ -206,8 +205,10 @@ export function PhoneSignupForm() {
         return;
       }
 
-      const next = new URLSearchParams(window.location.search).get("next");
-      router.replace(next && roleCanReturnTo("patient", next) ? next : "/patient");
+      // A newly registered real patient begins clinical intake immediately.
+      // An existing patient using "New Consultation" reaches this same form
+      // via /patient/consultations/new. The testing skip is QA-ID gated there.
+      router.replace("/consultation/start");
       router.refresh();
     } catch {
       setError("Unable to finish registration. Please try again.");

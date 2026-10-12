@@ -6,6 +6,7 @@ import { ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { isAppRole, roleCanReturnTo, roleHome } from "@/lib/roles";
+import { isQaPatient, QA_FRESH_INTAKE_PATH } from "@/lib/qa-patient";
 import styles from "./patient-login-form.module.css";
 
 /**
@@ -57,12 +58,15 @@ export function StaffLoginForm() {
         return;
       }
 
-      // Existing QA patient accounts go to their dashboard on this testing
-      // entry point; normal patient login retains its own intake redirect.
+      // This single verified QA patient rehearses the first-time consultation
+      // on every login (including the admin/test entry point). All other users
+      // retain standard role-safe routing and cannot access a testing skip.
       const requestedNext = new URLSearchParams(window.location.search).get("next");
-      const destination = requestedNext && roleCanReturnTo(profile.role, requestedNext)
-        ? requestedNext
-        : roleHome(profile.role);
+      const destination = profile.role === "patient" && isQaPatient(data.user.id)
+        ? QA_FRESH_INTAKE_PATH
+        : requestedNext && roleCanReturnTo(profile.role, requestedNext)
+          ? requestedNext
+          : roleHome(profile.role);
 
       router.replace(destination);
       router.refresh();
