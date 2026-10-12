@@ -1016,7 +1016,7 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   background: #171717;
   color: #fff;
   font-size: 15px;
-  font-weight: 750;
+  font-weight: 650;
 }
 .standalone-intake .consultation-last-actions .patient-primary-button:hover:not(:disabled) {
   background: #333;
