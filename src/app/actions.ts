@@ -91,7 +91,6 @@ function buildConsultationRecord(formData: FormData, patientId: string) {
               },
       consent_truth: checked(formData, "consent_truth"),
       consent_telehealth: checked(formData, "consent_telehealth"),
-      consent_privacy: checked(formData, "consent_privacy"),
     },
   };
 }
@@ -185,10 +184,9 @@ export async function submitConsultation(formData: FormData) {
   try {
     const consentOk =
       checked(formData, "consent_truth") &&
-      checked(formData, "consent_telehealth") &&
-      checked(formData, "consent_privacy");
+      checked(formData, "consent_telehealth");
 
-    if (!consentOk) return { ok: false, error: "All three consent statements are required." };
+    if (!consentOk) return { ok: false, error: "Please confirm both statements before submitting." };
 
     const record = buildConsultationRecord(formData, user.id);
     const responses = record.responses as Record<string, unknown>;

@@ -58,16 +58,15 @@ type FormState = {
   sexualNitrates: string;
   consentTruth: boolean;
   consentTelehealth: boolean;
-  consentPrivacy: boolean;
 };
 
 const conditionOptions = [
-  "Hypertension (High Blood Pressure)",
-  "Type 2 Diabetes / Prediabetes",
-  "Thyroid disease or family history of MTC",
-  "Cardiovascular or kidney conditions",
-  "Currently pregnant or breastfeeding",
-  "None of the above",
+  { value: "Hypertension (High Blood Pressure)", label: "High blood pressure" },
+  { value: "Type 2 Diabetes / Prediabetes", label: "Type 2 diabetes or prediabetes" },
+  { value: "Thyroid disease or family history of MTC", label: "Thyroid problems, or medullary thyroid cancer (MTC) in you or your family" },
+  { value: "Cardiovascular or kidney conditions", label: "Heart or kidney problems" },
+  { value: "Currently pregnant or breastfeeding", label: "Currently pregnant or breastfeeding" },
+  { value: "None of the above", label: "None of the above" },
 ];
 
 const careAreas = [
@@ -158,7 +157,6 @@ function initialState(draft?: Draft, defaults?: IntakeDefaults): FormState {
     sexualNitrates: readString(treatment.nitrates_or_activity_restriction),
     consentTruth: r.consent_truth === true,
     consentTelehealth: r.consent_telehealth === true,
-    consentPrivacy: r.consent_privacy === true,
   };
 }
 
@@ -274,13 +272,13 @@ export function ConsultationForm({
     data.set("sexual_nitrates", form.sexualNitrates);
     data.set("consent_truth", String(form.consentTruth));
     data.set("consent_telehealth", String(form.consentTelehealth));
-    data.set("consent_privacy", String(form.consentPrivacy));
     return data;
   }
 
   function validate(currentStep: number) {
-    if (currentStep === 1 && !form.primaryConcern) {
-      return "Choose what you would like help with.";
+    if (currentStep === 1) {
+      if (!form.primaryConcern) return "Choose the type of care you need.";
+      if (!form.careGoal.trim()) return "Tell us a little about what brought you here.";
     }
 
     if (currentStep === 2) {
@@ -318,8 +316,6 @@ export function ConsultationForm({
     }
 
     if (currentStep === 5) {
-      if (!form.careGoal.trim()) return "Briefly describe what you want help with.";
-
       if (form.primaryConcern === "weight") {
         if (!form.weightPreviousGlp1) return "Tell us whether you have used a GLP-1 medicine before.";
         if (!form.weightDigestiveHistory) return "Answer the digestive-health screening question.";
@@ -340,9 +336,9 @@ export function ConsultationForm({
 
     if (
       currentStep === 6 &&
-      (!form.consentTruth || !form.consentTelehealth || !form.consentPrivacy)
+      (!form.consentTruth || !form.consentTelehealth)
     ) {
-      return "All three consent statements are required before submission.";
+      return "Please confirm both statements before submitting.";
     }
 
     return "";
@@ -449,7 +445,7 @@ export function ConsultationForm({
       <section className="consultation-onepage-section" id="care-area">
             <div className="patient-intake-copy">
               <h2>What would you like help with?</h2>
-              <p>Choose the care area for this consultation.</p>
+              <p>Choose the care you need. A clinician will review your answers before recommending next steps.</p>
             </div>
 
             <div className="patient-care-choice-grid">
@@ -469,13 +465,27 @@ export function ConsultationForm({
                 </button>
               ))}
             </div>
+            {form.primaryConcern && (
+              <div className="patient-form-grid">
+                <label className="patient-form-field patient-wide-field">
+                  <span>In your own words, what brings you here today?</span>
+                  <textarea
+                    rows={5}
+                    value={form.careGoal}
+                    onChange={(e) => patch("careGoal", e.target.value)}
+                    placeholder="Tell us what you're experiencing, when it started, and what you'd like help with."
+                    maxLength={3000}
+                  />
+                </label>
+              </div>
+            )}
         {invalidSection === "care-area" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
       </section>
 
       <section className="consultation-onepage-section" id="about-you">
             <div className="patient-intake-copy">
               <h2>About you</h2>
-              <p>Confirm your basic details once. We use them with your consultation, without a separate profile setup.</p>
+              <p>Check the details from your account and fill in anything missing. These help your clinician assess which treatments may be suitable.</p>
             </div>
 
             <div className="patient-form-grid">
@@ -522,12 +532,13 @@ export function ConsultationForm({
               </label>
 
               <label className="patient-form-field">
-                <span>Sex</span>
+                <span>Sex for medical screening</span>
                 <select value={form.sex} onChange={(e) => patch("sex", e.target.value)}>
                   <option value="">Select</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                   <option value="intersex">Intersex</option>
+                   <option value="other">Other</option>
                   <option value="prefer-not-to-say">Prefer not to say</option>
                 </select>
               </label>
@@ -538,37 +549,37 @@ export function ConsultationForm({
 
       <section className="consultation-onepage-section" id="medical-history">
             <div className="patient-intake-copy">
-              <h2>Medical history</h2>
-              <p>Select any conditions that apply and add other relevant history if needed.</p>
+              <h2>Your health history</h2>
+              <p>Choose any health conditions that apply to you. Your clinician can ask for further details if needed.</p>
             </div>
 
             <fieldset className="patient-history-fieldset">
-              <legend>Do any of these apply to you?</legend>
+              <legend>Do you have, or have you previously had, any of these conditions?</legend>
               <div className="patient-condition-grid">
                 {conditionOptions.map((condition) => (
                   <button
                     type="button"
-                    key={condition}
-                    className={form.conditions.includes(condition) ? "is-selected" : ""}
-                    onClick={() => toggleCondition(condition)}
-                    aria-pressed={form.conditions.includes(condition)}
+                    key={condition.value}
+                    className={form.conditions.includes(condition.value) ? "is-selected" : ""}
+                    onClick={() => toggleCondition(condition.value)}
+                    aria-pressed={form.conditions.includes(condition.value)}
                   >
-                    <span>{form.conditions.includes(condition) ? <Check size={14} /> : null}</span>
-                    {condition}
+                    <span>{form.conditions.includes(condition.value) ? <Check size={14} /> : null}</span>
+                    {condition.label}
                   </button>
                 ))}
               </div>
             </fieldset>
 
             <div className="patient-form-field patient-wide-field consultation-answer-question">
-              <span id="additional-history-label">Any other medical history to share?</span>
+              <span id="additional-history-label">Is there anything else about your health your clinician should know?</span>
               <div className="consultation-binary-options" role="group" aria-labelledby="additional-history-label">
-                <button type="button" aria-pressed={form.medicalHistoryChoice === "none"} className={form.medicalHistoryChoice === "none" ? "is-selected" : ""} onClick={() => chooseAnswer("medicalHistory", "none")}>None</button>
+                <button type="button" aria-pressed={form.medicalHistoryChoice === "none"} className={form.medicalHistoryChoice === "none" ? "is-selected" : ""} onClick={() => chooseAnswer("medicalHistory", "none")}>No</button>
                 <button type="button" aria-pressed={form.medicalHistoryChoice === "yes"} className={form.medicalHistoryChoice === "yes" ? "is-selected" : ""} onClick={() => chooseAnswer("medicalHistory", "yes")}>Yes</button>
               </div>
               {form.medicalHistoryChoice === "yes" && (
                 <label className="consultation-reveal-field">
-                  <span>Tell us what else your clinician should know</span>
+                  <span>Tell us about any other conditions, surgeries or important health concerns</span>
                   <textarea
                     rows={4}
                     value={form.medicalHistory}
@@ -583,20 +594,20 @@ export function ConsultationForm({
 
       <section className="consultation-onepage-section" id="medications">
         <div className="patient-intake-copy">
-          <h2>Medications and allergies</h2>
-          <p>Select None or Yes. Add details only when they apply to you.</p>
+          <h2>Medicines and allergies</h2>
+          <p>Answer these safety questions and add details only where needed.</p>
         </div>
 
         <div className="patient-form-grid consultation-answer-grid">
           <div className="patient-form-field consultation-answer-question">
-            <span id="current-medications-label">Are you currently taking any medications?</span>
+            <span id="current-medications-label">Are you taking any medicines or supplements?</span>
             <div className="consultation-binary-options" role="group" aria-labelledby="current-medications-label">
-              <button type="button" aria-pressed={form.currentMedicationsChoice === "none"} className={form.currentMedicationsChoice === "none" ? "is-selected" : ""} onClick={() => chooseAnswer("currentMedications", "none")}>None</button>
+              <button type="button" aria-pressed={form.currentMedicationsChoice === "none"} className={form.currentMedicationsChoice === "none" ? "is-selected" : ""} onClick={() => chooseAnswer("currentMedications", "none")}>No</button>
               <button type="button" aria-pressed={form.currentMedicationsChoice === "yes"} className={form.currentMedicationsChoice === "yes" ? "is-selected" : ""} onClick={() => chooseAnswer("currentMedications", "yes")}>Yes</button>
             </div>
             {form.currentMedicationsChoice === "yes" && (
               <label className="consultation-reveal-field">
-                <span>Which medications are you taking?</span>
+                <span>What are you taking? Include names and doses if you know them.</span>
                 <textarea
                   rows={4}
                   value={form.currentMedications}
@@ -608,14 +619,14 @@ export function ConsultationForm({
           </div>
 
           <div className="patient-form-field consultation-answer-question">
-            <span id="drug-allergies-label">Do you have any known drug allergies?</span>
+            <span id="drug-allergies-label">Have you ever had an allergic reaction to a medicine?</span>
             <div className="consultation-binary-options" role="group" aria-labelledby="drug-allergies-label">
-              <button type="button" aria-pressed={form.allergiesChoice === "none"} className={form.allergiesChoice === "none" ? "is-selected" : ""} onClick={() => chooseAnswer("allergies", "none")}>None</button>
+              <button type="button" aria-pressed={form.allergiesChoice === "none"} className={form.allergiesChoice === "none" ? "is-selected" : ""} onClick={() => chooseAnswer("allergies", "none")}>No</button>
               <button type="button" aria-pressed={form.allergiesChoice === "yes"} className={form.allergiesChoice === "yes" ? "is-selected" : ""} onClick={() => chooseAnswer("allergies", "yes")}>Yes</button>
             </div>
             {form.allergiesChoice === "yes" && (
               <label className="consultation-reveal-field">
-                <span>Which medications caused a reaction?</span>
+                <span>Which medicine caused the reaction, and what happened?</span>
                 <textarea
                   rows={4}
                   value={form.allergies}
@@ -632,25 +643,14 @@ export function ConsultationForm({
       <section className="consultation-onepage-section" id="treatment-questions">
             <div className="patient-intake-copy">
               <h2>{form.primaryConcern ? `${careTitle(form.primaryConcern)} questions` : "Treatment-specific questions"}</h2>
-              <p>Answer the questions related to the care area you choose above.</p>
+              <p>A few more questions help your clinician consider which options might suit you.</p>
             </div>
 
             <div className="patient-form-grid">
-              <label className="patient-form-field patient-wide-field">
-                <span>What are you experiencing, and what would you like help with?</span>
-                <textarea
-                  rows={5}
-                  value={form.careGoal}
-                  onChange={(e) => patch("careGoal", e.target.value)}
-                  placeholder="Describe the main concern, when it started, and what you are hoping to improve."
-                  maxLength={3000}
-                />
-              </label>
-
               {form.primaryConcern === "weight" && (
                 <>
                   <label className="patient-form-field">
-                    <span>Have you used a GLP-1 medicine before?</span>
+                    <span>Have you tried weight-management medicines such as semaglutide or tirzepatide?</span>
                     <select value={form.weightPreviousGlp1} onChange={(e) => patch("weightPreviousGlp1", e.target.value)}>
                       <option value="">Select</option>
                       <option value="never">No</option>
@@ -660,7 +660,7 @@ export function ConsultationForm({
                     </select>
                   </label>
                   <label className="patient-form-field">
-                    <span>History of pancreatitis, gallbladder disease or severe digestive problems?</span>
+                    <span>Have you ever had inflammation of the pancreas (pancreatitis), gallbladder problems or severe digestive symptoms?</span>
                     <select value={form.weightDigestiveHistory} onChange={(e) => patch("weightDigestiveHistory", e.target.value)}>
                       <option value="">Select</option>
                       <option value="no">No</option>
@@ -674,7 +674,7 @@ export function ConsultationForm({
               {form.primaryConcern === "hair" && (
                 <>
                   <label className="patient-form-field">
-                    <span>Where is thinning most noticeable?</span>
+                    <span>Where do you notice the most hair thinning or loss?</span>
                     <select value={form.hairPattern} onChange={(e) => patch("hairPattern", e.target.value)}>
                       <option value="">Select</option>
                       <option value="hairline">Hairline / temples</option>
@@ -684,7 +684,7 @@ export function ConsultationForm({
                     </select>
                   </label>
                   <label className="patient-form-field">
-                    <span>How long has this been happening?</span>
+                    <span>How long have you noticed these changes?</span>
                     <select value={form.hairDuration} onChange={(e) => patch("hairDuration", e.target.value)}>
                       <option value="">Select</option>
                       <option value="under-6-months">Under 6 months</option>
@@ -694,7 +694,7 @@ export function ConsultationForm({
                     </select>
                   </label>
                   <label className="patient-form-field patient-wide-field">
-                    <span>Have you tried finasteride or minoxidil before?</span>
+                    <span>Have you tried minoxidil or finasteride for hair loss?</span>
                     <select value={form.hairPreviousTreatment} onChange={(e) => patch("hairPreviousTreatment", e.target.value)}>
                       <option value="">Select</option>
                       <option value="none">Neither</option>
@@ -709,7 +709,7 @@ export function ConsultationForm({
               {form.primaryConcern === "sex" && (
                 <>
                   <label className="patient-form-field">
-                    <span>Main concern</span>
+                    <span>Which sexual health concern would you like help with?</span>
                     <select value={form.sexualConcern} onChange={(e) => patch("sexualConcern", e.target.value)}>
                       <option value="">Select</option>
                       <option value="erectile-dysfunction">Erectile dysfunction</option>
@@ -719,7 +719,7 @@ export function ConsultationForm({
                     </select>
                   </label>
                   <label className="patient-form-field">
-                    <span>How often does the problem happen?</span>
+                    <span>How often does this concern affect you?</span>
                     <select value={form.sexualFrequency} onChange={(e) => patch("sexualFrequency", e.target.value)}>
                       <option value="">Select</option>
                       <option value="occasionally">Occasionally</option>
@@ -728,7 +728,7 @@ export function ConsultationForm({
                     </select>
                   </label>
                   <label className="patient-form-field patient-wide-field">
-                    <span>Do you take nitrate medicines, or has a clinician told you to avoid sexual activity for heart reasons?</span>
+                    <span>Do you take nitrates for chest pain (such as nitroglycerin), or have you been advised to avoid sexual activity because of a heart problem?</span>
                     <select value={form.sexualNitrates} onChange={(e) => patch("sexualNitrates", e.target.value)}>
                       <option value="">Select</option>
                       <option value="no">No</option>
@@ -744,25 +744,22 @@ export function ConsultationForm({
 
       <section className="consultation-onepage-section consultation-consent-section" id="consent">
         <div className="patient-intake-copy">
-          <h2>Consent &amp; submit</h2>
-          <p>Check your answers above and confirm before sending them to your clinician.</p>
+          <h2>Review and submit</h2>
+          <p>Check your answers above, then confirm before submitting them for review.</p>
         </div>
             <div className="patient-consent-card">
               <ShieldCheck size={24} />
               <div>
-                <h3>Consent and confirmation</h3>
+                <h3>Before you submit</h3>
                 <label>
                   <input type="checkbox" checked={form.consentTruth} onChange={(e) => patch("consentTruth", e.target.checked)} />
-                  <span>I confirm that the information I provided is accurate to the best of my knowledge.</span>
+                  <span>I've answered these questions as accurately as I can.</span>
                 </label>
                 <label>
                   <input type="checkbox" checked={form.consentTelehealth} onChange={(e) => patch("consentTelehealth", e.target.checked)} />
-                  <span>I consent to receiving care through the Suga.Health telehealth workflow.</span>
+                  <span>I agree to have a clinician review my answers and provide care remotely if appropriate.</span>
                 </label>
-                <label>
-                  <input type="checkbox" checked={form.consentPrivacy} onChange={(e) => patch("consentPrivacy", e.target.checked)} />
-                  <span>I understand that my information is used to provide and manage this consultation.</span>
-                </label>
+                <p>Your health information is used to assess and manage this consultation.</p>
               </div>
             </div>
         {invalidSection === "consent" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
@@ -771,7 +768,7 @@ export function ConsultationForm({
       {error && !invalidSection && <p className="consultation-inline-error" role="alert">{error}</p>}
 
       <footer className="consultation-onepage-actions">
-        <p>Submitting sends your answers for clinical review. A prescription is not guaranteed.</p>
+        <p>A clinician will assess your information. Treatment or a prescription is not guaranteed.</p>
         <button type="submit" className="patient-primary-button" disabled={isSubmitting}>
           <CheckCircle2 size={18} /> Submit consultation
         </button>
