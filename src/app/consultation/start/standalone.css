@@ -851,10 +851,10 @@ main.standalone-intake .standalone-intake-qa-skip svg {
 }
 
 
-/* "Last things" reference layout: only the final consultation section is restyled. */
+/* Final-section structure uses the same monochrome theme as the rest of the consultation. */
 .standalone-intake .consultation-consent-section {
-  --last-accent: #c9430b;
-  --last-border: #e7dfd5;
+  --last-accent: #171717;
+  --last-border: #dedede;
 }
 .standalone-intake .consultation-last-heading {
   display: flex;
@@ -873,16 +873,16 @@ main.standalone-intake .standalone-intake-qa-skip svg {
 }
 .standalone-intake .consultation-last-heading h2 {
   margin: 0;
-  color: #201c18;
-  font-size: clamp(23px, 2.3vw, 29px);
-  font-weight: 750;
+  color: #161616;
+  font-size: clamp(22px, 3vw, 29px);
+  font-weight: 650;
   line-height: 1.22;
   letter-spacing: -.035em;
 }
 .standalone-intake .consultation-last-heading p {
   margin: 6px 0 0;
-  color: #77736b;
-  font-size: clamp(14px, 1.2vw, 16px);
+  color: #686868;
+  font-size: 14px;
   line-height: 1.65;
 }
 .standalone-intake .consultation-last-note {
@@ -892,18 +892,18 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   cursor: default;
 }
 .standalone-intake .consultation-last-note > span {
-  color: #5e5c56;
-  font-size: 13px;
+  color: #333;
+  font-size: 14px;
   line-height: 1.45;
-  letter-spacing: .09em;
-  font-weight: 760;
-  text-transform: uppercase;
+  letter-spacing: normal;
+  font-weight: 600;
+  text-transform: none;
 }
 .standalone-intake .consultation-last-note small {
-  color: #8e8b85;
+  color: #777;
   letter-spacing: 0;
   font-size: 12px;
-  font-weight: 550;
+  font-weight: 500;
   text-transform: none;
 }
 .standalone-intake .consultation-last-note textarea {
@@ -914,13 +914,13 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   padding: 17px 19px;
   resize: vertical;
   border: 1px solid var(--last-border);
-  border-radius: 11px;
+  border-radius: 9px;
   background: #fff;
-  color: #24211e;
+  color: #191919;
   font-size: 16px;
   line-height: 1.65;
 }
-.standalone-intake .consultation-last-note textarea::placeholder { color: #969188; }
+.standalone-intake .consultation-last-note textarea::placeholder { color: #888; }
 .standalone-intake .consultation-last-note textarea:focus-visible {
   outline: 2px solid var(--last-accent);
   outline-offset: 2px;
@@ -932,7 +932,7 @@ main.standalone-intake .standalone-intake-qa-skip svg {
 .standalone-intake .consultation-last-check {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: 14px;
   min-width: 0;
   padding: 20px 21px;
   border: 1px solid var(--last-border);
@@ -942,27 +942,27 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   transition: border-color .2s ease, background-color .2s ease;
 }
 .standalone-intake .consultation-last-check:hover {
-  border-color: #d9b9a5;
-  background: #fffdfb;
+  border-color: #bcbcbc;
+  background: #fafafa;
 }
 .standalone-intake .consultation-last-check:has(input:checked) {
-  border-color: #dbad92;
+  border-color: #171717;
 }
 .standalone-intake .consultation-last-check > input[type="checkbox"] {
   -webkit-appearance: none !important;
   appearance: none !important;
   position: relative;
-  flex: 0 0 21px;
-  width: 21px !important;
-  height: 21px !important;
-  min-width: 21px;
-  min-height: 21px;
-  max-width: 21px;
-  max-height: 21px;
+  flex: 0 0 20px;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px;
+  min-height: 20px;
+  max-width: 20px;
+  max-height: 20px;
   margin: 2px 0 0;
-  border: 1.5px solid #b6aea4 !important;
-  border-radius: 4px;
-  background: #fff;
+  border: 0 !important;
+  border-radius: 5px;
+  background: #e9e9e9;
   box-shadow: none !important;
   outline: none;
   cursor: pointer;
@@ -985,14 +985,14 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   min-width: 0;
 }
 .standalone-intake .consultation-last-check-content strong {
-  color: #26231f;
-  font-size: clamp(15px, 1.45vw, 17px);
-  font-weight: 700;
+  color: #171717;
+  font-size: 15px;
+  font-weight: 650;
   line-height: 1.3;
 }
 .standalone-intake .consultation-last-check-content > span {
-  color: #77726c;
-  font-size: clamp(13px, 1.2vw, 15px);
+  color: #686868;
+  font-size: 14px;
   line-height: 1.6;
 }
 .standalone-intake .consultation-last-actions {
@@ -1009,28 +1009,28 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height: 58px;
+  min-height: 52px;
   padding: 12px 24px;
-  border: 1px solid #c9430b;
+  border: 1px solid #171717;
   border-radius: 999px;
-  background: #c9430b;
+  background: #171717;
   color: #fff;
-  font-size: clamp(16px, 1.45vw, 18px);
+  font-size: 15px;
   font-weight: 750;
 }
 .standalone-intake .consultation-last-actions .patient-primary-button:hover:not(:disabled) {
-  background: #af3707;
-  border-color: #af3707;
+  background: #333;
+  border-color: #333;
 }
 .standalone-intake .consultation-last-actions .patient-primary-button:focus-visible {
-  outline: 2px solid #a53508;
+  outline: 2px solid #171717;
   outline-offset: 4px;
 }
 .standalone-intake .consultation-last-actions > p {
   max-width: unset;
   margin: 0 auto;
   text-align: center;
-  color: #8a857e;
+  color: #656565;
   font-size: 13px;
   line-height: 1.6;
 }
