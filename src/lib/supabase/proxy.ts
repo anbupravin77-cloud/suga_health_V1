@@ -25,8 +25,11 @@ export async function updateSession(request: NextRequest) {
   });
 
   const { data } = await supabase.auth.getClaims();
+  // Match complete route segments so the public /admin-login page is not
+  // accidentally treated as an /admin dashboard route.
   const isProtected = protectedPrefixes.some((prefix) =>
-    request.nextUrl.pathname.startsWith(prefix),
+    request.nextUrl.pathname === prefix ||
+    request.nextUrl.pathname.startsWith(`${prefix}/`),
   );
 
   if (!data?.claims && isProtected) {

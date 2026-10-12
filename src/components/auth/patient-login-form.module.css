@@ -157,3 +157,19 @@
 @media (prefers-reduced-motion: reduce) {
   .submit { transition: none; }
 }
+
+/* Email/password access for staff and established test identities. */
+.adminLink {
+  margin: -10px 0 0;
+  text-align: center;
+  color: #77746e;
+  font-size: .83rem;
+  line-height: 1.6;
+}
+.adminLink a {
+  font-weight: 650;
+  color: #171717;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.adminLink a:focus-visible { outline: 2px solid #171717; outline-offset: 3px; }

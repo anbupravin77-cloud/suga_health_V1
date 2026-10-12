@@ -31,6 +31,9 @@ export function PatientLoginForm() {
   const signupHref = next && next.startsWith("/") && !next.startsWith("//")
     ? `/sign-up?next=${encodeURIComponent(next)}`
     : "/sign-up";
+  const adminHref = next && next.startsWith("/") && !next.startsWith("//")
+    ? `/admin-login?next=${encodeURIComponent(next)}`
+    : "/admin-login";
 
   function updateMobile(raw: string) {
     const digits = raw.replace(/\D/g, "");
@@ -150,6 +153,9 @@ export function PatientLoginForm() {
 
       <p className={styles.register}>
         Don't have an account? <Link href={signupHref}>Create your account</Link>
+      </p>
+      <p className={styles.adminLink}>
+        If you are admin, <Link href={adminHref}>log in here</Link>.
       </p>
     </div>
   );

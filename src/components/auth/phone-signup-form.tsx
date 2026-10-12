@@ -382,6 +382,9 @@ export function PhoneSignupForm() {
       <p className={styles.loginText}>
         If you already registered, <Link href="/sign-in">login here</Link>.
       </p>
+      <p className={styles.adminLink}>
+        If you are admin, <Link href="/admin-login">log in here</Link>.
+      </p>
     </form>
   );
 }

@@ -180,3 +180,18 @@
 @media (prefers-reduced-motion: reduce) {
   .passwordToggle { transition: none; }
 }
+
+.adminLink {
+  margin: -8px 0 0;
+  color: #77746e;
+  font-size: .82rem;
+  line-height: 1.55;
+  text-align: center;
+}
+.adminLink a {
+  color: #171717;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.adminLink a:focus-visible { outline: 2px solid #171717; outline-offset: 3px; }
