@@ -135,17 +135,13 @@ function initialState(draft?: Draft, defaults?: IntakeDefaults): FormState {
     heightUnit: "cm",
     // The current profile wins over old draft measurements. Future consultations
     // always load the latest saved values, never historical weight/height.
-    heightCm: defaults?.height_cm != null
-      ? String(defaults.height_cm)
-      : readNumberString(r.height_cm_input, readNumberString(r.height_cm)),
-    heightFeet: defaults?.height_cm != null ? "" : readNumberString(r.height_feet),
-    heightInches: defaults?.height_cm != null ? "" : readNumberString(r.height_inches),
+    heightCm: defaults?.height_cm != null ? String(defaults.height_cm) : "",
+    heightFeet: "",
+    heightInches: "",
     weightUnit: "kg",
-    weightValue: defaults?.weight_kg != null
-      ? String(defaults.weight_kg)
-      : readNumberString(r.weight_kg, readNumberString(r.weight_value)),
+    weightValue: defaults?.weight_kg != null ? String(defaults.weight_kg) : "",
     age: ageFromDateOfBirth(defaults?.dateOfBirth ?? ""),
-    sex: readString(r.sex, defaults?.sex || ""),
+    sex: defaults?.sex ?? "",
     conditions,
     currentMedications: readString(r.current_medications),
     currentMedicationsChoice: readAnswerChoice(r.current_medications, r.current_medications_choice),
@@ -212,7 +208,7 @@ function savedProfileSnapshot(defaults?: IntakeDefaults): ProfileSnapshot {
 }
 function profileChanged(current: ProfileSnapshot, saved: ProfileSnapshot): boolean {
   const differs = (a: number | null, b: number | null) =>
-    a === null || b === null ? a !== b : Math.abs(a - b) > .15;
+    a === null || b === null ? a !== b : Math.abs(a - b) >= .05;
   return current.firstName !== saved.firstName ||
     current.lastName !== saved.lastName ||
     current.dateOfBirth !== saved.dateOfBirth ||
@@ -222,6 +218,26 @@ function profileChanged(current: ProfileSnapshot, saved: ProfileSnapshot): boole
 }
 function roundedMeasure(value: number): string {
   return String(Math.round(value * 10) / 10);
+}
+
+function canSavePersonalDetails(form: FormState): boolean {
+  if (!form.firstName.trim() || form.firstName.trim().length > 100 ||
+      form.lastName.trim().length > 100) return false;
+
+  if (form.dateOfBirth) {
+    const age = Number(ageFromDateOfBirth(form.dateOfBirth));
+    if (!Number.isFinite(age) || age < 18 || age > 120) return false;
+  }
+  if (form.sex && !["male", "female", "intersex", "other", "prefer-not-to-say"].includes(form.sex)) {
+    return false;
+  }
+  if (form.heightUnit === "ftin" && !form.heightFeet.trim() && form.heightInches.trim()) {
+    return false;
+  }
+  const { heightCm, weightKg } = profileSnapshot(form);
+  if (heightCm !== null && (!Number.isFinite(heightCm) || heightCm < 80 || heightCm > 250)) return false;
+  if (weightKg !== null && (!Number.isFinite(weightKg) || weightKg < 20 || weightKg > 400)) return false;
+  return true;
 }
 
 export function ConsultationForm({
@@ -248,7 +264,7 @@ export function ConsultationForm({
   const [profileSaveError, setProfileSaveError] = useState("");
   const currentProfile = profileSnapshot(form);
   const isProfileDirty = profileChanged(currentProfile, savedProfile);
-  const canSaveProfile = isProfileDirty && !validate(2) && !isSubmitting && profileSaveState !== "saving";
+  const canSaveProfile = isProfileDirty && canSavePersonalDetails(form) && !isSubmitting && profileSaveState !== "saving";
 
   function changeHeightUnit(next: "cm" | "ftin") {
     setForm((current) => {
@@ -266,7 +282,7 @@ export function ConsultationForm({
         ...current,
         heightUnit: next,
         heightFeet: String(feet),
-        heightInches: roundedMeasure(totalInches - feet * 12),
+        heightInches: String(Math.round((totalInches - feet * 12) * 1000) / 1000),
       };
     });
   }
@@ -278,7 +294,7 @@ export function ConsultationForm({
         ...current,
         weightUnit: next,
         weightValue: weight > 0
-          ? roundedMeasure(weight * (next === "lb" ? 2.2046226218 : .45359237))
+          ? String(Math.round(weight * (next === "lb" ? 2.2046226218 : .45359237) * 1000) / 1000)
           : current.weightValue,
       };
     });
@@ -287,6 +303,7 @@ export function ConsultationForm({
     if (!canSaveProfile) return;
     const snapshot = profileSnapshot(form);
     const data = toFormData();
+    data.set("profile_only", "1");
     setProfileSaveError("");
     setProfileSaveState("saving");
     try {
@@ -792,7 +809,7 @@ export function ConsultationForm({
         </div>
 
         <div className="consultation-profile-save">
-          <p>Changes saved here will also update your Profile and be used for future consultations.</p>
+          <p>Changes saved here will also update your profile and be used to prefill future consultations.</p>
           <button type="button" onClick={saveProfileChanges} disabled={!canSaveProfile} aria-disabled={!canSaveProfile}>
             <Save size={17} aria-hidden="true" />
             {profileSaveState === "saving" ? "Saving..." : profileSaveState === "saved" && !isProfileDirty ? "Saved" : "Save changes"}

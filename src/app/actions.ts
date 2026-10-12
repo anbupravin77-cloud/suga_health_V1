@@ -126,41 +126,56 @@ export async function saveConsultationBasics(formData: FormData) {
   const lastName = value(formData, "last_name");
   const dateOfBirth = value(formData, "date_of_birth");
   const sex = value(formData, "sex");
+  // Profile-only saves allow missing measurements during onboarding. The
+  // consultation submission path still enforces its clinical requirements.
+  const profileOnly = value(formData, "profile_only") === "1";
   const displayName = [firstName, lastName].filter(Boolean).join(" ").trim();
 
   if (!firstName || firstName.length > 100 || lastName.length > 100) {
     return { ok: false as const, error: "Enter a valid name." };
   }
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateOfBirth)) {
+  if (!dateOfBirth && !profileOnly) {
     return { ok: false as const, error: "Enter your date of birth." };
   }
 
-  const birth = new Date(`${dateOfBirth}T00:00:00Z`);
-  const today = new Date();
-  const age = today.getUTCFullYear() - birth.getUTCFullYear()
-    - (today.getUTCMonth() < birth.getUTCMonth()
-      || (today.getUTCMonth() === birth.getUTCMonth() && today.getUTCDate() < birth.getUTCDate()) ? 1 : 0);
-  if (
-    Number.isNaN(birth.getTime()) ||
-    birth.toISOString().slice(0, 10) !== dateOfBirth ||
-    age < 18 || age > 120
-  ) {
-    return { ok: false as const, error: "Enter a valid date of birth. Consultations are for adults aged 18 or older." };
+  if (dateOfBirth) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dateOfBirth)) {
+      return { ok: false as const, error: "Enter a valid date of birth." };
+    }
+    const birth = new Date(`${dateOfBirth}T00:00:00Z`);
+    const today = new Date();
+    const age = today.getUTCFullYear() - birth.getUTCFullYear()
+      - (today.getUTCMonth() < birth.getUTCMonth()
+        || (today.getUTCMonth() === birth.getUTCMonth() && today.getUTCDate() < birth.getUTCDate()) ? 1 : 0);
+    if (
+      Number.isNaN(birth.getTime()) ||
+      birth.toISOString().slice(0, 10) !== dateOfBirth ||
+      age < 18 || age > 120
+    ) {
+      return { ok: false as const, error: "Enter a valid date of birth. Consultations are for adults aged 18 or older." };
+    }
   }
 
-  if (!["male", "female", "other", "prefer-not-to-say", "intersex"].includes(sex)) {
-    return { ok: false as const, error: "Choose an option for medical screening." };
+  if ((!sex && !profileOnly) ||
+      (sex && !["male", "female", "other", "prefer-not-to-say", "intersex"].includes(sex))) {
+    return { ok: false as const, error: "Choose a valid option for medical screening." };
   }
 
   const heightUnit = value(formData, "height_unit");
-  const cm = heightUnit === "ftin"
+  const heightEntered = heightUnit === "ftin"
+    ? Boolean(value(formData, "height_feet") || value(formData, "height_inches"))
+    : Boolean(value(formData, "height_cm"));
+  const cm = !heightEntered ? null : heightUnit === "ftin"
     ? (numberValue(formData, "height_feet") ?? 0) * 30.48 + (numberValue(formData, "height_inches") ?? 0) * 2.54
     : numberValue(formData, "height_cm");
-  const inputWeight = numberValue(formData, "weight_value");
+  const inputWeight = value(formData, "weight_value")
+    ? numberValue(formData, "weight_value")
+    : null;
   const weightKg = inputWeight === null ? null
     : inputWeight * (value(formData, "weight_unit") === "lb" ? 0.45359237 : 1);
-  if (cm === null || !Number.isFinite(cm) || cm < 80 || cm > 250 ||
-      weightKg === null || !Number.isFinite(weightKg) || weightKg < 20 || weightKg > 400) {
+  if ((cm !== null && (!Number.isFinite(cm) || cm < 80 || cm > 250)) ||
+      (weightKg !== null && (!Number.isFinite(weightKg) || weightKg < 20 || weightKg > 400)) ||
+      (!profileOnly && (cm === null || weightKg === null))) {
     return { ok: false as const, error: "Enter a valid height (80–250 cm) and weight (20–400 kg)." };
   }
 
@@ -171,10 +186,10 @@ export async function saveConsultationBasics(formData: FormData) {
     first_name: firstName,
     last_name: lastName,
     display_name: displayName,
-    date_of_birth: dateOfBirth,
-    sex: sex === "intersex" ? "other" : sex,
-    height_cm: Math.round(cm * 10) / 10,
-    weight_kg: Math.round(weightKg * 10) / 10,
+    date_of_birth: dateOfBirth || null,
+    sex: sex === "intersex" ? "other" : sex || null,
+    height_cm: cm === null ? null : Math.round(cm * 10) / 10,
+    weight_kg: weightKg === null ? null : Math.round(weightKg * 10) / 10,
   }).eq("id", user.id).select("id").single();
 
   if (error || !saved) {
