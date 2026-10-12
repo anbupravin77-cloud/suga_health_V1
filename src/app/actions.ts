@@ -125,11 +125,12 @@ export async function saveConsultationBasics(formData: FormData) {
   const firstName = value(formData, "first_name");
   const lastName = value(formData, "last_name");
   const dateOfBirth = value(formData, "date_of_birth");
+  const sex = value(formData, "sex");
+  const displayName = [firstName, lastName].filter(Boolean).join(" ").trim();
 
-  if (!firstName || !lastName) {
-    return { ok: false as const, error: "Enter your first and last name." };
+  if (!firstName || firstName.length > 100 || lastName.length > 100) {
+    return { ok: false as const, error: "Enter a valid name." };
   }
-
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateOfBirth)) {
     return { ok: false as const, error: "Enter your date of birth." };
   }
@@ -139,28 +140,49 @@ export async function saveConsultationBasics(formData: FormData) {
   const age = today.getUTCFullYear() - birth.getUTCFullYear()
     - (today.getUTCMonth() < birth.getUTCMonth()
       || (today.getUTCMonth() === birth.getUTCMonth() && today.getUTCDate() < birth.getUTCDate()) ? 1 : 0);
-
   if (
     Number.isNaN(birth.getTime()) ||
     birth.toISOString().slice(0, 10) !== dateOfBirth ||
     age < 18 || age > 120
   ) {
-    return { ok: false as const, error: "Enter a valid date of birth. Consultations are for adults aged 18 and over." };
+    return { ok: false as const, error: "Enter a valid date of birth. Consultations are for adults aged 18 or older." };
+  }
+
+  if (!["male", "female", "other", "prefer-not-to-say", "intersex"].includes(sex)) {
+    return { ok: false as const, error: "Choose an option for medical screening." };
+  }
+
+  const heightUnit = value(formData, "height_unit");
+  const cm = heightUnit === "ftin"
+    ? (numberValue(formData, "height_feet") ?? 0) * 30.48 + (numberValue(formData, "height_inches") ?? 0) * 2.54
+    : numberValue(formData, "height_cm");
+  const inputWeight = numberValue(formData, "weight_value");
+  const weightKg = inputWeight === null ? null
+    : inputWeight * (value(formData, "weight_unit") === "lb" ? 0.45359237 : 1);
+  if (cm === null || !Number.isFinite(cm) || cm < 80 || cm > 250 ||
+      weightKg === null || !Number.isFinite(weightKg) || weightKg < 20 || weightKg > 400) {
+    return { ok: false as const, error: "Enter a valid height (80–250 cm) and weight (20–400 kg)." };
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.from("profiles").update({
+  // Profiles are the current source of truth. Historical consultation answers
+  // remain untouched, and only the authenticated patient's profile is updated.
+  const { data: saved, error } = await supabase.from("profiles").update({
     first_name: firstName,
     last_name: lastName,
-    display_name: `${firstName} ${lastName}`,
+    display_name: displayName,
     date_of_birth: dateOfBirth,
-  }).eq("id", user.id);
+    sex: sex === "intersex" ? "other" : sex,
+    height_cm: Math.round(cm * 10) / 10,
+    weight_kg: Math.round(weightKg * 10) / 10,
+  }).eq("id", user.id).select("id").single();
 
-  if (error) {
-    return { ok: false as const, error: "Could not save your details. Please try again." };
+  if (error || !saved) {
+    return { ok: false as const, error: "Could not save your profile details. Please try again." };
   }
 
   revalidatePath("/patient/profile");
+  revalidatePath("/consultation/start");
   return { ok: true as const };
 }
 
@@ -514,20 +536,40 @@ export async function updateProfile(formData: FormData) {
     const firstName = value(formData, "first_name");
     const lastName = value(formData, "last_name");
     const displayName = [firstName, lastName].filter(Boolean).join(" ").trim();
+    const dob = value(formData, "date_of_birth");
+    const sex = value(formData, "sex");
+    const heightRaw = value(formData, "height_cm");
+    const weightRaw = value(formData, "weight_kg");
+    const height = heightRaw ? Number(heightRaw) : null;
+    const weight = weightRaw ? Number(weightRaw) : null;
 
-    const { error } = await supabase
+    if (!firstName || firstName.length > 100 || lastName.length > 100 ||
+        (dob && !/^\d{4}-\d{2}-\d{2}$/.test(dob)) ||
+        (sex && !["male", "female", "other", "prefer-not-to-say"].includes(sex)) ||
+        (height !== null && (!Number.isFinite(height) || height < 80 || height > 250)) ||
+        (weight !== null && (!Number.isFinite(weight) || weight < 20 || weight > 400))) {
+      redirect("/patient/profile?error=invalid");
+    }
+
+    const { data: saved, error } = await supabase
       .from("profiles")
       .update({
-        first_name: firstName || null,
+        first_name: firstName,
         last_name: lastName || null,
         display_name: displayName || null,
         phone_number: value(formData, "phone_number") || null,
-        date_of_birth: value(formData, "date_of_birth") || null,
+        date_of_birth: dob || null,
+        sex: sex || null,
+        height_cm: height === null ? null : Math.round(height * 10) / 10,
+        weight_kg: weight === null ? null : Math.round(weight * 10) / 10,
       })
-      .eq("id", user.id);
+      .eq("id", user.id)
+      .select("id")
+      .single();
 
-    if (error) redirect("/patient/profile?error=save");
+    if (error || !saved) redirect("/patient/profile?error=save");
     revalidatePath("/patient/profile");
+    revalidatePath("/consultation/start");
     redirect("/patient/profile?notice=saved");
   }
 

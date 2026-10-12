@@ -25,15 +25,16 @@ export default async function StartConsultationPage({
   // production. This only navigates to the dashboard; it never submits data.
   const showQaSkip = isQaPatient(user.id);
 
-  // Only the verified QA patient receives blank onboarding fields. No database
-  // profile or consultation records are erased when replaying the experience.
-  const profile = replayFirstTime
-    ? null
-    : (await supabase
-        .from("profiles")
-        .select("first_name, last_name, date_of_birth, sex, height_cm, weight_kg")
-        .eq("id", user.id)
-        .maybeSingle()).data;
+  // All patients, including the QA patient in fresh-intake mode, receive their
+  // latest profile values. "Fresh" resets clinical answers, not identity data.
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("first_name, last_name, date_of_birth, sex, height_cm, weight_kg")
+    .eq("id", user.id)
+    .single();
+  if (profileError || !profile) {
+    throw new Error("Could not load your current patient profile.");
+  }
 
   return (
     <main className="patient-v2 standalone-intake">
@@ -51,7 +52,7 @@ export default async function StartConsultationPage({
           <p>Complete the details below on one page. Your answers are sent for clinical review when you submit.</p>
           {replayFirstTime && (
             <p className="standalone-intake-qa-note" role="status">
-              Test mode: starting fresh. Your existing test account and past consultations are preserved.
+              Test mode: your saved profile details are prefilled. Consultation answers start fresh, and past consultations are preserved.
             </p>
           )}
         </div>

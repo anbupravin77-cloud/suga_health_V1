@@ -70,7 +70,7 @@ export default async function PatientProfilePage({
           <h2>{displayName}</h2>
           <p>Patient</p>
           <div className="patient-profile-contact">
-            <span><Mail size={15} /> {identity.email || "Email unavailable"}</span>
+            <span><Mail size={15} /> {identity.email || "Email not linked for login"}</span>
             {data?.phone_number && <span><Phone size={15} /> {data.phone_number}</span>}
           </div>
         </div>
@@ -108,6 +108,24 @@ export default async function PatientProfilePage({
                 <span>Date of birth</span>
                 <input name="date_of_birth" type="date" defaultValue={data?.date_of_birth ?? ""} />
               </label>
+              <label>
+                <span>Sex for medical screening</span>
+                <select name="sex" defaultValue={data?.sex ?? ""}>
+                  <option value="">Select</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                  <option value="prefer-not-to-say">Prefer not to say</option>
+                </select>
+              </label>
+              <label>
+                <span>Height (cm)</span>
+                <input name="height_cm" type="number" inputMode="decimal" min="80" max="250" step="0.1" defaultValue={data?.height_cm == null ? "" : String(data.height_cm)} />
+              </label>
+              <label>
+                <span>Weight (kg)</span>
+                <input name="weight_kg" type="number" inputMode="decimal" min="20" max="400" step="0.1" defaultValue={data?.weight_kg == null ? "" : String(data.weight_kg)} />
+              </label>
               <div className="wide patient-form-actions">
                 <ActionButton className="patient-primary-button" type="submit" pendingLabel="Saving…">
                   Save changes
@@ -127,9 +145,16 @@ export default async function PatientProfilePage({
               <div><Ruler size={19} /><span>Height</span><strong>{data?.height_cm ? `${Number(data.height_cm)} cm` : "Not provided"}</strong></div>
               <div><Scale size={19} /><span>Weight</span><strong>{data?.weight_kg ? `${Number(data.weight_kg)} kg` : "Not provided"}</strong></div>
               <div><UserRound size={19} /><span>Sex</span><strong>{data?.sex?.replaceAll("-", " ") || "Not provided"}</strong></div>
+              <div><CalendarDays size={19} /><span>Age</span><strong>{data?.date_of_birth ? (() => {
+                const now = new Date();
+                const birth = new Date(`${data.date_of_birth}T00:00:00Z`);
+                const years = now.getUTCFullYear() - birth.getUTCFullYear();
+                return years - (now.getUTCMonth() < birth.getUTCMonth() ||
+                  now.getUTCMonth() === birth.getUTCMonth() && now.getUTCDate() < birth.getUTCDate() ? 1 : 0);
+              })() : "Not provided"}</strong></div>
               <div><CalendarDays size={19} /><span>Date of birth</span><strong>{data?.date_of_birth ? new Date(`${data.date_of_birth}T00:00:00`).toLocaleDateString("en", { dateStyle: "medium" }) : "Not provided"}</strong></div>
             </div>
-            <p className="patient-muted-copy">Measurements can be updated when you start your next consultation.</p>
+            <p className="patient-muted-copy">These are your latest saved details. Updates here are used to prefill future consultations. Changes saved during a consultation also appear here.</p>
           </section>
         </div>
 

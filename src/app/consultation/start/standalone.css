@@ -1044,3 +1044,60 @@ main.standalone-intake .standalone-intake-qa-skip svg {
 @media (prefers-reduced-motion: reduce) {
   .standalone-intake .consultation-last-check { transition: none; }
 }
+
+/* Profile is the intake's source of truth. Save only when details change. */
+.standalone-intake .consultation-profile-save {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.standalone-intake .consultation-profile-save p {
+  flex: 1 1 260px;
+  margin: 0;
+  color: #6c6b67;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.standalone-intake .consultation-profile-save button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 45px;
+  padding: 11px 19px;
+  border: 1px solid #171717;
+  border-radius: 999px;
+  background: #171717;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.standalone-intake .consultation-profile-save button:disabled {
+  cursor: not-allowed;
+  opacity: .4;
+}
+.standalone-intake .consultation-profile-save button:focus-visible {
+  outline: 2px solid #171717;
+  outline-offset: 3px;
+}
+.standalone-intake .consultation-profile-saved {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: #216647;
+}
+.standalone-intake .patient-form-field input[readonly] {
+  color: #64645e;
+  background: #f6f6f4;
+  cursor: default;
+}
+@media(max-width:700px) {
+  .standalone-intake .consultation-profile-save {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .standalone-intake .consultation-profile-save button { width: 100%; }
+}

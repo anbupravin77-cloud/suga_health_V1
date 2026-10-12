@@ -132,13 +132,19 @@ function initialState(draft?: Draft, defaults?: IntakeDefaults): FormState {
     firstName: defaults?.firstName ?? "",
     lastName: defaults?.lastName ?? "",
     dateOfBirth: defaults?.dateOfBirth ?? "",
-    heightUnit: readString(r.height_unit) === "ftin" ? "ftin" : "cm",
-    heightCm: readNumberString(r.height_cm_input, defaults?.height_cm ? String(defaults.height_cm) : ""),
-    heightFeet: readNumberString(r.height_feet),
-    heightInches: readNumberString(r.height_inches),
-    weightUnit: readString(r.weight_unit) === "lb" ? "lb" : "kg",
-    weightValue: readNumberString(r.weight_value, defaults?.weight_kg ? String(defaults.weight_kg) : ""),
-    age: readNumberString(r.age, defaults?.age ? String(defaults.age) : ""),
+    heightUnit: "cm",
+    // The current profile wins over old draft measurements. Future consultations
+    // always load the latest saved values, never historical weight/height.
+    heightCm: defaults?.height_cm != null
+      ? String(defaults.height_cm)
+      : readNumberString(r.height_cm_input, readNumberString(r.height_cm)),
+    heightFeet: defaults?.height_cm != null ? "" : readNumberString(r.height_feet),
+    heightInches: defaults?.height_cm != null ? "" : readNumberString(r.height_inches),
+    weightUnit: "kg",
+    weightValue: defaults?.weight_kg != null
+      ? String(defaults.weight_kg)
+      : readNumberString(r.weight_kg, readNumberString(r.weight_value)),
+    age: ageFromDateOfBirth(defaults?.dateOfBirth ?? ""),
     sex: readString(r.sex, defaults?.sex || ""),
     conditions,
     currentMedications: readString(r.current_medications),
@@ -166,6 +172,58 @@ function careTitle(id: string) {
   return careAreas.find((area) => area.id === id)?.title || id;
 }
 
+
+type ProfileSnapshot = {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  sex: string;
+  heightCm: number | null;
+  weightKg: number | null;
+};
+
+function profileSnapshot(form: FormState): ProfileSnapshot {
+  const heightValue = form.heightUnit === "cm"
+    ? Number(form.heightCm)
+    : Number(form.heightFeet) * 30.48 + Number(form.heightInches || "0") * 2.54;
+  const weightValue = Number(form.weightValue);
+  return {
+    firstName: form.firstName.trim(),
+    lastName: form.lastName.trim(),
+    dateOfBirth: form.dateOfBirth,
+    sex: form.sex === "intersex" ? "other" : form.sex,
+    heightCm: form.heightUnit === "cm" && !form.heightCm.trim() ||
+      form.heightUnit === "ftin" && !form.heightFeet.trim()
+      ? null : Math.round(heightValue * 10) / 10,
+    weightKg: !form.weightValue.trim() ? null
+      : Math.round(weightValue * (form.weightUnit === "lb" ? .45359237 : 1) * 10) / 10,
+  };
+}
+
+function savedProfileSnapshot(defaults?: IntakeDefaults): ProfileSnapshot {
+  return {
+    firstName: defaults?.firstName?.trim() ?? "",
+    lastName: defaults?.lastName?.trim() ?? "",
+    dateOfBirth: defaults?.dateOfBirth ?? "",
+    sex: defaults?.sex ?? "",
+    heightCm: defaults?.height_cm ?? null,
+    weightKg: defaults?.weight_kg ?? null,
+  };
+}
+function profileChanged(current: ProfileSnapshot, saved: ProfileSnapshot): boolean {
+  const differs = (a: number | null, b: number | null) =>
+    a === null || b === null ? a !== b : Math.abs(a - b) > .15;
+  return current.firstName !== saved.firstName ||
+    current.lastName !== saved.lastName ||
+    current.dateOfBirth !== saved.dateOfBirth ||
+    current.sex !== saved.sex ||
+    differs(current.heightCm, saved.heightCm) ||
+    differs(current.weightKg, saved.weightKg);
+}
+function roundedMeasure(value: number): string {
+  return String(Math.round(value * 10) / 10);
+}
+
 export function ConsultationForm({
   draft,
   defaults,
@@ -180,17 +238,81 @@ export function ConsultationForm({
   const [invalidSection, setInvalidSection] = useState<string | null>(null);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // Reuse verified profile details; reveal editable inputs only when missing or
-  // explicitly requested. The QA fresh-intake route supplies blank defaults.
+  // The latest profile values, including QA accounts, are prefilled.
+  // Reveal editable account fields when missing or explicitly requested.
   const [editingAccountDetails, setEditingAccountDetails] = useState(
-    () => !(defaults?.firstName?.trim() && defaults?.lastName?.trim() && defaults?.dateOfBirth && defaults?.sex),
+    () => !(defaults?.firstName?.trim() && defaults?.dateOfBirth && defaults?.sex),
   );
+  const [savedProfile, setSavedProfile] = useState<ProfileSnapshot>(() => savedProfileSnapshot(defaults));
+  const [profileSaveState, setProfileSaveState] = useState<"idle" | "saving" | "saved">("idle");
+  const [profileSaveError, setProfileSaveError] = useState("");
+  const currentProfile = profileSnapshot(form);
+  const isProfileDirty = profileChanged(currentProfile, savedProfile);
+  const canSaveProfile = isProfileDirty && !validate(2) && !isSubmitting && profileSaveState !== "saving";
+
+  function changeHeightUnit(next: "cm" | "ftin") {
+    setForm((current) => {
+      if (current.heightUnit === next) return current;
+      const cm = current.heightUnit === "cm"
+        ? Number(current.heightCm)
+        : Number(current.heightFeet) * 30.48 + Number(current.heightInches || "0") * 2.54;
+      if (!(cm > 0)) return { ...current, heightUnit: next };
+      if (next === "cm") {
+        return { ...current, heightUnit: next, heightCm: roundedMeasure(cm) };
+      }
+      const totalInches = cm / 2.54;
+      const feet = Math.floor(totalInches / 12);
+      return {
+        ...current,
+        heightUnit: next,
+        heightFeet: String(feet),
+        heightInches: roundedMeasure(totalInches - feet * 12),
+      };
+    });
+  }
+  function changeWeightUnit(next: "kg" | "lb") {
+    setForm((current) => {
+      if (current.weightUnit === next) return current;
+      const weight = Number(current.weightValue);
+      return {
+        ...current,
+        weightUnit: next,
+        weightValue: weight > 0
+          ? roundedMeasure(weight * (next === "lb" ? 2.2046226218 : .45359237))
+          : current.weightValue,
+      };
+    });
+  }
+  async function saveProfileChanges() {
+    if (!canSaveProfile) return;
+    const snapshot = profileSnapshot(form);
+    const data = toFormData();
+    setProfileSaveError("");
+    setProfileSaveState("saving");
+    try {
+      const result = await saveConsultationBasics(data);
+      if (!result.ok) {
+        setProfileSaveError(result.error || "Could not update your profile.");
+        setProfileSaveState("idle");
+        return;
+      }
+      setSavedProfile(snapshot);
+      setProfileSaveState("saved");
+      router.refresh();
+    } catch {
+      setProfileSaveError("Could not save your changes. Please try again.");
+      setProfileSaveState("idle");
+    }
+  }
 
 
   function patch<K extends keyof FormState>(key: K, next: FormState[K]) {
     setForm((current) => ({ ...current, [key]: next }));
     setError("");
     setInvalidSection(null);
+    if (["firstName", "lastName", "dateOfBirth", "sex", "heightCm", "heightFeet", "heightInches", "weightValue"].includes(key)) {
+      setProfileSaveState("idle");
+    }
   }
 
   function toggleCondition(condition: string) {
@@ -290,15 +412,15 @@ export function ConsultationForm({
     }
 
     if (currentStep === 2) {
-      if (!form.firstName.trim() || !form.lastName.trim()) return "Enter your first and last name.";
+      if (!form.firstName.trim()) return "Enter your name.";
       const age = Number(ageFromDateOfBirth(form.dateOfBirth));
       if (!form.dateOfBirth || !Number.isFinite(age) || age < 18 || age > 120) {
         return "Enter a valid date of birth. Consultations are for adults aged 18 and over.";
       }
-      if (form.heightUnit === "cm" && !(Number(form.heightCm) > 0 && Number(form.heightCm) <= 300)) return "Enter a valid height.";
-      if (form.heightUnit === "ftin" && !(Number(form.heightFeet) >= 1 && Number(form.heightFeet) <= 9 && Number(form.heightInches || "0") >= 0 && Number(form.heightInches || "0") < 12)) return "Enter a valid height.";
+      if (form.heightUnit === "cm" && !(Number(form.heightCm) >= 80 && Number(form.heightCm) <= 250)) return "Enter a valid height.";
+      if (form.heightUnit === "ftin" && !(Number(form.heightFeet) * 30.48 + Number(form.heightInches || "0") * 2.54 >= 80 && Number(form.heightFeet) * 30.48 + Number(form.heightInches || "0") * 2.54 <= 250)) return "Enter a valid height.";
       const weightKg = Number(form.weightValue) * (form.weightUnit === "lb" ? 0.45359237 : 1);
-      if (!(weightKg > 0 && weightKg <= 500)) return "Enter a valid weight.";
+      if (!(weightKg >= 20 && weightKg <= 400)) return "Enter a valid weight.";
       if (!form.sex) return "Select the option that applies to you.";
     }
 
@@ -346,21 +468,13 @@ export function ConsultationForm({
   }
 
   async function saveProgress() {
-    if (saveState === "saving" || isSubmitting || !form.primaryConcern) return;
+    if (saveState === "saving" || isSubmitting || profileSaveState === "saving" || !form.primaryConcern) return;
     setSaveState("saving");
     setInvalidSection(null);
     setError("");
     try {
-      // Persist completed personal details alongside the draft so resuming does
-      // not ask for the same details again. Incomplete drafts remain saveable.
-      if (!validate(2)) {
-        const basics = await saveConsultationBasics(toFormData());
-        if (!basics.ok) {
-          setSaveState("idle");
-          setError(basics.error || "We couldn’t save your personal details.");
-          return;
-        }
-      }
+      // Draft saving does not modify the current patient profile. The dedicated
+      // Save changes button, or successful consultation submission, does that.
       const result = await saveConsultationDraft(toFormData());
       if (result.ok && result.id) {
         setDraftId(result.id);
@@ -376,7 +490,7 @@ export function ConsultationForm({
   }
 
   async function handleSubmit() {
-    if (isSubmitting) return;
+    if (isSubmitting || profileSaveState === "saving") return;
     // Follow the order patients actually encounter each section on screen.
     // Keep the original validation keys so saved consultations remain compatible.
     const sections = [
@@ -607,7 +721,7 @@ export function ConsultationForm({
             <div>
               <strong>{[form.firstName, form.lastName].filter(Boolean).join(" ")}</strong>
               <p>
-                Born {form.dateOfBirth.split("-").reverse().join("/")} · {form.sex === "prefer-not-to-say" ? "Prefer not to say" : form.sex.charAt(0).toUpperCase() + form.sex.slice(1)}
+                Born {form.dateOfBirth.split("-").reverse().join("/")} · Age {ageFromDateOfBirth(form.dateOfBirth) || "—"} · {form.sex === "prefer-not-to-say" ? "Prefer not to say" : form.sex.charAt(0).toUpperCase() + form.sex.slice(1)}
               </p>
             </div>
             <button type="button" onClick={() => setEditingAccountDetails(true)}>
@@ -622,11 +736,15 @@ export function ConsultationForm({
             </label>
             <label className="patient-form-field">
               <span>Last name</span>
-              <input type="text" value={form.lastName} onChange={(e) => patch("lastName", e.target.value)} autoComplete="family-name" maxLength={100} required />
+              <input type="text" value={form.lastName} onChange={(e) => patch("lastName", e.target.value)} autoComplete="family-name" maxLength={100} />
             </label>
             <label className="patient-form-field">
               <span>Date of birth</span>
               <input type="date" max={new Date().toISOString().slice(0, 10)} value={form.dateOfBirth} onChange={(e) => patch("dateOfBirth", e.target.value)} autoComplete="bday" required />
+            </label>
+            <label className="patient-form-field">
+              <span>Age (calculated from date of birth)</span>
+              <input type="text" readOnly value={ageFromDateOfBirth(form.dateOfBirth)} aria-label="Age calculated from date of birth" />
             </label>
             <label className="patient-form-field">
               <span>Sex for medical screening</span>
@@ -647,8 +765,8 @@ export function ConsultationForm({
                 <div className="patient-field-heading">
                   <label>Height</label>
                   <div className="patient-unit-switch">
-                    <button type="button" className={form.heightUnit === "cm" ? "is-active" : ""} onClick={() => patch("heightUnit", "cm")}>cm</button>
-                    <button type="button" className={form.heightUnit === "ftin" ? "is-active" : ""} onClick={() => patch("heightUnit", "ftin")}>ft / in</button>
+                    <button type="button" className={form.heightUnit === "cm" ? "is-active" : ""} onClick={() => changeHeightUnit("cm")}>cm</button>
+                    <button type="button" className={form.heightUnit === "ftin" ? "is-active" : ""} onClick={() => changeHeightUnit("ftin")}>ft / in</button>
                   </div>
                 </div>
                 {form.heightUnit === "cm" ? (
@@ -665,13 +783,25 @@ export function ConsultationForm({
                 <div className="patient-field-heading">
                   <label>Weight</label>
                   <div className="patient-unit-switch">
-                    <button type="button" className={form.weightUnit === "kg" ? "is-active" : ""} onClick={() => patch("weightUnit", "kg")}>kg</button>
-                    <button type="button" className={form.weightUnit === "lb" ? "is-active" : ""} onClick={() => patch("weightUnit", "lb")}>lb</button>
+                    <button type="button" className={form.weightUnit === "kg" ? "is-active" : ""} onClick={() => changeWeightUnit("kg")}>kg</button>
+                    <button type="button" className={form.weightUnit === "lb" ? "is-active" : ""} onClick={() => changeWeightUnit("lb")}>lb</button>
                   </div>
                 </div>
                 <input type="number" min="1" inputMode="decimal" value={form.weightValue} onChange={(e) => patch("weightValue", e.target.value)} placeholder="Your weight" />
               </div>
         </div>
+
+        <div className="consultation-profile-save">
+          <p>Changes saved here will also update your Profile and be used for future consultations.</p>
+          <button type="button" onClick={saveProfileChanges} disabled={!canSaveProfile} aria-disabled={!canSaveProfile}>
+            <Save size={17} aria-hidden="true" />
+            {profileSaveState === "saving" ? "Saving..." : profileSaveState === "saved" && !isProfileDirty ? "Saved" : "Save changes"}
+          </button>
+        </div>
+        {profileSaveError && <p className="consultation-inline-error" role="alert">{profileSaveError}</p>}
+        {profileSaveState === "saved" && !isProfileDirty && !profileSaveError && (
+          <p className="consultation-profile-saved" role="status">Your latest details are saved to your profile.</p>
+        )}
 
         {invalidSection === "about-you" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
       </section>
