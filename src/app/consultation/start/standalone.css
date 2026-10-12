@@ -849,3 +849,198 @@ main.standalone-intake .standalone-intake-qa-skip svg {
     font-size: .83rem;
   }
 }
+
+
+/* "Last things" reference layout: only the final consultation section is restyled. */
+.standalone-intake .consultation-consent-section {
+  --last-accent: #c9430b;
+  --last-border: #e7dfd5;
+}
+.standalone-intake .consultation-last-heading {
+  display: flex;
+  align-items: start;
+  gap: 13px;
+  margin-bottom: 26px;
+}
+.standalone-intake .consultation-last-step {
+  flex: 0 0 auto;
+  padding-top: 5px;
+  color: var(--last-accent);
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: .09em;
+  font-weight: 800;
+}
+.standalone-intake .consultation-last-heading h2 {
+  margin: 0;
+  color: #201c18;
+  font-size: clamp(23px, 2.3vw, 29px);
+  font-weight: 750;
+  line-height: 1.22;
+  letter-spacing: -.035em;
+}
+.standalone-intake .consultation-last-heading p {
+  margin: 6px 0 0;
+  color: #77736b;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.65;
+}
+.standalone-intake .consultation-last-note {
+  display: grid;
+  gap: 11px;
+  margin-bottom: 28px;
+  cursor: default;
+}
+.standalone-intake .consultation-last-note > span {
+  color: #5e5c56;
+  font-size: 13px;
+  line-height: 1.45;
+  letter-spacing: .09em;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+.standalone-intake .consultation-last-note small {
+  color: #8e8b85;
+  letter-spacing: 0;
+  font-size: 12px;
+  font-weight: 550;
+  text-transform: none;
+}
+.standalone-intake .consultation-last-note textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 126px;
+  padding: 17px 19px;
+  resize: vertical;
+  border: 1px solid var(--last-border);
+  border-radius: 11px;
+  background: #fff;
+  color: #24211e;
+  font-size: 16px;
+  line-height: 1.65;
+}
+.standalone-intake .consultation-last-note textarea::placeholder { color: #969188; }
+.standalone-intake .consultation-last-note textarea:focus-visible {
+  outline: 2px solid var(--last-accent);
+  outline-offset: 2px;
+}
+.standalone-intake .consultation-last-checks {
+  display: grid;
+  gap: 13px;
+}
+.standalone-intake .consultation-last-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  min-width: 0;
+  padding: 20px 21px;
+  border: 1px solid var(--last-border);
+  border-radius: 11px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.standalone-intake .consultation-last-check:hover {
+  border-color: #d9b9a5;
+  background: #fffdfb;
+}
+.standalone-intake .consultation-last-check:has(input:checked) {
+  border-color: #dbad92;
+}
+.standalone-intake .consultation-last-check > input[type="checkbox"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  position: relative;
+  flex: 0 0 21px;
+  width: 21px !important;
+  height: 21px !important;
+  min-width: 21px;
+  min-height: 21px;
+  max-width: 21px;
+  max-height: 21px;
+  margin: 2px 0 0;
+  border: 1.5px solid #b6aea4 !important;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: none !important;
+  outline: none;
+  cursor: pointer;
+}
+.standalone-intake .consultation-last-check > input[type="checkbox"]:checked {
+  border-color: var(--last-accent) !important;
+  background-color: var(--last-accent) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M4 10.1l3.8 3.8L16 5.9' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-size: 19px 19px !important;
+  background-position: center !important;
+}
+.standalone-intake .consultation-last-check:has(input:focus-visible) {
+  outline: 2px solid var(--last-accent);
+  outline-offset: 3px;
+}
+.standalone-intake .consultation-last-check-content {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+.standalone-intake .consultation-last-check-content strong {
+  color: #26231f;
+  font-size: clamp(15px, 1.45vw, 17px);
+  font-weight: 700;
+  line-height: 1.3;
+}
+.standalone-intake .consultation-last-check-content > span {
+  color: #77726c;
+  font-size: clamp(13px, 1.2vw, 15px);
+  line-height: 1.6;
+}
+.standalone-intake .consultation-last-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+  margin-top: 34px;
+  border-top: 1px solid var(--last-border);
+  padding-top: 30px;
+}
+.standalone-intake .consultation-last-actions .patient-primary-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 58px;
+  padding: 12px 24px;
+  border: 1px solid #c9430b;
+  border-radius: 999px;
+  background: #c9430b;
+  color: #fff;
+  font-size: clamp(16px, 1.45vw, 18px);
+  font-weight: 750;
+}
+.standalone-intake .consultation-last-actions .patient-primary-button:hover:not(:disabled) {
+  background: #af3707;
+  border-color: #af3707;
+}
+.standalone-intake .consultation-last-actions .patient-primary-button:focus-visible {
+  outline: 2px solid #a53508;
+  outline-offset: 4px;
+}
+.standalone-intake .consultation-last-actions > p {
+  max-width: unset;
+  margin: 0 auto;
+  text-align: center;
+  color: #8a857e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+@media (max-width: 700px) {
+  .standalone-intake .consultation-last-check { padding: 17px 15px; gap: 13px; }
+  .standalone-intake .consultation-last-check-content strong { font-size: 16px; }
+  .standalone-intake .consultation-last-check-content > span { font-size: 14px; }
+  .standalone-intake .consultation-last-actions { margin-top: 27px; padding-top: 25px; }
+  .standalone-intake .consultation-last-actions .patient-primary-button { min-height: 56px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .standalone-intake .consultation-last-check { transition: none; }
+}

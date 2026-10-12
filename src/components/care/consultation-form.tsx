@@ -58,6 +58,7 @@ type FormState = {
   sexualNitrates: string;
   consentTruth: boolean;
   consentTelehealth: boolean;
+  consentPrivacy: boolean;
 };
 
 const conditionOptions = [
@@ -144,7 +145,7 @@ function initialState(draft?: Draft, defaults?: IntakeDefaults): FormState {
     currentMedicationsChoice: readAnswerChoice(r.current_medications, r.current_medications_choice),
     allergies: readString(r.allergies),
     allergiesChoice: readAnswerChoice(r.allergies, r.allergies_choice),
-    medicalHistory: readString(r.medical_history),
+    medicalHistory: readString(r.medical_history).trim().toLowerCase() === "none" ? "" : readString(r.medical_history),
     medicalHistoryChoice: readAnswerChoice(r.medical_history, r.medical_history_choice),
     careGoal: readString(r.care_goal),
     weightPreviousGlp1: readString(treatment.previous_glp1),
@@ -157,6 +158,7 @@ function initialState(draft?: Draft, defaults?: IntakeDefaults): FormState {
     sexualNitrates: readString(treatment.nitrates_or_activity_restriction),
     consentTruth: r.consent_truth === true,
     consentTelehealth: r.consent_telehealth === true,
+    consentPrivacy: r.consent_privacy === true,
   };
 }
 
@@ -264,8 +266,8 @@ export function ConsultationForm({
     data.set("current_medications", form.currentMedicationsChoice === "none" ? "None" : form.currentMedicationsChoice === "yes" ? form.currentMedications.trim() : "");
     data.set("allergies_choice", form.allergiesChoice);
     data.set("allergies", form.allergiesChoice === "none" ? "None" : form.allergiesChoice === "yes" ? form.allergies.trim() : "");
-    data.set("medical_history_choice", form.medicalHistoryChoice);
-    data.set("medical_history", form.medicalHistoryChoice === "none" ? "None" : form.medicalHistoryChoice === "yes" ? form.medicalHistory.trim() : "");
+    data.set("medical_history_choice", form.medicalHistory.trim() ? "yes" : "none");
+    data.set("medical_history", form.medicalHistory.trim() || "None");
     data.set("care_goal", form.careGoal);
     data.set("weight_previous_glp1", form.weightPreviousGlp1);
     data.set("weight_digestive_history", form.weightDigestiveHistory);
@@ -277,6 +279,7 @@ export function ConsultationForm({
     data.set("sexual_nitrates", form.sexualNitrates);
     data.set("consent_truth", String(form.consentTruth));
     data.set("consent_telehealth", String(form.consentTelehealth));
+    data.set("consent_privacy", String(form.consentPrivacy));
     return data;
   }
 
@@ -302,10 +305,6 @@ export function ConsultationForm({
     if (currentStep === 3) {
       if (form.conditions.length === 0) {
         return 'Select any applicable conditions or choose "None of the above".';
-      }
-      if (!form.medicalHistoryChoice) return "Choose No or Yes for additional medical history.";
-      if (form.medicalHistoryChoice === "yes" && !form.medicalHistory.trim()) {
-        return "Add the medical history you want your clinician to know.";
       }
     }
 
@@ -339,8 +338,8 @@ export function ConsultationForm({
       }
     }
 
-    if (currentStep === 6 && (!form.consentTruth || !form.consentTelehealth)) {
-      return "Please agree to clinical review and confirm your answers before submitting.";
+    if (currentStep === 6 && (!form.consentTruth || !form.consentTelehealth || !form.consentPrivacy)) {
+      return "Please review and confirm all three statements before submitting.";
     }
 
     return "";
@@ -701,24 +700,6 @@ export function ConsultationForm({
               </div>
             </fieldset>
 
-            <div className="patient-form-field patient-wide-field consultation-answer-question">
-              <span id="additional-history-label">Is there anything else about your health your clinician should know?</span>
-              <div className="consultation-binary-options" role="group" aria-labelledby="additional-history-label">
-                <button type="button" aria-pressed={form.medicalHistoryChoice === "none"} className={form.medicalHistoryChoice === "none" ? "is-selected" : ""} onClick={() => chooseAnswer("medicalHistory", "none")}>No</button>
-                <button type="button" aria-pressed={form.medicalHistoryChoice === "yes"} className={form.medicalHistoryChoice === "yes" ? "is-selected" : ""} onClick={() => chooseAnswer("medicalHistory", "yes")}>Yes</button>
-              </div>
-              {form.medicalHistoryChoice === "yes" && (
-                <label className="consultation-reveal-field">
-                  <span>Tell us about any other conditions, surgeries or important health concerns</span>
-                  <textarea
-                    rows={4}
-                    value={form.medicalHistory}
-                    onChange={(e) => patch("medicalHistory", e.target.value)}
-                    placeholder="Previous diagnoses, surgeries, treatments or other relevant history."
-                  />
-                </label>
-              )}
-            </div>
         {invalidSection === "medical-history" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
       </section>
 
@@ -771,44 +752,58 @@ export function ConsultationForm({
       </section>
 
       <section className="consultation-onepage-section consultation-consent-section" id="consent">
-        <div className="patient-intake-copy">
-          <h2>Review and submit</h2>
-          <p>Review your details above. When you are ready, consent to clinical review and submit.</p>
+        <div className="consultation-last-heading">
+          <span className="consultation-last-step" aria-hidden="true">05</span>
+          <div>
+            <h2>Last things</h2>
+            <p>One final note, three confirmations, and your answers go for clinical review.</p>
+          </div>
         </div>
-            <div className="patient-consent-card">
-              <ShieldCheck size={24} />
-              <div>
-                <h3>Before you submit</h3>
-                <p>By submitting, you confirm that your answers are accurate to the best of your knowledge.</p>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={form.consentTruth && form.consentTelehealth}
-                    onChange={(e) => {
-                      setForm((current) => ({
-                        ...current,
-                        consentTruth: e.target.checked,
-                        consentTelehealth: e.target.checked,
-                      }));
-                      setError("");
-                      setInvalidSection(null);
-                    }}
-                  />
-                  <span>I consent to a clinician reviewing my health information and providing care remotely when appropriate.</span>
-                </label>
-                <p>Your answers will be shared with the clinician reviewing your consultation. Submitting does not guarantee a prescription.</p>
-              </div>
-            </div>
+
+        <label className="consultation-last-note">
+          <span>Anything else your doctor should know? <small>(optional)</small></span>
+          <textarea
+            rows={5}
+            value={form.medicalHistory}
+            onChange={(event) => patch("medicalHistory", event.target.value)}
+            placeholder="Sleep, stress, past treatments, or anything else you'd like your doctor to know."
+            maxLength={3000}
+          />
+        </label>
+
+        <div className="consultation-last-checks" role="group" aria-label="Confirm before submitting">
+          <label className="consultation-last-check">
+            <input type="checkbox" checked={form.consentTruth} onChange={(event) => patch("consentTruth", event.target.checked)} />
+            <span className="consultation-last-check-content">
+              <strong>My answers are accurate</strong>
+              <span>I confirm that the details I provided are true and complete to the best of my knowledge.</span>
+            </span>
+          </label>
+          <label className="consultation-last-check">
+            <input type="checkbox" checked={form.consentTelehealth} onChange={(event) => patch("consentTelehealth", event.target.checked)} />
+            <span className="consultation-last-check-content">
+              <strong>I consent to telehealth care</strong>
+              <span>I understand a clinician will review my consultation remotely and may contact me for more details.</span>
+            </span>
+          </label>
+          <label className="consultation-last-check">
+            <input type="checkbox" checked={form.consentPrivacy} onChange={(event) => patch("consentPrivacy", event.target.checked)} />
+            <span className="consultation-last-check-content">
+              <strong>I understand how my health information is used</strong>
+              <span>My answers will be used to assess and manage my consultation and may be shared with clinicians involved in my care.</span>
+            </span>
+          </label>
+        </div>
         {invalidSection === "consent" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
       </section>
 
       {error && !invalidSection && <p className="consultation-inline-error" role="alert">{error}</p>}
 
-      <footer className="consultation-onepage-actions">
-        <p>A clinician will assess your information. Treatment or a prescription is not guaranteed.</p>
+      <footer className="consultation-onepage-actions consultation-last-actions">
         <button type="submit" className="patient-primary-button" disabled={isSubmitting}>
-          <CheckCircle2 size={18} /> Submit consultation
+          Send for clinical review
         </button>
+        <p>A qualified clinician will review your answers. A prescription is not guaranteed.</p>
       </footer>
     </form>
   );
