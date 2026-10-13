@@ -495,3 +495,74 @@ main.refined-home .home-page-content :is(
     white-space: normal !important;
   }
 }
+
+/* Client homepage review: remove redundant CTA, improve vertical rhythm and headings. */
+main.refined-home .mobile-home-header .mobile-home-signin {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-height: 43px;
+  padding-inline: 1.2rem;
+  font-family: var(--font-home), Inter, Arial, sans-serif;
+  font-size: .92rem;
+  font-weight: 600;
+}
+main.refined-home .mobile-home-header .mobile-home-header-actions {
+  gap: 8px !important;
+}
+/* Decorative CTA arrows go away; functional carousel navigation remains. */
+main.refined-home .home-page-content a.suga-btn svg,
+main.refined-home .home-page-content .hero-action-grid > a > svg,
+main.refined-home .home-page-content .care-expander-arrow,
+main.refined-home .home-progression button[aria-pressed] > svg {
+  display: none !important;
+}
+main.refined-home .care-heading-compact { display: none; }
+main.refined-home .home-progression header > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 7px 12px;
+  margin-bottom: 14px !important;
+  border: 1px solid #ddddda;
+  border-radius: 8px;
+  background: #f7f7f5;
+  color: #424242 !important;
+  font-family: var(--font-home), Inter, Arial, sans-serif;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: .075em;
+  line-height: 1.2 !important;
+}
+@media (max-width: 820px) {
+  main.refined-home .home-page-content > .home-pathways {
+    padding-bottom: 20px !important;
+  }
+  main.refined-home .home-page-content > .home-progression {
+    padding-top: 16px !important;
+    padding-bottom: 18px !important;
+  }
+  main.refined-home .home-page-content > .home-process {
+    padding-top: 22px !important;
+  }
+  main.refined-home .care-heading-full { display: none; }
+  main.refined-home .care-heading-compact { display: inline; white-space: nowrap; }
+  main.refined-home .home-process #care-expander-title {
+    max-width: none !important;
+    font-size: clamp(24px, 6.4vw, 31px) !important;
+  }
+  main.refined-home .home-progression header > span:first-child {
+    font-size: 13px !important;
+  }
+}
+@media (max-width: 390px) {
+  main.refined-home .mobile-home-header .mobile-home-signin {
+    padding-inline: .9rem;
+    font-size: .88rem;
+    min-height: 42px;
+  }
+  main.refined-home .home-process #care-expander-title {
+    font-size: clamp(22px, 6.2vw, 25px) !important;
+  }
+}

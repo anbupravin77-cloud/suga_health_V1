@@ -308,3 +308,15 @@
     transform: none !important;
   }
 }
+
+/* Arrowless CTA presentation; the real link and magnetic behavior are unchanged. */
+:global(main.refined-home) .motion .icon { display: none !important; }
+:global(main.refined-home .hero-action-grid) .motion.hospital {
+  padding-inline: 21px !important;
+  gap: 0 !important;
+}
+@media (max-width: 720px) {
+  :global(main.refined-home .hero-action-grid) .motion.hospital {
+    padding-inline: 16px !important;
+  }
+}

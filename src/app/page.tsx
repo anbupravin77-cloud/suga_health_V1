@@ -5,8 +5,6 @@ import productStyles from "@/components/public/product-gallery.module.css";
 import { Inter } from "next/font/google";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
-  ArrowRight,
-  ArrowUpRight,
   Award,
   Check,
   ChevronDown,
@@ -71,7 +69,7 @@ const pillars = [
     desc: "Confidential, discreet, clinically proven medications to enhance your vitality and improve your sexual health.",
     stats: "95% clinical response rate",
     timeline: "Works in 30–60 minutes",
-    highlights: ["On-demand or daily micro-dosing", "100% online & 100% confidential", "Delivered in unbranded discreet boxes"],
+    highlights: ["On-demand or daily dosing", "100% online & 100% confidential", "Delivered in unbranded discreet boxes"],
     path: "/sexual-health",
     img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop&grayscale=1",
   },
@@ -502,12 +500,7 @@ export default function HomePage() {
           </nav>
 
           <div className="mobile-home-header-actions flex items-center gap-2.5 sm:gap-3 shrink-0">
-            <Link href="/sign-in" className="mobile-home-signin suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
-            <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="mobile-home-start suga-btn suga-btn-primary suga-btn-compact hidden sm:inline-flex">
-              <span className="mobile-home-start-full">Start consultation</span>
-              <span className="mobile-home-start-short">Start</span>
-              <ArrowRight size={15} />
-            </Link>
+            <Link href="/sign-in" className="mobile-home-signin suga-btn suga-btn-account suga-btn-compact inline-flex">Sign In</Link>
             <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="mobile-home-menu lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
               {mobileMenuOpen ? <X size={23} /> : <Menu size={23} />}
             </button>
@@ -541,9 +534,9 @@ export default function HomePage() {
               </div>
 
               <div className="hero-action-grid" aria-label="Explore Suga Health care">
-                <Link href="/weight-loss" className="home-action-pill suga-btn suga-btn-secondary">Medical weight loss <ArrowUpRight size={16} /></Link>
-                <Link href="/hair-growth" className="home-action-pill suga-btn suga-btn-secondary">Hair growth <ArrowUpRight size={16} /></Link>
-                <Link href="/sexual-health" className="home-action-pill suga-btn suga-btn-secondary">Sexual Health <ArrowUpRight size={16} /></Link>
+                <Link href="/weight-loss" className="home-action-pill suga-btn suga-btn-secondary">Medical weight loss</Link>
+                <Link href="/hair-growth" className="home-action-pill suga-btn suga-btn-secondary">Hair growth</Link>
+                <Link href="/sexual-health" className="home-action-pill suga-btn suga-btn-secondary">Sexual Health</Link>
                 <MotionLink href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} variant="magnetic" tone="hospital" className="home-action-pill home-action-primary suga-btn suga-btn-primary">Start consultation</MotionLink>
               </div>
             </div>
@@ -616,7 +609,7 @@ export default function HomePage() {
                     </div>
                     <div className="pathway-actions">
                       <MotionLink href={pillar.path} variant="particle" tone="light" className="suga-btn suga-btn-secondary suga-btn-inline">View protocol</MotionLink>
-                      <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline"><span>Start consultation</span><ArrowUpRight size={15} /></Link>
+                      <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline"><span>Start consultation</span></Link>
                     </div>
                   </div>
                 </article>
@@ -630,7 +623,7 @@ export default function HomePage() {
         <section className="home-process home-editorial-section" aria-labelledby="care-expander-title">
           <div className="home-section-shell">
             <div className="care-expander-heading">
-              <h2 id="care-expander-title">What happens after you start?</h2>
+              <h2 id="care-expander-title"><span className="care-heading-full">What happens after you start?</span><span className="care-heading-compact">What happens next?</span></h2>
               <p>One consultation. A clear next step, based on your health information.</p>
             </div>
             <div
@@ -690,7 +683,7 @@ export default function HomePage() {
                       }}
                     >
                       <span className="care-expander-number">{item.step}</span>
-                      <span className="care-expander-arrow"><ArrowUpRight size={19} aria-hidden="true" /></span>
+                      
                     </button>
                     <div className="care-expander-layout">
                       <div className="care-expander-copy">
@@ -760,7 +753,7 @@ export default function HomePage() {
                 <p>Your consultation is reviewed by a licensed clinician, with ongoing support throughout your care.</p>
               </div>
               <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary">
-                <span>Start consultation</span><ArrowRight size={16} />
+                <span>Start consultation</span>
               </Link>
             </div>
           </div>
@@ -910,7 +903,7 @@ export default function HomePage() {
         </div>
         <div className="p-5 sm:p-6 bg-neutral-50 border-t border-neutral-200 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
           <span className="text-xs text-neutral-600">Ask a clinician about treatment suitability.</span>
-          <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="inline-flex items-center justify-center gap-1.5 px-6 py-3 rounded-full bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider">Start consultation <ArrowRight size={14} /></Link>
+          <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="inline-flex items-center justify-center gap-1.5 px-6 py-3 rounded-full bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider">Start consultation</Link>
         </div>
       </Modal>}
     </main>
