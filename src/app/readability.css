@@ -460,3 +460,38 @@ main.refined-home {
   --care-type-section-title: clamp(1.8rem, 1.5rem + 1.2vw, 2.45rem);
   --care-type-category-title: clamp(1.63rem, 1.35rem + 1.1vw, 2.3rem);
 }
+
+/*
+ * Homepage section-title system.
+ * Shared Inter scale for every major section h2 (not the hero h1,
+ * treatment cards, product labels, or interactive step headings).
+ */
+main.refined-home .home-page-content {
+  --home-section-heading-size: clamp(1.875rem, calc(1.35rem + 2.4vw), 3.25rem);
+}
+main.refined-home .home-page-content :is(
+  .home-pathways .editorial-section-heading h2,
+  .home-progression #milestones-title,
+  .home-process #care-expander-title,
+  .home-metrics #living-metrics-title,
+  .home-comparison .editorial-section-heading h2,
+  .home-doctors .editorial-section-heading h2,
+  .home-voices #voices-title,
+  .home-formulary .editorial-section-heading h2,
+  .home-faq #faq-title,
+  .home-final-cta h2
+) {
+  font-family: var(--font-home), Inter, Arial, sans-serif !important;
+  font-size: var(--home-section-heading-size) !important;
+  font-weight: 650 !important;
+  line-height: 1.14 !important;
+  letter-spacing: -.038em !important;
+  white-space: normal !important;
+  text-wrap: balance !important;
+  overflow-wrap: break-word;
+}
+@media (max-width: 700px) {
+  main.refined-home .home-doctors .section-title-line {
+    white-space: normal !important;
+  }
+}
