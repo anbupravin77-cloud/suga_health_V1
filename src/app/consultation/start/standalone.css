@@ -260,7 +260,7 @@
 /* Single-page consultation design (Inter) */
 .standalone-intake,
 .standalone-intake :is(h1,h2,h3,h4,p,span,small,strong,label,legend,button,input,select,textarea,a,summary) {
-  font-family: var(--font-consultation), Inter, Arial, sans-serif !important;
+  font-family: var(--font-inter), Inter, Arial, sans-serif !important;
 }
 
 .standalone-intake {
@@ -285,7 +285,7 @@
 }
 
 .standalone-intake-intro h1 {
-  font-family: var(--font-consultation), Inter, Arial, sans-serif !important;
+  font-family: var(--font-inter), Inter, Arial, sans-serif !important;
   font-size: clamp(32px, 4.2vw, 49px);
   font-weight: 650;
   letter-spacing: -.045em;
@@ -1199,4 +1199,118 @@ main.standalone-intake .standalone-intake-qa-skip svg {
 }
 @media (prefers-reduced-motion: reduce) {
   .standalone-intake #care-area .consultation-care-options button { transition: none; }
+}
+
+
+/* Consultation readability and mobile rhythm; scoped outside dashboard styles. */
+.standalone-intake .consultation-onepage {
+  font-size: 16px;
+  line-height: 1.55;
+}
+.standalone-intake .patient-intake-copy p,
+.standalone-intake #care-area .consultation-care-heading > p,
+.standalone-intake .consultation-last-heading p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+.standalone-intake .patient-form-field > span,
+.standalone-intake .patient-form-field > label,
+.standalone-intake .patient-field-heading label,
+.standalone-intake .patient-history-fieldset legend,
+.standalone-intake .consultation-last-note > span {
+  font-size: 15px;
+  line-height: 1.5;
+}
+.standalone-intake .patient-form-field input,
+.standalone-intake .patient-form-field select,
+.standalone-intake .patient-form-field textarea {
+  min-width: 0;
+  font-size: 16px;
+}
+.standalone-intake .patient-condition-grid button {
+  min-width: 0;
+  min-height: 54px;
+  padding: 12px 14px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.standalone-intake .consultation-profile-review p,
+.standalone-intake .consultation-profile-save p,
+.standalone-intake .consultation-last-check-content > span,
+.standalone-intake .consultation-last-actions > p,
+.standalone-intake .consultation-onepage-toolbar .patient-save-draft {
+  font-size: 15px;
+}
+.standalone-intake .consultation-last-check-content strong {
+  font-size: 16px;
+}
+.standalone-intake .consultation-last-note small,
+.standalone-intake .consultation-optional-detail small {
+  color: #707070;
+  font-size: 14px;
+  font-weight: 500;
+}
+.standalone-intake .consultation-optional-details {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.standalone-intake .consultation-optional-detail {
+  min-width: 0;
+  align-content: start;
+  gap: 10px;
+}
+.standalone-intake .consultation-optional-detail > span {
+  color: #292929;
+}
+.standalone-intake .consultation-optional-detail textarea {
+  box-sizing: border-box;
+  min-height: 128px;
+  padding: 14px 15px;
+  border: 1px solid #d7d7d7;
+  border-radius: 10px;
+  background: #fff;
+  color: #171717;
+  line-height: 1.6;
+  resize: vertical;
+}
+.standalone-intake .consultation-optional-detail textarea::placeholder {
+  color: #777;
+}
+.standalone-intake .consultation-optional-detail textarea:focus-visible {
+  outline: 2px solid #171717;
+  outline-offset: 2px;
+}
+.standalone-intake #about-you .patient-form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.standalone-intake #about-you .patient-form-field {
+  min-width: 0;
+}
+.standalone-intake #about-you .consultation-profile-save p {
+  flex-basis: 0;
+  min-width: 0;
+}
+@media (max-width: 700px) {
+  .standalone-intake .consultation-optional-details,
+  .standalone-intake #about-you .patient-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .standalone-intake #about-you .consultation-profile-save {
+    margin-top: 16px;
+    gap: 12px;
+  }
+  .standalone-intake #about-you .consultation-profile-save p {
+    flex: none;
+    width: 100%;
+    min-height: 0;
+  }
+  .standalone-intake .consultation-profile-review {
+    gap: 10px;
+  }
+  .standalone-intake .patient-condition-grid button {
+    font-size: 15px;
+  }
+  .standalone-intake #care-area .consultation-care-options strong {
+    font-size: 14px;
+  }
 }

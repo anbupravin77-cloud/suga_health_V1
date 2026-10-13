@@ -14,6 +14,11 @@ function numberValue(formData: FormData, key: string) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+function optionalClinicalDetails(formData: FormData, field: string) {
+  const input = value(formData, field);
+  return input.toLowerCase() === "none" ? "" : input;
+}
+
 function checked(formData: FormData, key: string) {
   const raw = value(formData, key);
   return raw === "true" || raw === "on" || raw === "1";
@@ -33,6 +38,8 @@ function buildConsultationRecord(formData: FormData, patientId: string) {
   const weightInput = numberValue(formData, "weight_value");
   const age = numberValue(formData, "age");
   const sex = value(formData, "sex");
+  const currentMedications = optionalClinicalDetails(formData, "current_medications");
+  const allergies = optionalClinicalDetails(formData, "allergies");
 
   const heightCm =
     heightUnit === "cm"
@@ -65,10 +72,10 @@ function buildConsultationRecord(formData: FormData, patientId: string) {
       age,
       sex,
       conditions: formData.getAll("conditions").map(String).filter(Boolean),
-      current_medications: value(formData, "current_medications"),
-      current_medications_choice: value(formData, "current_medications_choice"),
-      allergies: value(formData, "allergies"),
-      allergies_choice: value(formData, "allergies_choice"),
+      current_medications: currentMedications || "None",
+      current_medications_choice: currentMedications ? "yes" : "none",
+      allergies: allergies || "None",
+      allergies_choice: allergies ? "yes" : "none",
       medical_history: value(formData, "medical_history"),
       medical_history_choice: value(formData, "medical_history_choice"),
       care_goal: value(formData, "care_goal"),

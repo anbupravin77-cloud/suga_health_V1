@@ -45,9 +45,7 @@ type FormState = {
   sex: string;
   conditions: string[];
   currentMedications: string;
-  currentMedicationsChoice: "" | "none" | "yes";
   allergies: string;
-  allergiesChoice: "" | "none" | "yes";
   medicalHistory: string;
   medicalHistoryChoice: "" | "none" | "yes";
   careGoal: string;
@@ -110,6 +108,11 @@ function ageFromDateOfBirth(dateOfBirth: string): string {
   return age >= 0 && age <= 120 ? String(age) : "";
 }
 
+function readOptionalDetails(value: unknown): string {
+  if (typeof value !== "string") return "";
+  return value.trim().toLowerCase() === "none" ? "" : value;
+}
+
 function readAnswerChoice(value: unknown, storedChoice: unknown): "" | "none" | "yes" {
   if (storedChoice === "none" || storedChoice === "yes") return storedChoice;
   if (typeof value !== "string" || !value.trim()) return "";
@@ -146,10 +149,8 @@ function initialState(draft?: Draft, defaults?: IntakeDefaults): FormState {
     age: ageFromDateOfBirth(defaults?.dateOfBirth ?? ""),
     sex: defaults?.sex ?? "",
     conditions,
-    currentMedications: readString(r.current_medications),
-    currentMedicationsChoice: readAnswerChoice(r.current_medications, r.current_medications_choice),
-    allergies: readString(r.allergies),
-    allergiesChoice: readAnswerChoice(r.allergies, r.allergies_choice),
+    currentMedications: readOptionalDetails(r.current_medications),
+    allergies: readOptionalDetails(r.allergies),
     medicalHistory: readString(r.medical_history).trim().toLowerCase() === "none" ? "" : readString(r.medical_history),
     medicalHistoryChoice: readAnswerChoice(r.medical_history, r.medical_history_choice),
     careGoal: readString(r.care_goal),
@@ -356,38 +357,6 @@ export function ConsultationForm({
     setInvalidSection(null);
   }
 
-  function chooseAnswer(
-    field: "currentMedications" | "allergies" | "medicalHistory",
-    choice: "none" | "yes",
-  ) {
-    setForm((current) => {
-      const cleanValue = (value: string) =>
-        choice === "none" ? "None" : value.trim().toLowerCase() === "none" ? "" : value;
-
-      if (field === "currentMedications") {
-        return {
-          ...current,
-          currentMedicationsChoice: choice,
-          currentMedications: cleanValue(current.currentMedications),
-        };
-      }
-      if (field === "allergies") {
-        return {
-          ...current,
-          allergiesChoice: choice,
-          allergies: cleanValue(current.allergies),
-        };
-      }
-      return {
-        ...current,
-        medicalHistoryChoice: choice,
-        medicalHistory: cleanValue(current.medicalHistory),
-      };
-    });
-    setError("");
-    setInvalidSection(null);
-  }
-
   function toFormData() {
     const data = new FormData();
     if (draftId) data.set("id", draftId);
@@ -404,10 +373,12 @@ export function ConsultationForm({
     data.set("age", ageFromDateOfBirth(form.dateOfBirth));
     data.set("sex", form.sex);
     form.conditions.forEach((condition) => data.append("conditions", condition));
-    data.set("current_medications_choice", form.currentMedicationsChoice);
-    data.set("current_medications", form.currentMedicationsChoice === "none" ? "None" : form.currentMedicationsChoice === "yes" ? form.currentMedications.trim() : "");
-    data.set("allergies_choice", form.allergiesChoice);
-    data.set("allergies", form.allergiesChoice === "none" ? "None" : form.allergiesChoice === "yes" ? form.allergies.trim() : "");
+    const medications = readOptionalDetails(form.currentMedications).trim();
+    const allergies = readOptionalDetails(form.allergies).trim();
+    data.set("current_medications_choice", medications ? "yes" : "none");
+    data.set("current_medications", medications || "None");
+    data.set("allergies_choice", allergies ? "yes" : "none");
+    data.set("allergies", allergies || "None");
     data.set("medical_history_choice", form.medicalHistory.trim() ? "yes" : "none");
     data.set("medical_history", form.medicalHistory.trim() || "None");
     data.set("care_goal", form.careGoal);
@@ -447,17 +418,6 @@ export function ConsultationForm({
     if (currentStep === 3) {
       if (form.conditions.length === 0) {
         return 'Select any applicable conditions or choose "None of the above".';
-      }
-    }
-
-    if (currentStep === 4) {
-      if (!form.currentMedicationsChoice) return "Choose No or Yes for current medicines.";
-      if (form.currentMedicationsChoice === "yes" && !form.currentMedications.trim()) {
-        return "List your current medications.";
-      }
-      if (!form.allergiesChoice) return "Choose No or Yes for medicine allergies.";
-      if (form.allergiesChoice === "yes" && !form.allergies.trim()) {
-        return "List your known drug allergies.";
       }
     }
 
@@ -834,8 +794,7 @@ export function ConsultationForm({
               <p>Choose any health conditions that apply to you. Your clinician can ask for further details if needed.</p>
             </div>
 
-            <fieldset className="patient-history-fieldset">
-              <legend>Do you have, or have you previously had, any of these conditions?</legend>
+            <fieldset className="patient-history-fieldset" aria-label="Health conditions">
               <div className="patient-condition-grid">
                 {conditionOptions.map((condition) => (
                   <button
@@ -857,48 +816,31 @@ export function ConsultationForm({
 
       <section className="consultation-onepage-section" id="medications">
         <div className="patient-intake-copy">
-          <h2>Medicines and allergies</h2>
-          <p>Answer these safety questions and add details only where needed.</p>
+          <h2>Current Medications and Allergies</h2>
+          <p>List any current medicines or known medication allergies. Leave a box blank if none.</p>
         </div>
 
-        <div className="patient-form-grid consultation-answer-grid">
-          <div className="patient-form-field consultation-answer-question">
-            <span id="current-medications-label">Are you taking any medicines or supplements?</span>
-            <div className="consultation-binary-options" role="group" aria-labelledby="current-medications-label">
-              <button type="button" aria-pressed={form.currentMedicationsChoice === "none"} className={form.currentMedicationsChoice === "none" ? "is-selected" : ""} onClick={() => chooseAnswer("currentMedications", "none")}>No</button>
-              <button type="button" aria-pressed={form.currentMedicationsChoice === "yes"} className={form.currentMedicationsChoice === "yes" ? "is-selected" : ""} onClick={() => chooseAnswer("currentMedications", "yes")}>Yes</button>
-            </div>
-            {form.currentMedicationsChoice === "yes" && (
-              <label className="consultation-reveal-field">
-                <span>What are you taking? Include names and doses if you know them.</span>
-                <textarea
-                  rows={4}
-                  value={form.currentMedications}
-                  onChange={(e) => patch("currentMedications", e.target.value)}
-                  placeholder="Include names and doses if you know them."
-                />
-              </label>
-            )}
-          </div>
-
-          <div className="patient-form-field consultation-answer-question">
-            <span id="drug-allergies-label">Have you ever had an allergic reaction to a medicine?</span>
-            <div className="consultation-binary-options" role="group" aria-labelledby="drug-allergies-label">
-              <button type="button" aria-pressed={form.allergiesChoice === "none"} className={form.allergiesChoice === "none" ? "is-selected" : ""} onClick={() => chooseAnswer("allergies", "none")}>No</button>
-              <button type="button" aria-pressed={form.allergiesChoice === "yes"} className={form.allergiesChoice === "yes" ? "is-selected" : ""} onClick={() => chooseAnswer("allergies", "yes")}>Yes</button>
-            </div>
-            {form.allergiesChoice === "yes" && (
-              <label className="consultation-reveal-field">
-                <span>Which medicine caused the reaction, and what happened?</span>
-                <textarea
-                  rows={4}
-                  value={form.allergies}
-                  onChange={(e) => patch("allergies", e.target.value)}
-                  placeholder="List the medicine and reaction, if known."
-                />
-              </label>
-            )}
-          </div>
+        <div className="patient-form-grid consultation-answer-grid consultation-optional-details">
+          <label className="patient-form-field consultation-optional-detail">
+            <span>Current medicines or supplements <small>(optional)</small></span>
+            <textarea
+              rows={4}
+              value={form.currentMedications}
+              onChange={(event) => patch("currentMedications", event.target.value)}
+              placeholder="Medicine or supplement names and doses, if any."
+              maxLength={3000}
+            />
+          </label>
+          <label className="patient-form-field consultation-optional-detail">
+            <span>Medication allergies <small>(optional)</small></span>
+            <textarea
+              rows={4}
+              value={form.allergies}
+              onChange={(event) => patch("allergies", event.target.value)}
+              placeholder="Medicine names and reactions, if any."
+              maxLength={3000}
+            />
+          </label>
         </div>
         {invalidSection === "medications" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
       </section>
