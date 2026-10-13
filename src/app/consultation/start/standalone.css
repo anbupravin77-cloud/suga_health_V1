@@ -856,35 +856,6 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   --last-accent: #171717;
   --last-border: #dedede;
 }
-.standalone-intake .consultation-last-heading {
-  display: flex;
-  align-items: start;
-  gap: 13px;
-  margin-bottom: 26px;
-}
-.standalone-intake .consultation-last-step {
-  flex: 0 0 auto;
-  padding-top: 5px;
-  color: var(--last-accent);
-  font-size: 12px;
-  line-height: 1.4;
-  letter-spacing: .09em;
-  font-weight: 800;
-}
-.standalone-intake .consultation-last-heading h2 {
-  margin: 0;
-  color: #161616;
-  font-size: clamp(22px, 3vw, 29px);
-  font-weight: 650;
-  line-height: 1.22;
-  letter-spacing: -.035em;
-}
-.standalone-intake .consultation-last-heading p {
-  margin: 6px 0 0;
-  color: #686868;
-  font-size: 14px;
-  line-height: 1.65;
-}
 .standalone-intake .consultation-last-note {
   display: grid;
   gap: 11px;
@@ -1111,36 +1082,6 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   padding-top: 24px;
   border-top: 0;
 }
-.standalone-intake #care-area .consultation-care-heading {
-  margin-bottom: 23px;
-}
-.standalone-intake #care-area .consultation-care-title {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-.standalone-intake #care-area .consultation-care-number {
-  flex: 0 0 auto;
-  color: #454545;
-  font-size: 12px;
-  font-weight: 750;
-  letter-spacing: .08em;
-  line-height: 1.3;
-}
-.standalone-intake #care-area .consultation-care-title h2 {
-  margin: 0;
-  color: #171717;
-  font-size: clamp(21px, 2.5vw, 25px);
-  font-weight: 650;
-  letter-spacing: -.035em;
-  line-height: 1.25;
-}
-.standalone-intake #care-area .consultation-care-heading > p {
-  margin: 7px 0 0;
-  color: #686868;
-  font-size: 14px;
-  line-height: 1.6;
-}
 .standalone-intake #care-area .consultation-care-options {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1195,7 +1136,6 @@ main.standalone-intake .standalone-intake-qa-skip svg {
     gap: 8px;
   }
   .standalone-intake #care-area .consultation-care-options strong { font-size: 12px; }
-  .standalone-intake #care-area .consultation-care-title h2 { font-size: clamp(19px, 5vw, 23px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .standalone-intake #care-area .consultation-care-options button { transition: none; }
@@ -1207,9 +1147,7 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   font-size: 16px;
   line-height: 1.55;
 }
-.standalone-intake .patient-intake-copy p,
-.standalone-intake #care-area .consultation-care-heading > p,
-.standalone-intake .consultation-last-heading p {
+.standalone-intake .patient-intake-copy p {
   font-size: 16px;
   line-height: 1.6;
 }
@@ -1312,5 +1250,58 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   }
   .standalone-intake #care-area .consultation-care-options strong {
     font-size: 14px;
+  }
+}
+
+
+/* Numbered headings across the full clinical intake, including conditional steps. */
+.standalone-intake .consultation-section-heading {
+  margin-bottom: 24px;
+  min-width: 0;
+}
+.standalone-intake .consultation-section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 13px;
+  min-width: 0;
+}
+.standalone-intake .consultation-section-number {
+  flex: 0 0 28px;
+  font-family: var(--font-inter), Inter, Arial, sans-serif !important;
+  font-size: 18px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.035em;
+  line-height: 1.2;
+  color: #555;
+}
+.standalone-intake .consultation-section-title h2 {
+  margin: 0;
+  min-width: 0;
+  font-family: var(--font-inter), Inter, Arial, sans-serif !important;
+  font-size: clamp(22px, 3vw, 29px);
+  font-weight: 650;
+  line-height: 1.22;
+  letter-spacing: -.035em;
+  color: #161616;
+}
+.standalone-intake .consultation-section-heading > p {
+  margin: 8px 0 0 41px;
+  max-width: 70ch;
+  color: #686868;
+  font-size: 16px;
+  line-height: 1.6;
+}
+@media (max-width: 700px) {
+  .standalone-intake .consultation-section-title { gap: 10px; }
+  .standalone-intake .consultation-section-number {
+    flex-basis: 25px;
+    font-size: 17px;
+  }
+  .standalone-intake .consultation-section-title h2 {
+    font-size: clamp(21px, 5.5vw, 25px);
+  }
+  .standalone-intake .consultation-section-heading > p {
+    margin-left: 35px;
   }
 }

@@ -172,6 +172,22 @@ function careTitle(id: string) {
   return careAreas.find((area) => area.id === id)?.title || id;
 }
 
+function ConsultationSectionHeading({ number, title, description }: {
+  number: number;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="patient-intake-copy consultation-section-heading">
+      <div className="consultation-section-title">
+        <span className="consultation-section-number" aria-hidden="true">{String(number).padStart(2, "0")}</span>
+        <h2>{title}</h2>
+      </div>
+      <p>{description}</p>
+    </div>
+  );
+}
+
 
 type ProfileSnapshot = {
   firstName: string;
@@ -546,13 +562,11 @@ export function ConsultationForm({
       </div>
 
       <section className="consultation-onepage-section" id="care-area">
-            <div className="patient-intake-copy consultation-care-heading">
-              <div className="consultation-care-title">
-                <span className="consultation-care-number" aria-hidden="true">01</span>
-                <h2>What brings you in today?</h2>
-              </div>
-              <p>Choose one. Your doctor will look at the whole picture.</p>
-            </div>
+            <ConsultationSectionHeading
+              number={1}
+              title="What brings you in today?"
+              description="Choose one. Your doctor will look at the whole picture."
+            />
 
             <div className="patient-care-choice-grid consultation-care-options" role="group" aria-label="Choose a care area">
               {careAreas.map((area) => {
@@ -590,10 +604,11 @@ export function ConsultationForm({
 
       {form.primaryConcern && (
       <section className="consultation-onepage-section" id="treatment-questions">
-            <div className="patient-intake-copy">
-              <h2>A few questions about {careTitle(form.primaryConcern).toLowerCase()}</h2>
-              <p>These answers help your clinician understand your concern and check whether treatments may be safe for you.</p>
-            </div>
+            <ConsultationSectionHeading
+              number={2}
+              title={`A few questions about ${careTitle(form.primaryConcern).toLowerCase()}`}
+              description="These answers help your clinician understand your concern and check whether treatments may be safe for you."
+            />
 
             <div className="patient-form-grid">
               {form.primaryConcern === "weight" && (
@@ -693,10 +708,11 @@ export function ConsultationForm({
       )}
 
       <section className="consultation-onepage-section" id="about-you">
-        <div className="patient-intake-copy">
-          <h2>Your details</h2>
-          <p>We've used the information from your account where available. Please check it and add your current height and weight.</p>
-        </div>
+        <ConsultationSectionHeading
+          number={form.primaryConcern ? 3 : 2}
+          title="Your details"
+          description="We've used the information from your account where available. Please check it and add your current height and weight."
+        />
 
         {!editingAccountDetails ? (
           <div className="consultation-profile-review">
@@ -789,10 +805,11 @@ export function ConsultationForm({
       </section>
 
       <section className="consultation-onepage-section" id="medical-history">
-            <div className="patient-intake-copy">
-              <h2>Your health history</h2>
-              <p>Choose any health conditions that apply to you. Your clinician can ask for further details if needed.</p>
-            </div>
+            <ConsultationSectionHeading
+              number={form.primaryConcern ? 4 : 3}
+              title="Your health history"
+              description="Choose any health conditions that apply to you. Your clinician can ask for further details if needed."
+            />
 
             <fieldset className="patient-history-fieldset" aria-label="Health conditions">
               <div className="patient-condition-grid">
@@ -815,10 +832,11 @@ export function ConsultationForm({
       </section>
 
       <section className="consultation-onepage-section" id="medications">
-        <div className="patient-intake-copy">
-          <h2>Current Medications and Allergies</h2>
-          <p>List any current medicines or known medication allergies. Leave a box blank if none.</p>
-        </div>
+        <ConsultationSectionHeading
+          number={form.primaryConcern ? 5 : 4}
+          title="Current Medications and Allergies"
+          description="List any current medicines or known medication allergies. Leave a box blank if none."
+        />
 
         <div className="patient-form-grid consultation-answer-grid consultation-optional-details">
           <label className="patient-form-field consultation-optional-detail">
@@ -846,13 +864,11 @@ export function ConsultationForm({
       </section>
 
       <section className="consultation-onepage-section consultation-consent-section" id="consent">
-        <div className="consultation-last-heading">
-          <span className="consultation-last-step" aria-hidden="true">05</span>
-          <div>
-            <h2>Last things</h2>
-            <p>One final note, three confirmations, and your answers go for clinical review.</p>
-          </div>
-        </div>
+        <ConsultationSectionHeading
+          number={form.primaryConcern ? 6 : 5}
+          title="Last things"
+          description="One final note, three confirmations, and your answers go for clinical review."
+        />
 
         <label className="consultation-last-note">
           <span>Anything else your doctor should know? <small>(optional)</small></span>
