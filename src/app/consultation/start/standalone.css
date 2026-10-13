@@ -1279,7 +1279,7 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   margin: 0;
   min-width: 0;
   font-family: var(--font-inter), Inter, Arial, sans-serif !important;
-  font-size: clamp(22px, 3vw, 29px);
+  font-size: clamp(24px, 3.2vw, 31px);
   font-weight: 650;
   line-height: 1.22;
   letter-spacing: -.035em;
@@ -1299,7 +1299,7 @@ main.standalone-intake .standalone-intake-qa-skip svg {
     font-size: 17px;
   }
   .standalone-intake .consultation-section-title h2 {
-    font-size: clamp(21px, 5.5vw, 25px);
+    font-size: clamp(23px, 5.9vw, 27px);
   }
   .standalone-intake .consultation-section-heading > p {
     margin-left: 35px;
