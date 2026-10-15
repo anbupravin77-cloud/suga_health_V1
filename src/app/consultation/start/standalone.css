@@ -1279,11 +1279,13 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   margin: 0;
   min-width: 0;
   font-family: var(--font-inter), Inter, Arial, sans-serif !important;
-  font-size: clamp(24px, 3.2vw, 31px);
+  font-size: 30px;
   font-weight: 650;
   line-height: 1.22;
   letter-spacing: -.035em;
   color: #161616;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 .standalone-intake .consultation-section-heading > p {
   margin: 8px 0 0 41px;
@@ -1299,7 +1301,7 @@ main.standalone-intake .standalone-intake-qa-skip svg {
     font-size: 17px;
   }
   .standalone-intake .consultation-section-title h2 {
-    font-size: clamp(23px, 5.9vw, 27px);
+    font-size: 26px;
   }
   .standalone-intake .consultation-section-heading > p {
     margin-left: 35px;
@@ -1314,7 +1316,11 @@ main.standalone-intake .standalone-intake-qa-skip svg {
 }
 .standalone-intake-intro { max-width: none; margin-bottom: 16px; }
 .standalone-intake-intro h1 { white-space: nowrap; letter-spacing: -.052em; }
-.standalone-intake .consultation-onepage-toolbar { min-height: 42px; }
+.standalone-intake .consultation-onepage-toolbar {
+  box-sizing: border-box;
+  min-height: 0;
+  padding: 20px 0 10px;
+}
 .standalone-intake .consultation-onepage-section { padding: 22px 0; }
 .standalone-intake .consultation-section-heading { margin-bottom: 13px; }
 .standalone-intake .consultation-section-heading > p { margin-top: 5px; }
@@ -1341,11 +1347,6 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   border: 1px solid #dedede; border-radius: 9px;
   background: #f8f8f8; color: #333; font-size: 14px;
 }
-.standalone-intake #medications .consultation-section-title h2 {
-  font-size: clamp(19px, 2.4vw, 27px);
-  white-space: nowrap;
-  letter-spacing: -.045em;
-}
 .standalone-intake .consultation-last-note { margin-bottom: 15px; gap: 0; }
 .standalone-intake .consultation-last-actions {
   margin-top: 18px; padding-top: 18px; gap: 0;
@@ -1358,15 +1359,14 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   .standalone-intake-intro h1 { font-size: clamp(19px, 5.7vw, 28px); }
   .standalone-intake .consultation-onepage-section { padding: 17px 0; }
   .standalone-intake .consultation-section-heading { margin-bottom: 12px; }
-  .standalone-intake #medications .consultation-section-title h2 {
-    font-size: clamp(14px, 3.85vw, 17px);
-    letter-spacing: -.055em;
+  .standalone-intake .consultation-onepage-toolbar {
+    min-height: 0;
+    padding-top: 20px;
+    padding-bottom: 10px;
   }
-  .standalone-intake .consultation-onepage-toolbar { min-height: 40px; }
   .standalone-intake .consultation-last-check { padding: 14px; }
   .standalone-intake .consultation-last-actions { margin-top: 14px; padding-top: 14px; }
 }
 @media (max-width: 360px) {
-  .standalone-intake #medications .consultation-section-title h2 { font-size: 13.5px; }
   .standalone-intake-intro h1 { font-size: 19px; }
 }
