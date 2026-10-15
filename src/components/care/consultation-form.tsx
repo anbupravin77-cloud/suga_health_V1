@@ -73,7 +73,8 @@ const conditionOptions = [
   { value: "None of the above", label: "None of the above" },
 ];
 
-// A compact hairline silhouette, rather than a generic wave or haircut icon.
+// Three hair strands emerging from the scalp: a simple growth symbol
+// at the same size and stroke weight as the other treatment icons.
 function HairGrowthIcon({ className, size = 20, strokeWidth = 1.8 }: {
   className?: string;
   size?: number;
@@ -83,10 +84,10 @@ function HairGrowthIcon({ className, size = 20, strokeWidth = 1.8 }: {
     <svg className={className} width={size} height={size} viewBox="0 0 24 24"
       fill="none" stroke="currentColor" strokeWidth={strokeWidth}
       strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M5 10c0-4.5 3-7.5 7-7.5s7 3 7 7.5v3" />
-      <path d="M5 10c1.6-.3 2.6-1.5 3.1-3.2.9 1.7 2.1 2.4 4.1 2.3 1.8 0 3.2-.9 4-2.4.7 1.6 1.6 2.5 2.8 2.8" />
-      <path d="M5 12v2c0 2 1.3 3 3 3.5M19 12v2c0 2-1.3 3-3 3.5" />
-      <path d="M9 20c1 .8 2 1.1 3 1.1s2-.3 3-1.1" />
+      <path d="M4 19c4-1.6 12-1.6 16 0" />
+      <path d="M7 17.5C4 13 8.8 10 7 4.5" />
+      <path d="M12 17.5c-2.6-4.5 2.6-8 0-13" />
+      <path d="M17 17.5c-1.7-4.5 3-7.5 0-13" />
     </svg>
   );
 }
