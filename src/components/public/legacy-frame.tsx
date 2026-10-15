@@ -30,7 +30,7 @@ export function LegacyPublicFrame({ children }: { children: ReactNode }) {
         </nav>
         <div className="treatment-mobile-header-actions flex items-center gap-2.5 sm:gap-3 shrink-0">
           <Link href="/sign-in" className="treatment-mobile-signin suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
-          <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="treatment-mobile-start suga-btn suga-btn-primary suga-btn-compact hidden sm:inline-flex">
+          <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="treatment-mobile-start suga-btn suga-btn-primary suga-btn-compact suga-consultation-cta hidden sm:inline-flex">
             <span className="treatment-mobile-start-full">Start consultation</span>
             <span className="treatment-mobile-start-short">Start</span>
             <ArrowRight size={15} />
@@ -69,5 +69,5 @@ export function LegacySection({ children, surface = false }: { children: ReactNo
 }
 
 export function LegacyCta({ title, description }: { title: string; description: string }) {
-  return <LegacySection><div className="max-w-3xl mx-auto text-center py-4 sm:py-6"><h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-950 mb-4 sm:mb-6 tracking-tight">{title}</h2><p className="text-neutral-600 text-base sm:text-lg leading-relaxed mb-6 sm:mb-8 max-w-xl mx-auto">{description}</p><Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-large">Start Free Assessment <ArrowRight size={17} /></Link></div></LegacySection>;
+  return <LegacySection><div className="max-w-3xl mx-auto text-center py-4 sm:py-6"><h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-950 mb-4 sm:mb-6 tracking-tight">{title}</h2><p className="text-neutral-600 text-base sm:text-lg leading-relaxed mb-6 sm:mb-8 max-w-xl mx-auto">{description}</p><Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-large suga-consultation-cta">Start Free Assessment <ArrowRight size={17} /></Link></div></LegacySection>;
 }

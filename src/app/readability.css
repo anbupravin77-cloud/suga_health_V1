@@ -701,16 +701,19 @@ main.refined-home .mobile-home-header .mobile-home-login:focus-visible {
   }
 }
 
-/* The scrolling announcement stays above the fixed homepage header. */
+/* Announcement scrolls away normally; header alone stays at the viewport top.
+   Clip horizontal overflow without creating a scrolling ancestor for sticky. */
 main.refined-home {
   --home-announcement-height: 38px;
+  overflow-x: clip;
+  overflow-y: visible;
 }
 main.refined-home > .home-trust-ticker {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  z-index: auto;
   height: var(--home-announcement-height);
   max-width: 100%;
 }
@@ -721,13 +724,69 @@ main.refined-home > .home-trust-ticker .home-marquee-track {
   align-items: center;
 }
 main.refined-home > .mobile-home-header {
-  top: var(--home-announcement-height) !important;
+  position: sticky;
+  top: 0 !important;
+  left: auto;
+  right: auto;
+  width: 100%;
 }
 main.refined-home > .home-page-content {
-  padding-top: calc(var(--home-announcement-height) + 70px) !important;
+  padding-top: 0 !important;
 }
-@media (max-width: 430px) {
-  main.refined-home > .home-page-content {
-    padding-top: calc(var(--home-announcement-height) + 68px) !important;
+
+
+/* Public consultation entry: one Suga crimson CTA design wherever it appears.
+   Scoped by an explicit class so Login, treatment choices and clinical controls
+   retain their own visual hierarchy and interactive behavior. */
+a.suga-consultation-cta,
+a.suga-consultation-cta:visited,
+a.suga-consultation-cta:hover,
+a.suga-consultation-cta:focus-visible {
+  background: #ed0723 !important;
+  background-color: #ed0723 !important;
+  background-image: none !important;
+  background-size: auto !important;
+  border: 1px solid #ed0723 !important;
+  border-radius: 999px !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  font-family: var(--font-inter), Inter, Arial, sans-serif !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  text-decoration: none !important;
+  box-shadow: none;
+}
+a.suga-consultation-cta > span[aria-hidden="true"]:first-child {
+  background: #ed0723 !important;
+  background-image: none !important;
+}
+a.suga-consultation-cta :is(span, svg) {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+a.suga-consultation-cta:focus-visible {
+  outline: 2px solid #a90a1f !important;
+  outline-offset: 3px;
+}
+@media (hover: hover) and (pointer: fine) {
+  a.suga-consultation-cta:hover {
+    background: #df0924 !important;
+    background-color: #df0924 !important;
+    border-color: #df0924 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 7px 18px rgba(237,7,35,.18) !important;
+  }
+  a.suga-consultation-cta:hover > span[aria-hidden="true"]:first-child {
+    background: #df0924 !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  a.suga-consultation-cta {
+    transition: none !important;
+    animation: none !important;
+  }
+  a.suga-consultation-cta:hover {
+    transform: none !important;
   }
 }

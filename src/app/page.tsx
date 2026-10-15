@@ -484,7 +484,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main className={`legacy-public refined-home ${homeInter.variable} min-h-screen bg-white text-black overflow-x-hidden`}>
+    <main className={`legacy-public refined-home ${homeInter.variable} min-h-screen bg-white text-black overflow-x-clip`}>
       <div className="home-trust-ticker" aria-label="Suga Health service highlights">
         <div className="home-marquee-track">
           {[0, 1, 2, 3].map((group) => (
@@ -497,7 +497,7 @@ export default function HomePage() {
           ))}
         </div>
       </div>
-      <header className="legacy-header mobile-home-header fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
+      <header className="legacy-header mobile-home-header sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
         <div className="mobile-home-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
           <Link href="/" className="mobile-home-brand flex flex-col items-start select-none shrink-0">
             <span className="font-sans text-xl sm:text-2xl tracking-tighter uppercase font-black text-neutral-950 leading-none">SUGA<span className="text-neutral-400">.</span>HEALTH</span>
@@ -526,7 +526,7 @@ export default function HomePage() {
       </header>
       <MobilePublicMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} fontClassName={`${homeInter.variable} home-inter-menu`} />
 
-      <div className="home-page-content pt-[70px]">
+      <div className="home-page-content">
         <section className="home-hero bg-white border-b border-neutral-200/80">
           <div className="home-hero-composition">
             <div className="hero-intro-grid">
@@ -540,7 +540,7 @@ export default function HomePage() {
                 <Link href="/weight-loss" className="home-action-pill suga-btn suga-btn-secondary">Medical weight loss</Link>
                 <Link href="/hair-growth" className="home-action-pill suga-btn suga-btn-secondary">Hair growth</Link>
                 <Link href="/sexual-health" className="home-action-pill suga-btn suga-btn-secondary">Sexual Health</Link>
-                <MotionLink href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} variant="magnetic" tone="hospital" className="home-action-pill home-action-primary suga-btn suga-btn-primary">Start consultation</MotionLink>
+                <MotionLink href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} variant="magnetic" tone="hospital" className="home-action-pill home-action-primary suga-btn suga-btn-primary suga-consultation-cta">Start consultation</MotionLink>
               </div>
             </div>
 
@@ -612,7 +612,7 @@ export default function HomePage() {
                     </div>
                     <div className="pathway-actions">
                       <MotionLink href={pillar.path} variant="particle" tone="light" className="suga-btn suga-btn-secondary suga-btn-inline">View protocol</MotionLink>
-                      <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline"><span>Start consultation</span></Link>
+                      <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-btn-inline suga-consultation-cta"><span>Start consultation</span></Link>
                     </div>
                   </div>
                 </article>
@@ -755,7 +755,7 @@ export default function HomePage() {
                 <h3>Real doctors. Direct access. Care built around you.</h3>
                 <p>Your consultation is reviewed by a licensed clinician, with ongoing support throughout your care.</p>
               </div>
-              <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary">
+              <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-btn-primary suga-consultation-cta">
                 <span>Start consultation</span>
               </Link>
             </div>
@@ -871,7 +871,7 @@ export default function HomePage() {
               <h2>Your personalized medical plan is&nbsp;5 minutes away.</h2>
               <p>Answer quick medical questions. A licensed clinician will review your file and tailor your prescription.</p>
             </div>
-            <MotionLink href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} variant="liquid" tone="light" className="suga-btn suga-btn-large">Start Free Assessment</MotionLink>
+            <MotionLink href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} variant="magnetic" tone="hospital" className="suga-btn suga-btn-large suga-consultation-cta">Start Free Assessment</MotionLink>
           </div>
         </section>
       </div>
@@ -906,7 +906,7 @@ export default function HomePage() {
         </div>
         <div className="p-5 sm:p-6 bg-neutral-50 border-t border-neutral-200 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
           <span className="text-xs text-neutral-600">Ask a clinician about treatment suitability.</span>
-          <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="inline-flex items-center justify-center gap-1.5 px-6 py-3 rounded-full bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider">Start consultation</Link>
+          <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="suga-btn suga-consultation-cta inline-flex items-center justify-center gap-1.5 px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider">Start consultation</Link>
         </div>
       </Modal>}
     </main>

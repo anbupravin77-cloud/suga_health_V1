@@ -64,7 +64,7 @@ export function MobilePublicMenu({ open, onClose, fontClassName }: { open: boole
               rememberReturnPosition();
               onClose();
             }}
-            className="suga-btn suga-btn-primary suga-btn-full"
+            className="suga-btn suga-btn-primary suga-btn-full suga-consultation-cta"
           >
             Start consultation
           </Link>
