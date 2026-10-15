@@ -620,10 +620,11 @@ main.refined-home .mobile-home-header .mobile-home-profile {
   color: #151515;
   text-decoration: none;
 }
-main.refined-home .mobile-home-header .mobile-home-profile svg {
-  transition: transform 220ms cubic-bezier(.2,.7,.2,1);
+main.refined-home .mobile-home-header .mobile-home-profile {
+  cursor: default;
+  user-select: none;
+  pointer-events: none;
 }
-main.refined-home .mobile-home-header .mobile-home-profile:focus-visible,
 main.refined-home .mobile-home-header .mobile-home-login:focus-visible {
   outline: 2px solid #151515;
   outline-offset: 3px;
@@ -681,13 +682,6 @@ main.refined-home .mobile-home-header .mobile-home-login:focus-visible {
   :is(.suga-btn.suga-btn-secondary, .button.button-secondary, .suga-btn.suga-btn-account):not(:disabled):not([aria-disabled="true"]):hover {
     box-shadow: 0 4px 14px rgba(17,17,17,.065);
   }
-  main.refined-home .mobile-home-header .mobile-home-profile:hover svg {
-    transform: scale(1.08);
-  }
-  main.refined-home .mobile-home-header .mobile-home-profile:hover {
-    background: #ededeb;
-    border-color: #b0b0ad;
-  }
 }
 :where(button, a.suga-btn, a.button, a[role="button"]):focus-visible {
   outline: 2px solid #171717;
@@ -698,10 +692,6 @@ main.refined-home .mobile-home-header .mobile-home-login:focus-visible {
   filter: none !important;
 }
 @media (prefers-reduced-motion: reduce) {
-  main.refined-home .mobile-home-header .mobile-home-profile svg {
-    transition: none !important;
-    transform: none !important;
-  }
   :where(button, a.suga-btn, a.button, a[role="button"]) {
     scroll-behavior: auto;
     animation: none;
