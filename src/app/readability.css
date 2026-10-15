@@ -790,3 +790,29 @@ a.suga-consultation-cta:focus-visible {
     transform: none !important;
   }
 }
+
+
+/* CSS Modules give MotionLink its own high-specificity dark surface.
+ * Match that specificity so footer/assessment CTAs stay crimson too. */
+main.refined-home a.suga-consultation-cta {
+  background: #ed0723 !important;
+  background-color: #ed0723 !important;
+  background-image: none !important;
+  border-color: #ed0723 !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+main.refined-home a.suga-consultation-cta > span[aria-hidden="true"]:first-child {
+  background: #ed0723 !important;
+  background-image: none !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  main.refined-home a.suga-consultation-cta:hover {
+    background: #df0924 !important;
+    background-color: #df0924 !important;
+    border-color: #df0924 !important;
+  }
+  main.refined-home a.suga-consultation-cta:hover > span[aria-hidden="true"]:first-child {
+    background: #df0924 !important;
+  }
+}
