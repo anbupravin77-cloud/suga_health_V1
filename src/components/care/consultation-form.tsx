@@ -390,10 +390,13 @@ export function ConsultationForm({
         };
       }
 
-      // The old combined thyroid/MTC answer cannot safely be assigned to
-      // either new choice. Ask the patient to clarify when updating that draft.
+      // Preserve ambiguous legacy thyroid/MTC history until the patient
+      // explicitly selects one of the new thyroid/MTC choices.
+      const clarifiesLegacy = condition === "Thyroid problems" ||
+        condition === "Medullary thyroid cancer (MTC) in you or your family";
       const withoutNone = current.conditions.filter((item) =>
-        item !== "None of the above" && item !== legacyThyroidCondition);
+        item !== "None of the above" &&
+        (!clarifiesLegacy || item !== legacyThyroidCondition));
       return {
         ...current,
         conditions: withoutNone.includes(condition)
