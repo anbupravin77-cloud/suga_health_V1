@@ -44,7 +44,7 @@ const pillars = [
   {
     id: "weight",
     title: "Medical Weight Loss",
-    subtitle: "GLP-1 Metabolic Health Protocol",
+    subtitle: "Metabolic Health Protocol",
     desc: "The revolutionary GLP 1 peptide helps re-balance the appetite and satiety cycle and help you reach an ideal body weight naturally.",
     stats: "Avg. 15% weight reduction",
     timeline: "Noticeable in 4–8 weeks",
