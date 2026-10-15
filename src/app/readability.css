@@ -816,3 +816,42 @@ main.refined-home a.suga-consultation-cta > span[aria-hidden="true"]:first-child
     background: #df0924 !important;
   }
 }
+
+
+/* Seamless compositor-friendly ticker with fewer text layers on phones. */
+main.refined-home > .home-trust-ticker {
+  contain: layout paint;
+}
+main.refined-home > .home-trust-ticker .home-marquee-track {
+  animation: suga-marquee-desktop 48s linear infinite !important;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+@keyframes suga-marquee-desktop {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-25%, 0, 0); }
+}
+@media (max-width: 760px) {
+  main.refined-home > .home-trust-ticker .home-ticker-sequence:nth-child(n + 3) {
+    display: none;
+  }
+  main.refined-home > .home-trust-ticker .home-marquee-track {
+    animation-name: suga-marquee-mobile !important;
+  }
+}
+@keyframes suga-marquee-mobile {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+main.refined-home > .home-trust-ticker[data-ticker-visible="false"] .home-marquee-track {
+  animation-play-state: paused !important;
+  will-change: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  main.refined-home > .home-trust-ticker .home-marquee-track {
+    animation: none !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+}

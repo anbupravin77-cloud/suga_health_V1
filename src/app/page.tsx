@@ -346,12 +346,34 @@ export default function HomePage() {
   const [careTouchPaused, setCareTouchPaused] = useState(false);
   const [careCompact, setCareCompact] = useState(false);
   const careExpanderRef = useRef<HTMLDivElement>(null);
+  const tickerRef = useRef<HTMLDivElement>(null);
   const careHoverResumeRef = useRef<number | null>(null);
   const careTouchResumeRef = useRef<number | null>(null);
   const careLastPointerTypeRef = useRef("mouse");
   const [voiceIndex, setVoiceIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   useRestoreReturnPosition();
+
+  // Pause the marquee when offscreen to spare mobile rendering work.
+  useEffect(() => {
+    const ticker = tickerRef.current;
+    if (!ticker || typeof IntersectionObserver === "undefined") return;
+
+    let inView = true;
+    const syncVisibility = () => {
+      ticker.dataset.tickerVisible = inView && !document.hidden ? "true" : "false";
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      syncVisibility();
+    }, { threshold: 0 });
+    observer.observe(ticker);
+    document.addEventListener("visibilitychange", syncVisibility);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", syncVisibility);
+    };
+  }, []);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -485,7 +507,7 @@ export default function HomePage() {
 
   return (
     <main className={`legacy-public refined-home ${homeInter.variable} min-h-screen bg-white text-black overflow-x-clip`}>
-      <div className="home-trust-ticker" aria-label="Suga Health service highlights">
+      <div ref={tickerRef} className="home-trust-ticker" data-ticker-visible="true" aria-label="Suga Health service highlights">
         <div className="home-marquee-track">
           {[0, 1, 2, 3].map((group) => (
             <span key={group} aria-hidden={group > 0 ? true : undefined} className="home-ticker-sequence">
