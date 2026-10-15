@@ -799,58 +799,6 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   stroke: #ffffff !important;
 }
 
-/* Show previously supplied account details as a compact review, not repeat form
-   inputs. Matches the existing consultation borders, typography and spacing. */
-.standalone-intake .consultation-profile-review {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 17px 19px;
-  margin-bottom: 20px;
-  border: 1px solid #e4e4e4;
-  border-radius: 13px;
-  background: #fafaf9;
-}
-.standalone-intake .consultation-profile-review strong {
-  color: #181818;
-  font-size: 1rem;
-  font-weight: 650;
-}
-.standalone-intake .consultation-profile-review p {
-  color: #686868;
-  font-size: .88rem;
-  line-height: 1.55;
-  margin: 5px 0 0;
-}
-.standalone-intake .consultation-profile-review button {
-  flex: 0 0 auto;
-  min-height: 43px;
-  padding: 10px 14px;
-  border: 1px solid #d8d8d8;
-  border-radius: 999px;
-  background: #fff;
-  color: #171717;
-  font-size: .87rem;
-  font-weight: 650;
-  cursor: pointer;
-}
-.standalone-intake .consultation-profile-review button:focus-visible {
-  outline: 2px solid #171717;
-  outline-offset: 3px;
-}
-@media (max-width: 540px) {
-  .standalone-intake .consultation-profile-review {
-    align-items: flex-start;
-    padding: 15px;
-  }
-  .standalone-intake .consultation-profile-review button {
-    padding: 9px 11px;
-    font-size: .83rem;
-  }
-}
-
-
 /* Final-section structure uses the same monochrome theme as the rest of the consultation. */
 .standalone-intake .consultation-consent-section {
   --last-accent: #171717;
@@ -1172,7 +1120,6 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   font-size: 15px;
   line-height: 1.45;
 }
-.standalone-intake .consultation-profile-review p,
 .standalone-intake .consultation-profile-save p,
 .standalone-intake .consultation-last-check-content > span,
 .standalone-intake .consultation-last-actions > p,
@@ -1241,9 +1188,6 @@ main.standalone-intake .standalone-intake-qa-skip svg {
     flex: none;
     width: 100%;
     min-height: 0;
-  }
-  .standalone-intake .consultation-profile-review {
-    gap: 10px;
   }
   .standalone-intake .patient-condition-grid button {
     font-size: 15px;

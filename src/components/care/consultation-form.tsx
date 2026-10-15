@@ -285,11 +285,7 @@ export function ConsultationForm({
   const [invalidSection, setInvalidSection] = useState<string | null>(null);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // The latest profile values, including QA accounts, are prefilled.
-  // Reveal editable account fields when missing or explicitly requested.
-  const [editingAccountDetails, setEditingAccountDetails] = useState(
-    () => !(defaults?.firstName?.trim() && defaults?.dateOfBirth && defaults?.sex),
-  );
+  // Saved account details are visible immediately and remain editable.
   const [savedProfile, setSavedProfile] = useState<ProfileSnapshot>(() => savedProfileSnapshot(defaults));
   const [profileSaveState, setProfileSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const [profileSaveError, setProfileSaveError] = useState("");
@@ -758,23 +754,10 @@ export function ConsultationForm({
         <ConsultationSectionHeading
           number={form.primaryConcern ? 3 : 2}
           title="Your details"
-          description="We've used the information from your account where available. Please check it and add your current height and weight."
+          description="Review your details and update them if needed."
         />
 
-        {!editingAccountDetails ? (
-          <div className="consultation-profile-review">
-            <div>
-              <strong>{[form.firstName, form.lastName].filter(Boolean).join(" ")}</strong>
-              <p>
-                Born {form.dateOfBirth.split("-").reverse().join("/")} · Age {ageFromDateOfBirth(form.dateOfBirth) || "—"} · {form.sex === "prefer-not-to-say" ? "Prefer not to say" : form.sex.charAt(0).toUpperCase() + form.sex.slice(1)}
-              </p>
-            </div>
-            <button type="button" onClick={() => setEditingAccountDetails(true)}>
-              Edit details
-            </button>
-          </div>
-        ) : (
-          <div className="patient-form-grid">
+        <div className="patient-form-grid">
             <label className="patient-form-field">
               <span>First name</span>
               <input type="text" value={form.firstName} onChange={(e) => patch("firstName", e.target.value)} autoComplete="given-name" maxLength={100} required />
@@ -803,7 +786,6 @@ export function ConsultationForm({
               </select>
             </label>
           </div>
-        )}
 
         <div className="patient-form-grid">
               <div className="patient-form-field">
