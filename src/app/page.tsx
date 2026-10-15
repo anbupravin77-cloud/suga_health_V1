@@ -17,6 +17,7 @@ import {
   MapPin,
   Menu,
   ShieldCheck,
+  CircleUserRound,
   Sparkles,
   Truck,
   X,
@@ -500,7 +501,10 @@ export default function HomePage() {
           </nav>
 
           <div className="mobile-home-header-actions flex items-center gap-2.5 sm:gap-3 shrink-0">
-            <Link href="/sign-in" className="mobile-home-signin suga-btn suga-btn-account suga-btn-compact inline-flex">Sign In</Link>
+            <Link href="/sign-in" className="mobile-home-login suga-btn suga-btn-secondary suga-btn-compact">Login</Link>
+            <Link href="/patient/profile" className="mobile-home-profile" aria-label="Your patient profile" title="Your profile">
+              <CircleUserRound size={23} strokeWidth={1.85} aria-hidden="true" />
+            </Link>
             <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="mobile-home-menu lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
               {mobileMenuOpen ? <X size={23} /> : <Menu size={23} />}
             </button>

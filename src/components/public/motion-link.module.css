@@ -320,3 +320,20 @@
     padding-inline: 16px !important;
   }
 }
+
+
+/* Stable, role-led CTA motion: no cursor-chasing translation. */
+:global(main.refined-home) .motion {
+  transition: transform 220ms cubic-bezier(.2,.7,.2,1),
+              box-shadow 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  :global(main.refined-home) .motion.magnetic:hover {
+    transform: translateY(-1px) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :global(main.refined-home) .motion.magnetic:hover {
+    transform: none !important;
+  }
+}

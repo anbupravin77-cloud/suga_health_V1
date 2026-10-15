@@ -566,3 +566,147 @@ main.refined-home .home-progression header > span:first-child {
     font-size: clamp(22px, 6.2vw, 25px) !important;
   }
 }
+
+
+/* Homepage announcement: sunshine yellow, charcoal copy, Suga crimson accents. */
+main.refined-home .home-hero > .home-trust-ticker {
+  background: #ffe45c !important;
+  border-bottom: 1px solid #e8c338 !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+main.refined-home .home-hero .home-ticker-sequence {
+  color: #171715 !important;
+  font-weight: 750;
+}
+main.refined-home .home-hero .home-ticker-sequence b {
+  color: #d6092b !important;
+  font-weight: 800 !important;
+}
+
+/* Homepage header: always Login followed by an accessible profile control. */
+main.refined-home .mobile-home-header .mobile-home-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px !important;
+}
+main.refined-home .mobile-home-header .mobile-home-login {
+  display: inline-flex !important;
+  min-height: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  padding: .65rem 1.1rem;
+  border-radius: 999px;
+  border-color: #d7d7d5;
+  background-color: #fff;
+  background-image: none;
+  color: #191919;
+  font-family: var(--font-home), Inter, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 650;
+}
+main.refined-home .mobile-home-header .mobile-home-profile {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border: 1px solid #d6d6d4;
+  border-radius: 50%;
+  background: #f8f8f7;
+  color: #151515;
+  text-decoration: none;
+}
+main.refined-home .mobile-home-header .mobile-home-profile svg {
+  transition: transform 220ms cubic-bezier(.2,.7,.2,1);
+}
+main.refined-home .mobile-home-header .mobile-home-profile:focus-visible,
+main.refined-home .mobile-home-header .mobile-home-login:focus-visible {
+  outline: 2px solid #151515;
+  outline-offset: 3px;
+}
+@media (max-width: 430px) {
+  main.refined-home .mobile-home-header .mobile-home-header-actions { gap: 7px !important; }
+  main.refined-home .mobile-home-header .mobile-home-login {
+    min-height: 42px;
+    height: 42px;
+    padding-inline: 14px;
+    font-size: 14px;
+  }
+  main.refined-home .mobile-home-header .mobile-home-profile {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    min-height: 42px;
+  }
+}
+@media (max-width: 360px) {
+  main.refined-home .mobile-home-header .mobile-home-header-actions { gap: 5px !important; }
+  main.refined-home .mobile-home-header .mobile-home-login { padding-inline: 11px; font-size: 13px; }
+  main.refined-home .mobile-home-header .mobile-home-profile {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    min-height: 40px;
+  }
+}
+
+/*
+ * Shared motion language across Suga buttons.
+ * Primary = soft elevation; secondary = highlight; icon controls = subtle icon scale.
+ * The role-specific active/selected styling, existing loaders and clinical validation
+ * stay in charge. Never run looping decorations on a button.
+ */
+:root {
+  --suga-action-duration: 220ms;
+  --suga-action-ease: cubic-bezier(.2,.7,.2,1);
+}
+:where(button, a.suga-btn, a.button, a[role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+:where(button, a.suga-btn, a.button, a[role="button"]):not(:disabled):not([aria-disabled="true"]):active {
+  filter: brightness(.95);
+}
+@media (hover: hover) and (pointer: fine) {
+  :where(button, a.suga-btn, a.button, a[role="button"]):not(:disabled):not([aria-disabled="true"]):hover {
+    filter: brightness(1.035);
+  }
+  :is(.suga-btn.suga-btn-primary, .button.button-primary):not(:disabled):not([aria-disabled="true"]):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 7px 18px rgba(17,17,17,.13);
+  }
+  :is(.suga-btn.suga-btn-secondary, .button.button-secondary, .suga-btn.suga-btn-account):not(:disabled):not([aria-disabled="true"]):hover {
+    box-shadow: 0 4px 14px rgba(17,17,17,.065);
+  }
+  main.refined-home .mobile-home-header .mobile-home-profile:hover svg {
+    transform: scale(1.08);
+  }
+  main.refined-home .mobile-home-header .mobile-home-profile:hover {
+    background: #ededeb;
+    border-color: #b0b0ad;
+  }
+}
+:where(button, a.suga-btn, a.button, a[role="button"]):focus-visible {
+  outline: 2px solid #171717;
+  outline-offset: 3px;
+}
+:where(button, a.suga-btn, a.button, a[role="button"]):disabled,
+:where(button, a.suga-btn, a.button, a[role="button"])[aria-disabled="true"] {
+  filter: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  main.refined-home .mobile-home-header .mobile-home-profile svg {
+    transition: none !important;
+    transform: none !important;
+  }
+  :where(button, a.suga-btn, a.button, a[role="button"]) {
+    scroll-behavior: auto;
+    animation: none;
+  }
+  :is(.suga-btn.suga-btn-primary, .button.button-primary):hover {
+    transform: none !important;
+  }
+}
