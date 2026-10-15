@@ -945,21 +945,21 @@ export function ConsultationForm({
             <input type="checkbox" checked={form.consentTruth} onChange={(event) => patch("consentTruth", event.target.checked)} />
             <span className="consultation-last-check-content">
               <strong>My answers are accurate</strong>
-              <span>I confirm that the details I provided are true and complete to the best of my knowledge.</span>
+              <span>I confirm the information I provided is true and complete to the best of my knowledge.</span>
             </span>
           </label>
           <label className="consultation-last-check">
             <input type="checkbox" checked={form.consentTelehealth} onChange={(event) => patch("consentTelehealth", event.target.checked)} />
             <span className="consultation-last-check-content">
               <strong>I consent to telehealth care</strong>
-              <span>I understand a clinician will review my consultation remotely and may contact me for more details.</span>
+              <span>I understand my consultation will be reviewed remotely by a licensed physician who may contact me for more detail.</span>
             </span>
           </label>
           <label className="consultation-last-check">
             <input type="checkbox" checked={form.consentPrivacy} onChange={(event) => patch("consentPrivacy", event.target.checked)} />
             <span className="consultation-last-check-content">
-              <strong>I understand how my health information is used</strong>
-              <span>My answers will be used to assess and manage my consultation and may be shared with clinicians involved in my care.</span>
+              <strong>I accept the privacy terms</strong>
+              <span>My health information is stored securely and shared only with my care team.</span>
             </span>
           </label>
         </div>
