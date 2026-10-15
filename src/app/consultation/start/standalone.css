@@ -1305,3 +1305,68 @@ main.standalone-intake .standalone-intake-qa-skip svg {
     margin-left: 35px;
   }
 }
+
+
+/* Mobile-first consultation refinement: compact rhythm and explicit clinical answers. */
+.standalone-intake-content {
+  padding-top: clamp(20px, 3.5vw, 36px);
+  padding-bottom: 48px;
+}
+.standalone-intake-intro { max-width: none; margin-bottom: 16px; }
+.standalone-intake-intro h1 { white-space: nowrap; letter-spacing: -.052em; }
+.standalone-intake .consultation-onepage-toolbar { min-height: 42px; }
+.standalone-intake .consultation-onepage-section { padding: 22px 0; }
+.standalone-intake .consultation-section-heading { margin-bottom: 13px; }
+.standalone-intake .consultation-section-heading > p { margin-top: 5px; }
+.standalone-intake #care-area { padding-top: 16px; }
+.standalone-intake #care-area .consultation-care-options { margin-bottom: 10px; }
+.standalone-intake .consultation-optional-details { gap: 16px; }
+.standalone-intake .consultation-clinical-field { display: grid; min-width: 0; gap: 10px; align-content: start; }
+.standalone-intake .consultation-clinical-field textarea:disabled {
+  background: #f5f5f5; color: #777; opacity: .85;
+}
+.standalone-intake .consultation-none-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  justify-self: start; min-width: 100px; min-height: 44px;
+  padding: 10px 18px; border-radius: 10px; border: 1px solid #cfcfcf;
+  background: #fff; color: #171717; font-size: 15px; font-weight: 650;
+  cursor: pointer;
+}
+.standalone-intake .consultation-none-button.is-selected {
+  background: #171717; color: #fff; border-color: #171717;
+}
+.standalone-intake .consultation-none-button:focus-visible { outline: 2px solid #171717; outline-offset: 3px; }
+.standalone-intake .consultation-legacy-condition-note {
+  margin: 0 0 12px; padding: 10px 12px;
+  border: 1px solid #dedede; border-radius: 9px;
+  background: #f8f8f8; color: #333; font-size: 14px;
+}
+.standalone-intake #medications .consultation-section-title h2 {
+  font-size: clamp(19px, 2.4vw, 27px);
+  white-space: nowrap;
+  letter-spacing: -.045em;
+}
+.standalone-intake .consultation-last-note { margin-bottom: 15px; gap: 0; }
+.standalone-intake .consultation-last-actions {
+  margin-top: 18px; padding-top: 18px; gap: 0;
+}
+.standalone-intake .consultation-last-checks { gap: 10px; }
+.standalone-intake .consultation-last-check { padding: 16px; }
+.standalone-intake .consultation-last-note textarea { min-height: 110px; }
+@media (max-width: 700px) {
+  .standalone-intake-content { width: calc(100% - 28px); padding-top: 22px; padding-bottom: 36px; }
+  .standalone-intake-intro h1 { font-size: clamp(19px, 5.7vw, 28px); }
+  .standalone-intake .consultation-onepage-section { padding: 17px 0; }
+  .standalone-intake .consultation-section-heading { margin-bottom: 12px; }
+  .standalone-intake #medications .consultation-section-title h2 {
+    font-size: clamp(14px, 3.85vw, 17px);
+    letter-spacing: -.055em;
+  }
+  .standalone-intake .consultation-onepage-toolbar { min-height: 40px; }
+  .standalone-intake .consultation-last-check { padding: 14px; }
+  .standalone-intake .consultation-last-actions { margin-top: 14px; padding-top: 14px; }
+}
+@media (max-width: 360px) {
+  .standalone-intake #medications .consultation-section-title h2 { font-size: 13.5px; }
+  .standalone-intake-intro h1 { font-size: 19px; }
+}

@@ -6,9 +6,8 @@ import {
   LoaderCircle,
   Save,
   ShieldCheck,
-  Scale,
-  Waves,
-  HeartPulse,
+  PersonStanding,
+  HeartHandshake,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -45,7 +44,9 @@ type FormState = {
   sex: string;
   conditions: string[];
   currentMedications: string;
+  medicationsNone: boolean;
   allergies: string;
+  allergiesNone: boolean;
   medicalHistory: string;
   medicalHistoryChoice: "" | "none" | "yes";
   careGoal: string;
@@ -65,29 +66,37 @@ type FormState = {
 const conditionOptions = [
   { value: "Hypertension (High Blood Pressure)", label: "High blood pressure" },
   { value: "Type 2 Diabetes / Prediabetes", label: "Type 2 diabetes or prediabetes" },
-  { value: "Thyroid disease or family history of MTC", label: "Thyroid problems, or medullary thyroid cancer (MTC) in you or your family" },
+  { value: "Thyroid problems", label: "Thyroid problems" },
+  { value: "Medullary thyroid cancer (MTC) in you or your family", label: "Medullary thyroid cancer (MTC) in you or your family" },
   { value: "Cardiovascular or kidney conditions", label: "Heart or kidney problems" },
   { value: "Currently pregnant or breastfeeding", label: "Currently pregnant or breastfeeding" },
   { value: "None of the above", label: "None of the above" },
 ];
 
+// A compact hairline silhouette, rather than a generic wave or haircut icon.
+function HairGrowthIcon({ className, size = 20, strokeWidth = 1.8 }: {
+  className?: string;
+  size?: number;
+  strokeWidth?: number;
+}) {
+  return (
+    <svg className={className} width={size} height={size} viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" strokeWidth={strokeWidth}
+      strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M5 10c0-4.5 3-7.5 7-7.5s7 3 7 7.5v3" />
+      <path d="M5 10c1.6-.3 2.6-1.5 3.1-3.2.9 1.7 2.1 2.4 4.1 2.3 1.8 0 3.2-.9 4-2.4.7 1.6 1.6 2.5 2.8 2.8" />
+      <path d="M5 12v2c0 2 1.3 3 3 3.5M19 12v2c0 2-1.3 3-3 3.5" />
+      <path d="M9 20c1 .8 2 1.1 3 1.1s2-.3 3-1.1" />
+    </svg>
+  );
+}
+
 const careAreas = [
-  {
-    id: "weight",
-    title: "Weight loss",
-    icon: Scale,
-  },
-  {
-    id: "hair",
-    title: "Hair growth",
-    icon: Waves,
-  },
-  {
-    id: "sex",
-    title: "Sexual health",
-    icon: HeartPulse,
-  },
+  { id: "weight", title: "Weight loss", icon: PersonStanding },
+  { id: "hair", title: "Hair growth", icon: HairGrowthIcon },
+  { id: "sex", title: "Sexual health", icon: HeartHandshake },
 ];
+const legacyThyroidCondition = "Thyroid disease or family history of MTC";
 
 function readString(value: unknown, fallback = "") {
   return typeof value === "string" ? value : fallback;
@@ -150,7 +159,9 @@ function initialState(draft?: Draft, defaults?: IntakeDefaults): FormState {
     sex: defaults?.sex ?? "",
     conditions,
     currentMedications: readOptionalDetails(r.current_medications),
+    medicationsNone: readAnswerChoice(r.current_medications, r.current_medications_choice) === "none",
     allergies: readOptionalDetails(r.allergies),
+    allergiesNone: readAnswerChoice(r.allergies, r.allergies_choice) === "none",
     medicalHistory: readString(r.medical_history).trim().toLowerCase() === "none" ? "" : readString(r.medical_history),
     medicalHistoryChoice: readAnswerChoice(r.medical_history, r.medical_history_choice),
     careGoal: readString(r.care_goal),
@@ -175,7 +186,7 @@ function careTitle(id: string) {
 function ConsultationSectionHeading({ number, title, description }: {
   number: number;
   title: string;
-  description: string;
+  description?: string;
 }) {
   return (
     <div className="patient-intake-copy consultation-section-heading">
@@ -183,7 +194,7 @@ function ConsultationSectionHeading({ number, title, description }: {
         <span className="consultation-section-number" aria-hidden="true">{String(number).padStart(2, "0")}</span>
         <h2>{title}</h2>
       </div>
-      <p>{description}</p>
+      {description && <p>{description}</p>}
     </div>
   );
 }
@@ -352,6 +363,24 @@ export function ConsultationForm({
     }
   }
 
+  function updateClinicalDetail(field: "currentMedications" | "allergies", text: string) {
+    setForm((current) => ({
+      ...current,
+      [field]: text,
+      ...(field === "currentMedications" ? { medicationsNone: false } : { allergiesNone: false }),
+    }));
+    setError("");
+    setInvalidSection(null);
+  }
+
+  function confirmNone(field: "currentMedications" | "allergies") {
+    setForm((current) => field === "currentMedications"
+      ? { ...current, medicationsNone: !current.medicationsNone, currentMedications: "" }
+      : { ...current, allergiesNone: !current.allergiesNone, allergies: "" });
+    setError("");
+    setInvalidSection(null);
+  }
+
   function toggleCondition(condition: string) {
     setForm((current) => {
       if (condition === "None of the above") {
@@ -361,7 +390,10 @@ export function ConsultationForm({
         };
       }
 
-      const withoutNone = current.conditions.filter((item) => item !== "None of the above");
+      // The old combined thyroid/MTC answer cannot safely be assigned to
+      // either new choice. Ask the patient to clarify when updating that draft.
+      const withoutNone = current.conditions.filter((item) =>
+        item !== "None of the above" && item !== legacyThyroidCondition);
       return {
         ...current,
         conditions: withoutNone.includes(condition)
@@ -391,10 +423,10 @@ export function ConsultationForm({
     form.conditions.forEach((condition) => data.append("conditions", condition));
     const medications = readOptionalDetails(form.currentMedications).trim();
     const allergies = readOptionalDetails(form.allergies).trim();
-    data.set("current_medications_choice", medications ? "yes" : "none");
-    data.set("current_medications", medications || "None");
-    data.set("allergies_choice", allergies ? "yes" : "none");
-    data.set("allergies", allergies || "None");
+    data.set("current_medications_choice", form.medicationsNone ? "none" : medications ? "yes" : "");
+    data.set("current_medications", form.medicationsNone ? "None" : medications);
+    data.set("allergies_choice", form.allergiesNone ? "none" : allergies ? "yes" : "");
+    data.set("allergies", form.allergiesNone ? "None" : allergies);
     data.set("medical_history_choice", form.medicalHistory.trim() ? "yes" : "none");
     data.set("medical_history", form.medicalHistory.trim() || "None");
     data.set("care_goal", form.careGoal);
@@ -432,8 +464,20 @@ export function ConsultationForm({
     }
 
     if (currentStep === 3) {
+      if (form.conditions.includes(legacyThyroidCondition)) {
+        return "Please clarify the previous combined thyroid/MTC answer using the two separate choices.";
+      }
       if (form.conditions.length === 0) {
         return 'Select any applicable conditions or choose "None of the above".';
+      }
+    }
+
+    if (currentStep === 4) {
+      if (!form.medicationsNone && !readOptionalDetails(form.currentMedications).trim()) {
+        return 'Enter your current medicines or select "None".';
+      }
+      if (!form.allergiesNone && !readOptionalDetails(form.allergies).trim()) {
+        return 'Enter your medication allergies or select "None".';
       }
     }
 
@@ -812,6 +856,11 @@ export function ConsultationForm({
             />
 
             <fieldset className="patient-history-fieldset" aria-label="Health conditions">
+              {form.conditions.includes(legacyThyroidCondition) && (
+                <p className="consultation-legacy-condition-note" role="status">
+                  Your previous answer combined thyroid problems with MTC. Please select the applicable option(s) separately below.
+                </p>
+              )}
               <div className="patient-condition-grid">
                 {conditionOptions.map((condition) => (
                   <button
@@ -835,30 +884,43 @@ export function ConsultationForm({
         <ConsultationSectionHeading
           number={form.primaryConcern ? 5 : 4}
           title="Current Medications and Allergies"
-          description="List any current medicines or known medication allergies. Leave a box blank if none."
         />
 
         <div className="patient-form-grid consultation-answer-grid consultation-optional-details">
-          <label className="patient-form-field consultation-optional-detail">
-            <span>Current medicines or supplements <small>(optional)</small></span>
-            <textarea
-              rows={4}
-              value={form.currentMedications}
-              onChange={(event) => patch("currentMedications", event.target.value)}
-              placeholder="Medicine or supplement names and doses, if any."
-              maxLength={3000}
-            />
-          </label>
-          <label className="patient-form-field consultation-optional-detail">
-            <span>Medication allergies <small>(optional)</small></span>
-            <textarea
-              rows={4}
-              value={form.allergies}
-              onChange={(event) => patch("allergies", event.target.value)}
-              placeholder="Medicine names and reactions, if any."
-              maxLength={3000}
-            />
-          </label>
+          <div className="consultation-clinical-field">
+            <label className="patient-form-field consultation-optional-detail">
+              <span>Current medicines including supplement</span>
+              <textarea
+                rows={3}
+                value={form.currentMedications}
+                onChange={(event) => updateClinicalDetail("currentMedications", event.target.value)}
+                placeholder="Medicine or supplement names and doses"
+                maxLength={3000}
+                disabled={form.medicationsNone}
+              />
+            </label>
+            <button type="button" className={`consultation-none-button${form.medicationsNone ? " is-selected" : ""}`}
+              aria-pressed={form.medicationsNone} onClick={() => confirmNone("currentMedications")}>
+              {form.medicationsNone && <Check size={16} aria-hidden="true" />} None
+            </button>
+          </div>
+          <div className="consultation-clinical-field">
+            <label className="patient-form-field consultation-optional-detail">
+              <span>Medication allergies</span>
+              <textarea
+                rows={3}
+                value={form.allergies}
+                onChange={(event) => updateClinicalDetail("allergies", event.target.value)}
+                placeholder="Medicine names and reactions"
+                maxLength={3000}
+                disabled={form.allergiesNone}
+              />
+            </label>
+            <button type="button" className={`consultation-none-button${form.allergiesNone ? " is-selected" : ""}`}
+              aria-pressed={form.allergiesNone} onClick={() => confirmNone("allergies")}>
+              {form.allergiesNone && <Check size={16} aria-hidden="true" />} None
+            </button>
+          </div>
         </div>
         {invalidSection === "medications" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
       </section>
@@ -866,12 +928,11 @@ export function ConsultationForm({
       <section className="consultation-onepage-section consultation-consent-section" id="consent">
         <ConsultationSectionHeading
           number={form.primaryConcern ? 6 : 5}
-          title="Last things"
-          description="One final note, three confirmations, and your answers go for clinical review."
+          title="Anything else your doctor should know?"
         />
 
         <label className="consultation-last-note">
-          <span>Anything else your doctor should know? <small>(optional)</small></span>
+          <span className="sr-only">Anything else your doctor should know?</span>
           <textarea
             rows={5}
             value={form.medicalHistory}
@@ -913,7 +974,6 @@ export function ConsultationForm({
         <button type="submit" className="patient-primary-button" disabled={isSubmitting}>
           Send for clinical review
         </button>
-        <p>A qualified clinician will review your answers. A prescription is not guaranteed.</p>
       </footer>
     </form>
   );

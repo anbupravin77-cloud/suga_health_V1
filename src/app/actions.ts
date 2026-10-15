@@ -40,6 +40,10 @@ function buildConsultationRecord(formData: FormData, patientId: string) {
   const sex = value(formData, "sex");
   const currentMedications = optionalClinicalDetails(formData, "current_medications");
   const allergies = optionalClinicalDetails(formData, "allergies");
+  const medicationsChoice = currentMedications ? "yes"
+    : value(formData, "current_medications_choice") === "none" ? "none" : "";
+  const allergiesChoice = allergies ? "yes"
+    : value(formData, "allergies_choice") === "none" ? "none" : "";
 
   const heightCm =
     heightUnit === "cm"
@@ -72,10 +76,10 @@ function buildConsultationRecord(formData: FormData, patientId: string) {
       age,
       sex,
       conditions: formData.getAll("conditions").map(String).filter(Boolean),
-      current_medications: currentMedications || "None",
-      current_medications_choice: currentMedications ? "yes" : "none",
-      allergies: allergies || "None",
-      allergies_choice: allergies ? "yes" : "none",
+      current_medications: currentMedications || (medicationsChoice === "none" ? "None" : ""),
+      current_medications_choice: medicationsChoice,
+      allergies: allergies || (allergiesChoice === "none" ? "None" : ""),
+      allergies_choice: allergiesChoice,
       medical_history: value(formData, "medical_history"),
       medical_history_choice: value(formData, "medical_history_choice"),
       care_goal: value(formData, "care_goal"),
@@ -242,6 +246,13 @@ export async function submitConsultation(formData: FormData) {
     }
     if (!Array.isArray(responses.conditions) || responses.conditions.length === 0) {
       return { ok: false, error: "Select the applicable medical conditions or choose None of the above." };
+    }
+    if (responses.conditions.includes("Thyroid disease or family history of MTC")) {
+      return { ok: false, error: "Please clarify your thyroid/MTC history using the two separate choices." };
+    }
+    if (!["none", "yes"].includes(String(responses.current_medications_choice)) ||
+        !["none", "yes"].includes(String(responses.allergies_choice))) {
+      return { ok: false, error: "Confirm either medicines/allergy details or None for each section." };
     }
 
     const saved = await persistConsultation(formData, user.id);

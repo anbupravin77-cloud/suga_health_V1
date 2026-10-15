@@ -176,7 +176,6 @@ export function MilestoneJourney() {
     <section className={`home-progression home-editorial-section ${styles.section}`} aria-labelledby="milestones-title">
       <div className={`home-section-shell ${styles.shell}`}>
         <header className={styles.topline}>
-          <span className={styles.eyebrow}>Clinical progression</span>
           <h2 className={styles.heading} id="milestones-title">Clear Milestones from Day 1.</h2>
           <p className={styles.description}>Expect real, measurable physiological changes with continuous medical guidance.</p>
         </header>
