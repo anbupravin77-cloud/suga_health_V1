@@ -49,7 +49,6 @@ main.legacy-public.refined-home > div > section:not(.home-hero) { animation: non
 
 /* Hero: the existing message and care links meet one existing pathway photograph. */
 .refined-home > div > .home-hero { padding-top: 0; padding-bottom: 0; background: #f3f3ef; }
-.home-hero > div:first-child { background: #ebebe7; padding-block: .7rem; }
 .home-hero .animate-marquee {
   display: flex;
   width: max-content;

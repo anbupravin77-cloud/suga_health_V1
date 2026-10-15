@@ -485,6 +485,18 @@ export default function HomePage() {
 
   return (
     <main className={`legacy-public refined-home ${homeInter.variable} min-h-screen bg-white text-black overflow-x-hidden`}>
+      <div className="home-trust-ticker" aria-label="Suga Health service highlights">
+        <div className="home-marquee-track">
+          {[0, 1, 2, 3].map((group) => (
+            <span key={group} aria-hidden={group > 0 ? true : undefined} className="home-ticker-sequence">
+              <span>Fully confidential</span><b>✦</b>
+              <span>Free and discrete shipping</span><b>✦</b>
+              <span>100% online process</span><b>✦</b>
+              <span>Used and trusted by millions around the world</span><b>✦</b>
+            </span>
+          ))}
+        </div>
+      </div>
       <header className="legacy-header mobile-home-header fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
         <div className="mobile-home-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
           <Link href="/" className="mobile-home-brand flex flex-col items-start select-none shrink-0">
@@ -516,19 +528,6 @@ export default function HomePage() {
 
       <div className="home-page-content pt-[70px]">
         <section className="home-hero bg-white border-b border-neutral-200/80">
-          <div className="home-trust-ticker" aria-label="Suga Health service highlights">
-            <div className="home-marquee-track">
-              {[0, 1, 2, 3].map((group) => (
-                <span key={group} aria-hidden={group > 0 ? true : undefined} className="home-ticker-sequence">
-                  <span>Fully confidential</span><b>✦</b>
-                  <span>Free and discrete shipping</span><b>✦</b>
-                  <span>100% online process</span><b>✦</b>
-                  <span>Used and trusted by millions around the world</span><b>✦</b>
-                </span>
-              ))}
-            </div>
-          </div>
-
           <div className="home-hero-composition">
             <div className="hero-intro-grid">
               <div className="hero-intro-copy">
