@@ -1407,32 +1407,4 @@ main.standalone-intake .standalone-intake-qa-skip svg {
   color: #777;
 }
 
-/* Compact consent rows keep all three legally meaningful statements intact. */
-.standalone-intake .consultation-consent-section .consultation-last-checks {
-  gap: 0;
-}
-.standalone-intake .consultation-consent-section .consultation-last-check {
-  padding: 15px 2px;
-  border: 0;
-  border-bottom: 1px solid #dedede;
-  border-radius: 0;
-  background: transparent;
-  gap: 13px;
-}
-.standalone-intake .consultation-consent-section .consultation-last-check:last-child {
-  border-bottom: 0;
-}
-.standalone-intake .consultation-consent-section .consultation-last-check:hover {
-  background: #fafafa;
-}
-.standalone-intake .consultation-consent-section .consultation-last-check-content {
-  gap: 3px;
-}
-.standalone-intake .consultation-consent-section .consultation-last-check-content > span {
-  line-height: 1.45;
-}
-@media (max-width: 700px) {
-  .standalone-intake .consultation-consent-section .consultation-last-check {
-    padding: 14px 2px;
-  }
-}
+/* Consent confirmations retain the original three individual bordered cards. */
