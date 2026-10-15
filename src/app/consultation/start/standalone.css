@@ -1314,3 +1314,125 @@ main.standalone-intake .standalone-intake-qa-skip svg {
 @media (max-width: 360px) {
   .standalone-intake-intro h1 { font-size: 19px; }
 }
+
+
+/* Review-approved intake refinements: the first two sections need no subtitles. */
+.standalone-intake #care-area .consultation-section-heading,
+.standalone-intake #about-you .consultation-section-heading {
+  margin-bottom: 18px;
+}
+
+/* Inline None confirmations: a single label row followed by the editable field. */
+.standalone-intake #medications .consultation-clinical-field {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 10px;
+  align-content: start;
+}
+.standalone-intake #medications .consultation-clinical-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+.standalone-intake #medications .consultation-clinical-heading > label {
+  min-width: 0;
+  color: #292929;
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+.standalone-intake #medications .consultation-none-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  min-width: 0;
+  min-height: 44px;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: #292929;
+  font-size: 15px;
+  font-weight: 550;
+  cursor: pointer;
+}
+.standalone-intake #medications .consultation-none-button.is-selected {
+  background: transparent;
+  border-color: transparent;
+  color: #171717;
+}
+.standalone-intake #medications .consultation-none-indicator {
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  border: 1.5px solid #929292;
+  border-radius: 50%;
+  background: white;
+  box-shadow: inset 0 0 0 3px #fff;
+}
+.standalone-intake #medications .consultation-none-button.is-selected .consultation-none-indicator {
+  border-color: #171717;
+  background: #171717;
+}
+.standalone-intake #medications .consultation-none-button:hover {
+  background: #f3f3f3;
+}
+.standalone-intake #medications .consultation-clinical-field > textarea {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 128px;
+  padding: 14px 15px;
+  border: 1px solid #d7d7d7;
+  border-radius: 10px;
+  background: #fff;
+  color: #171717;
+  font-family: var(--font-inter), Inter, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  resize: vertical;
+}
+.standalone-intake #medications .consultation-clinical-field > textarea::placeholder { color: #777; }
+.standalone-intake #medications .consultation-clinical-field > textarea:focus-visible {
+  outline: 2px solid #171717;
+  outline-offset: 2px;
+}
+.standalone-intake #medications .consultation-clinical-field > textarea:disabled {
+  background: #f5f5f5;
+  color: #777;
+}
+
+/* Compact consent rows keep all three legally meaningful statements intact. */
+.standalone-intake .consultation-consent-section .consultation-last-checks {
+  gap: 0;
+}
+.standalone-intake .consultation-consent-section .consultation-last-check {
+  padding: 15px 2px;
+  border: 0;
+  border-bottom: 1px solid #dedede;
+  border-radius: 0;
+  background: transparent;
+  gap: 13px;
+}
+.standalone-intake .consultation-consent-section .consultation-last-check:last-child {
+  border-bottom: 0;
+}
+.standalone-intake .consultation-consent-section .consultation-last-check:hover {
+  background: #fafafa;
+}
+.standalone-intake .consultation-consent-section .consultation-last-check-content {
+  gap: 3px;
+}
+.standalone-intake .consultation-consent-section .consultation-last-check-content > span {
+  line-height: 1.45;
+}
+@media (max-width: 700px) {
+  .standalone-intake .consultation-consent-section .consultation-last-check {
+    padding: 14px 2px;
+  }
+}

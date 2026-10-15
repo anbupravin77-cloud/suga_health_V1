@@ -609,7 +609,6 @@ export function ConsultationForm({
             <ConsultationSectionHeading
               number={1}
               title="What brings you in today?"
-              description="Choose one. Your doctor will look at the whole picture."
             />
 
             <div className="patient-care-choice-grid consultation-care-options" role="group" aria-label="Choose a care area">
@@ -755,7 +754,6 @@ export function ConsultationForm({
         <ConsultationSectionHeading
           number={form.primaryConcern ? 3 : 2}
           title="Your details"
-          description="Review your details and update them if needed."
         />
 
         <div className="patient-form-grid">
@@ -874,38 +872,52 @@ export function ConsultationForm({
 
         <div className="patient-form-grid consultation-answer-grid consultation-optional-details">
           <div className="consultation-clinical-field">
-            <label className="patient-form-field consultation-optional-detail">
-              <span>Current medicines including supplement</span>
-              <textarea
-                rows={3}
-                value={form.currentMedications}
-                onChange={(event) => updateClinicalDetail("currentMedications", event.target.value)}
-                placeholder="Medicine or supplement names and doses"
-                maxLength={3000}
-                disabled={form.medicationsNone}
-              />
-            </label>
-            <button type="button" className={`consultation-none-button${form.medicationsNone ? " is-selected" : ""}`}
-              aria-pressed={form.medicationsNone} onClick={() => confirmNone("currentMedications")}>
-              {form.medicationsNone && <Check size={16} aria-hidden="true" />} None
-            </button>
+            <div className="consultation-clinical-heading">
+              <label htmlFor="consultation-medicines">Current medicines including supplement</label>
+              <button
+                type="button"
+                className={`consultation-none-button${form.medicationsNone ? " is-selected" : ""}`}
+                aria-pressed={form.medicationsNone}
+                aria-label="No current medicines or supplements"
+                onClick={() => confirmNone("currentMedications")}
+              >
+                <span className="consultation-none-indicator" aria-hidden="true" />
+                None
+              </button>
+            </div>
+            <textarea
+              id="consultation-medicines"
+              rows={3}
+              value={form.currentMedications}
+              onChange={(event) => updateClinicalDetail("currentMedications", event.target.value)}
+              placeholder="Medicine or supplement names and doses"
+              maxLength={3000}
+              disabled={form.medicationsNone}
+            />
           </div>
           <div className="consultation-clinical-field">
-            <label className="patient-form-field consultation-optional-detail">
-              <span>Medication allergies</span>
-              <textarea
-                rows={3}
-                value={form.allergies}
-                onChange={(event) => updateClinicalDetail("allergies", event.target.value)}
-                placeholder="Medicine names and reactions"
-                maxLength={3000}
-                disabled={form.allergiesNone}
-              />
-            </label>
-            <button type="button" className={`consultation-none-button${form.allergiesNone ? " is-selected" : ""}`}
-              aria-pressed={form.allergiesNone} onClick={() => confirmNone("allergies")}>
-              {form.allergiesNone && <Check size={16} aria-hidden="true" />} None
-            </button>
+            <div className="consultation-clinical-heading">
+              <label htmlFor="consultation-allergies">Medication allergies</label>
+              <button
+                type="button"
+                className={`consultation-none-button${form.allergiesNone ? " is-selected" : ""}`}
+                aria-pressed={form.allergiesNone}
+                aria-label="No medication allergies"
+                onClick={() => confirmNone("allergies")}
+              >
+                <span className="consultation-none-indicator" aria-hidden="true" />
+                None
+              </button>
+            </div>
+            <textarea
+              id="consultation-allergies"
+              rows={3}
+              value={form.allergies}
+              onChange={(event) => updateClinicalDetail("allergies", event.target.value)}
+              placeholder="Medicine names and reactions"
+              maxLength={3000}
+              disabled={form.allergiesNone}
+            />
           </div>
         </div>
         {invalidSection === "medications" && error && <p className="consultation-inline-error" role="alert">{error}</p>}
