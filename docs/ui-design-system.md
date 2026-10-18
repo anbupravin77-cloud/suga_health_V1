@@ -8,6 +8,8 @@ The universal font is **Inter**. Mobile applies below 900px; desktop applies fro
 | Purpose | Mobile | Desktop | Line-height | Weight |
 |---|---:|---:|---:|---:|
 | Main hero H1 | 36px | 56px | 1.15 | 700 |
+
+**Homepage mobile hero exception:** The long “Clinically proven…” headline intentionally retains its earlier, more compact responsive scale: `clamp(1.95rem, 7.6vw, 2.6rem)` below 560px, `clamp(1.82rem, 7.9vw, 2.3rem)` below 430px, and `clamp(1.78rem, 8vw, 2rem)` below 360px, with 500 font weight. The other hero titles and standard typography tokens are unchanged.
 | Main section H2 | 30px | 44px | 1.15 | 700 |
 | Treatment H3 | 27px | 34px | 1.2 | 650 |
 | Card H4 | 20px | 24px | 1.2 | 650 |

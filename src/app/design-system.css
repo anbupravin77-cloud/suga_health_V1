@@ -78,6 +78,28 @@ main.refined-home .home-hero .legacy-hero-title {
   line-height: 1.15 !important;
   letter-spacing: -.04em;
 }
+/* Restore the original calmer mobile hero, before the universal 36px override.
+ * Scoped to homepage only; all other headings still use design-system tokens. */
+@media (max-width: 560px) {
+  main.refined-home .home-hero .legacy-hero-title {
+    font-size: clamp(1.95rem, 7.6vw, 2.6rem) !important;
+    font-weight: 500 !important;
+    line-height: 1.18 !important;
+    letter-spacing: -.024em !important;
+  }
+}
+@media (max-width: 430px) {
+  main.refined-home .home-hero .legacy-hero-title {
+    font-size: clamp(1.82rem, 7.9vw, 2.3rem) !important;
+    line-height: 1.19 !important;
+  }
+}
+@media (max-width: 360px) {
+  main.refined-home .home-hero .legacy-hero-title {
+    font-size: clamp(1.78rem, 8vw, 2rem) !important;
+    line-height: 1.2 !important;
+  }
+}
 main.refined-home .home-page-content {
   --home-section-heading-size: var(--suga-type-section);
 }
