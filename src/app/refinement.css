@@ -723,34 +723,69 @@ main.legacy-public.refined-home > div > section:not(.home-hero) { animation: non
 }
 
 
-/* One borderless full-bleed photo surface, with touch swipe and dot navigation. */
-main.refined-home .home-hero .hero-photo-carousel {
-  position: relative;
+/* Four-piece bento: three independent treatment tiles and one portrait carousel. */
+main.refined-home .home-hero .hero-bento-grid {
+  display: grid;
   width: min(1180px, 100%);
-  aspect-ratio: 16 / 9;
+  height: clamp(540px, 55vw, 750px);
   margin: 0 auto;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1.3fr) minmax(0, .7fr);
+  grid-template-areas:
+    "feature feature models models"
+    "mini-one mini-two models models";
+  gap: 12px;
+  min-width: 0;
+}
+main.refined-home .home-hero .hero-bento-grid :is(.hero-bento-static, .hero-bento-models) {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
   padding: 0 !important;
   overflow: hidden;
   border: 0 !important;
-  border-radius: 24px;
-  box-shadow: none !important;
+  border-radius: 21px;
   outline: none;
+  box-shadow: none !important;
   background: transparent !important;
-  touch-action: pan-y;
   isolation: isolate;
 }
-main.refined-home .home-hero .hero-photo-carousel:focus-visible {
-  outline: 2px solid #171717;
-  outline-offset: 4px;
+main.refined-home .home-hero .hero-bento-grid .hero-bento-feature { grid-area: feature; }
+main.refined-home .home-hero .hero-bento-grid .hero-bento-mini-one { grid-area: mini-one; }
+main.refined-home .home-hero .hero-bento-grid .hero-bento-mini-two { grid-area: mini-two; }
+main.refined-home .home-hero .hero-bento-grid .hero-bento-models {
+  grid-area: models;
+  touch-action: pan-y;
 }
-main.refined-home .home-hero .hero-photo-carousel-track {
+main.refined-home .home-hero .hero-bento-grid :is(.hero-bento-static, .hero-bento-models):focus-visible {
+  outline: 2px solid #171717;
+  outline-offset: 3px;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-static img,
+main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  object-fit: cover;
+  box-shadow: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-track {
   display: flex;
   width: 100%;
   height: 100%;
   transition: transform 420ms cubic-bezier(.22, 1, .36, 1);
   will-change: transform;
 }
-main.refined-home .home-hero .hero-photo-carousel-slide {
+main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-slide {
   position: relative;
   flex: 0 0 100%;
   width: 100%;
@@ -761,33 +796,20 @@ main.refined-home .home-hero .hero-photo-carousel-slide {
   overflow: hidden;
   background: transparent;
 }
-main.refined-home .home-hero .hero-photo-carousel-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  object-fit: cover;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-main.refined-home .home-hero .hero-photo-carousel-dots {
+main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-dots {
   position: absolute;
   z-index: 2;
-  left: clamp(12px, 3vw, 30px);
-  bottom: clamp(12px, 3vw, 25px);
+  left: clamp(8px, 2vw, 22px);
+  bottom: clamp(8px, 2vw, 20px);
   display: flex;
   align-items: center;
   gap: 2px;
   padding: 5px;
   border-radius: 999px;
-  background: rgba(10, 10, 10, .25);
+  background: rgba(10, 10, 10, .28);
   backdrop-filter: blur(5px);
 }
-main.refined-home .home-hero .hero-photo-carousel-dots button {
+main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-dots button {
   display: grid;
   place-items: center;
   width: 26px;
@@ -797,7 +819,7 @@ main.refined-home .home-hero .hero-photo-carousel-dots button {
   background: transparent;
   cursor: pointer;
 }
-main.refined-home .home-hero .hero-photo-carousel-dots button span {
+main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-dots button span {
   display: block;
   width: 8px;
   height: 8px;
@@ -805,23 +827,34 @@ main.refined-home .home-hero .hero-photo-carousel-dots button span {
   background: rgba(255, 255, 255, .85);
   transition: background-color 200ms ease, transform 200ms ease;
 }
-main.refined-home .home-hero .hero-photo-carousel-dots button.is-active span {
+main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-dots button.is-active span {
   background: #f3ff9f;
   transform: scale(1.15);
 }
-main.refined-home .home-hero .hero-photo-carousel-dots button:focus-visible {
+main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-dots button:focus-visible {
   outline: 2px solid white;
   border-radius: 999px;
 }
 @media (max-width: 820px) {
-  main.refined-home .home-hero .hero-photo-carousel {
-    aspect-ratio: 1 / 1.04;
-    border-radius: 18px;
+  main.refined-home .home-hero .hero-bento-grid {
+    height: clamp(300px, 93vw, 490px);
+    gap: 7px;
+  }
+  main.refined-home .home-hero .hero-bento-grid :is(.hero-bento-static, .hero-bento-models) {
+    border-radius: 13px;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-dots {
+    padding: 3px;
+    gap: 0;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-dots button {
+    width: 22px;
+    height: 24px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  main.refined-home .home-hero .hero-photo-carousel-track,
-  main.refined-home .home-hero .hero-photo-carousel-dots button span {
+  main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-track,
+  main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-dots button span {
     transition: none !important;
   }
 }
