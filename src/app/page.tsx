@@ -76,12 +76,6 @@ const pillars = [
   },
 ];
 
-const heroSlides = pillars.map((pillar) => ({
-  src: pillar.img,
-  label: pillar.title,
-  caption: pillar.subtitle,
-}));
-
 const howItWorks = [
   {
     step: "01",
@@ -334,7 +328,6 @@ export default function HomePage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [heroSlide, setHeroSlide] = useState(0);
   const [activeCareStep, setActiveCareStep] = useState<number | null>(null);
   const [careInView, setCareInView] = useState(false);
   const [carePageVisible, setCarePageVisible] = useState(true);
@@ -373,17 +366,6 @@ export default function HomePage() {
       observer.disconnect();
       document.removeEventListener("visibilitychange", syncVisibility);
     };
-  }, []);
-
-  useEffect(() => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reducedMotion.matches) return;
-
-    const timer = window.setInterval(() => {
-      setHeroSlide((current) => (current + 1) % heroSlides.length);
-    }, 4600);
-
-    return () => window.clearInterval(timer);
   }, []);
 
   useEffect(() => {
@@ -566,35 +548,51 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="hero-bento hero-bento-ro" aria-label="Suga Health care and treatment imagery">
-              <div className={`hero-bento-primary editorial-media editorial-media-large editorial-media-${pillars[heroSlide].id} ${pillars[heroSlide].id === "weight" ? "home-uploaded-media-frame" : ""}`}>
-                <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
-                {pillars[heroSlide].id === "weight" && (
-                  <img
-                    src="/images/wmremove-transformed.jpeg"
-                    alt="Woman holding a small medicine vial against an orange studio background"
-                    width={2048}
-                    height={1529}
-                    loading="eager"
-                    fetchPriority="high"
-                    decoding="async"
-                    className="home-uploaded-media home-uploaded-media-photo"
-                    onError={(event) => { event.currentTarget.style.display = "none"; }}
-                  />
-                )}
+            <div className="hero-bento hero-bento-ro" aria-label="Suga Health treatment photography">
+              <div className="hero-bento-primary editorial-media editorial-media-large editorial-media-weight">
+                <img
+                  src="/images/bento/bento-weight-loss-man.webp"
+                  alt="Indian man in a light blue polo holding a medication pen against a soft blue studio background"
+                  width={1440}
+                  height={960}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                />
               </div>
 
-              <button type="button" className="hero-bento-support editorial-media editorial-media-doctor editorial-media-clickable" onClick={() => setSelectedDoctor(doctors[0])} aria-label={"View credentials for " + doctors[0].name}>
-                <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
-              </button>
+              <Link href="/weight-loss" className="hero-bento-support editorial-media editorial-media-weight editorial-media-clickable" aria-label="Explore medical weight loss">
+                <img
+                  src="/images/bento/bento-weight-loss-woman.webp"
+                  alt="Indian woman in mauve attire holding a medication pen against a lavender and peach background"
+                  width={1440}
+                  height={960}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </Link>
 
-              <button type="button" className="hero-bento-small hero-bento-small-one editorial-media editorial-media-product editorial-media-weight editorial-media-clickable" onClick={() => setSelectedProduct(products[0])} aria-label={"View " + products[0].name}>
-                <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
-              </button>
+              <Link href="/hair-growth" className="hero-bento-small hero-bento-small-one editorial-media editorial-media-hair editorial-media-clickable" aria-label="Explore hair growth care">
+                <img
+                  src="/images/bento/bento-hair-serum.webp"
+                  alt="Indian man with styled dark hair holding a hair serum bottle against a pastel studio background"
+                  width={1440}
+                  height={960}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </Link>
 
-              <button type="button" className="hero-bento-small hero-bento-small-two editorial-media editorial-media-product editorial-media-sexual editorial-media-clickable" onClick={() => setSelectedProduct(products[6])} aria-label={"View " + products[6].name}>
-                <div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} />
-              </button>
+              <a href="#care-expander-title" className="hero-bento-small hero-bento-small-two editorial-media editorial-media-weight editorial-media-clickable" aria-label="Learn how Suga Health works">
+                <img
+                  src="/images/bento/bento-tablet-water.webp"
+                  alt="Indian woman in blue knitwear holding a tablet and a glass of water against a pale blue background"
+                  width={1440}
+                  height={960}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
             </div>
           </div>
         </section>
