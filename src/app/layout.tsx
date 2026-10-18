@@ -4,6 +4,7 @@ import "./globals.css";
 import "./refinement.css";
 import "./readability.css";
 import "./auth-refinement.css";
+import "./design-system.css";
 
 const brand = Cormorant_Garamond({
   subsets: ["latin"],

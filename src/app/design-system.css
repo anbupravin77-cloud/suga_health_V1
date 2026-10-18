@@ -1,0 +1,348 @@
+/*
+ * Suga.Health V1 design language, 2026-10.
+ * Type, rhythm and shared actions are consistent; card composition is NOT
+ * universal. Milestone, doctor, product and clinical cards retain their own
+ * semantics, geometry and behavior.
+ */
+:root {
+  --suga-font: var(--font-inter), Inter, Arial, sans-serif;
+  --suga-crimson: #ed0723;
+  --suga-type-hero: 2.25rem;          /* 36px */
+  --suga-type-section: 1.875rem;      /* 30px */
+  --suga-type-treatment: 1.6875rem;   /* 27px */
+  --suga-type-card: 1.25rem;          /* 20px */
+  --suga-type-eyebrow: .8125rem;      /* 13px */
+  --suga-type-lead: 1.0625rem;        /* 17px */
+  --suga-type-body: 1rem;            /* 16px */
+  --suga-type-bullet: .9375rem;       /* 15px */
+  --suga-type-stat: 1rem;            /* 16px */
+  --suga-type-stat-label: .75rem;     /* 12px */
+  --suga-type-action: .9375rem;       /* 15px */
+  --suga-type-action-compact: .8125rem; /* 13px in narrow dual-action cards */
+  --suga-type-helper: .875rem;        /* 14px */
+  --suga-type-caption: .8125rem;      /* 13px */
+  --suga-section-gap: 4rem;          /* 64px */
+  --suga-image-radius: 20px;
+}
+@media (min-width: 900px) {
+  :root {
+    --suga-type-hero: 3.5rem;          /* 56px */
+    --suga-type-section: 2.75rem;      /* 44px */
+    --suga-type-treatment: 2.125rem;   /* 34px */
+    --suga-type-card: 1.5rem;          /* 24px */
+    --suga-type-lead: 1.1875rem;       /* 19px */
+    --suga-type-body: 1.0625rem;      /* 17px */
+    --suga-type-bullet: 1rem;         /* 16px */
+    --suga-type-stat: 1.125rem;       /* 18px */
+    --suga-type-action: 1rem;         /* 16px */
+    --suga-type-action-compact: .875rem;
+    --suga-type-helper: .9375rem;     /* 15px */
+    --suga-type-caption: .875rem;     /* 14px */
+    --suga-section-gap: 6rem;         /* 96px */
+  }
+}
+
+/* Inter is shared across public pages, account areas and forms. */
+body,
+main.legacy-public,
+main.refined-home,
+main.refined-treatment,
+.app-layout,
+.standalone-intake,
+.auth-surface {
+  font-family: var(--suga-font);
+}
+:is(main.refined-home,main.refined-treatment,.app-layout,.standalone-intake,.auth-surface)
+:is(h1,h2,h3,h4,h5,h6,p,button,input,textarea,select) {
+  font-family: var(--suga-font);
+}
+
+/* Legacy CSS Modules for milestones and product cards already consume these
+ * semantic variables. Resolve them to the single approved scale. */
+main.refined-home {
+  --care-type-eyebrow: var(--suga-type-eyebrow);
+  --care-type-meta: var(--suga-type-caption);
+  --care-type-body: var(--suga-type-body);
+  --care-type-lead: var(--suga-type-lead);
+  --care-type-action: var(--suga-type-action);
+  --care-type-action-compact: var(--suga-type-action-compact);
+  --care-type-card-title: var(--suga-type-card);
+  --care-type-section-title: var(--suga-type-section);
+  --care-type-category-title: var(--suga-type-treatment);
+}
+
+/* Site-wide semantic hierarchy, scoped to named page contexts. */
+main.refined-home .home-hero .legacy-hero-title {
+  font-size: var(--suga-type-hero) !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -.04em;
+}
+main.refined-home .home-page-content {
+  --home-section-heading-size: var(--suga-type-section);
+}
+main.refined-home .home-page-content :is(
+  .home-pathways .editorial-section-heading h2,
+  .home-progression #milestones-title,
+  .home-process #care-expander-title,
+  .home-metrics #living-metrics-title,
+  .home-comparison .editorial-section-heading h2,
+  .home-doctors .editorial-section-heading h2,
+  .home-voices #voices-title,
+  .home-formulary .editorial-section-heading h2,
+  .home-faq #faq-title,
+  .home-final-cta h2
+),
+main.refined-treatment .treatment-page-section h2 {
+  font-size: var(--suga-type-section) !important;
+  line-height: 1.15 !important;
+  font-weight: 700 !important;
+  letter-spacing: -.038em !important;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+main.refined-home :is(
+  .editorial-section-heading > p,
+  .care-expander-heading > p,
+  .faq-heading > p,
+  .voices-heading > p
+),
+main.refined-treatment .treatment-page-hero p {
+  font-size: var(--suga-type-lead) !important;
+  line-height: 1.55 !important;
+}
+main.refined-treatment .treatment-page-hero h1 {
+  font-size: var(--suga-type-hero) !important;
+  line-height: 1.15 !important;
+  font-weight: 700 !important;
+}
+main.refined-home :is(.home-kicker, .pathway-proof-row span),
+main.refined-treatment :is(.eyebrow,.legacy-label) {
+  font-size: var(--suga-type-eyebrow) !important;
+  line-height: 1.4 !important;
+}
+
+/*
+ * Three treatment pathways are siblings in ONE layout system:
+ * same square image, same copy width, same heading sizes, same vertical rhythm.
+ * Do not prescribe images or data; the existing video/gradients remain.
+ */
+main.refined-home .home-pathways .pathway-editorial-list {
+  display: grid;
+  row-gap: var(--suga-section-gap) !important;
+}
+main.refined-home .home-pathways .pathway-editorial-row,
+main.refined-home .home-pathways .pathway-editorial-row:nth-child(even) {
+  display: grid !important;
+  grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+  gap: clamp(28px,4vw,64px) !important;
+  align-items: center !important;
+  min-width: 0;
+  padding-bottom: var(--suga-section-gap) !important;
+}
+main.refined-home .home-pathways .pathway-editorial-row > .pathway-editorial-image,
+main.refined-home .home-pathways .pathway-editorial-row:nth-child(even) > .pathway-editorial-image {
+  display: block;
+  position: relative;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  aspect-ratio: 1 / 1 !important;
+  align-self: center;
+  padding: 0 !important;
+  border-radius: var(--suga-image-radius) !important;
+  overflow: hidden;
+}
+main.refined-home .home-pathways .pathway-editorial-image > .home-empty-image {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  border-radius: inherit;
+}
+main.refined-home .home-pathways .pathway-editorial-image > :is(img,video) {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+main.refined-home .home-pathways .pathway-editorial-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+  padding: 0 !important;
+}
+main.refined-home .home-pathways .pathway-editorial-copy h3 {
+  font-family: var(--suga-font) !important;
+  font-size: var(--suga-type-treatment) !important;
+  font-weight: 650 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -.035em;
+  margin-block: 10px 12px !important;
+}
+main.refined-home .home-pathways .pathway-editorial-copy > p {
+  font-size: var(--suga-type-lead) !important;
+  line-height: 1.55 !important;
+  margin-block: 0 24px !important;
+  max-width: 58ch;
+}
+main.refined-home .home-pathways .pathway-proof-row {
+  width: 100%;
+  min-width: 0;
+  margin-block: 0 20px !important;
+}
+main.refined-home .home-pathways .pathway-proof-row > div {
+  min-width: 0;
+  padding-block: 14px !important;
+}
+main.refined-home .home-pathways .pathway-proof-row span {
+  font-size: var(--suga-type-stat-label) !important;
+  line-height: 1.4 !important;
+}
+main.refined-home .home-pathways .pathway-proof-row strong {
+  font-size: var(--suga-type-stat) !important;
+  line-height: 1.4 !important;
+  font-weight: 600 !important;
+}
+main.refined-home .home-pathways .pathway-highlight-list {
+  display: grid;
+  gap: 10px !important;
+  margin-block: 0 22px !important;
+}
+main.refined-home .home-pathways .pathway-highlight-list span {
+  font-size: var(--suga-type-bullet) !important;
+  line-height: 1.5 !important;
+}
+main.refined-home .home-pathways .pathway-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px !important;
+  margin-top: 0;
+}
+/* The square images remain equal at every width; stack before copy becomes cramped. */
+@media (max-width: 760px) {
+  main.refined-home .home-pathways .pathway-editorial-row,
+  main.refined-home .home-pathways .pathway-editorial-row:nth-child(even) {
+    grid-template-columns: minmax(0,1fr) !important;
+    gap: 22px !important;
+  }
+  main.refined-home .home-pathways .pathway-editorial-row:nth-child(even) > .pathway-editorial-image,
+  main.refined-home .home-pathways .pathway-editorial-row:nth-child(even) > .pathway-editorial-copy {
+    order: initial !important;
+  }
+  main.refined-home .home-pathways .pathway-editorial-row > .pathway-editorial-image {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+/* Unify body typography while allowing distinct card structures. */
+main.refined-home :is(
+  .care-expander-brief,
+  .care-expander-detail p,
+  .comparison-row p,
+  .faq-answer p,
+  .metric-ledger p,
+  .doctor-trust-band p,
+  .home-final-cta p
+),
+main.refined-treatment .treatment-page-section p {
+  font-size: var(--suga-type-body) !important;
+  line-height: 1.6 !important;
+}
+main.refined-home .home-process .care-expander-copy h3 {
+  font-size: var(--suga-type-card) !important;
+  line-height: 1.2 !important;
+}
+main.refined-home .home-page-content :is(.editorial-section-heading > span, .home-kicker) {
+  font-size: var(--suga-type-eyebrow) !important;
+  line-height: 1.4 !important;
+}
+
+/* Shared actions: same font, shape and motion. Primary/secondary/icon-only
+   variants retain their own colors and purpose; crimson CTAs stay crimson. */
+:is(.suga-btn:not(.suga-btn-utility), .button:not(.button-text), a.suga-consultation-cta) {
+  font-family: var(--suga-font) !important;
+  font-size: var(--suga-type-action) !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  border-radius: 999px !important;
+}
+:is(.suga-btn:not(.suga-btn-utility), .button:not(.button-text)):not(.suga-btn-compact) {
+  min-height: 48px;
+}
+:is(.suga-btn-compact,.suga-btn-inline) {
+  min-height: 44px;
+}
+:is(.suga-btn,.button):focus-visible {
+  outline: 2px solid #171717;
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.suga-btn,.button) {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+/* Account, consultation and dashboard fields use the same legible base scale.
+   Do not touch disabled/readOnly state, input validation or form handling. */
+:is(.standalone-intake,.auth-surface,.app-layout,.patient-profile-form)
+:is(input,select,textarea) {
+  font-family: var(--suga-font) !important;
+  font-size: var(--suga-type-body) !important;
+  line-height: 1.5;
+}
+:is(.standalone-intake,.auth-surface,.app-layout,.patient-profile-form)
+:is(label,legend) {
+  font-family: var(--suga-font) !important;
+  font-size: var(--suga-type-body);
+  line-height: 1.4;
+}
+.standalone-intake .consultation-section-heading h2 {
+  font-size: var(--suga-type-treatment) !important;
+  font-weight: 650 !important;
+  line-height: 1.2 !important;
+}
+.standalone-intake .consultation-care-options strong {
+  font-size: var(--suga-type-bullet) !important;
+  line-height: 1.3 !important;
+}
+.standalone-intake .consultation-last-check-content > strong {
+  font-size: var(--suga-type-body) !important;
+  line-height: 1.4 !important;
+}
+.standalone-intake .consultation-last-check-content > span,
+.standalone-intake .consultation-profile-save p {
+  font-size: var(--suga-type-helper) !important;
+  line-height: 1.6 !important;
+}
+.auth-surface .auth-card-premium .auth-intro h1 {
+  font-size: var(--suga-type-treatment) !important;
+  line-height: 1.2 !important;
+}
+.auth-surface .auth-card-premium .auth-intro > p {
+  font-size: var(--suga-type-helper) !important;
+  line-height: 1.6 !important;
+}
+.app-layout :is(.dashboard-heading,.case-header) h1 {
+  font-size: var(--suga-type-section) !important;
+  line-height: 1.15 !important;
+}
+.app-layout :is(.detail-card,.treatment-summary,.workspace-block,.completed-panel) h2,
+.app-layout .dashboard-section h2 {
+  font-size: var(--suga-type-card) !important;
+  line-height: 1.2 !important;
+}
+@media (max-width: 380px) {
+  /* Three treatment choices share limited phone width, so keep each legible. */
+  .standalone-intake .consultation-care-options strong {
+    font-size: 14px !important;
+  }
+}
