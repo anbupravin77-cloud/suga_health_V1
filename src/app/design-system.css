@@ -127,10 +127,14 @@ main.refined-treatment :is(.eyebrow,.legacy-label) {
  * same square image, same copy width, same heading sizes, same vertical rhythm.
  * Do not prescribe images or data; the existing video/gradients remain.
  */
+/* Remove the decorative full-width line above the first pathway. */
 main.refined-home .home-pathways .pathway-editorial-list {
   display: grid;
   row-gap: var(--suga-section-gap) !important;
+  border-top: 0 !important;
 }
+/* No decorative horizontal rules between treatment chapters.
+   Preserve the separate Efficacy / Expected Results dividers inside each row. */
 main.refined-home .home-pathways .pathway-editorial-row,
 main.refined-home .home-pathways .pathway-editorial-row:nth-child(even) {
   display: grid !important;
@@ -139,6 +143,7 @@ main.refined-home .home-pathways .pathway-editorial-row:nth-child(even) {
   align-items: center !important;
   min-width: 0;
   padding-bottom: 0 !important;
+  border-bottom: 0 !important;
 }
 main.refined-home .home-pathways .pathway-editorial-row > .pathway-editorial-image,
 main.refined-home .home-pathways .pathway-editorial-row:nth-child(even) > .pathway-editorial-image {
