@@ -373,3 +373,245 @@ main.refined-treatment .treatment-page-section h3 {
   font-size: var(--suga-type-treatment) !important;
   line-height: 1.2 !important;
 }
+
+
+/* Bento actions and safe mobile gutters.
+ * Four existing image tiles remain borderless; no external brand copy/endorsements.
+ * The clickable treatment tiles use a visual CTA because nested links are invalid.
+ */
+main.refined-home .home-hero .hero-bento-grid {
+  box-sizing: border-box;
+  width: min(1180px, calc(100% - 32px)) !important;
+  max-width: calc(100vw - 32px);
+  margin-inline: auto !important;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-static::after,
+main.refined-home .home-hero .hero-bento-grid .hero-bento-models::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(9, 15, 22, .49) 0%,
+    rgba(9, 15, 22, .12) 35%,
+    transparent 58%,
+    rgba(9, 15, 22, .38) 100%
+  );
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-copy {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  padding: clamp(14px, 2vw, 24px) !important;
+  color: #fff !important;
+  pointer-events: none;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-eyebrow {
+  font-family: var(--suga-font);
+  font-size: clamp(10px, .82vw, 13px) !important;
+  line-height: 1.3;
+  font-weight: 750;
+  letter-spacing: .095em;
+  color: #fff !important;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-title {
+  font-family: var(--suga-font);
+  font-size: clamp(18px, 2.1vw, 29px) !important;
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -.035em;
+  color: #fff !important;
+  text-wrap: balance;
+  max-width: 17ch;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: auto;
+  min-height: 40px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .97);
+  color: #151515 !important;
+  font-family: var(--suga-font);
+  font-size: var(--suga-type-action-compact);
+  font-weight: 650;
+  line-height: 1.2;
+  transition: transform 220ms cubic-bezier(.2,.7,.2,1), background-color 220ms ease;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-action span,
+main.refined-home .home-hero .hero-bento-grid .hero-bento-action svg {
+  color: #151515 !important;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-action-round {
+  width: 40px;
+  min-width: 40px;
+  padding: 0;
+  align-self: flex-end;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-mini-one .hero-bento-title,
+main.refined-home .home-hero .hero-bento-grid .hero-bento-mini-two .hero-bento-title {
+  font-size: clamp(16px, 1.55vw, 22px) !important;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-static img {
+  transition: transform 500ms cubic-bezier(.2,.7,.2,1);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-static:hover img {
+    transform: scale(1.035);
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-static:hover .hero-bento-action {
+    transform: translateY(-3px);
+    background: #f4ffb0;
+  }
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-portrait-copy {
+  position: absolute;
+  z-index: 2;
+  top: clamp(14px, 2vw, 24px);
+  left: clamp(14px, 2vw, 24px);
+  max-width: min(67%, 340px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-portrait-title {
+  font-family: var(--suga-font);
+  color: #fff !important;
+  font-size: clamp(21px, 2.5vw, 35px) !important;
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-portrait-cta {
+  position: absolute;
+  z-index: 3;
+  bottom: clamp(12px, 2vw, 20px);
+  right: clamp(12px, 2vw, 20px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 11px 15px;
+  border-radius: 999px;
+  background: #151515;
+  color: #fff !important;
+  font-family: var(--suga-font);
+  font-size: var(--suga-type-action-compact);
+  font-weight: 650;
+  line-height: 1.15;
+  text-decoration: none;
+  transition: background-color 200ms ease, transform 200ms ease;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-portrait-cta :is(span,svg) {
+  color: #fff !important;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-portrait-cta:hover {
+  background: var(--suga-crimson);
+  transform: translateY(-2px);
+}
+main.refined-home .home-hero .hero-bento-grid .hero-bento-portrait-cta:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-dots {
+  z-index: 3;
+}
+@media (max-width: 820px) {
+  /* The hero container has no mobile horizontal padding on <=430px.
+     Keep the grid inset from BOTH viewport edges at every mobile width. */
+  main.refined-home .home-hero .hero-bento-grid {
+    width: calc(100% - 28px) !important;
+    max-width: calc(100vw - 28px) !important;
+    margin-inline: auto !important;
+    gap: 8px;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-copy {
+    padding: 9px !important;
+    gap: 4px;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-feature .hero-bento-title {
+    font-size: clamp(15px, 3.8vw, 21px) !important;
+    max-width: 14ch;
+  }
+  main.refined-home .home-hero .hero-bento-grid :is(.hero-bento-mini-one,.hero-bento-mini-two) .hero-bento-eyebrow {
+    display: none;
+  }
+  main.refined-home .home-hero .hero-bento-grid :is(.hero-bento-mini-one,.hero-bento-mini-two) .hero-bento-title {
+    font-size: clamp(11px, 3vw, 15px) !important;
+    line-height: 1.12;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-feature .hero-bento-action {
+    min-height: 32px;
+    padding: 6px 10px;
+    font-size: 11px !important;
+    gap: 4px;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-action-round {
+    width: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    height: 28px;
+    padding: 0 !important;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-action-round svg {
+    width: 15px;
+    height: 15px;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-portrait-copy {
+    left: 11px;
+    top: 12px;
+    max-width: 78%;
+    gap: 6px;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-portrait-title {
+    font-size: clamp(15px, 3.7vw, 23px) !important;
+    line-height: 1.16 !important;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-eyebrow {
+    font-size: 9px !important;
+    line-height: 1.3;
+    letter-spacing: .05em;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-portrait-cta {
+    right: 9px;
+    bottom: 10px;
+    width: 35px;
+    height: 35px;
+    min-height: 35px;
+    padding: 0 !important;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-portrait-cta-label {
+    display: none;
+  }
+}
+@media (max-width: 360px) {
+  main.refined-home .home-hero .hero-bento-grid {
+    width: calc(100% - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-feature .hero-bento-eyebrow {
+    display: none;
+  }
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-portrait-copy {
+    max-width: 84%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-static img,
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-action,
+  main.refined-home .home-hero .hero-bento-grid .hero-bento-portrait-cta {
+    transition: none !important;
+  }
+}

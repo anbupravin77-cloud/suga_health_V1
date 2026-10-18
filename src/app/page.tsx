@@ -18,6 +18,7 @@ import {
   Menu,
   ShieldCheck,
   CircleUserRound,
+  ArrowUpRight,
   Sparkles,
   Truck,
   X,
@@ -33,9 +34,33 @@ import doctorStyles from "@/components/public/doctor-spotlight.module.css";
 
 const homeInter = Inter({ subsets: ["latin"], variable: "--font-home", display: "swap" });
 const bentoPortraits = [
-  { src: "/images/bento/bento-weight-loss-man.webp", alt: "Indian gentleman in a blue polo holding a medication pen", focus: "70% 40%" },
-  { src: "/images/bento/bento-hair-serum.webp", alt: "Indian man with styled dark hair holding a hair serum bottle", focus: "64% 38%" },
-  { src: "/images/bento/bento-tablet-water.webp", alt: "Indian woman in a blue top holding a tablet and water", focus: "70% 40%" },
+  {
+    src: "/images/bento/bento-weight-loss-man.webp",
+    alt: "Indian gentleman in a blue polo holding a medication pen",
+    focus: "70% 40%",
+    tag: "WEIGHT MANAGEMENT",
+    headline: "A plan built around you",
+    cta: "Explore weight loss",
+    href: "/weight-loss",
+  },
+  {
+    src: "/images/bento/bento-hair-serum.webp",
+    alt: "Indian man with styled dark hair holding a hair serum bottle",
+    focus: "64% 38%",
+    tag: "HAIR GROWTH",
+    headline: "Your hair care options",
+    cta: "Explore hair growth",
+    href: "/hair-growth",
+  },
+  {
+    src: "/images/bento/bento-tablet-water.webp",
+    alt: "Indian woman in a blue top holding a tablet and water",
+    focus: "70% 40%",
+    tag: "PRIVATE CARE",
+    headline: "Care on your terms",
+    cta: "Explore sexual health",
+    href: "/sexual-health",
+  },
 ] as const;
 
 const navLinks = [
@@ -557,14 +582,29 @@ export default function HomePage() {
 
 
             <div className="hero-bento-grid" aria-label="Suga Health treatment imagery">
-              <Link href="/weight-loss" className="hero-bento-static hero-bento-feature" aria-label="Explore weight management">
+              <Link href="/weight-loss" className="hero-bento-static hero-bento-feature" aria-label="Explore medical weight loss">
                 <img src="/images/products/mounjaro.webp" alt="Weight management medication illustration" width={900} height={900} loading="lazy" decoding="async" />
+                <span className="hero-bento-copy" aria-hidden="true">
+                  <span className="hero-bento-eyebrow">WEIGHT MANAGEMENT</span>
+                  <strong className="hero-bento-title">Medical weight loss</strong>
+                  <span className="hero-bento-action"><span>Explore care</span><ArrowUpRight size={18} /></span>
+                </span>
               </Link>
-              <Link href="/hair-growth" className="hero-bento-static hero-bento-mini-one" aria-label="Explore hair growth care">
+              <Link href="/hair-growth" className="hero-bento-static hero-bento-mini-one" aria-label="Explore hair growth treatments">
                 <img src="/images/products/mintop-5.webp" alt="Topical hair treatment bottle illustration" width={900} height={900} loading="lazy" decoding="async" />
+                <span className="hero-bento-copy" aria-hidden="true">
+                  <span className="hero-bento-eyebrow">HAIR CARE</span>
+                  <strong className="hero-bento-title">Hair growth</strong>
+                  <span className="hero-bento-action hero-bento-action-round"><ArrowUpRight size={18} /></span>
+                </span>
               </Link>
-              <Link href="/sexual-health" className="hero-bento-static hero-bento-mini-two" aria-label="Explore sexual health care">
+              <Link href="/sexual-health" className="hero-bento-static hero-bento-mini-two" aria-label="Explore private sexual health care">
                 <img src="/images/products/suhagra-100.webp" alt="Medicine tablet resting in an open palm" width={900} height={900} loading="lazy" decoding="async" />
+                <span className="hero-bento-copy" aria-hidden="true">
+                  <span className="hero-bento-eyebrow">PRIVATE CARE</span>
+                  <strong className="hero-bento-title">Sexual health</strong>
+                  <span className="hero-bento-action hero-bento-action-round"><ArrowUpRight size={18} /></span>
+                </span>
               </Link>
               <div
                 className="hero-photo-carousel hero-bento-models"
@@ -620,6 +660,18 @@ export default function HomePage() {
                     </div>
                   ))}
                 </div>
+                <div className="hero-bento-portrait-copy" aria-live="polite" aria-atomic="true">
+                  <span className="hero-bento-eyebrow">{bentoPortraits[bentoPhotoIndex].tag}</span>
+                  <strong className="hero-bento-portrait-title">{bentoPortraits[bentoPhotoIndex].headline}</strong>
+                </div>
+                <Link
+                  href={bentoPortraits[bentoPhotoIndex].href}
+                  className="hero-bento-portrait-cta"
+                  aria-label={bentoPortraits[bentoPhotoIndex].cta}
+                >
+                  <span className="hero-bento-portrait-cta-label">{bentoPortraits[bentoPhotoIndex].cta}</span>
+                  <ArrowUpRight size={19} aria-hidden="true" />
+                </Link>
                 <div className="hero-photo-carousel-dots" role="group" aria-label="Select photo">
                   {bentoPortraits.map((portrait, index) => (
                     <button
