@@ -373,3 +373,18 @@
   .groupHeading .swipeHint { font-size: 0; gap: 0; }
   .groupHeading .swipeHint svg { width: 16px; height: 16px; }
 }
+
+
+/* The alternate product gallery follows the same typography contracts. */
+:global(main.refined-home .home-formulary) .groupHeading h3 {
+  font-family: var(--suga-font) !important;
+  font-size: var(--suga-type-treatment) !important;
+  line-height: 1.2 !important;
+}
+:global(main.refined-home .home-formulary) .compactCard .ingredients {
+  font-size: var(--suga-type-body) !important;
+  line-height: 1.6 !important;
+}
+:global(main.refined-home .home-formulary) .compactCard .category {
+  font-size: var(--suga-type-eyebrow) !important;
+}

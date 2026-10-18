@@ -451,3 +451,19 @@
     white-space: nowrap;
   }
 }
+
+
+/* Treatment-family headings are H3, while the section heading remains H2. */
+:global(main.refined-home .home-formulary) .groupHeading h3 {
+  font-family: var(--suga-font) !important;
+  font-size: var(--suga-type-treatment) !important;
+  line-height: 1.2 !important;
+}
+:global(main.refined-home .home-formulary) .card .name {
+  font-size: var(--suga-type-card) !important;
+  line-height: 1.2 !important;
+}
+:global(main.refined-home .home-formulary) .card .ingredients {
+  font-size: var(--suga-type-body) !important;
+  line-height: 1.6 !important;
+}

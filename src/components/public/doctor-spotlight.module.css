@@ -570,3 +570,38 @@
     line-height: 1.6 !important;
   }
 }
+
+
+/* Shared type ladder. Clinician portrait cards retain their coverflow styling. */
+.featuredKicker {
+  font-size: var(--suga-type-eyebrow) !important;
+  line-height: 1.4 !important;
+}
+.featuredCopy h3 {
+  font-family: var(--suga-font) !important;
+  font-size: var(--suga-type-card) !important;
+  line-height: 1.2 !important;
+}
+.featuredCopy p {
+  font-family: var(--suga-font) !important;
+  font-size: var(--suga-type-body) !important;
+  line-height: 1.6 !important;
+}
+.profileButton {
+  font-family: var(--suga-font) !important;
+  font-size: var(--suga-type-action) !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+}
+.note {
+  font-family: var(--suga-font) !important;
+  font-size: var(--suga-type-helper) !important;
+  line-height: 1.6 !important;
+}
+.doctorSection :global(.editorial-section-heading p) {
+  font-size: var(--suga-type-lead) !important;
+  line-height: 1.55 !important;
+}
+@media (max-width: 760px) {
+  .profileButton { gap: 6px; padding-inline: 10px; }
+}

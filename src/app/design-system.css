@@ -138,7 +138,7 @@ main.refined-home .home-pathways .pathway-editorial-row:nth-child(even) {
   gap: clamp(28px,4vw,64px) !important;
   align-items: center !important;
   min-width: 0;
-  padding-bottom: var(--suga-section-gap) !important;
+  padding-bottom: 0 !important;
 }
 main.refined-home .home-pathways .pathway-editorial-row > .pathway-editorial-image,
 main.refined-home .home-pathways .pathway-editorial-row:nth-child(even) > .pathway-editorial-image {
@@ -345,4 +345,26 @@ main.refined-home .home-page-content :is(.editorial-section-heading > span, .hom
   .standalone-intake .consultation-care-options strong {
     font-size: 14px !important;
   }
+}
+
+
+/* Other public component families share the type ladder, not their geometry. */
+main.refined-home .home-voices :is(.voice-testimonial p,.voice-testimonial blockquote),
+main.refined-home .home-metrics .metric-ledger article p {
+  font-size: var(--suga-type-body) !important;
+  line-height: 1.6 !important;
+}
+main.refined-home .home-voices .voice-testimonial :is(small,.voice-caption),
+main.refined-home .home-page-content :is(.product-description,.product-meta) {
+  font-size: var(--suga-type-caption);
+  line-height: 1.5;
+}
+main.refined-home .home-process .care-expander-card {
+  /* Different from timeline/profile cards: no universal card radius/background. */
+  font-family: var(--suga-font);
+}
+main.refined-treatment .treatment-page-section h3 {
+  font-family: var(--suga-font) !important;
+  font-size: var(--suga-type-treatment) !important;
+  line-height: 1.2 !important;
 }
