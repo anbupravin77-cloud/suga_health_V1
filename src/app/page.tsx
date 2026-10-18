@@ -32,6 +32,12 @@ import { ProductShowcase } from "@/components/public/product-design-review";
 import doctorStyles from "@/components/public/doctor-spotlight.module.css";
 
 const homeInter = Inter({ subsets: ["latin"], variable: "--font-home", display: "swap" });
+const bentoPortraits = [
+  { src: "/images/bento/bento-weight-loss-man.webp", alt: "Indian gentleman in a blue polo holding a medication pen", focus: "70% 40%" },
+  { src: "/images/bento/bento-weight-loss-woman.webp", alt: "Indian woman in mauve holding a medication pen", focus: "68% 38%" },
+  { src: "/images/bento/bento-hair-serum.webp", alt: "Indian man with styled dark hair holding a hair serum bottle", focus: "64% 38%" },
+  { src: "/images/bento/bento-tablet-water.webp", alt: "Indian woman in a blue top holding a tablet and water", focus: "70% 40%" },
+] as const;
 
 const navLinks = [
   { name: "About", path: "/about", desc: "Our clinical mission & standards" },
@@ -343,6 +349,8 @@ export default function HomePage() {
   const careHoverResumeRef = useRef<number | null>(null);
   const careTouchResumeRef = useRef<number | null>(null);
   const careLastPointerTypeRef = useRef("mouse");
+  const [bentoPhotoIndex, setBentoPhotoIndex] = useState(0);
+  const bentoTouchStart = useRef<{ x: number; y: number } | null>(null);
   const [voiceIndex, setVoiceIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   useRestoreReturnPosition();
@@ -548,51 +556,74 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="hero-bento hero-bento-ro" aria-label="Suga Health treatment photography">
-              <div className="hero-bento-primary editorial-media editorial-media-large editorial-media-weight">
-                <img
-                  src="/images/bento/bento-weight-loss-man.webp"
-                  alt="Indian man in a light blue polo holding a medication pen against a soft blue studio background"
-                  width={1440}
-                  height={960}
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                />
+            <div
+              className="hero-photo-carousel"
+              role="region"
+              aria-roledescription="carousel"
+              aria-label="Suga Health treatment photography"
+              tabIndex={0}
+              onTouchStart={(event) => {
+                const touch = event.touches[0];
+                if (touch) bentoTouchStart.current = { x: touch.clientX, y: touch.clientY };
+              }}
+              onTouchEnd={(event) => {
+                const initial = bentoTouchStart.current;
+                bentoTouchStart.current = null;
+                const touch = event.changedTouches[0];
+                if (!initial || !touch) return;
+                const dx = touch.clientX - initial.x;
+                const dy = touch.clientY - initial.y;
+                if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy) * 1.3) return;
+                setBentoPhotoIndex((current) =>
+                  Math.max(0, Math.min(bentoPortraits.length - 1, current + (dx < 0 ? 1 : -1))),
+                );
+              }}
+              onTouchCancel={() => { bentoTouchStart.current = null; }}
+              onKeyDown={(event) => {
+                if (event.target !== event.currentTarget) return;
+                if (event.key === "ArrowRight") {
+                  event.preventDefault();
+                  setBentoPhotoIndex((current) => Math.min(bentoPortraits.length - 1, current + 1));
+                } else if (event.key === "ArrowLeft") {
+                  event.preventDefault();
+                  setBentoPhotoIndex((current) => Math.max(0, current - 1));
+                }
+              }}
+            >
+              <div
+                className="hero-photo-carousel-track"
+                style={{ transform: `translate3d(-${bentoPhotoIndex * 100}%, 0, 0)` }}
+              >
+                {bentoPortraits.map((portrait, index) => (
+                  <div key={portrait.src} className="hero-photo-carousel-slide" aria-hidden={index !== bentoPhotoIndex}>
+                    <img
+                      src={portrait.src}
+                      alt={portrait.alt}
+                      width={1440}
+                      height={960}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      fetchPriority={index === 0 ? "high" : "auto"}
+                      decoding="async"
+                      draggable={false}
+                      style={{ objectPosition: portrait.focus }}
+                    />
+                  </div>
+                ))}
               </div>
-
-              <Link href="/weight-loss" className="hero-bento-support editorial-media editorial-media-weight editorial-media-clickable" aria-label="Explore medical weight loss">
-                <img
-                  src="/images/bento/bento-weight-loss-woman.webp"
-                  alt="Indian woman in mauve attire holding a medication pen against a lavender and peach background"
-                  width={1440}
-                  height={960}
-                  loading="lazy"
-                  decoding="async"
-                />
-              </Link>
-
-              <Link href="/hair-growth" className="hero-bento-small hero-bento-small-one editorial-media editorial-media-hair editorial-media-clickable" aria-label="Explore hair growth care">
-                <img
-                  src="/images/bento/bento-hair-serum.webp"
-                  alt="Indian man with styled dark hair holding a hair serum bottle against a pastel studio background"
-                  width={1440}
-                  height={960}
-                  loading="lazy"
-                  decoding="async"
-                />
-              </Link>
-
-              <a href="#care-expander-title" className="hero-bento-small hero-bento-small-two editorial-media editorial-media-weight editorial-media-clickable" aria-label="Learn how Suga Health works">
-                <img
-                  src="/images/bento/bento-tablet-water.webp"
-                  alt="Indian woman in blue knitwear holding a tablet and a glass of water against a pale blue background"
-                  width={1440}
-                  height={960}
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
+              <div className="hero-photo-carousel-dots" role="group" aria-label="Select photo">
+                {bentoPortraits.map((portrait, index) => (
+                  <button
+                    key={portrait.src}
+                    type="button"
+                    className={index === bentoPhotoIndex ? "is-active" : ""}
+                    aria-label={`Show photo ${index + 1} of ${bentoPortraits.length}`}
+                    aria-pressed={index === bentoPhotoIndex}
+                    onClick={() => setBentoPhotoIndex(index)}
+                  >
+                    <span aria-hidden="true" />
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </section>
