@@ -637,3 +637,29 @@ main.refined-home .home-hero .hero-bento-grid .hero-photo-carousel-dots {
     transition: none !important;
   }
 }
+
+/* Homepage process / FAQ finishing touches.
+   Decorative arrows only: step controls and their interactive behavior stay intact. */
+main.refined-home .home-process .care-expander-card :is(.care-expander-arrow, svg) {
+  display: none !important;
+}
+main.refined-home .home-process :is(.care-expander-trigger, .care-expander-copy)::after {
+  content: none !important;
+  display: none !important;
+}
+/* The FAQ heading should not have a separator above it. */
+main.refined-home .home-faq {
+  border-top: none !important;
+}
+/* Give the full desktop process title enough space for one line. */
+@media (min-width: 821px) {
+  main.refined-home .home-process .care-expander-heading {
+    max-width: none;
+  }
+  main.refined-home .home-page-content .home-process #care-expander-title {
+    max-width: none !important;
+    white-space: nowrap !important;
+    text-wrap: nowrap !important;
+    overflow-wrap: normal !important;
+  }
+}
