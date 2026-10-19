@@ -333,7 +333,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
               }
             }}
           >
-            {placeholderFeatured ? "Next clinician" : "View credentials"} <ArrowUpRight size={17} />
+            {placeholderFeatured ? "Next clinician" : "View credentials"}
           </button>
         </div>
       </div>
