@@ -568,10 +568,10 @@ main.refined-home .home-progression header > span:first-child {
 }
 
 
-/* Homepage announcement: sunshine yellow, charcoal copy, Suga crimson accents. */
+/* Homepage announcement: soft beige, charcoal copy, Suga crimson accents. */
 main.refined-home > .home-trust-ticker {
-  background: #ffe45c !important;
-  border-bottom: 1px solid #e8c338 !important;
+  background: #f1e8dc !important;
+  border-bottom: 1px solid #dfd2c2 !important;
   -webkit-mask-image: none !important;
   mask-image: none !important;
 }
