@@ -521,18 +521,6 @@ export default function HomePage() {
 
   return (
     <main className={`legacy-public refined-home ${homeInter.variable} min-h-screen bg-white text-black overflow-x-clip`}>
-      <div ref={tickerRef} className="home-trust-ticker" data-ticker-visible="true" aria-label="Suga Health service highlights">
-        <div className="home-marquee-track">
-          {[0, 1, 2, 3].map((group) => (
-            <span key={group} aria-hidden={group > 0 ? true : undefined} className="home-ticker-sequence">
-              <span>Fully confidential</span><b>✦</b>
-              <span>Free and discrete shipping</span><b>✦</b>
-              <span>100% online process</span><b>✦</b>
-              <span>Used and trusted by millions around the world</span><b>✦</b>
-            </span>
-          ))}
-        </div>
-      </div>
       <header className="legacy-header mobile-home-header sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
         <div className="mobile-home-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
           <Link href="/" className="mobile-home-brand flex flex-col items-start select-none shrink-0">
@@ -560,6 +548,18 @@ export default function HomePage() {
           </div>
         </div>
       </header>
+      <div ref={tickerRef} className="home-trust-ticker" data-ticker-visible="true" aria-label="Suga Health service highlights">
+        <div className="home-marquee-track">
+          {[0, 1, 2, 3].map((group) => (
+            <span key={group} aria-hidden={group > 0 ? true : undefined} className="home-ticker-sequence">
+              <span>Fully confidential</span><b>✦</b>
+              <span>Free and discrete shipping</span><b>✦</b>
+              <span>100% online process</span><b>✦</b>
+              <span>Used and trusted by millions around the world</span><b>✦</b>
+            </span>
+          ))}
+        </div>
+      </div>
       <MobilePublicMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} fontClassName={`${homeInter.variable} home-inter-menu`} />
 
       <div className="home-page-content">
