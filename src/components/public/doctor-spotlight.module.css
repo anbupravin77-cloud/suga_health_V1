@@ -513,11 +513,11 @@
   }
   .rail .farLeft, .rail .farRight { opacity: 0 !important; pointer-events: none; }
   .rail .nearLeft, .rail .nearRight { opacity: .93; filter: none !important; }
-  /* Founder portrait only: shift the focal point higher on mobile,
-     keeping the bottom fully covered and all carousel geometry unchanged. */
+  /* Founder portrait only: balanced mobile crop with the full face visible.
+     The card, copy and other doctor portraits retain their existing geometry. */
   .rail .founderPortraitImage {
-    object-position: center bottom;
-    transform: scale(1.2);
+    object-position: center 50%;
+    transform: scale(1.1);
     transform-origin: center bottom;
   }
   .rail .cardContents { left: 14px; right: 14px; bottom: 17px; }
