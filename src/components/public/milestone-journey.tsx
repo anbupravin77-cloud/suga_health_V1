@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { rememberReturnPosition } from "./return-position";
 import { MotionLink } from "./motion-link";
 import styles from "./milestone-journey.module.css";
@@ -194,6 +194,7 @@ export function MilestoneJourney() {
                   onClick={() => selectCategory(item.key)}
                 >
                   <span className={styles.categoryText}>{item.title}{item.suffix && <span className={styles.suffix}> ({item.suffix})</span>}</span>
+                  <ArrowUpRight size={22} strokeWidth={1.5} aria-hidden="true" />
                 </button>
               ))}
             </div>
