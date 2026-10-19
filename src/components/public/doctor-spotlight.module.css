@@ -513,6 +513,13 @@
   }
   .rail .farLeft, .rail .farRight { opacity: 0 !important; pointer-events: none; }
   .rail .nearLeft, .rail .nearRight { opacity: .93; filter: none !important; }
+  /* Founder portrait only: shift the focal point higher on mobile,
+     keeping the bottom fully covered and all carousel geometry unchanged. */
+  .rail .founderPortraitImage {
+    object-position: center bottom;
+    transform: scale(1.2);
+    transform-origin: center bottom;
+  }
   .rail .cardContents { left: 14px; right: 14px; bottom: 17px; }
   .rail .cardName { font-size: clamp(17px, 4.6vw, 20px); }
   .rail .cardRole { font-size: 9px; }
