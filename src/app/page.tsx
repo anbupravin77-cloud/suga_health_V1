@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import productStyles from "@/components/public/product-gallery.module.css";
 import { Inter } from "next/font/google";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -155,60 +156,76 @@ const sugaModel = [
 
 const doctors = [
   {
-    id: "dr-marcus-vance",
-    name: "Dr. Marcus Vance",
-    credentials: "MD, FACP",
+    id: "dr-raja-prabhakaran-rajarethinam",
+    name: "Dr. Raja Prabhakaran Rajarethinam",
+    credentials: "MD, MBA",
+    role: "Founder",
+    specialty: "Founder, Suga.Health",
+    image: "/images/doctors/Rajaprabhakaran_Rajarethinam_MD_MBA_Founder.jpeg",
+    education: "Details to be updated.",
+    boardCertification: "Details to be updated.",
+    bio: "Founder of Suga.Health. More professional details coming soon.",
+    experience: "Details to be updated.",
+  },
+  {
+    id: "dr-arulprakash",
+    name: "Dr. Arulprakash",
+    credentials: "MD, FRCP, MCA",
     role: "Chief Medical Officer",
-    specialty: "Internal Medicine & Metabolic Pharmacology",
-    education: "Johns Hopkins School of Medicine",
-    licensedStatesCount: 32,
-    quote: "Treating whole metabolic health, never cutting clinical corners.",
-    bio: "Dr. Vance has over 16 years of experience in endocrinology, preventative longevity, and clinical weight management. He oversees Suga Health’s clinical safety protocols.",
-    image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=800&auto=format&fit=crop",
-    boardCertification: "American Board of Internal Medicine (ABIM)",
-    yearsOfExperience: 16,
+    specialty: "Medical Leadership",
+    image: "/images/doctors/Dr.Arulprakash_MD_FRCP_MCA_Chief_Medical_Officer.jpeg",
+    education: "Details to be updated.",
+    boardCertification: "Details to be updated.",
+    bio: "Chief Medical Officer at Suga.Health. More profile details coming soon.",
+    experience: "Details to be updated.",
   },
   {
-    id: "dr-elena-chen",
-    name: "Dr. Elena Chen",
-    credentials: "MD, FAAD",
-    role: "Director of Clinical Dermatology",
-    specialty: "Trichology & Follicular Regeneration",
-    education: "Stanford University School of Medicine",
-    licensedStatesCount: 26,
-    quote: "Precision follicular stimulation with minimal systemic exposure.",
-    bio: "Dr. Chen specializes in pattern hair loss in men and women, androgenetic alopecia, and dual-action compounds.",
-    image: "https://images.unsplash.com/photo-1594824813583-294711319717?q=80&w=800&auto=format&fit=crop",
-    boardCertification: "American Board of Dermatology (ABD)",
-    yearsOfExperience: 12,
+    id: "dr-aishwarya-meenaloshini",
+    name: "Dr. Aishwarya Meenaloshini",
+    credentials: "MBBS, MD",
+    role: "Dermatology Specialist",
+    specialty: "Dermatology, Venereology & Leprosy",
+    image: "/images/doctors/Dr.Aishwarya_Meenaloshini_MBBS_MD_Dermatology_Venereology_Leprosy.jpeg",
+    education: "Details to be updated.",
+    boardCertification: "Details to be updated.",
+    bio: "Specialist in dermatology, venereology and leprosy. Full biography coming soon.",
+    experience: "Details to be updated.",
   },
   {
-    id: "dr-julian-rivera",
-    name: "Dr. Julian Rivera",
-    credentials: "MD",
-    role: "Lead Urologist & Men’s Health Director",
-    specialty: "Endocrine Health & Sexual Health",
-    education: "Columbia University Vagelos College of Physicians",
-    licensedStatesCount: 28,
-    quote: "Restoring vitality through exact, evidence-based therapeutic dosing.",
-    bio: "Dr. Rivera is a practicing urologist with extensive clinical expertise in vascular erectile health and hormone optimization.",
-    image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=800&auto=format&fit=crop",
-    boardCertification: "American Board of Urology (ABU)",
-    yearsOfExperience: 14,
+    id: "dr-abi-sindhuja",
+    name: "Dr. Abi Sindhuja",
+    credentials: "MS, MCh",
+    role: "Consultant Aesthetic Surgeon",
+    specialty: "Aesthetic Surgery",
+    image: "/images/doctors/Dr.Abi_Sindhuja_%20MS_MCH_Consultant_Aesthetic%20Surgeon.jpeg",
+    education: "Details to be updated.",
+    boardCertification: "Details to be updated.",
+    bio: "Consultant in aesthetic surgery. Full biography coming soon.",
+    experience: "Details to be updated.",
   },
   {
-    id: "dr-sarah-jenkins",
-    name: "Dr. Sarah Jenkins",
-    credentials: "DO",
-    role: "Director of Preventive Longevity",
-    specialty: "Integrative Wellness & Primary Care",
-    education: "Georgetown University Medical Center",
-    licensedStatesCount: 24,
-    quote: "Proactive titration and ongoing clinician guidance ensure lasting health.",
-    bio: "Dr. Jenkins champions whole-person osteopathic medicine and lifestyle-integrated pharmacotherapy.",
-    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=800&auto=format&fit=crop",
-    boardCertification: "American Osteopathic Board of Internal Medicine (AOBIM)",
-    yearsOfExperience: 11,
+    id: "dr-s-c-vivekanandhan",
+    name: "Dr. S. C. Vivekanandhan",
+    credentials: "MD, DTCD",
+    role: "Consultant Pulmonologist & Sleep Apnea Specialist",
+    specialty: "Pulmonology & Sleep Apnea",
+    image: "/images/doctors/S.C.Vivekanandhan_MD_DTCD_Consultant_Pulmonaligist_and_Sleep_Apnea_Specialist.jpeg",
+    education: "Details to be updated.",
+    boardCertification: "Details to be updated.",
+    bio: "Consultant in pulmonology and sleep apnea. Full biography coming soon.",
+    experience: "Details to be updated.",
+  },
+  {
+    id: "dr-sampath-kumar",
+    name: "Dr. Sampath Kumar",
+    credentials: "MD, DM",
+    role: "Consultant Nephrologist",
+    specialty: "Nephrology",
+    image: "/images/doctors/Sampath_Kumar_MD_DM_Consultant_Nephrologist.jpeg",
+    education: "Details to be updated.",
+    boardCertification: "Details to be updated.",
+    bio: "Consultant in nephrology. Full biography coming soon.",
+    experience: "Details to be updated.",
   },
 ];
 
@@ -853,7 +870,7 @@ export default function HomePage() {
 
         <section id="doctors" className={`home-doctors home-editorial-section ${doctorStyles.doctorSection}`}>
           <div className="home-section-shell">
-            <SectionHeader centered hideEyebrow eyebrow="Medical Leadership & Care Team" title={<><span className="section-title-line">Experienced clinicians</span><span className="section-title-line">behind every prescription</span></>} subtitle="No bots, no algorithmic shortcuts. Licensed US physicians personally evaluate every intake, design individualized treatment plans, and support you throughout your care." />
+            <SectionHeader centered hideEyebrow eyebrow="Medical Leadership & Care Team" title={<><span className="section-title-line">Experienced clinicians</span><span className="section-title-line">behind every prescription</span></>} subtitle="Meet the doctors behind Suga.Health. Explore their roles, specialties, qualifications and professional profiles." />
 
             <DoctorSpotlight
               doctors={doctors}
@@ -1003,8 +1020,27 @@ export default function HomePage() {
       </footer>
 
       {selectedDoctor && <Modal label={selectedDoctor.name} stableScroll onClose={() => setSelectedDoctor(null)}>
-        <div className="p-5 sm:p-7 bg-neutral-950 text-white flex items-center gap-4"><div className="home-empty-image" aria-hidden="true" style={{ width: "100%", height: "100%" }} /><div><span className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Board-Certified Clinician</span><h3 className="font-sans text-2xl font-extrabold text-white">{selectedDoctor.name}, {selectedDoctor.credentials}</h3><p className="text-xs text-neutral-300">{selectedDoctor.role}</p></div></div>
-        <div className="p-5 sm:p-7 space-y-5"><div><span className="legacy-label">Clinical Specialty</span><p className="text-sm text-neutral-700">{selectedDoctor.specialty}</p></div><div><span className="legacy-label">Board Certification</span><p className="text-sm text-neutral-700">{selectedDoctor.boardCertification}</p></div><div><span className="legacy-label">Education</span><p className="text-sm text-neutral-700">{selectedDoctor.education}</p></div><div><span className="legacy-label">About</span><p className="text-sm text-neutral-700">{selectedDoctor.bio}</p></div><div className="text-xs font-bold uppercase tracking-wider text-neutral-500">{selectedDoctor.yearsOfExperience} years clinical practice</div></div>
+        <div className="p-5 sm:p-7 bg-neutral-950 text-white flex items-center gap-4">
+          <Image
+            src={selectedDoctor.image}
+            alt={`Portrait of ${selectedDoctor.name}`}
+            width={88}
+            height={108}
+            className="w-20 h-24 sm:w-[88px] sm:h-[108px] shrink-0 rounded-xl object-cover object-top"
+          />
+          <div className="min-w-0">
+            <span className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Suga.Health Medical Team</span>
+            <h3 className="font-sans text-xl sm:text-2xl font-extrabold text-white">{selectedDoctor.name}, {selectedDoctor.credentials}</h3>
+            <p className="text-xs text-neutral-300">{selectedDoctor.role}</p>
+          </div>
+        </div>
+        <div className="p-5 sm:p-7 space-y-5">
+          <div><span className="legacy-label">Clinical Field / Role</span><p className="text-sm text-neutral-700">{selectedDoctor.specialty}</p></div>
+          <div><span className="legacy-label">Additional Certifications</span><p className="text-sm text-neutral-700">{selectedDoctor.boardCertification}</p></div>
+          <div><span className="legacy-label">Education</span><p className="text-sm text-neutral-700">{selectedDoctor.education}</p></div>
+          <div><span className="legacy-label">About</span><p className="text-sm text-neutral-700">{selectedDoctor.bio}</p></div>
+          <div><span className="legacy-label">Experience</span><p className="text-sm text-neutral-700">{selectedDoctor.experience}</p></div>
+        </div>
       </Modal>}
 
       {selectedProduct && <Modal label={selectedProduct.activeIngredients} onClose={() => setSelectedProduct(null)}>

@@ -69,6 +69,12 @@
   background-color: var(--portrait-color);
 }
 
+.portraitImage {
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+}
+
 .portraitLabel {
   position: absolute;
   top: 16px;
@@ -80,20 +86,6 @@
   color: rgba(24,27,29,.43);
 }
 
-/* The fifth position is transparently a future profile, not a made-up doctor. */
-.placeholderCard .portrait {
-  background-color: #879394;
-}
-.placeholderCard .portraitLabel {
-  max-width: 180px;
-  color: rgba(22, 31, 32, .7);
-  font-size: 9px;
-  line-height: 1.5;
-}
-.placeholderCard .cardName {
-  font-size: 21px;
-  letter-spacing: -.02em;
-}
 
 .cardShade {
   position: absolute;

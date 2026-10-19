@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import styles from "./doctor-spotlight.module.css";
 
 type DoctorPreview = {
@@ -10,6 +11,7 @@ type DoctorPreview = {
   credentials: string;
   role: string;
   specialty: string;
+  image: string;
 };
 
 type DoctorSpotlightProps = {
@@ -17,25 +19,6 @@ type DoctorSpotlightProps = {
   onViewProfile: (doctorId: string) => void;
   paused?: boolean;
 };
-
-// Five distinct positions without fabricating a fifth doctor. Replace this
-// placeholder when a verified fifth clinician profile becomes available.
-const additionalProfiles: DoctorPreview[] = [
-  {
-    id: "care-team-profile-placeholder",
-    name: "More profiles soon",
-    credentials: "",
-    role: "CARE TEAM",
-    specialty: "Additional clinician profiles will appear here once verified.",
-  },
-  {
-    id: "care-team-second-placeholder",
-    name: "Meet the care team",
-    credentials: "",
-    role: "PROFILE PENDING",
-    specialty: "A verified clinician profile will be added here.",
-  },
-];
 
 // Five visible slots with two offscreen buffers each side.
 // Three repeated copies provide a physical wrap with no last-to-first jump.
@@ -56,7 +39,7 @@ function indexFor(value: number, count: number) {
 }
 
 export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: DoctorSpotlightProps) {
-  const cards = [...doctors, ...additionalProfiles];
+  const cards = doctors;
   const count = cards.length;
   const [position, setPosition] = useState(count);
   const [displayedIndex, setDisplayedIndex] = useState(0);
@@ -205,8 +188,6 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
     holdForTouch();
     if (slot !== 0) {
       advance(slot < 0 ? -1 : 1);
-    } else if (additionalProfiles.some((profile) => profile.id === doctorId)) {
-      advance(1);
     } else {
       onViewProfile(doctorId);
     }
@@ -214,7 +195,6 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
 
   if (!doctors.length) return null;
   const featured = cards[indexFor(displayedIndex, count)];
-  const placeholderFeatured = additionalProfiles.some((profile) => profile.id === featured.id);
 
   return (
     <div className={styles.root}>
@@ -259,7 +239,6 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
         {Array.from({ length: count * 3 }, (_, absoluteIndex) => {
           const offset = absoluteIndex - position;
           const doctor = cards[indexFor(absoluteIndex, count)];
-          const isPlaceholder = additionalProfiles.some((profile) => profile.id === doctor.id);
           const isCenter = offset === 0;
           const offscreen = Math.abs(offset) >= 3;
           const positionClass = positions[Math.max(0, Math.min(8, offset + 4))];
@@ -268,11 +247,11 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
             <button
               key={absoluteIndex}
               type="button"
-              className={`${styles.card} ${positionClass} ${isCenter ? styles.isCenter : ""} ${isPlaceholder ? styles.placeholderCard : ""}`}
+              className={`${styles.card} ${positionClass} ${isCenter ? styles.isCenter : ""}`}
               style={{ ["--portrait-color" as string]: ["#c3c8c5", "#afb9bf", "#c4bebb", "#b6c1b5", "#919da0"][indexFor(absoluteIndex, count)] }}
               tabIndex={offscreen ? -1 : 0}
               aria-hidden={offscreen ? true : undefined}
-              aria-label={isCenter ? (isPlaceholder ? "Continue to the next clinician" : `View credentials for ${doctor.name}`) : `Feature ${doctor.name}`}
+              aria-label={isCenter ? `View credentials for ${doctor.name}` : `Feature ${doctor.name}`}
               onTransitionEnd={(event) => {
                 if (event.target === event.currentTarget && event.propertyName === "transform" && isCenter && !isResetting) {
                   finishMove();
@@ -281,7 +260,13 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
               onClick={() => chooseSlot(offset, doctor.id)}
             >
               <span className={styles.portrait} aria-hidden="true">
-                <span className={styles.portraitLabel}>{isPlaceholder ? "ADDITIONAL PROFILE / PENDING VERIFICATION" : "PORTRAIT PLACEHOLDER"}</span>
+                <Image
+                  src={doctor.image}
+                  alt=""
+                  fill
+                  sizes="(max-width: 480px) 246px, (max-width: 760px) 274px, 354px"
+                  className={styles.portraitImage}
+                />
               </span>
               <span className={styles.cardShade} aria-hidden="true" />
               <span className={styles.cardContents}>
@@ -326,19 +311,15 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
             className={styles.profileButton}
             onClick={() => {
               holdForTouch();
-              if (placeholderFeatured) {
-                advance(1);
-              } else {
-                onViewProfile(featured.id);
-              }
+              onViewProfile(featured.id);
             }}
           >
-            {placeholderFeatured ? "Next clinician" : "View credentials"}
+            View credentials
           </button>
         </div>
       </div>
       <p className={styles.note}>
-        Portraits are placeholders. Clinician identities and credentials must be verified before publication.
+        Additional professional biography and education details will be updated soon.
       </p>
     </div>
   );
