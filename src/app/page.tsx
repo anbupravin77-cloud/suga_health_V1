@@ -237,7 +237,7 @@ const products = [
     "activeIngredients": "Tirzepatide",
     "form": "Prescription injection · KwikPen / vial",
     "manufacturer": "Eli Lilly",
-    "image": "/images/products/mounjaro.webp",
+    "image": "/images/products/weightloss%20image1.png",
     "imageAlt": "Illustration of a treatment pen near a person's thigh",
     "description": "Tirzepatide is a prescription medicine used for type 2 diabetes and weight management in eligible patients. A clinician determines suitability and the appropriate presentation.",
     "clinicalNote": "Prescription required. Not suitable for everyone; use only under medical supervision."
@@ -249,7 +249,7 @@ const products = [
     "activeIngredients": "Tirzepatide",
     "form": "Prescription multi-dose KwikPen",
     "manufacturer": "Eli Lilly · distributed by Cipla",
-    "image": "/images/products/yurpeak.webp",
+    "image": "/images/products/weightloss%20image%202.png",
     "imageAlt": "Concept photograph of a hand holding a pen-style injection device",
     "description": "Tirzepatide is a prescription injectable medicine. A clinician determines the appropriate indication, presentation, dosage and follow-up.",
     "clinicalNote": "Prescription required. Medical assessment and follow-up are essential."
@@ -261,7 +261,7 @@ const products = [
     "activeIngredients": "Orlistat 120 mg",
     "form": "Oral capsules",
     "manufacturer": "Intas Pharmaceuticals",
-    "image": "/images/products/obelit-120.webp",
+    "image": "/images/products/weightloss%20image%203.png",
     "imageAlt": "Concept photograph of capsules being picked up by fingertips",
     "description": "Orlistat is an oral medicine that reduces the absorption of dietary fat. Its use should be guided by an appropriate clinical assessment.",
     "clinicalNote": "A clinician or pharmacist should review suitability, interactions and dietary requirements."
@@ -273,7 +273,7 @@ const products = [
     "activeIngredients": "Minoxidil 5% topical solution",
     "form": "Topical solution",
     "manufacturer": "Dr. Reddy's Laboratories",
-    "image": "/images/products/mintop-5.webp",
+    "image": "/images/products/hairloss%20image%201.png",
     "imageAlt": "Illustration of a minoxidil-style hair treatment bottle",
     "description": "Topical minoxidil 5% is used for certain forms of pattern hair loss. A clinician can assess the cause of hair loss and the suitability of this treatment.",
     "clinicalNote": "Treatment choice varies by hair-loss diagnosis and patient factors."
@@ -285,7 +285,7 @@ const products = [
     "activeIngredients": "Minoxidil 5% + Finasteride 0.1%",
     "form": "Topical solution",
     "manufacturer": "Intas Pharmaceuticals",
-    "image": "/images/products/morr-f-5.webp",
+    "image": "/images/products/hairloss%20image%202.png",
     "imageAlt": "Illustration of a topical dropper being applied near a scalp parting",
     "description": "A prescription topical combination of minoxidil and finasteride used in selected patients with androgenetic hair loss.",
     "clinicalNote": "Requires a prescriber's review, including pregnancy-related precautions where relevant."
@@ -297,7 +297,7 @@ const products = [
     "activeIngredients": "Oral minoxidil",
     "form": "Oral tablets",
     "manufacturer": "Intas Pharmaceuticals",
-    "image": "/images/products/lonitab.webp",
+    "image": "/images/products/hairloss%20image%203.png",
     "imageAlt": "Concept photograph of tablets and a blister strip",
     "description": "Oral minoxidil was originally used to manage high blood pressure. Its use for hair growth is off-label and requires appropriate clinical supervision.",
     "clinicalNote": "Off-label hair-loss use requires careful clinician supervision due to possible cardiovascular effects."
@@ -309,7 +309,7 @@ const products = [
     "activeIngredients": "Sildenafil 100 mg",
     "form": "Oral tablets",
     "manufacturer": "Cipla",
-    "image": "/images/products/suhagra-100.webp",
+    "image": "/images/products/sexualhealth%20image%201.png",
     "imageAlt": "Illustration of a blue tablet resting in an open palm",
     "description": "Sildenafil is a prescription treatment for erectile dysfunction. A clinician assesses whether it is appropriate, including possible interactions.",
     "clinicalNote": "Must not be combined with nitrate medicines; suitability and dosing require medical review."
@@ -321,7 +321,7 @@ const products = [
     "activeIngredients": "Tadalafil 20 mg",
     "form": "Oral tablets",
     "manufacturer": "Cipla",
-    "image": "/images/products/tadacip-20.webp",
+    "image": "/images/products/sexualhealth%20image%202.png",
     "imageAlt": "Concept macro photograph of a tablet between fingertips",
     "description": "Tadalafil is a prescription treatment used for erectile dysfunction. The 20 mg strength is one presentation; prescribing decisions are individualized.",
     "clinicalNote": "Must not be combined with nitrate medicines; medical evaluation is required."
@@ -333,7 +333,7 @@ const products = [
     "activeIngredients": "Dapoxetine 30 mg",
     "form": "Oral tablets",
     "manufacturer": "Sun Pharma",
-    "image": "/images/products/duralast-30.webp",
+    "image": "/images/products/sexualhealth%20image%203.png",
     "imageAlt": "Concept photograph of a blister strip, tablets and fingertips",
     "description": "Dapoxetine is used for premature ejaculation in selected adult patients. It is not a general-purpose sexual performance supplement.",
     "clinicalNote": "Prescription-only use; a clinician must review interactions and precautions."
