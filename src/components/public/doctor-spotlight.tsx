@@ -285,7 +285,6 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
       </div>
       <div className={styles.underRail}>
         <div className={styles.featuredCopy} aria-live="off">
-          <span className={styles.featuredKicker}>FEATURED CLINICIAN</span>
           <h3>{featured.name}{featured.credentials ? `, ${featured.credentials}` : ""}</h3>
           <p>{featured.specialty}</p>
         </div>
