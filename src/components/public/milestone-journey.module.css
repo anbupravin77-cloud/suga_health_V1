@@ -280,7 +280,7 @@
   .heading { font-size: 23px; }
 }
 
-/* Monochrome moving perimeter. Kept separate from the content and from
+/* Sapphire-blue moving perimeter. Kept separate from the content and from
    the heading-to-card WAAPI transform: the outer frame moves as one unit. */
 .cardGlowFrame {
   position: relative;
@@ -308,10 +308,10 @@
     from 0deg,
     #e2e2df 0deg,
     #e2e2df 210deg,
-    #a5a5a2 244deg,
-    #111 278deg,
-    #111 293deg,
-    #a5a5a2 323deg,
+    #88a9d2 244deg,
+    #2457A7 278deg,
+    #2457A7 293deg,
+    #88a9d2 323deg,
     #e2e2df 356deg,
     #e2e2df 360deg
   );
