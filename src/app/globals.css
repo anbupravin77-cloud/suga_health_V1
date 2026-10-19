@@ -1418,7 +1418,7 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   overflow: hidden;
   white-space: nowrap;
   border-bottom: 1px solid #e4e4e1;
-  background: #f3f3f0;
+  background: #f1e8dc;
   -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 1.5rem, #000 calc(100% - 1.5rem), transparent 100%);
   mask-image: linear-gradient(90deg, transparent 0, #000 1.5rem, #000 calc(100% - 1.5rem), transparent 100%);
 }
@@ -3548,7 +3548,7 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   }
 
   .refined-home .home-page-content {
-    padding-top: 68px !important;
+    padding-top: 0 !important;
   }
 
   .refined-home .home-trust-ticker {
