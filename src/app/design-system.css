@@ -647,8 +647,11 @@ main.refined-home .home-process :is(.care-expander-trigger, .care-expander-copy)
   content: none !important;
   display: none !important;
 }
-/* The FAQ heading should not have a separator above it. */
+/* Keep the full-width FAQ section divider while removing the inset rule above its heading. */
 main.refined-home .home-faq {
+  border-top: 1px solid var(--care-rule) !important;
+}
+main.refined-home .home-faq > .home-faq-shell {
   border-top: none !important;
 }
 /* Give the full desktop process title enough space for one line. */
