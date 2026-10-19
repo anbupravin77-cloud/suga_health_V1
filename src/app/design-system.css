@@ -666,3 +666,29 @@ main.refined-home .home-faq > .home-faq-shell {
     overflow-wrap: normal !important;
   }
 }
+
+
+/* Keep long Hair Growth and Sexual Health hero headlines clear of the photo. */
+@media (min-width: 1100px) {
+  main.refined-treatment :is(.treatment-page-hero-hair, .treatment-page-hero-sexual) > div:last-child {
+    max-width: 55%;
+    margin-left: max(0px, calc((100% - 1280px) / 2));
+    margin-right: auto;
+  }
+  main.refined-treatment :is(.treatment-page-hero-hair, .treatment-page-hero-sexual) > div:last-child :is(h1, p) {
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
+  main.refined-treatment :is(.treatment-page-hero-hair, .treatment-page-hero-sexual) > .treatment-hero-media {
+    left: 62%;
+  }
+}
+@media (min-width: 821px) and (max-width: 1099px) {
+  main.refined-treatment :is(.treatment-page-hero-hair, .treatment-page-hero-sexual) > .treatment-hero-media {
+    opacity: .1;
+  }
+  main.refined-treatment :is(.treatment-page-hero-hair, .treatment-page-hero-sexual) > div:last-child :is(h1, p) {
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
+}
