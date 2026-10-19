@@ -600,7 +600,7 @@ export default function HomePage() {
 
             <div className="hero-bento-grid" aria-label="Suga Health treatment imagery">
               <Link href="/weight-loss" className="hero-bento-static hero-bento-feature" aria-label="Explore medical weight loss">
-                <img src="/images/products/mounjaro.webp" alt="Weight management medication illustration" width={900} height={900} loading="lazy" decoding="async" />
+                <img src="/images/products/weightloss%20image1.png" alt="Weight management medication illustration" width={900} height={900} loading="lazy" decoding="async" />
                 <span className="hero-bento-copy" aria-hidden="true">
                   <span className="hero-bento-eyebrow">WEIGHT MANAGEMENT</span>
                   <strong className="hero-bento-title">Medical weight loss</strong>
@@ -608,7 +608,7 @@ export default function HomePage() {
                 </span>
               </Link>
               <Link href="/hair-growth" className="hero-bento-static hero-bento-mini-one" aria-label="Explore hair growth treatments">
-                <img src="/images/products/mintop-5.webp" alt="Topical hair treatment bottle illustration" width={900} height={900} loading="lazy" decoding="async" />
+                <img src="/images/products/hairloss%20image%201.png" alt="Topical hair treatment bottle illustration" width={900} height={900} loading="lazy" decoding="async" />
                 <span className="hero-bento-copy" aria-hidden="true">
                   <span className="hero-bento-eyebrow">HAIR CARE</span>
                   <strong className="hero-bento-title">Hair growth</strong>
@@ -616,7 +616,7 @@ export default function HomePage() {
                 </span>
               </Link>
               <Link href="/sexual-health" className="hero-bento-static hero-bento-mini-two" aria-label="Explore private sexual health care">
-                <img src="/images/products/suhagra-100.webp" alt="Medicine tablet resting in an open palm" width={900} height={900} loading="lazy" decoding="async" />
+                <img src="/images/products/sexualhealth%20image%201.png" alt="Medicine tablet resting in an open palm" width={900} height={900} loading="lazy" decoding="async" />
                 <span className="hero-bento-copy" aria-hidden="true">
                   <span className="hero-bento-eyebrow">PRIVATE CARE</span>
                   <strong className="hero-bento-title">Sexual health</strong>
