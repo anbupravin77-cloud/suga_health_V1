@@ -203,7 +203,7 @@ export function MilestoneJourney() {
               href="/sign-up?next=%2Fconsultation%2Fstart"
               onClick={rememberReturnPosition}
               variant="radar"
-              className={styles.cta}
+              className={`${styles.cta} suga-consultation-cta`}
             >
               See if you qualify today
             </MotionLink>
