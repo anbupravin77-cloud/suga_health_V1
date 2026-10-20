@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Clock3, MessageSquare, ShieldCheck, UserRound } from "lucide-react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { BrandLogo } from "@/components/brand-logo";
 
 function statusCopy(status: string | null) {
   if (status === "completed") return { title: "Your treatment plan is ready", body: "Your clinician has completed the consultation.", done: true };
@@ -39,9 +40,8 @@ export default async function PatientFlowTestDashboardPage() {
   return (
     <main className="pft-dashboard-page">
       <header className="pft-dashboard-header">
-        <Link href="/landing-test" className="pft-wordmark">
-          <strong>Suga.health</strong>
-          <span>live naturally</span>
+        <Link href="/patient-flow-test/dashboard" className="pft-wordmark" aria-label="Test patient dashboard home">
+          <BrandLogo size="test" priority />
         </Link>
         <span className="pft-dashboard-secure"><ShieldCheck size={16} /> Patient portal</span>
       </header>
