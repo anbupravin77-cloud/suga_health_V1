@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { BrandLogo } from "@/components/brand-logo";
 
 export function AuthShell({ title, description, children }: { title: string; description: string; children: ReactNode }) {
   return (
@@ -10,10 +11,7 @@ export function AuthShell({ title, description, children }: { title: string; des
       <section className="auth-card-premium">
         <div className="auth-brand-lockup">
           <Link href="/" className="auth-brand-link" aria-label="Suga.Health home">
-            <span className="auth-brand-name font-sans">
-              SUGA<span className="auth-brand-dot">.</span>HEALTH
-            </span>
-            <span className="brand-tagline auth-brand-tagline">live naturally</span>
+            <BrandLogo size="auth" priority />
           </Link>
         </div>
 
