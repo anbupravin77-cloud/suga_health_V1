@@ -5,6 +5,7 @@ import { ArrowLeft, Check, Loader2, Phone, RefreshCw, ShieldCheck } from "lucide
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { BrandLogo } from "@/components/brand-logo";
 
 type Mode = "signup" | "login";
 type Gender = "female" | "male" | "intersex" | "prefer-not-to-say" | "";
@@ -188,9 +189,8 @@ export function TestAccountAccess({ initialMode }: { initialMode: Mode }) {
           <Link href="/landing-test" className="pft-icon-link" aria-label="Back to test landing page">
             <ArrowLeft size={21} />
           </Link>
-          <Link href="/landing-test" className="pft-wordmark">
-            <strong>Suga.health</strong>
-            <span>live naturally</span>
+          <Link href="/landing-test" className="pft-wordmark" aria-label="Test landing home">
+            <BrandLogo size="test" priority />
           </Link>
           <span className="pft-topbar-spacer" />
         </header>
