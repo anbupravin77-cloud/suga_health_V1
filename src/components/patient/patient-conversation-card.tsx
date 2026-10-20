@@ -36,11 +36,9 @@ export type PatientConversation = {
 
 export function PatientConversationCard({
   conversation,
-  index,
   href,
 }: {
   conversation: PatientConversation;
-  index: number;
   href: string;
 }) {
   const title = patientCareTitle(conversation.concern);
@@ -50,10 +48,6 @@ export function PatientConversationCard({
       className="patient-conversation-card"
       aria-label={`Open ${title} conversation. ${conversation.doctorName}.`}
     >
-      <span className="patient-conversation-overline">
-        <span className="patient-conversation-dot" aria-hidden="true" />
-        CONSULTATION {String(index + 1).padStart(2, "0")}
-      </span>
       <strong className="patient-conversation-title">{title}</strong>
       <span className="patient-conversation-detail">
         <span className="patient-conversation-avatar" aria-hidden="true">
