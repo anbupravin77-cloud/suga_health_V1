@@ -692,3 +692,165 @@ main.refined-home .home-faq > .home-faq-shell {
     overflow-wrap: break-word;
   }
 }
+
+/* Patient portal: Inter typography system (scoped to /patient shell). */
+.patient-v2 {
+  --font-sans: var(--font-inter);
+  --patient-type-body: 1rem;       /* 16px */
+  --patient-type-support: .875rem; /* 14px */
+  --patient-type-caption: .8125rem;/* 13px */
+  --patient-type-kicker: .75rem;   /* 12px */
+  font-family: var(--font-inter), Inter, Arial, sans-serif;
+  font-size: var(--patient-type-body);
+  line-height: 1.6;
+}
+.patient-v2 :is(button, input, select, textarea) {
+  font-family: var(--font-inter), Inter, Arial, sans-serif !important;
+}
+.patient-v2 :is(h1, h2, h3, h4) {
+  font-family: var(--font-inter), Inter, Arial, sans-serif !important;
+  overflow-wrap: break-word;
+}
+.patient-v2 :is(.patient-page-heading h1, .patient-detail-hero h1,
+  .patient-medication-detail-hero h1, .dashboard-heading h1) {
+  font-size: clamp(1.875rem, 2.7vw, 2.25rem) !important;
+  line-height: 1.2 !important;
+  font-weight: 700;
+  letter-spacing: -.035em;
+}
+.patient-v2 :is(.patient-start-card h2, .patient-intake-copy h2,
+  .patient-preview-header h2, .patient-medication-title h2,
+  .patient-profile-identity h2, .patient-submit-state h2) {
+  font-size: 1.375rem !important;
+  line-height: 1.3 !important;
+  letter-spacing: -.025em;
+}
+.patient-v2 :is(.patient-section-title h2, .patient-treatment-options h2,
+  .patient-signout-card h2, .patient-chat-empty h2) {
+  font-size: 1.1875rem !important;
+  line-height: 1.35 !important;
+}
+.patient-v2 .patient-content :is(h3, h4) {
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
+}
+.patient-v2 .patient-content :is(p, dd, li, blockquote) {
+  font-size: var(--patient-type-body) !important;
+  line-height: 1.6 !important;
+}
+.patient-v2 :is(.patient-record-copy strong, .patient-empty-simple strong,
+  .patient-mini-list strong, .patient-message-preview-list strong,
+  .patient-summary-list strong, .patient-preview-doctor strong,
+  .patient-draft-banner strong, .patient-concern-card strong,
+  .patient-profile-facts strong, .patient-account-status strong,
+  .patient-address-row strong, .patient-related-link strong,
+  .patient-medication-facts strong, .patient-medication-facts-grid strong,
+  .patient-review-list strong, .patient-notification-copy strong,
+  .notification-copy strong, .patient-thread-copy strong,
+  .patient-chat-consultation strong, .patient-history-heading strong,
+  .patient-option-card strong, .patient-care-choice-grid strong) {
+  font-size: var(--patient-type-support) !important;
+  line-height: 1.45 !important;
+}
+.patient-v2 :is(.patient-record-copy > span, .patient-empty-simple span,
+  .patient-support-card span, .patient-preview-doctor span,
+  .patient-draft-banner span, .patient-summary-list span,
+  .patient-medication-facts span, .patient-preview-facts span,
+  .patient-profile-contact span, .patient-profile-facts span,
+  .patient-detail-definition-grid dt, .patient-medication-title p,
+  .patient-account-status p, .patient-address-row p,
+  .patient-history-timeline p, .patient-thread-copy small,
+  .patient-chat-consultation small, .patient-related-link span,
+  .patient-related-link small, .patient-review-list span,
+  .patient-preview-section p, .patient-preview-section ul,
+  .patient-preview-facts strong, .patient-care-choice-grid small,
+  .patient-condition-grid button, .patient-form-field small,
+  .patient-consent-card label, .patient-option-card .option-description,
+  .patient-option-card .option-medicine span) {
+  font-size: var(--patient-type-support) !important;
+  line-height: 1.55 !important;
+}
+.patient-v2 :is(.patient-kicker, .patient-page-heading .eyebrow,
+  .dashboard-heading .eyebrow, .patient-option-card .option-tier,
+  .patient-prescription-tag, .patient-care-progress small,
+  .patient-intake-stepper small, .patient-intake-stepper > div > span,
+  .patient-history-heading span, .patient-chat-status,
+  .patient-option-card .selected-badge, .patient-date-tile span,
+  .patient-preview-header span, .patient-brand-block small,
+  .patient-related-consultation small, .patient-history-timeline a,
+  .patient-form-field small, .patient-preview-facts span) {
+  font-size: var(--patient-type-kicker) !important;
+  line-height: 1.4 !important;
+}
+.patient-v2 :is(.patient-muted-copy, .patient-preview-doctor small,
+  .patient-message-preview-list small, .patient-mini-list small,
+  .patient-thread-copy time, .patient-v2 .message time,
+  .patient-instruction-card small, .patient-history-timeline p,
+  .patient-notification-copy time, .notification-copy time) {
+  font-size: var(--patient-type-caption) !important;
+  line-height: 1.5 !important;
+}
+.patient-v2 :is(.patient-nav a, .patient-support-card strong,
+  .patient-account-copy strong, .patient-account-copy small,
+  .patient-signout, .patient-primary-button, .patient-secondary-button,
+  .patient-active-care > a, .patient-section-title a,
+  .patient-filter-tabs a, .patient-detail-tabs a, .patient-detail-tabs span,
+  .patient-search-form button, .patient-save-draft,
+  .patient-back-link, .patient-unit-switch button,
+  .patient-review-list button, .patient-option-card .button,
+  .patient-form-field > span, .patient-form-field > label,
+  .patient-field-heading label, .patient-profile-form label > span,
+  .patient-history-fieldset legend, .patient-consent-card label) {
+  font-size: var(--patient-type-support) !important;
+  line-height: 1.45 !important;
+}
+.patient-v2 :is(.patient-search-form input, .patient-profile-form input,
+  .patient-form-field input, .patient-form-field select,
+  .patient-form-field textarea, .message-form textarea) {
+  font-size: var(--patient-type-body) !important;
+  line-height: 1.5 !important;
+}
+.patient-v2 :is(.patient-treatment-options .medicine-directions dt,
+  .patient-treatment-options .medicine-directions dd,
+  .patient-treatment-options .option-price span,
+  .patient-treatment-options .option-price strong,
+  .patient-treatment-options .option-medicine strong,
+  .patient-consultation-preview .patient-preview-section > strong) {
+  font-size: var(--patient-type-caption) !important;
+  line-height: 1.5 !important;
+}
+.patient-v2 .patient-content :is(dt, label, legend) {
+  line-height: 1.5;
+}
+.patient-v2 .patient-profile-form label,
+.patient-v2 .patient-form-field,
+.patient-v2 .patient-record-copy,
+.patient-v2 .patient-thread-copy,
+.patient-v2 .patient-chat-consultation > span:nth-child(2) {
+  min-width: 0;
+}
+.patient-v2 .patient-content :is(.patient-record-copy, .patient-thread-copy,
+  .patient-preview-header, .patient-summary-list, .patient-profile-facts,
+  .patient-detail-definition-grid) {
+  overflow-wrap: break-word;
+}
+.patient-v2 .patient-v2 .status-badge,
+.patient-v2 .status-badge {
+  font-size: var(--patient-type-kicker) !important;
+  line-height: 1.25 !important;
+}
+@media (max-width: 600px) {
+  .patient-v2 :is(.patient-page-heading h1, .patient-detail-hero h1,
+    .patient-medication-detail-hero h1, .dashboard-heading h1) {
+    font-size: 1.75rem !important;
+    line-height: 1.25 !important;
+  }
+  .patient-v2 :is(.patient-start-card h2, .patient-intake-copy h2,
+    .patient-preview-header h2, .patient-medication-title h2) {
+    font-size: 1.25rem !important;
+  }
+  .patient-v2 .patient-care-progress strong {
+    font-size: .75rem !important;
+    line-height: 1.35 !important;
+  }
+}
