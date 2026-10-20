@@ -1,6 +1,6 @@
 "use client";
 
-import { LoaderCircle, Send } from "lucide-react";
+import { ArrowUp, LoaderCircle, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { sendMessageNow } from "@/app/actions";
@@ -18,12 +18,14 @@ export function MessageThread({
   currentUserId,
   messages,
   enabled = true,
+  iconOnlySend = false,
 }: {
   threadId: string;
   currentUserId: string;
   messages: Message[];
   returnTo?: string;
   enabled?: boolean;
+  iconOnlySend?: boolean;
 }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
@@ -118,8 +120,16 @@ export function MessageThread({
             placeholder="Write a private message…"
             disabled={sending}
           />
-          <button className="button button-primary motion-cta" type="submit" disabled={sending || !body.trim()}>
-            {sending ? <><LoaderCircle size={16} className="action-spinner" /> Sending…</> : <><Send size={16} /> Send</>}
+          <button
+            className={iconOnlySend ? "button button-primary motion-cta patient-message-send-arrow" : "button button-primary motion-cta"}
+            type="submit"
+            disabled={sending || !body.trim()}
+            aria-label={iconOnlySend ? (sending ? "Sending message" : "Send message") : undefined}
+            title={iconOnlySend ? "Send message" : undefined}
+          >
+            {iconOnlySend
+              ? (sending ? <LoaderCircle size={20} className="action-spinner" aria-hidden="true" /> : <ArrowUp size={23} strokeWidth={2.3} aria-hidden="true" />)
+              : (sending ? <><LoaderCircle size={16} className="action-spinner" /> Sending…</> : <><Send size={16} /> Send</>)}
           </button>
         </form>
       ) : <p className="form-note">Messaging opens when a doctor begins reviewing this consultation.</p>}
