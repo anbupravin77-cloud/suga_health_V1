@@ -71,7 +71,7 @@ export default async function ConsultationsPage({
           <h1>My Consultations</h1>
           <p>Your consultations, organized by treatment and assigned clinician.</p>
         </div>
-        <Link className="patient-primary-button" href="/patient/consultations/new">
+        <Link className="patient-primary-button patient-consultations-new suga-consultation-cta" href="/patient/consultations/new">
           New Consultation <ArrowRight size={16} aria-hidden="true" />
         </Link>
       </section>
