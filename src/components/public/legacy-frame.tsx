@@ -6,6 +6,7 @@ import { useState, type ReactNode } from "react";
 import { rememberReturnPosition, useRestoreReturnPosition } from "./return-position";
 import { MobilePublicMenu } from "./mobile-public-menu";
 import { PublicImage } from "./public-image";
+import { BrandLogo } from "@/components/brand-logo";
 
 const navLinks = [
   { name: "About", path: "/about", desc: "Our clinical mission & standards" },
@@ -22,8 +23,7 @@ export function LegacyPublicFrame({ children }: { children: ReactNode }) {
     <header className="legacy-header treatment-mobile-header fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80">
       <div className="treatment-mobile-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex justify-between items-center">
         <Link href="/" className="treatment-mobile-brand flex flex-col items-start select-none shrink-0">
-          <span className="font-sans text-xl sm:text-2xl tracking-tighter uppercase font-black text-neutral-950 leading-none">SUGA<span className="text-neutral-400">.</span>HEALTH</span>
-          <span className="brand-tagline text-neutral-500 mt-0.5">live naturally</span>
+          <BrandLogo size="header" priority />
         </Link>
         <nav className="public-desktop-nav hidden lg:flex items-center" aria-label="Primary navigation">
           {navLinks.map((link) => <Link key={link.name} href={link.path} className="public-desktop-nav-link">{link.name}</Link>)}
@@ -47,7 +47,7 @@ export function LegacyPublicFrame({ children }: { children: ReactNode }) {
     <footer className="bg-neutral-950 text-neutral-300 py-12 md:py-16 border-t border-neutral-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 mb-10 sm:mb-12">
-          <div className="md:col-span-6"><Link href="/" className="flex flex-col items-start mb-6"><span className="font-sans text-2xl tracking-tighter uppercase font-black text-white">SUGA<span className="text-neutral-500">.</span>HEALTH</span><span className="brand-tagline text-neutral-400 mt-0.5">live naturally</span></Link><p className="text-neutral-400 max-w-md text-sm leading-relaxed">Confidential, doctor-guided treatments for medical weight loss, hair restoration, and sexual health. Real treatments delivered with care and complete privacy.</p></div>
+          <div className="md:col-span-6"><Link href="/" className="flex flex-col items-start mb-6"><BrandLogo size="footer" inverse /></Link><p className="text-neutral-400 max-w-md text-sm leading-relaxed">Confidential, doctor-guided treatments for medical weight loss, hair restoration, and sexual health. Real treatments delivered with care and complete privacy.</p></div>
           <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Clinical Treatments</h4><ul className="space-y-3 text-sm text-neutral-400"><li><Link href="/weight-loss">Medical Weight Loss (GLP-1)</Link></li><li><Link href="/hair-growth">Hair Regrowth & Density</Link></li><li><Link href="/sexual-health">Sexual Health</Link></li><li><Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition}>Start Online Consultation</Link></li></ul></div>
           <div className="md:col-span-3"><h4 className="font-semibold text-white mb-5 uppercase tracking-widest text-xs">Medical Practice</h4><ul className="space-y-3 text-sm text-neutral-400"><li><Link href="/#doctors">Our Doctors & Medical Board</Link></li><li><Link href="/#products">Our Products & Formulary</Link></li><li><Link href="/about">About Our Clinical Mission</Link></li><li><Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition}>Patient Medical Intake</Link></li></ul></div>
         </div>
