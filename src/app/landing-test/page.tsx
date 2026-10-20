@@ -6,6 +6,7 @@ import { ArrowRight, Menu, UserRound, Sprout, Mars, X } from "lucide-react";
 import { useState } from "react";
 import { rememberReturnPosition } from "@/components/public/return-position";
 import "./landing-test.css";
+import { BrandLogo } from "@/components/brand-logo";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -25,8 +26,7 @@ export default function LandingTestPage() {
     <main className={`${bebasNeue.className} landing-test`}>
       <header className="landing-test__nav">
         <Link href="/" className="landing-test__brand" aria-label="Suga.Health home">
-          <strong>SUGA.HEALTH</strong>
-          <span>live naturally</span>
+          <BrandLogo size="test" priority />
         </Link>
 
         <nav className="landing-test__links" aria-label="Primary navigation">
