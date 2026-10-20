@@ -56,7 +56,7 @@ export default function HeroTestPage() {
             ))}
           </div>
 
-          <Link href="/sign-up" className={`${styles.primaryCta} suga-consultation-cta`>
+          <Link href="/sign-up" className={`${styles.primaryCta} suga-consultation-cta`}>
             <span>Start consultation</span>
             <ArrowRight size={25} strokeWidth={1.6} />
           </Link>
