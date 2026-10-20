@@ -7,6 +7,7 @@ import { useState, type MouseEvent, type ReactNode } from "react";
 import { signOut } from "@/app/actions";
 import { ActionButton } from "@/components/ui/action-button";
 import type { AppRole } from "@/lib/roles";
+import { BrandLogo } from "@/components/brand-logo";
 
 const iconMap = {
   Home,
@@ -97,7 +98,7 @@ export function AppShell({
       <div className={pendingHref ? "portal-route-progress is-active" : "portal-route-progress"} aria-hidden="true" />
       <aside className="app-sidebar">
         <div className="sidebar-brand">
-          <Link className="wordmark" href="/">Suga.Health</Link>
+          <Link className="wordmark" href={base} aria-label={`${role} dashboard home`}><BrandLogo size="portal" inverse priority /></Link>
           <span>{meta.label}</span>
         </div>
         <nav aria-label={`${role} navigation`}>
@@ -134,7 +135,7 @@ export function AppShell({
       </aside>
       <div className="app-main">
         <header className="app-topbar">
-          <Link className="mobile-app-brand" href="/">SUGA<span>.</span>HEALTH</Link>
+          <Link className="mobile-app-brand" href={base} aria-label={`${role} dashboard home`}><BrandLogo size="patient" priority /></Link>
           <span>{meta.workspace}</span>
           <strong>{name}</strong>
         </header>
