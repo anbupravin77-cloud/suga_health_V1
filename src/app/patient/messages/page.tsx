@@ -1,20 +1,18 @@
 import Link from "next/link";
-import { CalendarDays, MessageSquare, Search, Stethoscope } from "lucide-react";
+import { ArrowLeft, MessageSquare, Search } from "lucide-react";
 import { MessageThread } from "@/components/care/message-thread";
+import {
+  PatientConversationCard,
+  PatientConversationsHeading,
+  doctorInitials,
+  patientCareTitle,
+  type PatientConversation,
+} from "@/components/patient/patient-conversation-card";
 import { requireIdentity } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Messages" };
-
-function careTitle(value: string) {
-  const labels: Record<string, string> = {
-    weight: "Weight Loss Consultation",
-    hair: "Hair Growth Consultation",
-    sex: "Sexual Health Consultation",
-  };
-  return labels[value] || value.replaceAll("_", " ");
-}
 
 export default async function PatientMessagesPage({
   searchParams,
@@ -22,18 +20,19 @@ export default async function PatientMessagesPage({
   searchParams: Promise<{ thread?: string; q?: string }>;
 }) {
   const params = await searchParams;
-  const search = (params.q || "").trim().toLowerCase();
+  const query = (params.q || "").trim();
+  const search = query.toLowerCase();
   const identity = await requireIdentity();
   const supabase = await createClient();
 
-  const { data: rawThreadRows } = await supabase
+  // Only use consultations that the patient is authorized to read.
+  const { data: threadRows } = await supabase
     .from("message_threads")
-    .select("id, consultation_id, doctor_id, updated_at, last_message_preview, last_message_at, patient_unread_count, consultations(primary_concern, status, updated_at)")
+    .select("id, consultation_id, doctor_id, updated_at")
     .order("updated_at", { ascending: false })
     .limit(80);
 
-  const rawThreads = rawThreadRows ?? [];
-  // Resolve care titles and status directly from authorized consultation IDs.
+  const rawThreads = threadRows ?? [];
   const consultationIds = [...new Set(rawThreads.map((thread) => thread.consultation_id))];
   const { data: consultationRows } = consultationIds.length
     ? await supabase
@@ -41,150 +40,140 @@ export default async function PatientMessagesPage({
         .select("id, primary_concern, status, assigned_to")
         .in("id", consultationIds)
     : { data: [] as Array<{ id: string; primary_concern: string; status: string; assigned_to: string | null }> };
+
   const consultationById = new Map(
     (consultationRows ?? []).map((consultation) => [consultation.id, consultation]),
   );
 
-  const threads = rawThreads.filter((thread) => {
-    const concern = consultationById.get(thread.consultation_id)?.primary_concern || "";
+  const resolved = await Promise.all(rawThreads.map(async (thread) => {
+    const consultation = consultationById.get(thread.consultation_id);
+    if (!consultation) return null;
+
+    const assigned = Boolean(thread.doctor_id || consultation.assigned_to);
+    let doctorName = "Awaiting doctor assignment";
+    let doctorSpecialization: string | null = null;
+
+    if (assigned) {
+      const { data: doctorRows } = await supabase.rpc("v1_get_consultation_doctor", {
+        p_consultation_id: thread.consultation_id,
+      });
+      const doctor = doctorRows?.[0];
+      doctorName = doctor?.full_name?.trim() || "Doctor details unavailable";
+      doctorSpecialization = doctor?.specialization || doctor?.professional_title || null;
+    }
+
+    return {
+      id: thread.id,
+      consultationId: thread.consultation_id,
+      concern: consultation.primary_concern,
+      doctorName,
+      doctorSpecialization,
+      assigned,
+      enabled: Boolean(thread.doctor_id),
+    };
+  }));
+
+  const conversations = resolved.filter((conversation) => conversation !== null);
+  const filteredConversations = conversations.filter((conversation) => {
     if (!search) return true;
-    return [careTitle(concern), thread.last_message_preview || ""].join(" ").toLowerCase().includes(search);
+    return [patientCareTitle(conversation.concern), conversation.doctorName]
+      .some((value) => value.toLowerCase().includes(search));
   });
 
-  const selected =
-    threads.find((thread) => thread.id === params.thread) ||
-    threads[0] ||
-    null;
+  // A conversation opens only after clicking its card or following an explicit thread link.
+  const selected = params.thread
+    ? filteredConversations.find((conversation) => conversation.id === params.thread) || null
+    : null;
 
-  let messages: Array<{
-    id: string;
-    sender_uid: string;
-    message_text: string;
-    created_at: string;
-  }> = [];
-  let doctor: { full_name: string | null; professional_title: string | null; specialization: string | null } | null = null;
-
-  if (selected) {
-    const [{ data: messageRows }, { data: doctorRows }] = await Promise.all([
-      supabase
+  const { data: messageRows } = selected
+    ? await supabase
         .from("messages")
         .select("id, sender_uid, message_text, created_at")
         .eq("thread_id", selected.id)
-        .order("created_at"),
-      selected.doctor_id || consultationById.get(selected.consultation_id)?.assigned_to
-        ? supabase.rpc("v1_get_consultation_doctor", {
-            p_consultation_id: selected.consultation_id,
-          })
-        : Promise.resolve({ data: [] }),
-    ]);
-    messages = messageRows ?? [];
-    doctor = doctorRows?.[0] ?? null;
-  }
+        .order("created_at")
+    : { data: [] as Array<{ id: string; sender_uid: string; message_text: string; created_at: string }> };
+
+  const backParams = new URLSearchParams();
+  if (query) backParams.set("q", query);
+  const backHref = backParams.size ? `/patient/messages?${backParams.toString()}` : "/patient/messages";
 
   return (
-    <div>
-      <section className="patient-page-heading">
-        <div>
-          <h1>Messages</h1>
-          <p>Private conversations with your clinician stay attached to the consultation they belong to.</p>
-        </div>
-      </section>
+    <div className="patient-messages-page patient-conversations-surface">
+      {selected ? (
+        <section className="patient-conversation-thread-view" aria-labelledby="patient-thread-title">
+          <Link className="patient-conversation-back" href={backHref}>
+            <ArrowLeft size={18} aria-hidden="true" />
+            All conversations
+          </Link>
 
-      <div className="patient-message-workspace">
-        <aside className="patient-message-index">
+          <header className="patient-conversation-thread-header">
+            <span className="patient-conversations-eyebrow">SECURE CONVERSATION</span>
+            <h1 id="patient-thread-title">{patientCareTitle(selected.concern)}</h1>
+            <div className="patient-conversation-clinician">
+              <span className="patient-conversation-avatar" aria-hidden="true">
+                {selected.assigned ? doctorInitials(selected.doctorName) : <MessageSquare size={17} />}
+              </span>
+              <span>
+                <strong>{selected.doctorName}</strong>
+                <small>{selected.doctorSpecialization || (selected.assigned ? "Assigned clinician · Private conversation" : "Your care team will be assigned soon")}</small>
+              </span>
+            </div>
+          </header>
+
+          <div className="patient-conversation-chat">
+            <MessageThread
+              key={selected.id}
+              threadId={selected.id}
+              currentUserId={identity.id}
+              messages={messageRows ?? []}
+              enabled={selected.enabled}
+              iconOnlySend
+            />
+          </div>
+        </section>
+      ) : (
+        <section className="patient-messages-list-view" aria-labelledby="patient-conversations-title">
+          <PatientConversationsHeading />
+
           <form className="patient-search-form patient-message-search" action="/patient/messages">
-            <Search size={17} />
-            <input name="q" defaultValue={params.q || ""} placeholder="Search messages…" />
+            <Search size={18} aria-hidden="true" />
+            <label className="sr-only" htmlFor="patient-conversation-search">Search consultations or doctors</label>
+            <input
+              id="patient-conversation-search"
+              name="q"
+              defaultValue={query}
+              placeholder="Search consultations or doctors..."
+            />
             <button type="submit">Search</button>
           </form>
 
-          {threads.length ? (
-            <div className="patient-thread-list">
-              {threads.map((thread) => {
-                const concern = consultationById.get(thread.consultation_id)?.primary_concern || "consultation";
+          {filteredConversations.length ? (
+            <div className="patient-conversations-grid">
+              {filteredConversations.map((conversation: PatientConversation, index) => {
                 const linkParams = new URLSearchParams();
-                if (params.q) linkParams.set("q", params.q);
-                linkParams.set("thread", thread.id);
-
+                if (query) linkParams.set("q", query);
+                linkParams.set("thread", conversation.id);
                 return (
-                  <Link
+                  <PatientConversationCard
+                    key={conversation.id}
+                    conversation={conversation}
+                    index={index}
                     href={`/patient/messages?${linkParams.toString()}`}
-                    className={selected?.id === thread.id ? "is-selected" : ""}
-                    key={thread.id}
-                  >
-                    <span className="patient-thread-icon"><MessageSquare size={18} /></span>
-                    <span className="patient-thread-copy">
-                      <strong>{careTitle(concern)}</strong>
-                      <small>Open secure conversation</small>
-                      <time>
-                        {new Date(thread.last_message_at || thread.updated_at).toLocaleDateString("en", {
-                          day: "2-digit",
-                          month: "short",
-                        })}
-                      </time>
-                    </span>
-                    {thread.patient_unread_count > 0 && <b>{thread.patient_unread_count}</b>}
-                  </Link>
+                  />
                 );
               })}
             </div>
           ) : (
-            <div className="patient-empty-simple">
-              <MessageSquare size={24} />
-              <div>
-                <strong>No conversations found</strong>
-                <span>Messages open when a consultation is assigned to a clinician.</span>
-              </div>
-            </div>
-          )}
-        </aside>
-
-        <section className="patient-chat-column">
-          {selected ? (
-            <>
-              <header className="patient-chat-header">
-                <div className="patient-preview-doctor">
-                  <span className="patient-doctor-avatar">DR</span>
-                  <div>
-                    <strong>{doctor?.full_name || ((selected.doctor_id || consultationById.get(selected.consultation_id)?.assigned_to) ? "Doctor details unavailable" : "Awaiting doctor assignment")}</strong>
-                    <span>{doctor?.specialization || doctor?.professional_title || "Clinical care team"}</span>
-                  </div>
-                </div>
-              </header>
-
-              <Link
-                className="patient-chat-consultation"
-                href={`/patient/consultations/${selected.consultation_id}`}
-              >
-                <CalendarDays size={18} />
-                <span>
-                  <small>Related consultation</small>
-                  <strong>{careTitle(consultationById.get(selected.consultation_id)?.primary_concern || "consultation")}</strong>
-                </span>
-                <span className="patient-chat-status">
-                  {consultationById.get(selected.consultation_id)?.status?.replaceAll("_", " ") || "Consultation"}
-                </span>
-              </Link>
-
-              <div className="patient-chat-thread">
-                <MessageThread
-                  threadId={selected.id}
-                  currentUserId={identity.id}
-                  messages={messages}
-                  enabled={Boolean(selected.doctor_id)}
-                />
-              </div>
-            </>
-          ) : (
-            <div className="patient-chat-empty">
-              <Stethoscope size={30} />
-              <h2>Your care conversations will appear here.</h2>
-              <p>Start a consultation first. Messaging opens when the consultation reaches a clinician.</p>
-              <Link className="patient-primary-button" href="/patient/consultations/new">Start Consultation</Link>
+            <div className="patient-conversation-empty">
+              <MessageSquare size={24} aria-hidden="true" />
+              <strong>{search ? "No matching consultations" : "No conversations yet"}</strong>
+              <p>{search
+                ? "Try searching by consultation type or doctor name."
+                : "Your care conversations will appear here once messaging becomes available."}</p>
             </div>
           )}
         </section>
-      </div>
+      )}
     </div>
   );
 }
