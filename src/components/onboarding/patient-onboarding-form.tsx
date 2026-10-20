@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useActionState, useRef, useState } from "react";
 import { completePatientOnboarding, type OnboardingState } from "@/app/actions";
 import styles from "./patient-onboarding-form.module.css";
+import { BrandLogo } from "@/components/brand-logo";
 
 type InitialProfile = {
   firstName: string;
@@ -148,7 +149,7 @@ export function PatientOnboardingForm({ initial }: { initial: InitialProfile }) 
         </div>
 
         <div className={styles.cardTop}>
-          <span className={styles.brand}>SUGA.HEALTH</span>
+          <span className={styles.brand}><BrandLogo size="test" priority /></span>
           <span className={styles.setupLabel}>Profile setup</span>
         </div>
 
