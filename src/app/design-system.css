@@ -932,3 +932,125 @@ main.refined-home .home-faq > .home-faq-shell {
   .suga-brand-logo--header { width: 141px; height: 48px; }
   .suga-brand-logo--patient { width: 137px; height: 46px; }
 }
+
+/* Larger brand lockups while preserving the source logo's blue/red colors
+   and its native 2944:1300 proportions. */
+.suga-brand-logo--header { width: 190px; height: auto; }
+.suga-brand-logo--footer { width: 250px; height: auto; }
+.suga-brand-logo--patient { width: 176px; height: auto; }
+.suga-brand-logo--portal { width: 206px; height: auto; }
+.suga-brand-logo--auth { width: 250px; height: auto; }
+.suga-brand-logo--card { width: 250px; height: auto; }
+.suga-brand-logo--test { width: 190px; height: auto; }
+
+/* Give the fuller, uncropped public logo its natural height. */
+.refined-home .mobile-home-header-inner,
+.refined-treatment .treatment-mobile-header-inner {
+  height: 86px;
+  min-height: 86px;
+}
+.refined-treatment .treatment-public-content {
+  padding-top: 86px !important;
+}
+
+/* Patient desktop and slide-out menu: center logo above navigation,
+   instead of leaving it tucked against the left padding. */
+.patient-v2 .patient-brand-block {
+  min-height: 132px;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 12px;
+}
+.patient-v2 .patient-brand-block .patient-wordmark {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.patient-v2 .patient-brand-block .suga-brand-logo--patient {
+  width: min(220px, 100%);
+  height: auto;
+}
+
+/* Keep other clinical workspace branding prominent. */
+.app-layout .sidebar-brand .suga-brand-logo--portal {
+  width: min(206px, 100%);
+  height: auto;
+}
+
+@media (max-width: 860px) {
+  /* Center relative to the mobile viewport, not the unequal icon groups. */
+  .patient-v2 .patient-topbar {
+    min-height: 86px;
+  }
+  .patient-v2 .patient-mobile-wordmark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: max-content;
+    max-width: none;
+    transform: translate(-50%, -50%);
+  }
+  .patient-v2 .patient-mobile-wordmark .suga-brand-logo--patient {
+    width: 172px;
+    height: auto;
+  }
+  .patient-v2 .patient-menu-button,
+  .patient-v2 .patient-topbar-actions {
+    position: relative;
+    z-index: 1;
+  }
+  .patient-v2 .patient-topbar-actions {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  /* The public logo stays left aligned, unlike the patient dashboard logo. */
+  .suga-brand-logo--header { width: 188px; height: auto; }
+  .suga-brand-logo--patient { width: 162px; height: auto; }
+  .suga-brand-logo--test { width: 175px; height: auto; }
+  .suga-brand-logo--auth,
+  .suga-brand-logo--card { width: 238px; height: auto; }
+  .refined-home .mobile-home-header,
+  .refined-treatment .treatment-mobile-header {
+    height: 86px;
+  }
+  .refined-home .mobile-home-header-inner,
+  .refined-treatment .treatment-mobile-header-inner {
+    height: 86px;
+    min-height: 86px;
+    padding-left: 8px;
+  }
+  .refined-home .mobile-home-brand,
+  .refined-treatment .treatment-mobile-brand {
+    flex: 0 0 auto;
+    justify-self: start;
+    max-width: min(49vw, 188px);
+  }
+  .refined-home .mobile-home-brand .suga-brand-logo,
+  .refined-treatment .treatment-mobile-brand .suga-brand-logo {
+    max-width: 100%;
+  }
+  .refined-treatment .treatment-public-content {
+    padding-top: 86px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .suga-brand-logo--header { width: 167px; }
+  .patient-v2 .patient-mobile-wordmark .suga-brand-logo--patient {
+    width: 148px;
+  }
+}
+@media (max-width: 350px) {
+  .suga-brand-logo--header { width: 145px; }
+  .patient-v2 .patient-mobile-wordmark .suga-brand-logo--patient {
+    width: 121px;
+  }
+}
