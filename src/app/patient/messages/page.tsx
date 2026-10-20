@@ -149,7 +149,7 @@ export default async function PatientMessagesPage({
 
           {filteredConversations.length ? (
             <div className="patient-conversations-grid">
-              {filteredConversations.map((conversation: PatientConversation, index) => {
+              {filteredConversations.map((conversation: PatientConversation) => {
                 const linkParams = new URLSearchParams();
                 if (query) linkParams.set("q", query);
                 linkParams.set("thread", conversation.id);
@@ -157,8 +157,7 @@ export default async function PatientMessagesPage({
                   <PatientConversationCard
                     key={conversation.id}
                     conversation={conversation}
-                    index={index}
-                    href={`/patient/messages?${linkParams.toString()}`}
+                      href={`/patient/messages?${linkParams.toString()}`}
                   />
                 );
               })}
