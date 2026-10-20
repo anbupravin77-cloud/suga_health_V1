@@ -91,11 +91,10 @@ export default async function PatientHome() {
 
           {conversations.length ? (
             <div className="patient-conversations-grid">
-              {conversations.map((conversation, index) => (
+              {conversations.map((conversation) => (
                 <PatientConversationCard
                   key={conversation.id}
                   conversation={conversation}
-                  index={index}
                   href={`/patient/messages?thread=${encodeURIComponent(conversation.id)}`}
                 />
               ))}
