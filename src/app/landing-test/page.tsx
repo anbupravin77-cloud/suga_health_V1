@@ -41,7 +41,7 @@ export default function LandingTestPage() {
           <Link
             href="/patient-flow-test/account"
             onClick={rememberReturnPosition}
-            className="landing-test__nav-cta"
+            className="landing-test__nav-cta suga-consultation-cta"
           >
             <span>Start consultation</span>
             <ArrowRight size={21} strokeWidth={1.8} />
@@ -95,7 +95,7 @@ export default function LandingTestPage() {
           <Link
             href="/patient-flow-test/account"
             onClick={rememberReturnPosition}
-            className="landing-test__main-cta"
+            className="landing-test__main-cta suga-consultation-cta"
           >
             <span>Start consultation</span>
             <ArrowRight size={31} strokeWidth={1.65} />
