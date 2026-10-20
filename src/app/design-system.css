@@ -859,8 +859,8 @@ main.refined-home .home-faq > .home-faq-shell {
   display: block;
   flex: 0 0 auto;
   max-width: 100%;
-  object-fit: contain;
-  object-position: left center;
+  object-fit: cover;
+  object-position: center center;
 }
 .suga-brand-logo--header { width: 190px; height: 54px; }
 .suga-brand-logo--footer { width: 210px; height: 65px; }
@@ -871,7 +871,10 @@ main.refined-home .home-faq > .home-faq-shell {
 .suga-brand-logo--test { width: 175px; height: 53px; }
 .legacy-public img.suga-brand-logo--inverse,
 .app-layout img.suga-brand-logo--inverse {
-  filter: grayscale(1) brightness(0) invert(1) !important;
+  filter: none !important;
+  background: #fff;
+  padding: 6px;
+  border-radius: 9px;
 }
 .patient-v2 .patient-wordmark,
 .patient-v2 .patient-mobile-wordmark,
