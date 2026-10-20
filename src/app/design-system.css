@@ -1672,3 +1672,160 @@ main.refined-home .home-faq > .home-faq-shell {
     transition: none;
   }
 }
+
+/* Patient consultation index: compact editorial heading and usable controls.
+ * Matches the existing white surfaces, blue care accents and crimson CTA. */
+.patient-v2 .patient-consultations-redesign .patient-page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px 24px;
+  margin: 0 0 19px;
+}
+.patient-v2 .patient-consultations-redesign .patient-page-heading > div {
+  min-width: 0;
+}
+.patient-v2 .patient-consultations-redesign .patient-consultations-eyebrow {
+  margin-bottom: 7px;
+  font-size: .75rem !important;
+  line-height: 1.4 !important;
+}
+.patient-v2 .patient-consultations-redesign .patient-page-heading h1 {
+  font-size: clamp(1.875rem, 2.8vw, 2.25rem) !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.035em;
+}
+.patient-v2 .patient-consultations-redesign .patient-page-heading p {
+  max-width: 48ch;
+  margin: 7px 0 0;
+  font-size: .875rem !important;
+  line-height: 1.55 !important;
+}
+.patient-v2 .patient-consultations-redesign .patient-consultations-new {
+  flex: 0 0 auto;
+  width: auto;
+  min-height: 46px;
+  padding: 0 21px;
+  gap: 10px;
+  white-space: nowrap;
+  font-size: .9375rem !important;
+  line-height: 1.3 !important;
+}
+.patient-v2 .patient-consultations-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, 315px);
+  align-items: center;
+  gap: 12px;
+  max-width: none;
+  width: 100%;
+  margin-bottom: 19px;
+  padding: 11px;
+  border: 1px solid #e3e7ec;
+  border-radius: 15px;
+  background: #fff;
+}
+.patient-v2 .patient-consultations-controls .patient-filter-tabs {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  grid-auto-flow: unset;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 3px;
+  padding: 4px;
+  border: 0;
+  border-radius: 10px;
+  background: #f2f5f9;
+}
+.patient-v2 .patient-consultations-controls .patient-filter-tabs a {
+  min-width: 0;
+  min-height: 40px;
+  padding: 8px 5px;
+  border-radius: 8px;
+  color: #5e6c7d;
+  font-size: .8125rem !important;
+  font-weight: 600;
+  line-height: 1.25 !important;
+  text-align: center;
+  white-space: nowrap;
+}
+.patient-v2 .patient-consultations-controls .patient-filter-tabs a.is-active {
+  color: #fff;
+  background: #2457a7;
+}
+.patient-v2 .patient-consultations-controls .patient-filter-tabs a:focus-visible {
+  outline: 2px solid #2457a7;
+  outline-offset: 2px;
+}
+.patient-v2 .patient-consultations-controls .patient-search-form {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 5px 0 13px;
+  border-color: #dce2e9;
+  border-radius: 10px;
+  background: #fff;
+}
+.patient-v2 .patient-consultations-controls .patient-search-form input {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
+}
+.patient-v2 .patient-consultations-controls .patient-search-form button {
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: #edf2f8;
+  color: #2b5489;
+  font-size: .8125rem !important;
+  line-height: 1.3 !important;
+  font-weight: 650;
+}
+.patient-v2 .patient-consultations-controls .patient-search-form:focus-within {
+  border-color: #7b9bcc;
+  box-shadow: 0 0 0 2px rgba(36,87,167,.1);
+}
+@media (max-width: 1100px) {
+  .patient-v2 .patient-consultations-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .patient-v2 .patient-consultations-redesign .patient-page-heading {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  .patient-v2 .patient-consultations-redesign .patient-page-heading h1 {
+    font-size: clamp(1.75rem, 8vw, 2rem) !important;
+  }
+  .patient-v2 .patient-consultations-redesign .patient-page-heading p {
+    font-size: .875rem !important;
+  }
+  .patient-v2 .patient-consultations-redesign .patient-consultations-new {
+    width: 100%;
+    min-height: 46px;
+    justify-self: stretch;
+  }
+  .patient-v2 .patient-consultations-controls {
+    gap: 10px;
+    padding: 9px;
+    margin-bottom: 17px;
+    border-radius: 13px;
+  }
+  .patient-v2 .patient-consultations-controls .patient-filter-tabs a {
+    font-size: .75rem !important;
+    padding-inline: 3px;
+  }
+}
+@media (max-width: 360px) {
+  .patient-v2 .patient-consultations-controls .patient-filter-tabs a {
+    font-size: .6875rem !important;
+    padding-inline: 1px;
+  }
+  .patient-v2 .patient-consultations-controls .patient-search-form button {
+    padding-inline: 8px;
+  }
+}
