@@ -14,6 +14,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { submitConsultation } from "@/app/actions";
+import { BrandLogo } from "@/components/brand-logo";
 
 type Patient = {
   name: string;
@@ -170,8 +171,7 @@ export function TestConsultationForm({ patient }: { patient: Patient }) {
           <ArrowLeft size={22} />
         </Link>
         <div className="pft-wordmark pft-wordmark-centered">
-          <strong>Suga.health</strong>
-          <span>live naturally</span>
+          <BrandLogo size="test" priority />
         </div>
         <span className="pft-secure-mark"><LockKeyhole size={15} /> Secure</span>
       </header>
