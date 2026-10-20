@@ -15,8 +15,8 @@ export function BrandLogo({
     <Image
       src="/img/logo/suga-health-logo-transparent.png"
       alt="Suga.Health"
-      width={320}
-      height={120}
+      width={2944}
+      height={1300}
       priority={priority}
       className={`suga-brand-logo suga-brand-logo--${size}${inverse ? " suga-brand-logo--inverse" : ""}`}
     />
