@@ -853,3 +853,74 @@ main.refined-home .home-faq > .home-faq-shell {
     line-height: 1.35 !important;
   }
 }
+
+/* Shared image logo + simplified patient homepage. */
+.suga-brand-logo {
+  display: block;
+  flex: 0 0 auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left center;
+}
+.suga-brand-logo--header { width: 190px; height: 54px; }
+.suga-brand-logo--footer { width: 210px; height: 65px; }
+.suga-brand-logo--patient { width: 184px; height: 56px; }
+.suga-brand-logo--portal { width: 193px; height: 62px; }
+.suga-brand-logo--auth { width: 214px; height: 74px; object-position: center; }
+.suga-brand-logo--card { width: 218px; height: 77px; object-position: center; }
+.suga-brand-logo--test { width: 175px; height: 53px; }
+.legacy-public img.suga-brand-logo--inverse,
+.app-layout img.suga-brand-logo--inverse {
+  filter: grayscale(1) brightness(0) invert(1) !important;
+}
+.patient-v2 .patient-wordmark,
+.patient-v2 .patient-mobile-wordmark,
+.app-layout .sidebar-brand a.wordmark,
+.app-layout a.mobile-app-brand {
+  width: max-content;
+  max-width: 100%;
+  line-height: 0;
+  text-decoration: none;
+}
+.patient-v2 .patient-home-simplified .patient-home-heading h1 {
+  font-weight: 400 !important;
+}
+.patient-v2 .patient-home-simplified .patient-home-heading {
+  margin-bottom: 22px;
+}
+.patient-v2 .patient-home-simplified .patient-home-stream {
+  display: grid;
+  gap: 18px;
+  max-width: 960px;
+}
+.patient-v2 .patient-home-simplified .patient-home-stream > .patient-panel {
+  min-width: 0;
+  padding: 23px 26px;
+}
+.patient-v2 .patient-home-simplified .patient-active-care .patient-section-title {
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+}
+.patient-v2 .patient-home-simplified .patient-active-care .patient-section-title > div {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+.patient-v2 .patient-home-simplified .patient-active-care > p {
+  margin: 0;
+}
+.patient-v2 .patient-home-simplified .patient-messages-home .patient-section-title {
+  align-items: center;
+}
+@media (max-width: 600px) {
+  .suga-brand-logo--header { width: 157px; height: 51px; }
+  .suga-brand-logo--patient { width: 155px; height: 49px; }
+  .suga-brand-logo--test { width: 150px; height: 47px; }
+  .patient-v2 .patient-home-simplified .patient-home-stream > .patient-panel {
+    padding: 18px;
+  }
+}
+@media (max-width: 375px) {
+  .suga-brand-logo--header { width: 141px; height: 48px; }
+  .suga-brand-logo--patient { width: 137px; height: 46px; }
+}
