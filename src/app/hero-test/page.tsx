@@ -30,7 +30,7 @@ export default function HeroTestPage() {
 
           <div className={styles.navActions}>
             <Link href="/sign-in" className={styles.login}>Login</Link>
-            <Link href="/sign-up" className={styles.navCta}>
+            <Link href="/sign-up" className={`${styles.navCta} suga-consultation-cta`}>
               Start consultation <ArrowRight size={18} strokeWidth={1.8} />
             </Link>
           </div>
@@ -56,7 +56,7 @@ export default function HeroTestPage() {
             ))}
           </div>
 
-          <Link href="/sign-up" className={styles.primaryCta}>
+          <Link href="/sign-up" className={`${styles.primaryCta} suga-consultation-cta`>
             <span>Start consultation</span>
             <ArrowRight size={25} strokeWidth={1.6} />
           </Link>
