@@ -859,8 +859,13 @@ main.refined-home .home-faq > .home-faq-shell {
   display: block;
   flex: 0 0 auto;
   max-width: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center center;
+  /* Protect the original uploaded blue/red logo from the legacy global img grayscale rule. */
+  filter: none !important;
+  -webkit-filter: none !important;
+  opacity: 1;
+  mix-blend-mode: normal;
 }
 .suga-brand-logo--header { width: 190px; height: 54px; }
 .suga-brand-logo--footer { width: 210px; height: 65px; }
