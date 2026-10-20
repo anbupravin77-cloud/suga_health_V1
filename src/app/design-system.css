@@ -784,7 +784,7 @@ main.refined-home .home-faq > .home-faq-shell {
 }
 .patient-v2 :is(.patient-muted-copy, .patient-preview-doctor small,
   .patient-message-preview-list small, .patient-mini-list small,
-  .patient-thread-copy time, .patient-v2 .message time,
+  .patient-thread-copy time, .message time,
   .patient-instruction-card small, .patient-history-timeline p,
   .patient-notification-copy time, .notification-copy time) {
   font-size: var(--patient-type-caption) !important;
@@ -834,7 +834,6 @@ main.refined-home .home-faq > .home-faq-shell {
   .patient-detail-definition-grid) {
   overflow-wrap: break-word;
 }
-.patient-v2 .patient-v2 .status-badge,
 .patient-v2 .status-badge {
   font-size: var(--patient-type-kicker) !important;
   line-height: 1.25 !important;
