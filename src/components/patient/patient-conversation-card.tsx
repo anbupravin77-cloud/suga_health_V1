@@ -15,7 +15,7 @@ export function patientCareTitle(value: string) {
   return title ? (title.toLowerCase().endsWith("consultation") ? title : `${title} Consultation`) : "Consultation";
 }
 
-function doctorInitials(name: string) {
+export function doctorInitials(name: string) {
   return name
     .replace(/^Dr\.?\s*/i, "")
     .trim()
