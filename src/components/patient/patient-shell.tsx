@@ -18,6 +18,7 @@ import {
 import { useEffect, useState, type ReactNode } from "react";
 import { signOut } from "@/app/actions";
 import { ActionButton } from "@/components/ui/action-button";
+import { BrandLogo } from "@/components/brand-logo";
 
 const navItems = [
   { label: "Home", href: "/patient", icon: Home },
@@ -79,8 +80,7 @@ export function PatientShell({
   const sidebar = (
     <>
       <div className="patient-brand-block">
-        <Link href="/" className="patient-wordmark">SUGA<span>.</span>HEALTH</Link>
-        <small>live naturally</small>
+        <Link href="/patient" className="patient-wordmark" aria-label="Patient dashboard home"><BrandLogo size="patient" priority /></Link>
       </div>
 
       <nav className="patient-nav" aria-label="Patient navigation">
@@ -129,7 +129,7 @@ export function PatientShell({
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
 
-          <Link href="/" className="patient-mobile-wordmark">SUGA<span>.</span>HEALTH</Link>
+          <Link href="/patient" className="patient-mobile-wordmark" aria-label="Patient dashboard home"><BrandLogo size="patient" priority /></Link>
 
           <div className="patient-topbar-actions">
             <Link className="patient-bell" href="/patient/notifications" aria-label="Notifications">
