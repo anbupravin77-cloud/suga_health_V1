@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import styles from "./empty-auth-card.module.css";
+import { BrandLogo } from "@/components/brand-logo";
 
 /**
  * Visual shell for the client-led authentication redesign.
@@ -10,11 +11,8 @@ export function EmptyAuthCard({ heading, children }: { heading?: string; childre
   return (
     <main className={styles.page}>
       <section className={styles.card} aria-label="Authentication design card">
-        <div className={styles.logo} role="img" aria-label="Suga.Health, live naturally">
-          <span className={styles.wordmark} aria-hidden="true">
-            SUGA<span className={styles.dot}>.</span>HEALTH
-          </span>
-          <span className={styles.tagline} aria-hidden="true">live naturally</span>
+        <div className={styles.logo}>
+          <BrandLogo size="card" priority />
         </div>
         {heading && <h1 className={styles.heading}>{heading}</h1>}
         {children}
