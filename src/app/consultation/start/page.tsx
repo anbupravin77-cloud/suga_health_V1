@@ -6,6 +6,7 @@ import { requireRole } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { isQaPatient } from "@/lib/qa-patient";
 import "./standalone.css";
+import { BrandLogo } from "@/components/brand-logo";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Start consultation | Suga.Health" };
@@ -39,8 +40,8 @@ export default async function StartConsultationPage({
   return (
     <main className="patient-v2 standalone-intake">
       <header className="standalone-intake-header">
-        <Link href="/" className="standalone-intake-logo" aria-label="Suga.Health home">
-          SUGA.HEALTH
+        <Link href="/patient" className="standalone-intake-logo" aria-label="Patient dashboard home">
+          <BrandLogo size="patient" priority />
         </Link>
         <Link href="/patient" className="standalone-intake-exit">
           <ArrowLeft size={15} /> Exit
