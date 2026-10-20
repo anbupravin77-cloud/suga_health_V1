@@ -33,10 +33,22 @@ export default async function PatientMessagesPage({
     .limit(80);
 
   const rawThreads = rawThreadRows ?? [];
+  // Resolve care titles and status directly from authorized consultation IDs.
+  const consultationIds = [...new Set(rawThreads.map((thread) => thread.consultation_id))];
+  const { data: consultationRows } = consultationIds.length
+    ? await supabase
+        .from("consultations")
+        .select("id, primary_concern, status, assigned_to")
+        .in("id", consultationIds)
+    : { data: [] as Array<{ id: string; primary_concern: string; status: string; assigned_to: string | null }> };
+  const consultationById = new Map(
+    (consultationRows ?? []).map((consultation) => [consultation.id, consultation]),
+  );
+
   const threads = rawThreads.filter((thread) => {
+    const concern = consultationById.get(thread.consultation_id)?.primary_concern || "";
     if (!search) return true;
-    const concern = thread.consultations?.[0]?.primary_concern || "";
-    return [concern, thread.last_message_preview || ""].join(" ").toLowerCase().includes(search);
+    return [careTitle(concern), thread.last_message_preview || ""].join(" ").toLowerCase().includes(search);
   });
 
   const selected =
@@ -59,7 +71,7 @@ export default async function PatientMessagesPage({
         .select("id, sender_uid, message_text, created_at")
         .eq("thread_id", selected.id)
         .order("created_at"),
-      selected.doctor_id
+      selected.doctor_id || consultationById.get(selected.consultation_id)?.assigned_to
         ? supabase.rpc("v1_get_consultation_doctor", {
             p_consultation_id: selected.consultation_id,
           })
@@ -89,7 +101,7 @@ export default async function PatientMessagesPage({
           {threads.length ? (
             <div className="patient-thread-list">
               {threads.map((thread) => {
-                const concern = thread.consultations?.[0]?.primary_concern || "consultation";
+                const concern = consultationById.get(thread.consultation_id)?.primary_concern || "consultation";
                 const linkParams = new URLSearchParams();
                 if (params.q) linkParams.set("q", params.q);
                 linkParams.set("thread", thread.id);
@@ -103,7 +115,7 @@ export default async function PatientMessagesPage({
                     <span className="patient-thread-icon"><MessageSquare size={18} /></span>
                     <span className="patient-thread-copy">
                       <strong>{careTitle(concern)}</strong>
-                      <small>{thread.last_message_preview || "Open secure conversation"}</small>
+                      <small>Open secure conversation</small>
                       <time>
                         {new Date(thread.last_message_at || thread.updated_at).toLocaleDateString("en", {
                           day: "2-digit",
@@ -134,7 +146,7 @@ export default async function PatientMessagesPage({
                 <div className="patient-preview-doctor">
                   <span className="patient-doctor-avatar">DR</span>
                   <div>
-                    <strong>{doctor?.full_name || "Suga.Health clinician"}</strong>
+                    <strong>{doctor?.full_name || ((selected.doctor_id || consultationById.get(selected.consultation_id)?.assigned_to) ? "Doctor details unavailable" : "Awaiting doctor assignment")}</strong>
                     <span>{doctor?.specialization || doctor?.professional_title || "Clinical care team"}</span>
                   </div>
                 </div>
@@ -147,10 +159,10 @@ export default async function PatientMessagesPage({
                 <CalendarDays size={18} />
                 <span>
                   <small>Related consultation</small>
-                  <strong>{careTitle(selected.consultations?.[0]?.primary_concern || "consultation")}</strong>
+                  <strong>{careTitle(consultationById.get(selected.consultation_id)?.primary_concern || "consultation")}</strong>
                 </span>
                 <span className="patient-chat-status">
-                  {selected.consultations?.[0]?.status?.replaceAll("_", " ") || "Consultation"}
+                  {consultationById.get(selected.consultation_id)?.status?.replaceAll("_", " ") || "Consultation"}
                 </span>
               </Link>
 
