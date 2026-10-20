@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Activity, Sprout, HeartPulse } from "lucide-react";
 import styles from "./page.module.css";
+import { BrandLogo } from "@/components/brand-logo";
 
 const treatments = [
   { href: "/weight-loss", label: "Medical weight loss", Icon: Activity },
@@ -17,8 +18,7 @@ export default function HeroTestPage() {
 
         <nav className={styles.nav} aria-label="Test landing navigation">
           <Link href="/hero-test" className={styles.brand} aria-label="Suga.Health test home">
-            <strong>SUGA.HEALTH</strong>
-            <span>live naturally</span>
+            <BrandLogo size="test" priority />
           </Link>
 
           <div className={styles.navLinks}>
