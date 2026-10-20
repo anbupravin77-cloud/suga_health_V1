@@ -969,7 +969,7 @@ export function ConsultationForm({
       {error && !invalidSection && <p className="consultation-inline-error" role="alert">{error}</p>}
 
       <footer className="consultation-onepage-actions consultation-last-actions">
-        <button type="submit" className="patient-primary-button" disabled={isSubmitting}>
+        <button type="submit" className="patient-primary-button suga-consultation-cta" disabled={isSubmitting}>
           Send for clinical review
         </button>
       </footer>
