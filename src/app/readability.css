@@ -577,7 +577,10 @@ main.refined-home > .home-trust-ticker {
 }
 main.refined-home > .home-trust-ticker .home-ticker-sequence {
   color: #171715 !important;
-  font-weight: 750;
+  font-weight: 400 !important;
+}
+main.refined-home > .home-trust-ticker .home-ticker-sequence > span {
+  font-weight: 400 !important;
 }
 main.refined-home > .home-trust-ticker .home-ticker-sequence b {
   color: #d6092b !important;
