@@ -1830,6 +1830,68 @@ main.refined-home .home-faq > .home-faq-shell {
   }
 }
 
+/* Consultation history polish: denser mobile hierarchy without changing data or routing. */
+.patient-v2 .patient-consultations-redesign .patient-page-heading {
+  margin-bottom: 14px;
+}
+.patient-v2 .patient-consultations-controls {
+  margin-bottom: 15px;
+}
+.patient-v2 .patient-consultations-controls .patient-filter-tabs a {
+  transition: background-color .16s ease, color .16s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .patient-v2 .patient-consultations-controls .patient-filter-tabs a:not(.is-active):hover {
+    background: #e4ebf5;
+    color: #244a79;
+  }
+  .patient-v2 .patient-consultations-controls .patient-search-form button:hover {
+    background: #dfe9f5;
+  }
+}
+.patient-v2 .patient-consultations-controls .patient-search-form button:focus-visible {
+  outline: 2px solid #2457a7;
+  outline-offset: 2px;
+}
+@media (max-width: 600px) {
+  .patient-v2 .patient-consultations-redesign .patient-page-heading {
+    gap: 11px;
+    margin-bottom: 12px;
+  }
+  .patient-v2 .patient-consultations-redesign .patient-consultations-eyebrow {
+    margin-bottom: 4px;
+  }
+  .patient-v2 .patient-consultations-redesign .patient-page-heading p {
+    margin-top: 5px;
+  }
+  .patient-v2 .patient-consultations-redesign .patient-consultations-new {
+    min-height: 44px;
+  }
+  .patient-v2 .patient-consultations-controls {
+    gap: 8px;
+    padding: 8px;
+    margin-bottom: 14px;
+  }
+  .patient-v2 .patient-consultations-controls .patient-filter-tabs a {
+    min-height: 40px;
+  }
+}
+@media (max-width: 380px) {
+  .patient-v2 .patient-consultations-controls .patient-filter-tabs {
+    gap: 2px;
+    padding: 3px;
+  }
+  .patient-v2 .patient-consultations-controls .patient-filter-tabs a {
+    font-size: .725rem !important;
+    letter-spacing: -.02em;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .patient-v2 .patient-consultations-controls .patient-filter-tabs a {
+    transition: none;
+  }
+}
+
 /* Consultation submission is also a primary medical-intake CTA.
  * Keep its disabled behavior and all other form controls unchanged. */
 .patient-v2 button.suga-consultation-cta {
