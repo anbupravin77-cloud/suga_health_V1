@@ -568,9 +568,9 @@ main.refined-home .home-progression header > span:first-child {
 }
 
 
-/* Homepage announcement: white strip, charcoal copy, Suga crimson accents. */
+/* Homepage announcement: cool off-white strip, charcoal copy, Suga crimson accents. */
 main.refined-home > .home-trust-ticker {
-  background: #ffffff !important;
+  background: #f4f6f9 !important;
   border-bottom: 1px solid #e4e4e1 !important;
   -webkit-mask-image: none !important;
   mask-image: none !important;
