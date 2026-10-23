@@ -13,8 +13,8 @@ export function BrandLogo({
 }) {
   return (
     <Image
-      src="/img/logo/suga-health-logo-transparent.png"
-      alt="Suga.Health"
+      src="/img/logo/IMG-20261022-WA0009.jpg"
+      alt="Suga.Health — Live Naturally"
       width={2944}
       height={1300}
       priority={priority}
