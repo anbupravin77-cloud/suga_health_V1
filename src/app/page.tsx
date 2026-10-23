@@ -554,8 +554,8 @@ export default function HomePage() {
           </nav>
 
           <div className="mobile-home-header-actions flex items-center gap-2.5 sm:gap-3 shrink-0">
-            <Link href="/sign-in" className="mobile-home-login suga-btn suga-btn-secondary suga-btn-compact">Login</Link>
-            <span className="mobile-home-profile" aria-hidden="true">
+            <Link href="/sign-in" className="mobile-home-login public-header-login suga-btn suga-btn-secondary suga-btn-compact">Login</Link>
+            <span className="mobile-home-profile public-header-profile" aria-hidden="true">
               <CircleUserRound size={23} strokeWidth={1.85} />
             </span>
             <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="mobile-home-menu lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
