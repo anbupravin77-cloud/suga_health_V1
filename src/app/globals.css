@@ -1418,7 +1418,9 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   overflow: hidden;
   white-space: nowrap;
   border-bottom: 1px solid #e4e4e1;
-  background: #f1e8dc;
+  background: #fcfbf8;
+  height: 38px;
+  box-sizing: border-box;
   -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 1.5rem, #000 calc(100% - 1.5rem), transparent 100%);
   mask-image: linear-gradient(90deg, transparent 0, #000 1.5rem, #000 calc(100% - 1.5rem), transparent 100%);
 }
@@ -1429,7 +1431,8 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   gap: 0;
   width: max-content;
   min-width: max-content;
-  padding: .82rem 0;
+  height: 100%;
+  padding: 0;
   animation: home-ticker-run 36s linear infinite;
   will-change: transform;
 }
@@ -1439,7 +1442,7 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   align-items: center;
   white-space: nowrap;
   color: #656561;
-  font-size: .64rem;
+  font-size: .875rem;
   font-weight: 600;
   line-height: 1;
   letter-spacing: .12em;
@@ -2572,7 +2575,7 @@ main.legacy-public > div > section:nth-of-type(n+3) {
 
 @media (max-width: 560px) {
   .refined-home .home-ticker-sequence {
-    font-size: .58rem;
+    font-size: .8125rem;
     letter-spacing: .09em;
   }
   .refined-home .home-ticker-sequence span { padding-inline: 1rem; }
