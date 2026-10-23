@@ -29,7 +29,7 @@
 :global(main.refined-home) .motion.light {
   background: #f6f6f4 !important;
   background-image: none !important;
-  border-color: #d2d2ce !important;
+  border-color: var(--suga-logo-blue, #0f5286) !important;
   color: #111 !important;
 }
 :global(main.refined-home) .motion:focus-visible {
@@ -336,4 +336,10 @@
   :global(main.refined-home) .motion.magnetic:hover {
     transform: none !important;
   }
+}
+
+/* View Protocol and other light motion links use the wordmark-blue outline.
+   Hospital-red consultation links retain their dedicated rules above. */
+:global(main.refined-home) .motion.light:focus-visible {
+  outline-color: var(--suga-logo-blue, #0f5286) !important;
 }
