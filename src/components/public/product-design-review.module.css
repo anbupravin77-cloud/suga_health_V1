@@ -232,13 +232,13 @@
   background: #fff !important;
   color: #161616 !important;
   -webkit-text-fill-color: #161616 !important;
-  border: 1px solid #d7d7d2 !important;
+  border: 1px solid var(--suga-logo-blue, #0f5286) !important;
   transition: background 200ms ease, border-color 200ms ease;
 }
 
 :global(main.refined-home .home-formulary) .footer > .secondary:hover {
   background: #f4f4f1 !important;
-  border-color: #bdbdb7 !important;
+  border-color: #0b426d !important;
 }
 
 :global(main.refined-home .home-formulary) .footer > :is(a,button):focus-visible {
@@ -409,7 +409,7 @@
     top: clamp(78px, 27vw, 135px);
     width: 43px;
     height: 43px;
-    border: 1px solid #d8d8d3;
+    border: 1px solid var(--suga-logo-blue, #0f5286);
     border-radius: 50%;
     display: grid;
     place-items: center;
@@ -466,4 +466,10 @@
 :global(main.refined-home .home-formulary) .card .ingredients {
   font-size: var(--suga-type-body) !important;
   line-height: 1.6 !important;
+}
+
+/* Non-intake product controls: Learn More and mobile carousel arrows. */
+:global(main.refined-home .home-formulary) .footer > .secondary:focus-visible,
+:global(main.refined-home .home-formulary) .railArrow:focus-visible {
+  outline-color: var(--suga-logo-blue, #0f5286) !important;
 }
