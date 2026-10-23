@@ -1418,7 +1418,7 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   overflow: hidden;
   white-space: nowrap;
   border-bottom: 1px solid #e4e4e1;
-  background: #ffffff;
+  background: #f4f6f9;
   height: 38px;
   box-sizing: border-box;
   -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 1.5rem, #000 calc(100% - 1.5rem), transparent 100%);
