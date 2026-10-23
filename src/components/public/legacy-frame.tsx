@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { ArrowRight, CircleUserRound, Menu, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { rememberReturnPosition, useRestoreReturnPosition } from "./return-position";
 import { MobilePublicMenu } from "./mobile-public-menu";
 import { PublicImage } from "./public-image";
@@ -17,6 +18,7 @@ const navLinks = [
 
 export function LegacyPublicFrame({ children }: { children: ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
   useRestoreReturnPosition();
 
   return <main className="legacy-public refined-treatment min-h-screen bg-[#FAFAFA] text-neutral-950 overflow-x-hidden">
@@ -26,15 +28,13 @@ export function LegacyPublicFrame({ children }: { children: ReactNode }) {
           <BrandLogo size="header" priority />
         </Link>
         <nav className="public-desktop-nav hidden lg:flex items-center" aria-label="Primary navigation">
-          {navLinks.map((link) => <Link key={link.name} href={link.path} className="public-desktop-nav-link">{link.name}</Link>)}
+          {navLinks.map((link) => <Link key={link.name} href={link.path} className="public-desktop-nav-link" aria-current={pathname === link.path ? "page" : undefined}>{link.name}</Link>)}
         </nav>
         <div className="treatment-mobile-header-actions flex items-center gap-2.5 sm:gap-3 shrink-0">
-          <Link href="/sign-in" className="treatment-mobile-signin suga-btn suga-btn-account suga-btn-compact hidden sm:inline-flex">Sign In</Link>
-          <Link href="/sign-up?next=%2Fconsultation%2Fstart" onClick={rememberReturnPosition} className="treatment-mobile-start suga-btn suga-btn-primary suga-btn-compact suga-consultation-cta hidden sm:inline-flex">
-            <span className="treatment-mobile-start-full">Start consultation</span>
-            <span className="treatment-mobile-start-short">Start</span>
-            <ArrowRight size={15} />
-          </Link>
+          <Link href="/sign-in" className="public-header-login suga-btn suga-btn-secondary suga-btn-compact">Login</Link>
+          <span className="public-header-profile" aria-hidden="true">
+            <CircleUserRound size={23} strokeWidth={1.85} />
+          </span>
           <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} className="treatment-mobile-menu lg:hidden p-2 rounded-xl text-neutral-900 hover:bg-neutral-100 transition-colors" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen}>
             {mobileMenuOpen ? <X size={23} /> : <Menu size={23} />}
           </button>
