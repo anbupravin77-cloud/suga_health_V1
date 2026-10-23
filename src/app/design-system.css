@@ -6,7 +6,9 @@
  */
 :root {
   --suga-font: var(--font-inter), Inter, Arial, sans-serif;
-  --suga-crimson: #ed0723;
+  --suga-crimson: #c30d10; /* red sampled from the new Live Naturally logo */
+  --suga-crimson-hover: #a90b0e;
+  --suga-crimson-focus: #85080b;
   --suga-logo-blue: #0f5286; /* sampled from the current Suga.Health wordmark */
   --suga-type-hero: 2.25rem;          /* 36px */
   --suga-type-section: 1.875rem;      /* 30px */
@@ -1925,9 +1927,9 @@ main.refined-home .home-faq > .home-faq-shell {
 /* Consultation submission is also a primary medical-intake CTA.
  * Keep its disabled behavior and all other form controls unchanged. */
 .patient-v2 button.suga-consultation-cta {
-  border: 1px solid #ed0723 !important;
+  border: 1px solid var(--suga-crimson) !important;
   border-radius: 999px !important;
-  background: #ed0723 !important;
+  background: var(--suga-crimson) !important;
   background-image: none !important;
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
@@ -1941,14 +1943,14 @@ main.refined-home .home-faq > .home-faq-shell {
   cursor: not-allowed;
 }
 .patient-v2 button.suga-consultation-cta:focus-visible {
-  outline: 2px solid #a90a1f !important;
+  outline: 2px solid var(--suga-crimson-focus) !important;
   outline-offset: 3px;
 }
 @media (hover:hover) and (pointer:fine) {
   .patient-v2 button.suga-consultation-cta:not(:disabled):hover {
-    border-color: #df0924 !important;
-    background: #df0924 !important;
-    box-shadow: 0 7px 18px rgba(237,7,35,.18) !important;
+    border-color: var(--suga-crimson-hover) !important;
+    background: var(--suga-crimson-hover) !important;
+    box-shadow: 0 7px 18px rgba(195,13,16,.18) !important;
     transform: translateY(-1px);
   }
 }
