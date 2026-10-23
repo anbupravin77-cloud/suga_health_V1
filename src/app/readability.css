@@ -568,10 +568,10 @@ main.refined-home .home-progression header > span:first-child {
 }
 
 
-/* Homepage announcement: PANTONE 11-4201 Cloud Dancer (approximate screen match). */
+/* Homepage announcement: subtle neutral light gray, distinct from white header. */
 main.refined-home > .home-trust-ticker {
-  background: #f0eee9 !important;
-  border-bottom: 1px solid #e1ded8 !important;
+  background: #f0f0f0 !important;
+  border-bottom: 1px solid #dedede !important;
   -webkit-mask-image: none !important;
   mask-image: none !important;
 }
