@@ -12,13 +12,17 @@ export function BrandLogo({
   priority?: boolean;
 }) {
   return (
-    <Image
-      src="/img/logo/IMG-20261022-WA0009.jpg"
-      alt="Suga.Health — Live Naturally"
-      width={2944}
-      height={1300}
-      priority={priority}
+    <span
       className={`suga-brand-logo suga-brand-logo--${size}${inverse ? " suga-brand-logo--inverse" : ""}`}
-    />
+    >
+      <Image
+        src="/img/logo/Suga.health%20Live%20Naturally%20Logo.png"
+        alt="Suga.Health — Live Naturally"
+        width={1473}
+        height={1068}
+        priority={priority}
+        className="suga-brand-logo-art"
+      />
+    </span>
   );
 }
