@@ -7,6 +7,7 @@
 :root {
   --suga-font: var(--font-inter), Inter, Arial, sans-serif;
   --suga-crimson: #ed0723;
+  --suga-logo-blue: #0f5286; /* sampled from the current Suga.Health wordmark */
   --suga-type-hero: 2.25rem;          /* 36px */
   --suga-type-section: 1.875rem;      /* 30px */
   --suga-type-treatment: 1.6875rem;   /* 27px */
@@ -1926,5 +1927,44 @@ main.refined-home .home-faq > .home-faq-shell {
   .patient-v2 button.suga-consultation-cta {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+
+/* Homepage: the logo's blue is the outline accent for NON-consultation actions.
+ * Only recolor existing borders; preserve fills, spacing, routing and red intake CTAs. */
+main.refined-home :is(
+  .suga-btn-secondary,
+  .suga-btn-primary:not(.suga-consultation-cta),
+  .home-action-pill:not(.home-action-primary),
+  .product-filter,
+  .legacy-toggle,
+  .doctor-credentials-button,
+  .hero-bento-portrait-cta
+):not(.suga-consultation-cta) {
+  border-color: var(--suga-logo-blue) !important;
+}
+main.refined-home :is(
+  .suga-btn-secondary,
+  .suga-btn-primary:not(.suga-consultation-cta),
+  .home-action-pill:not(.home-action-primary),
+  .product-filter,
+  .legacy-toggle,
+  .doctor-credentials-button,
+  .hero-bento-portrait-cta
+):not(.suga-consultation-cta):focus-visible {
+  outline-color: var(--suga-logo-blue) !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  main.refined-home :is(
+    .suga-btn-secondary,
+    .suga-btn-primary:not(.suga-consultation-cta),
+    .home-action-pill:not(.home-action-primary),
+    .product-filter,
+    .legacy-toggle,
+    .doctor-credentials-button,
+    .hero-bento-portrait-cta
+  ):not(.suga-consultation-cta):hover {
+    border-color: #0b426d !important;
   }
 }
