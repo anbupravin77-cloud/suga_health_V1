@@ -272,20 +272,36 @@
   align-items: center;
   justify-content: center;
   gap: 14px;
-  border: 1px solid var(--suga-logo-blue, #0f5286);
+  border: 1px solid var(--suga-crimson, #c30d10);
   border-radius: 999px;
-  background: #161616;
+  background: var(--suga-crimson, #c30d10);
   color: #fff !important;
   font-size: 12px;
   font-weight: 650;
   cursor: pointer;
   white-space: nowrap;
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
 }
 
-.navButton:focus-visible,
-.profileButton:focus-visible {
+@media (hover: hover) and (pointer: fine) {
+  .profileButton:hover {
+    background: var(--suga-crimson-hover, #a90b0e);
+    border-color: var(--suga-crimson-hover, #a90b0e);
+    transform: translateY(-1px);
+  }
+}
+
+.navButton:focus-visible {
   outline: 2px solid var(--suga-logo-blue, #0f5286);
   outline-offset: 4px;
+}
+.profileButton:focus-visible {
+  outline: 2px solid var(--suga-crimson-focus, #85080b);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .profileButton { transition: none; }
+  .profileButton:hover { transform: none; }
 }
 
 .note {
