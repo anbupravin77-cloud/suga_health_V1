@@ -266,6 +266,7 @@ export function DoctorSpotlight({ doctors, onViewProfile, paused = false }: Doct
                   fill
                   sizes="(max-width: 480px) 246px, (max-width: 760px) 274px, 354px"
                   className={`${styles.portraitImage} ${doctor.id === "dr-raja-prabhakaran-rajarethinam" ? styles.founderPortraitImage : ""}`}
+                  style={doctor.id === "dr-arulprakash" ? { objectPosition: "center center" } : undefined}
                 />
               </span>
               <span className={styles.cardShade} aria-hidden="true" />
