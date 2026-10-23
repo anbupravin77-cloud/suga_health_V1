@@ -221,11 +221,37 @@
   cursor: pointer;
 }
 
+/* The existing Get Started link and its morphing text animation retain their behavior. */
 :global(main.refined-home .home-formulary) .footer > .primary {
-  background: #161616 !important;
+  background: var(--suga-crimson, #c30d10) !important;
+  background-color: var(--suga-crimson, #c30d10) !important;
+  background-image: none !important;
   color: #fff !important;
-  border: 1px solid #161616 !important;
+  border: 1px solid var(--suga-crimson, #c30d10) !important;
   -webkit-text-fill-color: #fff !important;
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease !important;
+}
+/* MotionLink draws a separate covering surface above the button background. */
+:global(main.refined-home .home-formulary) .footer > .primary > span[aria-hidden="true"]:first-child {
+  background: var(--suga-crimson, #c30d10) !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  :global(main.refined-home .home-formulary) .footer > .primary:hover {
+    background: var(--suga-crimson-hover, #a90b0e) !important;
+    background-color: var(--suga-crimson-hover, #a90b0e) !important;
+    border-color: var(--suga-crimson-hover, #a90b0e) !important;
+    transform: translateY(-1px);
+  }
+  :global(main.refined-home .home-formulary) .footer > .primary:hover > span[aria-hidden="true"]:first-child {
+    background: var(--suga-crimson-hover, #a90b0e) !important;
+  }
+}
+:global(main.refined-home .home-formulary) .footer > .primary:focus-visible {
+  outline: 2px solid var(--suga-crimson-focus, #85080b) !important;
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  :global(main.refined-home .home-formulary) .footer > .primary { transition: none !important; }
 }
 
 :global(main.refined-home .home-formulary) .footer > .secondary {
