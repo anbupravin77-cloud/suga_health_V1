@@ -855,18 +855,36 @@ main.refined-home .home-faq > .home-faq-shell {
   }
 }
 
-/* Shared image logo + simplified patient homepage. */
+/* Shared brand lockup. Keep the original raster artwork unaltered;
+   crop only its large empty margins via an overflow-hidden viewport.
+   The verified source is 1473x1068; the artwork fits inside
+   x=60..1420, y=303..791, producing an aspect ratio of 1360/488. */
 .suga-brand-logo {
   display: block;
+  position: relative;
+  overflow: hidden;
   flex: 0 0 auto;
+  width: max-content;
   max-width: 100%;
+  aspect-ratio: 1360 / 488;
+  height: auto;
+  line-height: 0;
+  background: #fff;
+  isolation: isolate;
+}
+.suga-brand-logo > .suga-brand-logo-art {
+  display: block;
+  position: absolute;
+  left: -4.412%;
+  top: -62.1%;
+  width: 108.31%;
+  height: auto;
+  max-width: none !important;
   object-fit: contain;
-  object-position: center center;
-  /* Protect the original uploaded blue/red logo from the legacy global img grayscale rule. */
   filter: none !important;
   -webkit-filter: none !important;
-  opacity: 1;
   mix-blend-mode: normal;
+  opacity: 1;
 }
 .suga-brand-logo--header { width: 190px; height: 54px; }
 .suga-brand-logo--footer { width: 210px; height: 65px; }
@@ -1054,6 +1072,17 @@ main.refined-home .home-faq > .home-faq-shell {
   .patient-v2 .patient-mobile-wordmark .suga-brand-logo--patient {
     width: 121px;
   }
+}
+
+/* Image crop is intentional; it affects whitespace, never the logo text.
+   Apply after legacy fixed dimensions and responsive width declarations. */
+.suga-brand-logo {
+  height: auto !important;
+  aspect-ratio: 1360 / 488;
+}
+.suga-brand-logo--inverse {
+  background: #fff;
+  border-radius: 6px;
 }
 
 /* Patient home consultation-conversation cards: no message text outside chat. */
