@@ -745,11 +745,11 @@ a.suga-consultation-cta,
 a.suga-consultation-cta:visited,
 a.suga-consultation-cta:hover,
 a.suga-consultation-cta:focus-visible {
-  background: #ed0723 !important;
-  background-color: #ed0723 !important;
+  background: var(--suga-crimson, #c30d10) !important;
+  background-color: var(--suga-crimson, #c30d10) !important;
   background-image: none !important;
   background-size: auto !important;
-  border: 1px solid #ed0723 !important;
+  border: 1px solid var(--suga-crimson, #c30d10) !important;
   border-radius: 999px !important;
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
@@ -761,7 +761,7 @@ a.suga-consultation-cta:focus-visible {
   box-shadow: none;
 }
 a.suga-consultation-cta > span[aria-hidden="true"]:first-child {
-  background: #ed0723 !important;
+  background: var(--suga-crimson, #c30d10) !important;
   background-image: none !important;
 }
 a.suga-consultation-cta :is(span, svg) {
@@ -769,19 +769,19 @@ a.suga-consultation-cta :is(span, svg) {
   -webkit-text-fill-color: #fff !important;
 }
 a.suga-consultation-cta:focus-visible {
-  outline: 2px solid #a90a1f !important;
+  outline: 2px solid var(--suga-crimson-focus, #85080b) !important;
   outline-offset: 3px;
 }
 @media (hover: hover) and (pointer: fine) {
   a.suga-consultation-cta:hover {
-    background: #df0924 !important;
-    background-color: #df0924 !important;
-    border-color: #df0924 !important;
+    background: var(--suga-crimson-hover, #a90b0e) !important;
+    background-color: var(--suga-crimson-hover, #a90b0e) !important;
+    border-color: var(--suga-crimson-hover, #a90b0e) !important;
     transform: translateY(-1px);
-    box-shadow: 0 7px 18px rgba(237,7,35,.18) !important;
+    box-shadow: 0 7px 18px rgba(195,13,16,.18) !important;
   }
   a.suga-consultation-cta:hover > span[aria-hidden="true"]:first-child {
-    background: #df0924 !important;
+    background: var(--suga-crimson-hover, #a90b0e) !important;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -798,25 +798,25 @@ a.suga-consultation-cta:focus-visible {
 /* CSS Modules give MotionLink its own high-specificity dark surface.
  * Match that specificity so footer/assessment CTAs stay crimson too. */
 main.refined-home a.suga-consultation-cta {
-  background: #ed0723 !important;
-  background-color: #ed0723 !important;
+  background: var(--suga-crimson, #c30d10) !important;
+  background-color: var(--suga-crimson, #c30d10) !important;
   background-image: none !important;
-  border-color: #ed0723 !important;
+  border-color: var(--suga-crimson, #c30d10) !important;
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
 }
 main.refined-home a.suga-consultation-cta > span[aria-hidden="true"]:first-child {
-  background: #ed0723 !important;
+  background: var(--suga-crimson, #c30d10) !important;
   background-image: none !important;
 }
 @media (hover: hover) and (pointer: fine) {
   main.refined-home a.suga-consultation-cta:hover {
-    background: #df0924 !important;
-    background-color: #df0924 !important;
-    border-color: #df0924 !important;
+    background: var(--suga-crimson-hover, #a90b0e) !important;
+    background-color: var(--suga-crimson-hover, #a90b0e) !important;
+    border-color: var(--suga-crimson-hover, #a90b0e) !important;
   }
   main.refined-home a.suga-consultation-cta:hover > span[aria-hidden="true"]:first-child {
-    background: #df0924 !important;
+    background: var(--suga-crimson-hover, #a90b0e) !important;
   }
 }
 
