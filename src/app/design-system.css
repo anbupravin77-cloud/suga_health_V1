@@ -1120,6 +1120,45 @@ main.refined-home .home-faq > .home-faq-shell {
   }
 }
 
+/* Public navigation: phone browsers requesting "Desktop site" often expose a
+   ~980px CSS viewport. Show the full nav on laptop-sized layouts before
+   Tailwind's lg (1024px) breakpoint, while preserving hamburger on phones. */
+@media (min-width: 900px) and (max-width: 1023.98px) {
+  .refined-home .mobile-home-header-inner,
+  .refined-treatment .treatment-mobile-header-inner {
+    display: grid;
+    grid-template-columns: minmax(165px, 1fr) auto minmax(225px, 1fr);
+    align-items: center;
+    gap: 12px;
+  }
+  .refined-home .mobile-home-brand,
+  .refined-treatment .treatment-mobile-brand {
+    justify-self: start;
+    min-width: 0;
+  }
+  .refined-home .mobile-home-header-actions,
+  .refined-treatment .treatment-mobile-header-actions {
+    justify-self: end;
+    min-width: 0;
+  }
+  .refined-home .public-desktop-nav,
+  .refined-treatment .public-desktop-nav {
+    display: flex !important;
+    align-items: center;
+    justify-self: center;
+    gap: 0;
+  }
+  .refined-home .public-desktop-nav-link,
+  .refined-treatment .public-desktop-nav-link {
+    padding-inline: 9px;
+    font-size: .74rem;
+  }
+  .refined-home .mobile-home-menu,
+  .refined-treatment .treatment-mobile-menu {
+    display: none !important;
+  }
+}
+
 /* Patient home consultation-conversation cards: no message text outside chat. */
 .patient-v2 .patient-conversations-surface .patient-messages-home {
   background: #fff;
