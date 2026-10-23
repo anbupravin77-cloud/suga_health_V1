@@ -174,7 +174,7 @@ const doctors = [
     credentials: "MD, FRCP, MCA",
     role: "Chief Medical Officer",
     specialty: "Medical Leadership",
-    image: "/images/doctors/Dr.Arulprakash_MD_FRCP_MCA_Chief_Medical_Officer.jpeg",
+    image: "/images/doctors/IMG-20261020-WA0005.jpg",
     education: "Details to be updated.",
     boardCertification: "Details to be updated.",
     bio: "Chief Medical Officer at Suga.Health. More profile details coming soon.",
@@ -1026,7 +1026,7 @@ export default function HomePage() {
             alt={`Portrait of ${selectedDoctor.name}`}
             width={88}
             height={108}
-            className="w-20 h-24 sm:w-[88px] sm:h-[108px] shrink-0 rounded-xl object-cover object-top"
+            className={`w-20 h-24 sm:w-[88px] sm:h-[108px] shrink-0 rounded-xl object-cover ${selectedDoctor.id === "dr-arulprakash" ? "object-center" : "object-top"}`}
           />
           <div className="min-w-0">
             <span className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Suga.Health Medical Team</span>
