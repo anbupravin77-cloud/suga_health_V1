@@ -1417,8 +1417,8 @@ main.legacy-public > div > section:nth-of-type(n+3) {
   position: relative;
   overflow: hidden;
   white-space: nowrap;
-  border-bottom: 1px solid #e1ded8;
-  background: #f0eee9; /* PANTONE 11-4201 Cloud Dancer, approximate sRGB */
+  border-bottom: 1px solid #dedede;
+  background: #f0f0f0; /* light neutral gray: visually separate from white header */
   height: 38px;
   box-sizing: border-box;
   -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 1.5rem, #000 calc(100% - 1.5rem), transparent 100%);
