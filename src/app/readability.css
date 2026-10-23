@@ -570,8 +570,8 @@ main.refined-home .home-progression header > span:first-child {
 
 /* Homepage announcement: cool off-white strip, charcoal copy, Suga crimson accents. */
 main.refined-home > .home-trust-ticker {
-  background: #f4f6f9 !important;
-  border-bottom: 1px solid #e4e4e1 !important;
+  background: #edf1f5 !important;
+  border-bottom: 1px solid #dce3eb !important;
   -webkit-mask-image: none !important;
   mask-image: none !important;
 }
