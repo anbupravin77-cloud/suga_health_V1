@@ -250,7 +250,7 @@
   width: 42px;
   height: 42px;
   padding: 0;
-  border: 1px solid #d7d7d1;
+  border: 1px solid var(--suga-logo-blue, #0f5286);
   border-radius: 50%;
   background: #fff;
   color: #151515;
@@ -260,7 +260,7 @@
 
 .navButton:hover {
   background: #f1f1ee;
-  border-color: #a8a8a3;
+  border-color: #0b426d;
 }
 
 .profileButton {
@@ -272,7 +272,7 @@
   align-items: center;
   justify-content: center;
   gap: 14px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid var(--suga-logo-blue, #0f5286);
   border-radius: 999px;
   background: #161616;
   color: #fff !important;
@@ -284,7 +284,7 @@
 
 .navButton:focus-visible,
 .profileButton:focus-visible {
-  outline: 2px solid #191919;
+  outline: 2px solid var(--suga-logo-blue, #0f5286);
   outline-offset: 4px;
 }
 
