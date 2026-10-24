@@ -1325,18 +1325,19 @@ main.refined-treatment .treatment-mobile-header .treatment-mobile-header-actions
   }
 }
 
-/* Header logo only: broaden the footprint while trimming unused
-   bottom-white margin (source bounds y=247..811, versus 247..840).
-   Retain the whole blue outline and script, without changing the image asset.
-   A very slight vertical reduction keeps the 74px/70px headers compact. */
+/* Header-only logo crop: preserve the entire thin blue border.
+   Image crop uses approximately source x=40..1385, y=225..839:
+   generous outer breathing room instead of the former bottom-edge cut.
+   The viewport remains visually compact inside 74px/70px public headers. */
 .suga-brand-logo--header {
   width: 170px;
-  aspect-ratio: 1345 / 564;
-  transform: scaleY(.96);
+  aspect-ratio: 1345 / 614;
+  transform: scaleY(.88);
   transform-origin: center center;
 }
 .suga-brand-logo--header > .suga-brand-logo-art {
-  top: -43.79%;
+  left: -2.974%;
+  top: -36.65%;
 }
 @media (max-width: 600px) {
   .suga-brand-logo--header { width: 156px; }
