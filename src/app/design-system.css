@@ -1096,7 +1096,7 @@ main.refined-home .home-faq > .home-faq-shell {
   min-height: 74px;
 }
 .refined-home .mobile-home-brand .suga-brand-logo--header {
-  width: 160px;
+  width: 170px;
   height: auto !important;
 }
 @media (max-width: 600px) {
@@ -1106,17 +1106,17 @@ main.refined-home .home-faq > .home-faq-shell {
     min-height: 70px;
   }
   .refined-home .mobile-home-brand .suga-brand-logo--header {
-    width: 150px;
+    width: 156px;
   }
 }
 @media (max-width: 390px) {
   .refined-home .mobile-home-brand .suga-brand-logo--header {
-    width: 142px;
+    width: 146px;
   }
 }
 @media (max-width: 350px) {
   .refined-home .mobile-home-brand .suga-brand-logo--header {
-    width: 128px;
+    width: 132px;
   }
 }
 
@@ -1264,7 +1264,7 @@ main.refined-treatment .treatment-mobile-header .treatment-mobile-header-actions
   min-height: 74px;
 }
 .refined-treatment .treatment-mobile-brand .suga-brand-logo--header {
-  width: 160px;
+  width: 170px;
 }
 .refined-treatment .treatment-public-content {
   padding-top: 74px !important;
@@ -1276,7 +1276,7 @@ main.refined-treatment .treatment-mobile-header .treatment-mobile-header-actions
     min-height: 70px;
   }
   .refined-treatment .treatment-mobile-brand .suga-brand-logo--header {
-    width: 150px;
+    width: 156px;
   }
   .refined-treatment .treatment-public-content {
     padding-top: 70px !important;
@@ -1301,7 +1301,7 @@ main.refined-treatment .treatment-mobile-header .treatment-mobile-header-actions
 }
 @media (max-width: 390px) {
   .refined-treatment .treatment-mobile-brand .suga-brand-logo--header {
-    width: 142px;
+    width: 146px;
   }
 }
 @media (max-width: 360px) {
@@ -1321,21 +1321,31 @@ main.refined-treatment .treatment-mobile-header .treatment-mobile-header-actions
 }
 @media (max-width: 350px) {
   .refined-treatment .treatment-mobile-brand .suga-brand-logo--header {
-    width: 128px;
+    width: 132px;
   }
 }
 
-/* Keep the bordered header logo inside its 74px/70px navigation row
-   even when BrandLogo(size="header") is used beyond these two routes. */
-.suga-brand-logo--header { width: 160px; }
+/* Header logo only: broaden the footprint while trimming unused
+   bottom-white margin (source bounds y=247..811, versus 247..840).
+   Retain the whole blue outline and script, without changing the image asset.
+   A very slight vertical reduction keeps the 74px/70px headers compact. */
+.suga-brand-logo--header {
+  width: 170px;
+  aspect-ratio: 1345 / 564;
+  transform: scaleY(.96);
+  transform-origin: center center;
+}
+.suga-brand-logo--header > .suga-brand-logo-art {
+  top: -43.79%;
+}
 @media (max-width: 600px) {
-  .suga-brand-logo--header { width: 150px; }
+  .suga-brand-logo--header { width: 156px; }
 }
 @media (max-width: 390px) {
-  .suga-brand-logo--header { width: 142px; }
+  .suga-brand-logo--header { width: 146px; }
 }
 @media (max-width: 350px) {
-  .suga-brand-logo--header { width: 128px; }
+  .suga-brand-logo--header { width: 132px; }
 }
 
 /* Patient home consultation-conversation cards: no message text outside chat. */
