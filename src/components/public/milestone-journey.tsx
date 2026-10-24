@@ -66,32 +66,6 @@ export function MilestoneJourney() {
   const outgoingRefs = useRef<(HTMLElement | null)[]>([]);
   const previousActive = useRef<TimelineKey>("weight");
   const departingRef = useRef<TimelineKey | null>(null);
-  const stageRef = useRef<HTMLDivElement | null>(null);
-  const [glowVisible, setGlowVisible] = useState(false);
-
-  // Keep the decorative border animation off the GPU while this section is
-  // outside the viewport or the tab is in the background.
-  useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
-
-    let intersecting = false;
-    const sync = () => setGlowVisible(intersecting && !document.hidden);
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        intersecting = entry.isIntersecting;
-        sync();
-      },
-      { threshold: 0.08 }
-    );
-    observer.observe(stage);
-    document.addEventListener("visibilitychange", sync);
-    return () => {
-      observer.disconnect();
-      document.removeEventListener("visibilitychange", sync);
-    };
-  }, []);
-
 
   function selectCategory(key: TimelineKey) {
     if (active === key) return;
@@ -209,7 +183,7 @@ export function MilestoneJourney() {
             </MotionLink>
           </div>
 
-          <div ref={stageRef} className={styles.stage} data-glow-visible={glowVisible} aria-live="polite" aria-atomic="false">
+          <div className={styles.stage} aria-live="polite" aria-atomic="false">
             <div className={styles.stageHeader}>
               <span>Treatment timeline</span>
               <span className={styles.stageCount}>03 MILESTONES</span>
