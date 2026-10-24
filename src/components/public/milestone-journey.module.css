@@ -280,8 +280,8 @@
   .heading { font-size: 23px; }
 }
 
-/* Sapphire-blue moving perimeter. Kept separate from the content and from
-   the heading-to-card WAAPI transform: the outer frame moves as one unit. */
+/* Static Suga-blue perimeter for all three timeline cards.
+   Existing treatment switching and content animations remain unchanged. */
 .cardGlowFrame {
   position: relative;
   display: block;
@@ -291,44 +291,12 @@
   padding: 2px;
   overflow: hidden;
   border-radius: 15px;
-  background: #dcdcd9;
+  background: #2457A7;
   box-shadow: 0 2px 9px rgba(0, 0, 0, .025);
   transform-origin: center;
 }
 
-.cardGlowFrame::before {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  top: 50%;
-  left: 50%;
-  width: 210%;
-  aspect-ratio: 1;
-  background: conic-gradient(
-    from 0deg,
-    #e2e2df 0deg,
-    #e2e2df 210deg,
-    #88a9d2 244deg,
-    #2457A7 278deg,
-    #2457A7 293deg,
-    #88a9d2 323deg,
-    #e2e2df 356deg,
-    #e2e2df 360deg
-  );
-  transform: translate(-50%, -50%) rotate(0deg);
-  animation: milestone-border-orbit 6.5s linear infinite;
-  animation-play-state: paused;
-  pointer-events: none;
-}
-
-.stage[data-glow-visible="true"] .cardsLayer:not(.outgoing) .cardGlowFrame::before {
-  animation-play-state: running;
-}
-
-.cardsLayer .cardGlowFrame:nth-child(2)::before { animation-delay: -2.15s; }
-.cardsLayer .cardGlowFrame:nth-child(3)::before { animation-delay: -4.3s; }
-
-/* Inner surface always hides the conic fill; only the 2px rim is visible. */
+/* Inner surface covers the filled frame, leaving a permanent 2px blue rim. */
 .section .stage .cardsLayer .cardGlowFrame > .card {
   z-index: 1;
   width: 100%;
@@ -339,21 +307,9 @@
   box-shadow: none !important;
 }
 
-@keyframes milestone-border-orbit {
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
 @media (max-width: 760px) {
-  .cardGlowFrame { border-radius: 14px; padding: 1.5px; }
-  .section .stage .cardsLayer .cardGlowFrame > .card { border-radius: 12.5px !important; }
-  .cardGlowFrame::before { animation-duration: 9s; }
-  .cardsLayer .cardGlowFrame:nth-child(2)::before { animation-delay: -3s; }
-  .cardsLayer .cardGlowFrame:nth-child(3)::before { animation-delay: -6s; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cardGlowFrame { background: #d8d8d5; }
-  .cardGlowFrame::before { display: none !important; animation: none !important; }
+  .cardGlowFrame { border-radius: 14px; padding: 2px; }
+  .section .stage .cardsLayer .cardGlowFrame > .card { border-radius: 12px !important; }
 }
 
 /* Readability pass for all three animated timeline cards. */
