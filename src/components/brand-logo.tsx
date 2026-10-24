@@ -16,10 +16,10 @@ export function BrandLogo({
       className={`suga-brand-logo suga-brand-logo--${size}${inverse ? " suga-brand-logo--inverse" : ""}`}
     >
       <Image
-        src="/img/logo/Suga.health%20Live%20Naturally%20Logo.png"
+        src="/img/logo/IMG-20261024-WA0015.jpg"
         alt="Suga.Health — Live Naturally"
-        width={1473}
-        height={1068}
+        width={1448}
+        height={1086}
         priority={priority}
         className="suga-brand-logo-art"
       />
