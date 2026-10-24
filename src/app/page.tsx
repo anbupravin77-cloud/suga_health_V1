@@ -743,6 +743,19 @@ export default function HomePage() {
                         onError={(event) => { event.currentTarget.style.display = "none"; }}
                       />
                     )}
+                    {pillar.id === "sexual" && (
+                      <video
+                        className="home-uploaded-media home-uploaded-media-video"
+                        src="/videos/suga_sexual_health_zero_gravity_8s.mp4"
+                        aria-label="Illustrative animation of a floating treatment bottle and blue tablet"
+                        autoPlay
+                        muted
+                        playsInline
+                        loop
+                        preload="metadata"
+                        onError={(event) => { event.currentTarget.style.display = "none"; }}
+                      />
+                    )}
                   </div>
                   <div className="pathway-editorial-copy">
                     <span className="home-kicker">{pillar.subtitle}</span>
