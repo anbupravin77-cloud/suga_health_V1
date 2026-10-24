@@ -1349,6 +1349,40 @@ main.refined-treatment .treatment-mobile-header .treatment-mobile-header-actions
   .suga-brand-logo--header { width: 132px; }
 }
 
+/* Desktop homepage: reserve real vertical space for the bordered logo.
+   The old aspect-ratio box was taller than the 74px header even after a
+   visual transform. This frame fits wholly inside the shorter 68px header.
+   Scale only the image vertically (without cutting its blue outline).
+   Mobile sizing and every other brand placement remain unchanged. */
+@media (min-width: 900px) {
+  main.refined-home > .mobile-home-header,
+  main.refined-home > .mobile-home-header .mobile-home-header-inner {
+    height: 68px;
+    min-height: 68px;
+  }
+  main.refined-home .mobile-home-brand {
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+  }
+  main.refined-home .mobile-home-brand .suga-brand-logo--header {
+    display: block;
+    width: 170px;
+    height: 58px !important;
+    aspect-ratio: auto;
+    overflow: hidden;
+    transform: none;
+  }
+  main.refined-home .mobile-home-brand .suga-brand-logo--header > .suga-brand-logo-art {
+    left: -2.974%;
+    top: -65.5%;
+    width: 107.66%;
+    height: auto;
+    transform: scaleY(.76);
+    transform-origin: center center;
+  }
+}
+
 /* Patient home consultation-conversation cards: no message text outside chat. */
 .patient-v2 .patient-conversations-surface .patient-messages-home {
   background: #fff;
