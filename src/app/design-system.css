@@ -857,10 +857,10 @@ main.refined-home .home-faq > .home-faq-shell {
   }
 }
 
-/* Shared brand lockup. Keep the original raster artwork unaltered;
-   crop only its large empty margins via an overflow-hidden viewport.
-   The verified source is 1473x1068; the artwork fits inside
-   x=60..1420, y=303..791, producing an aspect ratio of 1360/488. */
+/* Shared logo viewport for the 1448 × 1086 uploaded artwork.
+   Keep the entire rounded blue outline and red tagline visible.
+   The colored bounds are approximately x=62..1385 and y=258..828;
+   crop ONLY the outer white margins to x=51..1396, y=247..840. */
 .suga-brand-logo {
   display: block;
   position: relative;
@@ -868,7 +868,7 @@ main.refined-home .home-faq > .home-faq-shell {
   flex: 0 0 auto;
   width: max-content;
   max-width: 100%;
-  aspect-ratio: 1360 / 488;
+  aspect-ratio: 1345 / 593;
   height: auto;
   line-height: 0;
   background: #fff;
@@ -877,9 +877,9 @@ main.refined-home .home-faq > .home-faq-shell {
 .suga-brand-logo > .suga-brand-logo-art {
   display: block;
   position: absolute;
-  left: -4.412%;
-  top: -62.1%;
-  width: 108.31%;
+  left: -3.792%;
+  top: -41.65%;
+  width: 107.66%;
   height: auto;
   max-width: none !important;
   object-fit: contain;
@@ -1080,7 +1080,7 @@ main.refined-home .home-faq > .home-faq-shell {
    Apply after legacy fixed dimensions and responsive width declarations. */
 .suga-brand-logo {
   height: auto !important;
-  aspect-ratio: 1360 / 488;
+  aspect-ratio: 1345 / 593;
 }
 .suga-brand-logo--inverse {
   background: #fff;
@@ -1096,7 +1096,7 @@ main.refined-home .home-faq > .home-faq-shell {
   min-height: 74px;
 }
 .refined-home .mobile-home-brand .suga-brand-logo--header {
-  width: 174px;
+  width: 160px;
   height: auto !important;
 }
 @media (max-width: 600px) {
@@ -1106,17 +1106,17 @@ main.refined-home .home-faq > .home-faq-shell {
     min-height: 70px;
   }
   .refined-home .mobile-home-brand .suga-brand-logo--header {
-    width: 158px;
+    width: 150px;
   }
 }
 @media (max-width: 390px) {
   .refined-home .mobile-home-brand .suga-brand-logo--header {
-    width: 148px;
+    width: 142px;
   }
 }
 @media (max-width: 350px) {
   .refined-home .mobile-home-brand .suga-brand-logo--header {
-    width: 132px;
+    width: 128px;
   }
 }
 
@@ -1264,7 +1264,7 @@ main.refined-treatment .treatment-mobile-header .treatment-mobile-header-actions
   min-height: 74px;
 }
 .refined-treatment .treatment-mobile-brand .suga-brand-logo--header {
-  width: 174px;
+  width: 160px;
 }
 .refined-treatment .treatment-public-content {
   padding-top: 74px !important;
@@ -1276,7 +1276,7 @@ main.refined-treatment .treatment-mobile-header .treatment-mobile-header-actions
     min-height: 70px;
   }
   .refined-treatment .treatment-mobile-brand .suga-brand-logo--header {
-    width: 158px;
+    width: 150px;
   }
   .refined-treatment .treatment-public-content {
     padding-top: 70px !important;
@@ -1301,7 +1301,7 @@ main.refined-treatment .treatment-mobile-header .treatment-mobile-header-actions
 }
 @media (max-width: 390px) {
   .refined-treatment .treatment-mobile-brand .suga-brand-logo--header {
-    width: 148px;
+    width: 142px;
   }
 }
 @media (max-width: 360px) {
@@ -1321,8 +1321,21 @@ main.refined-treatment .treatment-mobile-header .treatment-mobile-header-actions
 }
 @media (max-width: 350px) {
   .refined-treatment .treatment-mobile-brand .suga-brand-logo--header {
-    width: 132px;
+    width: 128px;
   }
+}
+
+/* Keep the bordered header logo inside its 74px/70px navigation row
+   even when BrandLogo(size="header") is used beyond these two routes. */
+.suga-brand-logo--header { width: 160px; }
+@media (max-width: 600px) {
+  .suga-brand-logo--header { width: 150px; }
+}
+@media (max-width: 390px) {
+  .suga-brand-logo--header { width: 142px; }
+}
+@media (max-width: 350px) {
+  .suga-brand-logo--header { width: 128px; }
 }
 
 /* Patient home consultation-conversation cards: no message text outside chat. */
