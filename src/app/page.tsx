@@ -730,6 +730,19 @@ export default function HomePage() {
                         onError={(event) => { event.currentTarget.style.display = "none"; }}
                       />
                     )}
+                    {pillar.id === "hair" && (
+                      <video
+                        className="home-uploaded-media home-uploaded-media-video"
+                        src="/videos/suga_hair_growth_zero_gravity_duet_8s.mp4"
+                        aria-label="Illustrative animation of gently floating hair treatment bottles"
+                        autoPlay
+                        muted
+                        playsInline
+                        loop
+                        preload="metadata"
+                        onError={(event) => { event.currentTarget.style.display = "none"; }}
+                      />
+                    )}
                   </div>
                   <div className="pathway-editorial-copy">
                     <span className="home-kicker">{pillar.subtitle}</span>
