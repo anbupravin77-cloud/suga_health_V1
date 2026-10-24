@@ -157,18 +157,6 @@ const sugaModel = [
 
 const doctors = [
   {
-    id: "dr-raja-prabhakaran-rajarethinam",
-    name: "Dr. Raja Prabhakaran Rajarethinam",
-    credentials: "MD, MBA",
-    role: "Founder",
-    specialty: "Founder, Suga.Health",
-    image: "/images/doctors/Rajaprabhakaran_Rajarethinam_MD_MBA_Founder.jpeg",
-    education: "Details to be updated.",
-    boardCertification: "Details to be updated.",
-    bio: "Founder of Suga.Health. More professional details coming soon.",
-    experience: "Details to be updated.",
-  },
-  {
     id: "dr-arulprakash",
     name: "Dr. Arulprakash",
     credentials: "MD, FRCP, MCA",
@@ -226,6 +214,18 @@ const doctors = [
     education: "Details to be updated.",
     boardCertification: "Details to be updated.",
     bio: "Consultant in nephrology. Full biography coming soon.",
+    experience: "Details to be updated.",
+  },
+  {
+    id: "dr-raja-prabhakaran-rajarethinam",
+    name: "Dr. Raja Prabhakaran Rajarethinam",
+    credentials: "MD, MBA",
+    role: "Founder",
+    specialty: "Founder, Suga.Health",
+    image: "/images/doctors/Rajaprabhakaran_Rajarethinam_MD_MBA_Founder.jpeg",
+    education: "Details to be updated.",
+    boardCertification: "Details to be updated.",
+    bio: "Founder of Suga.Health. More professional details coming soon.",
     experience: "Details to be updated.",
   },
 ];
